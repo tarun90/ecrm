@@ -1,0 +1,272 @@
+.email-container {
+  display: flex;
+  height: 100%;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3);
+}
+
+.email-list {
+  width: 360px;
+  border-right: 1px solid #e0e0e0;
+  overflow-y: auto;
+  background: #f6f8fc;
+}
+
+.email-list-header {
+  padding: 12px 16px;
+  background: white;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.email-list-header h2 {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #202124;
+  margin: 0;
+}
+
+.email-item {
+  padding: 8px 16px;
+  display: grid;
+  grid-template-columns: 180px 1fr 80px;
+  gap: 12px;
+  align-items: center;
+  background: white;
+  margin: 4px 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.email-item:hover {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  border-color: #e0e0e0;
+}
+
+.email-item.selected {
+  background-color: #c2e7ff;
+}
+
+.email-sender {
+  font-weight: 500;
+  color: #202124;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.email-content-preview {
+  overflow: hidden;
+}
+
+.email-subject {
+  font-weight: 500;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.email-snippet {
+  color: #5f6368;
+  font-size: 0.9em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.email-date {
+  color: #5f6368;
+  font-size: 0.9em;
+  text-align: right;
+}
+
+.email-detail {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: white;
+}
+
+.email-detail-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #e0e0e0;
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.email-detail-header h3 {
+  margin: 0 0 16px 0;
+  font-size: 1.375rem;
+  font-weight: normal;
+  color: #202124;
+}
+
+.email-detail-meta {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  color: #5f6368;
+  font-size: 0.875rem;
+}
+
+.meta-item {
+  display: contents;
+}
+
+.meta-label {
+  color: #666;
+  font-weight: 500;
+}
+
+.meta-value {
+  color: #202124;
+}
+
+.email-detail-body {
+  padding: 20px 24px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.email-content {
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: #202124;
+  max-width: 700px;
+}
+
+.email-content p {
+  margin: 1em 0;
+}
+
+.email-content a {
+  color: #1a73e8;
+  text-decoration: none;
+}
+
+.email-content a:hover {
+  text-decoration: underline;
+}
+
+.email-content blockquote {
+  margin: 1em 0;
+  padding-left: 16px;
+  border-left: 2px solid #e0e0e0;
+  color: #5f6368;
+}
+
+.email-content pre {
+  white-space: pre-wrap;
+  font-family: monospace;
+  background: #f8f9fa;
+  padding: 8px;
+  border-radius: 4px;
+  margin: 1em 0;
+}
+
+.email-actions {
+  padding: 8px 24px;
+  display: flex;
+  gap: 12px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.email-action-btn {
+  padding: 8px 16px;
+  border: none;
+  background: none;
+  border-radius: 4px;
+  color: #5f6368;
+  font-size: 0.875rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.email-action-btn:hover {
+  background: #f1f3f4;
+}
+
+.email-action-btn i {
+  font-size: 1.1em;
+}
+
+.email-count {
+  font-size: 0.9em;
+  color: #5f6368;
+  margin-left: 8px;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #5f6368;
+}
+
+.loading::after {
+  content: '';
+  width: 24px;
+  height: 24px;
+  border: 2px solid #dadce0;
+  border-top-color: #1a73e8;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.email-summary {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.email-summary h4 {
+  margin: 0 0 12px 0;
+  color: #202124;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.email-summary p {
+  color: #202124;
+  line-height: 1.6;
+  margin: 0 0 16px 0;
+}
+
+.show-full-btn {
+  background: none;
+  border: 1px solid #dadce0;
+  padding: 8px 16px;
+  border-radius: 4px;
+  color: #1a73e8;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.show-full-btn:hover {
+  background: #f1f3f4;
+}
+
+.email-action-btn.active {
+  background: #e8f0fe;
+  color: #1a73e8;
+} 

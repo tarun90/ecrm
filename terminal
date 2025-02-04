@@ -1,0 +1,32 @@
+mkdir gmail-client
+cd gmail-client
+npm init -y
+mkdir frontend backend 
+cd frontend
+npx create-react-app .
+cd .. 
+cd
+
+cd frontend
+npm install
+npm install dompurify
+
+cd ../backend
+npm install
+
+# For Ubuntu/Debian
+sudo apt-get install mongodb
+
+# For MacOS using Homebrew
+brew tap mongodb/brew
+brew install mongodb-community
+
+# Start backend server
+cd backend
+npm start
+
+# In a new terminal, start frontend server
+cd frontend
+npm start
+
+curl http://localhost:5000/api/auth/url
