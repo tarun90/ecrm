@@ -30,7 +30,7 @@ app.put("/update/:_id", async (req, resp) => {
     resp.send(data);
 })
 
-app.listen(5000)
+app.listen(5001)
 
 // Note:: 
 // Q: where you are passing id in put or delete method? params or body ?

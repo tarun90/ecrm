@@ -1,0 +1,83 @@
+div.buisness-manage-container {
+    display: flex;
+    margin-top: 0
+}
+.buisness-manage-container .side-bar-navicon {
+    background-color: #010148;
+    height: 100vh;
+    width: 90px;
+    padding: 20px 0;
+}
+.buisness-manage-container .nav-bar-items {
+    display: block;
+}
+.buisness-manage-container .nav-bar-items button.invoice-btn {
+    margin-left: 0;
+    transition: 0.2s all;
+    justify-content: center;
+    width: 100%;
+}
+.buisness-manage-container .nav-bar-items button.product-btn {
+    transition: 0.2s all;
+}
+button.border-indigo-500.text-indigo-600.flex.items-center.whitespace-nowrap.py-4.px-1.border-b-2.font-medium.text-sm {
+    margin-left: 0;
+   
+}
+.buisness-manage-container .nav-bar-items button.invoice-btn:hover {
+    color: #fff;
+}
+.buisness-manage-container .nav-bar-items button.product-btn:hover {
+    color: #fff;
+}
+.buisness-manage-container div.products-content {
+    width: 100%;
+    padding: 0;
+}
+div.invoice-header {
+    padding: 11px 20px;
+    background: #ffffff;
+}
+.invoice-table {
+    margin: 0 auto;
+    max-width: 80%;
+}
+button.border-transparent.product-btn.text-gray-500.hover\:text-gray-700.hover\:border-gray-300.flex.items-center.whitespace-nowrap.py-4.px-1.border-b-2.font-medium.text-sm {
+    margin: 0;
+}
+.buisness-manage-container .nav-bar-items h2 a{
+    color: #ffff;
+    font-size: 25px;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+}
+button.border-transparent.product-btn.text-gray-500.hover\:text-gray-700.hover\:border-gray-300.flex.items-center.whitespace-nowrap.py-4.px-1.border-b-2.font-medium.text-sm {
+    margin: 0;
+    width: 100%;
+    justify-content: center;
+    /* text-align: center; */
+}
+button.border-indigo-500.text-indigo-600.flex.items-center.whitespace-nowrap.py-4.px-1.border-b-2.font-medium.text-sm {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+}
+div.product-header {
+    padding: 11px 20px;
+    background: #ffffff;
+}
+.products-grid{
+    margin: 0 auto;
+    max-width: 80%;
+}
+.invoice-header button.export-invoice:hover {
+    opacity: 0.5;
+    background: black;
+}
+.invoice-header button.export-invoice {
+    transition: all 0.2s;
+    background: black;
+    opacity: 1;
+}

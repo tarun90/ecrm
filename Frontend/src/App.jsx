@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Products from './components/Products';
 import Invoices from './components/Invoices';
 import { CircleUser, FileText, Package } from 'lucide-react';
+import "./custome.css";
 
 function App() {
   const [activeTab, setActiveTab] = useState('products');
@@ -21,9 +22,9 @@ function App() {
       </header>
 
       {/* Navigation Tabs */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 ">
         <div className="border-b border-gray-200">
-          <nav className="-mb-px flex space-x-8">
+          <nav className="-mb-px flex space-x-8 ">
             <button
               onClick={() => setActiveTab('products')}
               className={`${

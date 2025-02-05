@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Package, Edit2, Search, Plus } from 'lucide-react';
 import axios from 'axios';
+import "./custome.css";
+
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -34,7 +36,7 @@ function Products() {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get('http://localhost:5000/api/products');
+      const response = await axios.get('http://localhost:5001/api/products');
       setProducts(response.data);
     } catch (error) {
       setError('Failed to fetch products. Please try again later.');
@@ -56,9 +58,9 @@ function Products() {
 
     try {
       if (isEditing && currentProduct) {
-        await axios.put(`http://localhost:5000/api/products/${currentProduct._id}`, formData);
+        await axios.put(`http://localhost:5001/api/products/${currentProduct._id}`, formData);
       } else {
-        await axios.post('http://localhost:5000/api/products', formData);
+        await axios.post('http://localhost:5001/api/products', formData);
       }
       setIsModalOpen(false);
       setFormData(initialFormData);
@@ -79,9 +81,9 @@ function Products() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 products-section">
       {/* Search and Add Product Bar */}
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center product-header">
         <div className="relative flex-1 max-w-xs">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
           <input
@@ -89,7 +91,7 @@ function Products() {
             placeholder="Search products..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 product-search focus:border-indigo-500"
           />
         </div>
         <button
@@ -127,7 +129,7 @@ function Products() {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 products-grid">
           {filteredProducts.map((product) => (
             <div
               key={product._id}

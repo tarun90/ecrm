@@ -3,6 +3,7 @@ import { FileText, Plus, Download, Search } from 'lucide-react';
 import axios from 'axios';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
+import "./custome.css";
 
 function Invoices() {
   const [invoices, setInvoices] = useState([]);
@@ -42,7 +43,7 @@ function Invoices() {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/products');
+      const response = await axios.get('http://localhost:5001/api/products');
       setProducts(response.data);
     } catch (err) {
       setError('Failed to fetch products. Please try again later.');
@@ -53,7 +54,7 @@ function Invoices() {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`http://localhost:5000/api/invoices?page=${currentPage}`);
+      const response = await axios.get(`http://localhost:5001/api/invoices?page=${currentPage}`);
       setInvoices(response.data);
     } catch (err) {
       setError('Failed to fetch invoices. Please try again later.');
@@ -83,9 +84,9 @@ function Invoices() {
 
     try {
       if (isEditing && currentInvoice) {
-        await axios.put(`http://localhost:5000/api/invoices/${currentInvoice._id}`, formData);
+        await axios.put(`http://localhost:5001/api/invoices/${currentInvoice._id}`, formData);
       } else {
-        await axios.post('http://localhost:5000/api/invoices', formData);
+        await axios.post('http://localhost:5001/api/invoices', formData);
       }
       setIsModalOpen(false);
       setFormData(initialFormData);
@@ -384,8 +385,8 @@ function Invoices() {
   };  
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-6 invoice-section">
+      <div className="flex justify-between items-center invoice-header">
         <div className="relative flex-1 max-w-xs">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
           <input
@@ -393,14 +394,14 @@ function Invoices() {
             placeholder="Search invoices..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            className="pl-10 search-invoice pr-4 py-2 w-full border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
           />
         </div>
         <div className="flex space-x-4">
           <button
             onClick={exportPDF}
             disabled={selectedInvoices.length === 0}
-            className="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200 disabled:opacity-50"
+            className="flex items-center px-4 py-2 bg-green-600 text-white export-invoice rounded-md hover:bg-green-700 transition-colors duration-200 disabled:opacity-50"
           >
             <Download className="h-5 w-5 mr-2" />
             Export Selected
@@ -439,7 +440,7 @@ function Invoices() {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
         </div>
       ) : (
-        <div className="bg-white shadow-md rounded-lg overflow-hidden">
+        <div className="bg-white shadow-md rounded-lg overflow-hidden invoice-table">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
