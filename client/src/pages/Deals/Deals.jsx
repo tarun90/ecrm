@@ -16,11 +16,12 @@ import {
   UploadOutlined,
   SearchOutlined
 } from '@ant-design/icons';
-import { useAuth } from '../contexts/AuthContext';
-import { dealService, contactService } from '../services/api';
-import styles from './Dashboard.module.css';
+import { useAuth } from '../../contexts/AuthContext';
+import { dealService, contactService } from '../../services/api';
+import styles from './Deals.module.css';
 import dayjs from 'dayjs';
 import { useLocation, useNavigate } from 'react-router-dom';
+import MainLayout from '../../components/MainLayout';
 
 
 const { Header, Sider, Content } = Layout;
@@ -37,7 +38,7 @@ const stages = [
   'Closed Lost'
 ];
 
-function Dashboard() {
+function Deals() {
   const navigate = useNavigate();
 
   const { user, logout } = useAuth();
@@ -192,10 +193,13 @@ function Dashboard() {
     try {
       setLoading(true);
       // console.log(user)
+      const userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : null
+  
+      
       const newDeal = await dealService.createDeal({
         ...values,
         closeDate: values.closeDate.toISOString(),
-        owner: user.id
+        owner: userData?.id
       });
       
       setDeals([...deals, newDeal]);
@@ -285,27 +289,11 @@ function Dashboard() {
   const getDealsInStage = (stage) => filteredDeals.filter((deal) => deal.stage === stage);
 
   return (
+    <MainLayout>
     <Layout className={styles.layout}>
-      <Sider collapsible collapsed={collapsed} onCollapse={setCollapsed}>
-        <div className={styles.logo}>DM</div>
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-          <Menu.Item key="1" icon={<HomeOutlined />}>
-            Dashboard
-          </Menu.Item>
-          <Menu.Item key="2" icon={<DollarOutlined />}>
-            Deals
-          </Menu.Item>
-          <Menu.Item key="3" icon={<TeamOutlined />}>
-            Contacts
-          </Menu.Item>
-          {/* <Menu.Item key="4" icon={<SettingOutlined />}>
-            Settings
-          </Menu.Item> */}
-        </Menu>
-      </Sider>
-      <Layout>
-        <Header className={styles.header}>
-          <div className={styles.headerContent}>
+   
+    
+        <div className={styles.headerContent}>
             <div className={styles.headerActions}>
               <Search
                 placeholder="Search deals by name or company..."
@@ -343,11 +331,8 @@ function Dashboard() {
                 <Button icon={<UploadOutlined />}>Import</Button>
               </Dropdown>
             </div>
-            <Dropdown overlay={userMenu} trigger={['click']}>
-              <Avatar icon={<UserOutlined />} />
-            </Dropdown>
+            
           </div>
-        </Header>
         <Content className={styles.content}>
           <DragDropContext onDragEnd={onDragEnd}>
             <div className={styles.kanbanBoard}>
@@ -804,9 +789,9 @@ function Dashboard() {
             </p>
           </Dragger>
         </Modal>
-      </Layout>
     </Layout>
+    </MainLayout>
   );
 }
 
-export default Dashboard;
+export default Deals;

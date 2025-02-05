@@ -1,10 +1,11 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
+import Login from './pages/login/Login';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import './App.css';
-
+import ContactListAndAdd from './pages/contacts/ContactListAndAdd';
+import Deals from './pages/Deals/Deals';
+import Dashboard from './pages/Dashboard/Dashboard';
 const PrivateRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
   let token = localStorage.getItem('token');
@@ -28,10 +29,27 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route
+            
               path="/"
               element={
                 <PrivateRoute>
                   <Dashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/deals"
+              element={
+                <PrivateRoute>
+                  <Deals />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/contacts"
+              element={
+                <PrivateRoute>
+                  <ContactListAndAdd />
                 </PrivateRoute>
               }
             />

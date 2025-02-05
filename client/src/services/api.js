@@ -48,18 +48,65 @@ export const dealService = {
 };
 
 export const contactService = {
-  getAllContacts: async () => {
-    const response = await axios.get(`${API_URL}/contacts`);
-    return response.data;
+
+  getAllContacts: async (search = '') => {
+    try {
+      const response = await axios.get(`${API_URL}/contacts`, {
+        params: { search }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching contacts:', error);
+      throw error;
+    }
+  },
+  exportContacts: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/contacts/export`, {
+        responseType: 'blob'
+      });
+
+      // Create a download link and trigger the download
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'contacts.csv');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error exporting contacts:', error);
+      throw error;
+    }
   },
 
+  importContacts: async (formData) => {
+    try {
+        const response = await axios.post(`${API_URL}/contacts/import`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error importing contacts:', error);
+        throw error;
+    }
+},
+
   createContact: async (contactData) => {
-    const response = await axios.post(`${API_URL}/contacts`, contactData);
+    let userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : {}
+    let contsData = {
+      ...contactData,
+      contactOwner: userData?.id
+    }
+    const response = await axios.post(`${API_URL}/contacts`, contsData);
     return response.data;
   },
 
   updateContact: async (contactId, contactData) => {
-    const response = await axios.patch(`${API_URL}/contacts/${contactId}`, contactData);
+    const response = await axios.put(`${API_URL}/contacts/${contactId}`, contactData);
     return response.data;
   },
 
