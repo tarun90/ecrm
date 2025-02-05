@@ -298,9 +298,9 @@ function Dashboard() {
           <Menu.Item key="3" icon={<TeamOutlined />}>
             Contacts
           </Menu.Item>
-          <Menu.Item key="4" icon={<SettingOutlined />}>
+          {/* <Menu.Item key="4" icon={<SettingOutlined />}>
             Settings
-          </Menu.Item>
+          </Menu.Item> */}
         </Menu>
       </Sider>
       <Layout>
