@@ -28,7 +28,7 @@ export function EventModal({ isOpen, onClose, onSubmit, onDelete, selectedDate, 
   const [showDeleteOptions, setShowDeleteOptions] = useState(false);
   const deleteOptionsRef = useRef<HTMLDivElement>(null);
   const [showMeetingLinkCopied, setShowMeetingLinkCopied] = useState(false);
-  
+
   // Autocomplete states
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -78,6 +78,7 @@ export function EventModal({ isOpen, onClose, onSubmit, onDelete, selectedDate, 
     }
 
     if (event) {
+      console.log(event, "event")
       setTitle(event.title);
       setDescription(event.description || '');
       setStartTime(format(event.start, 'HH:mm'));
@@ -112,6 +113,8 @@ export function EventModal({ isOpen, onClose, onSubmit, onDelete, selectedDate, 
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
+    console.log(event, "event=====")
+
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
@@ -124,13 +127,15 @@ export function EventModal({ isOpen, onClose, onSubmit, onDelete, selectedDate, 
     const [endHours, endMinutes] = endTime.split(':');
     end.setHours(parseInt(endHours), parseInt(endMinutes));
 
+    // Check if event has an id, if not, generate one
     const eventData = {
-      ...(event && { id: event.id }),
+      id: event?.id || Date.now().toString(), // Generate id manually if not present
       title,
       description,
       start,
       end,
       location,
+      eventId: event?.id,
       attendees: selectedAttendees,
       recurrence: recurrence || undefined,
       reminders: {
@@ -143,8 +148,11 @@ export function EventModal({ isOpen, onClose, onSubmit, onDelete, selectedDate, 
     };
 
     try {
+      // 1. Submit event to Google Calendar
       await onSubmit(eventData);
       savePreviousAttendees(selectedAttendees);
+
+      // Close the modal
       onClose();
     } catch (error: any) {
       setError(error.message || 'Failed to save event');
@@ -153,20 +161,41 @@ export function EventModal({ isOpen, onClose, onSubmit, onDelete, selectedDate, 
     }
   };
 
+
   const handleDelete = async (deleteType: 'single' | 'future' | 'all') => {
-    if (!event?.id || !onDelete) return;
-    
+    const eventId = event?.id; // Ensure an ID is available
+    console.log(eventId, "eventId")
+    if (!eventId || !onDelete) {
+      console.error('Event ID or onDelete callback is missing.');
+      setError('Event ID or onDelete callback is missing');
+      return;
+    }
+
     const messages = {
       single: 'Are you sure you want to delete this event?',
       future: 'Are you sure you want to delete this and all following events?',
-      all: 'Are you sure you want to delete all events in this series?'
+      all: 'Are you sure you want to delete all events in this series?',
     };
-    
+
     if (window.confirm(messages[deleteType])) {
       setIsDeleting(true);
       setError(null);
+
       try {
-        await onDelete(event.id, deleteType);
+        // 1. Delete from Google Calendar
+        await onDelete(eventId, deleteType);
+
+        // 2. Delete event from MongoDB by _id
+        const response = await fetch(`http://localhost:5000/api/events/${eventId}`, {
+          method: 'DELETE',
+        });
+
+        if (!response.ok) {
+          const result = await response.json();
+          throw new Error(result.error || 'Failed to delete event from MongoDB');
+        }
+
+        // Close the modal
         onClose();
       } catch (error: any) {
         setError(error.message || 'Failed to delete event');
@@ -185,24 +214,24 @@ export function EventModal({ isOpen, onClose, onSubmit, onDelete, selectedDate, 
       try {
         // Get suggestions from Google Contacts
         const contactSuggestions = await searchContacts(value);
-        
+
         // Get previously used attendees
         const previousAttendees = getPreviousAttendees();
-        
+
         // Combine and filter suggestions
         const allSuggestions = [...new Set([...contactSuggestions, ...previousAttendees])];
-        const filtered = allSuggestions.filter(email => 
+        const filtered = allSuggestions.filter(email =>
           email.toLowerCase().includes(value.toLowerCase()) &&
           !selectedAttendees.includes(email)
         );
-        
+
         setSuggestions(filtered);
         setShowSuggestions(true);
       } catch (error) {
         console.error('Error getting suggestions:', error);
         // Fallback to local storage suggestions
         const previousAttendees = getPreviousAttendees();
-        const filtered = previousAttendees.filter(email => 
+        const filtered = previousAttendees.filter(email =>
           email.toLowerCase().includes(value.toLowerCase()) &&
           !selectedAttendees.includes(email)
         );
@@ -292,7 +321,7 @@ export function EventModal({ isOpen, onClose, onSubmit, onDelete, selectedDate, 
                   {isDeleting ? 'Deleting...' : 'Delete'}
                   <ChevronDown className={`w-4 h-4 ml-1 transform transition-transform ${showDeleteOptions ? 'rotate-180' : ''}`} />
                 </button>
-                
+
                 {showDeleteOptions && (
                   <div className="absolute right-0 mt-2 w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
                     <div className="py-1" role="menu">
@@ -329,7 +358,7 @@ export function EventModal({ isOpen, onClose, onSubmit, onDelete, selectedDate, 
                 )}
               </div>
             )}
-            <button 
+            <button
               onClick={onClose}
               className="text-gray-500 hover:text-gray-700 transition-colors"
             >

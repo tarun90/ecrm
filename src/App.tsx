@@ -92,34 +92,99 @@ function App() {
       setIsModalOpen(true);
     }
   };
-
   const handleEventCreate = async (eventData: Omit<CalendarEvent, 'id'>) => {
     try {
-      const newEvent = await createEvent(eventData);
-      setEvents(prev => [...prev, newEvent]);
-      toast.success('Event created successfully');
-      setIsModalOpen(false);
-    } catch (error: any) {
-      const message = error?.message || 'Failed to create event';
-      console.error('Error creating event:', error);
-      toast.error(message);
-    }
-  };
+        console.log("Sending event data to Google Calendar:", eventData);
 
-  const handleEventUpdate = async (eventData: CalendarEvent) => {
-    try {
+        // Call package function and capture response
+        const newEvent = await createEvent(eventData);
+
+        console.log("Google Calendar API Response:", newEvent);
+
+        // Ensure the event ID is retrieved from Google Calendar
+        if (!newEvent || !newEvent.id) {
+            throw new Error('Google Calendar did not return an event ID');
+        }
+
+        // Construct a new event with the correct type
+        const fullEvent: any = {
+            ...eventData, // Spread original event data
+            EventId: newEvent.id, // Assign the ID from Google Calendar
+        };
+
+        // Store the event ID from Google Calendar in MongoDB
+        const response = await fetch('http://localhost:5000/api/events', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(fullEvent), // Now it includes `id`
+        });
+
+        const result = await response.json();
+        console.log("MongoDB Save Response:", result);
+
+        if (!response.ok) {
+            throw new Error(result.error || 'Failed to save event to MongoDB');
+        }
+
+        // Update local event list with correct ID
+        setEvents(prev => [...prev, fullEvent]);
+
+        toast.success('Event created successfully');
+        setIsModalOpen(false);
+    } catch (error: any) {
+        console.error('Error creating event:', error);
+        toast.error(error.message || 'Failed to create event');
+    }
+};
+
+
+
+const handleEventUpdate = async (eventData: CalendarEvent) => {
+  try {
+      console.log("Updating event in Google Calendar:", eventData);
+      
+      // Call Google API to update event
       const updatedEvent = await updateEvent(eventData);
+
+      console.log("Updated Event from Google Calendar:", updatedEvent);
+
+      if (!updatedEvent || !updatedEvent.id) {
+          throw new Error('Failed to retrieve updated event ID from Google Calendar');
+      }
+
+      // Send updated event to MongoDB
+      const response = await fetch(`http://localhost:5000/api/events/${eventData.id}`, {
+          method: 'PUT',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedEvent), // Ensure correct payload is sent
+      });
+
+      const result = await response.json();
+      console.log("MongoDB Update Response:", result);
+
+      if (!response.ok) {
+          throw new Error(result.error || 'Failed to update event in MongoDB');
+      }
+
+      // Update state with the latest event data
+      // setEvents(prev => prev.map(event => event.id === eventData.id ? updatedEvent : event));
       setEvents(prev => prev.map(event => 
+
         event.id === updatedEvent.id ? updatedEvent : event
+
       ));
       toast.success('Event updated successfully');
       setIsModalOpen(false);
-    } catch (error: any) {
-      const message = error?.message || 'Failed to update event';
+  } catch (error: any) {
       console.error('Error updating event:', error);
-      toast.error(message);
-    }
-  };
+      toast.error(error.message || 'Failed to update event');
+  }
+};
+
 
   const handleEventDelete = async (eventId: string, deleteType: 'single' | 'future' | 'all') => {
     try {
