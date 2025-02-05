@@ -1,0 +1,179 @@
+:root {
+  /* Theme Colors */
+  --primary-color: #03497A;
+  --secondary-color: #007AC1;
+  --tertiary-color: #00BDF2;
+  --quaternary-color: #F56F07;
+  --transparent-color: #FFFFFF00;
+
+  /* Background Colors */
+  --bg-primary: #002742;
+  --ant-modal-header: #002742;
+  --bg-secondary: #03497A;
+  --bg-sidebar: #013153;
+  --bg-white: #FFF;
+  --bg-black: #000;
+  --bg-gray-hover: #3F43500A;
+  --bg-light-hover: #FFFFFF14;
+  --bg-mention-highlight: #FFD470;
+  --bg-gray-shade1: #8D93A5;
+  --bg-gray-shade2: #939393;
+  --bg-gray-shade3: #F7F8F8;
+  --bg-gray-shade4: #D1D1D1;
+  --bg-gray-shade5: #ACACAC;
+  --bg-gray-shade6: #3F435029;
+  --bg-active-color: #1C58D9;
+  --side-bar-hover: rgb(0 39 66 / 54%);
+
+  /* Text Colors */
+  --text-primary: #121212;
+  --text-secondary: #007AC1;
+  --text-chat: #3F4350;
+  --text-tertiary: #A1A1A1;
+  --text-quaternary: #03497A;
+  --text-white: #FFF;
+  --text-black: #000;
+  --text-dd-primary: #3B3B3C;
+  --text-danger: #D24B4E;
+  --text-success: #3DB887;
+  --text-active: #1C58D9;
+  --text-gray-shade1: #8D93A5;
+  --text-gray-shade2: #939393;
+  --text-gray-shade3: #F7F8F8;
+  --text-gray-shade4: #D1D1D1;
+  --text-gray-shade5: #ACACAC;
+  --chat-headr-bg: #F7F8F8;
+  --chat-body-wrapper: #fff;
+  --post-preview: #fff;
+  --ant-modal-border: transparent;
+  --side-menu-color: rgba(255, 255, 255, 0.7215686275);
+
+  /* Button Colors */
+  --btn-bg-primary: #03497A;
+  --btn-bg-primary-hover: #002742;
+  --btn-bg-secondary: #007AC1;
+  --border-active: #1C58D9;
+
+  --font-size-12px: 12px;
+  --font-size-14px: 14px;
+  --base-size: 16px;
+  --font-size-18px: 18px;
+  --font-size-20px: 20px;
+  --font-size-22px: 22px;
+  --font-size-24px: 24px;
+  --font-size-28px: 28px;
+  --font-size-32px: 32px;
+  --font-size-34px: 34px;
+  --font-size-38px: 38px;
+  --font-size-46px: 46px;
+  --font-weight-300: 300;
+  --font-weight-400: 400;
+  --font-weight-500: 500;
+  --font-weight-600: 600;
+  --font-weight-700: 700;
+  --font-weight-800: 800;
+  --border-radius: 8px;
+  --h1-font-size: 44px;
+  --h2-font-size: 38px;
+  --h3-font-size: 32px;
+  --h4-font-size: 28px;
+  --h5-font-size: 24px;
+  --h6-font-size: 18px;
+  --white-color: #FFFFFF;
+  --header-bg-color: #002742;
+  --siderbar-bg-color: #03497A;
+  --gradient-background: linear-gradient(180deg, #03497A 0%, #007AC1 100%);
+  --background-color: #187cb7;
+  --border-color: #D1D1D1;
+  --pinned-message-bg: #fff4dc;
+  --text-editor-bg: #fff;
+  --chat-shared-files: #fff;
+  --scrollbar-track-color: rgba(192, 192, 192, 0.123);
+  --scrollbar-thumb-color: rgba(106, 107, 107, 0.37);
+  --mention-highlight-link-bg: #f0f8ff;
+  --mention-highlight-link: #0078d4;
+  --dark-btn-ball: #ffff;
+  --dark-btn-bg: #011e32;
+  --moon-color: #ffffff;
+  --input-placeholder: rgb(167, 167, 167);
+  --show-btn-bg-color: #ffff;
+  --down-arrow-btn-bg: #ffff;
+  --ant-btn-bg-hover: rgb(63 67 80 / 8%);
+  --ant-btn-color-hover: rgba(100, 99, 99, 0.685);
+  --ant-btn-color: rgba(89, 89, 90, 0.56);
+  --chat-menu-box-shadow: 1px 3px 7px 0px rgba(0, 0, 0, 0.0588235294);
+  --show-btn-color: #03497A;
+  --show-btn-hover: #f7f8f8;
+  --ant-modal-footer: #ffff;
+  --header-btn-color: rgb(90 89 89 / 80%);
+  --edit-message-color: rgba(63, 67, 80, 0.56);
+  --epr-category-label-bg: #ffffffe6;
+  --ant-tag-bg: rgb(68 69 72 / 8%);
+  --unread-msg-count-bg: #fff;
+  --unread-msg-count-color: #0a0a0a;
+  --mantion-user-color: rgb(221, 223, 228);
+  --info-bg-color: rgba(221, 223, 228, 0.26);
+  --img-open-modal-bg: rgb(0 0 0 / 66%);
+  --mantion-select-hover: #cccccc44;
+  --mantion-select-hover-btn: #03497A;
+}
+
+
+
+
+
+[data-theme="dark"] {
+  --siderbar-bg-color: #121317;
+  --bg-sidebar: #121317;
+  --bg-primary: #000000;
+  --text-color: #e0e0e0;
+  --chat-headr-bg: #0a0a0a;
+  --white-color: #000;
+  --side-bar-hover: rgba(112, 112, 112, 0.267);
+  --chat-body-wrapper: #090a0b;
+  --text-editor-bg: #090a0b;
+  --text-chat: rgb(221, 223, 228);
+  --border-color: rgb(60 60 60);
+  --border-color: rgb(73, 73, 73);
+  --post-preview: #272822;
+  --pinned-message-bg: rgb(9, 34, 34);
+  --chat-shared-files: #090a0b;
+  --ant-modal-overlaye: rgba(0, 0, 0, 0.445);
+  --ant-modal-header: #121317;
+  --ant-modal-border: #3c3c3c;
+  --text-primary: #fff;
+  --bg-white: #0a0a0a;
+  --bg-gray-hover: #181818;
+  --mention-highlight-link-bg: #0d6e6e;
+  --mention-highlight-link: #a4f4f4;
+  --dark-btn-ball: rgb(167, 167, 167);
+  --dark-btn-bg: #121317;
+  --moon-color: #ffffff;
+  --input-placeholder: rgb(167, 167, 167);
+  --side-menu-color: rgb(255 255 255 / 72%);
+  --down-arrow-btn-bg: #090a0b;
+  --show-btn-bg-color: #090a0b;
+  --text-dd-primary: #d3d3d3;
+  --ant-btn-bg-hover: rgba(84, 84, 85, 0.349);
+  --ant-btn-color: rgb(221 223 228 / 56%);
+  --ant-btn-color-hover: rgba(206, 206, 206, 0.685);
+  --chat-menu-box-shadow: -4px 4px 7px 1px rgb(6 6 6 / 53%);
+  --show-btn-color: #00bdf2;
+  --show-btn-hover: #181818;
+  --header-btn-color: rgba(168, 168, 168, 0.849);
+  --ant-modal-footer: #121317;
+  --input-bg-color: rgba(253, 253, 253, 0.0901960784);
+  --edit-message-color: rgba(168, 168, 168, 0.849);
+  --edit-message-bg: rgb(1 95 154 / 15%);
+  --epr-category-label-bg: #090a0b82;
+  --ant-tag-bg: rgb(84 86 86 / 32%);
+  --unread-msg-count-bg: #fff;
+  --unread-msg-count-color: #0a0a0a;
+  --mantion-user-color: rgb(221, 223, 228);
+  --text-danger: #ff0000;
+  --cancel-bg: #03497a5e;
+  --info-bg-color: rgb(221 223 228 / 4%);
+  --img-open-modal-bg: rgb(0 0 0 / 66%);
+  --mantion-select-hover: rgb(2 26 43);
+  --mantion-select-hover-btn: #a7a7a7;
+}

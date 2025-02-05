@@ -20,8 +20,11 @@ import {
 import { useAuth } from '../contexts/AuthContext';
 import { dealService, contactService } from '../services/api';
 import styles from './Dashboard.module.css';
+import './dashboard.css'
 import dayjs from 'dayjs';
 import { useLocation, useNavigate } from 'react-router-dom';
+import LogoIcon from '../assets/Icons/LogoIcon';
+import HeaderLogo from '../assets/Icons/headerlogo';
 
 
 const { Header, Sider, Content } = Layout;
@@ -46,7 +49,7 @@ function Dashboard() {
   const [filteredDeals, setFilteredDeals] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [contacts, setContacts] = useState([]);
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [isViewModalVisible, setIsViewModalVisible] = useState(false);
@@ -287,8 +290,10 @@ function Dashboard() {
 
   return (
     <Layout className={ styles.layout }>
-      <Sider collapsible collapsed={ collapsed } onCollapse={ setCollapsed }>
-        <div className={ styles.logo }>DM</div>
+      <Sider collapsible collapsed={ collapsed } onCollapse={ setCollapsed } className='Sidebar'>
+        <div className={ styles.logo }>
+          <HeaderLogo />
+        </div>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={ ['1'] }>
           <Menu.Item key="1" icon={ <HomeOutlined /> }>
             Dashboard
@@ -341,7 +346,7 @@ function Dashboard() {
                   ]
                 } }
               >
-                <Button icon={ <UploadOutlined /> }>Import</Button>
+                <Button icon={ <UploadOutlined /> } className="text-btn ">Import</Button>
               </Dropdown>
             </div>
             <Dropdown overlay={ userMenu } trigger={ ['click'] }>
@@ -455,6 +460,7 @@ function Dashboard() {
           footer={ [
             <Button
               key="cancel"
+              className='text-btn'
               onClick={ () => {
                 setIsModalVisible(false);
                 form.resetFields();
@@ -585,6 +591,8 @@ function Dashboard() {
           footer={ [
             <Button
               key="cancel"
+              className='text-btn'
+
               onClick={ () => {
                 setIsEditModalVisible(false);
                 setSelectedDeal(null);
@@ -702,13 +710,14 @@ function Dashboard() {
           } }
           footer={ [
             <Button
+              className='text-btn'
               key="close"
               onClick={ () => {
                 setIsViewModalVisible(false);
                 setSelectedDeal(null);
               } }
             >
-              Close
+              Cancel
             </Button>,
             <Button
               key="edit"
@@ -761,6 +770,7 @@ function Dashboard() {
 
         {/* Import Modal */ }
         <Modal
+
           title={ `Import ${importType === 'deals' ? 'Deals' : 'Contacts'}` }
           open={ isImportModalVisible }
           onCancel={ () => setIsImportModalVisible(false) }

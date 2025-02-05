@@ -4,7 +4,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import './App.css';
-
+import "./variable.css"
 const PrivateRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
   let token = localStorage.getItem('token');
@@ -13,20 +13,20 @@ const PrivateRoute = ({ children }) => {
 
 function App() {
   return (
-    <ConfigProvider 
-    theme={{
-      token: {
-        // Seed Token
-        colorPrimary: '#000',
-        // Alias Token
-        colorBgContainer: '#f6ffed',
-      },
-    }}
+    <ConfigProvider
+      theme={ {
+        token: {
+          // Seed Token
+          colorPrimary: '#03497a',
+          // Alias Token
+          colorBgContainer: '#f6ffed',
+        },
+      } }
     >
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={ <Login /> } />
             <Route
               path="/"
               element={

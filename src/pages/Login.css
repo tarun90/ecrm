@@ -1,0 +1,112 @@
+.main-login-page-wrapper {
+    border-radius: 10px;
+    box-shadow: 0 0 5px 2px #00000012;
+    margin: 40px;
+}
+
+.main-login-page-wrapper .min-logo-wrapper {
+    background: var(--gradient-background);
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 80px);
+    justify-content: center;
+    padding: 35px 80px 20px;
+}
+
+.login-min-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 80px);
+    justify-content: center;
+    align-items: center;
+    padding: 35px 80px 20px;
+    border-radius: 10px;
+    background-color: #fff;
+}
+
+.loginCard input {
+    border-color: #0077bd;
+    padding: 14px 16px;
+}
+
+.login-form-wrapper {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.ant-form .ant-input-outlined {
+    padding: 14px 16px;
+    border-color: #0077bd;
+    background-color: #fff;
+    color: rgba(0, 0, 0, 0.88);
+}
+
+.ant-input-prefix {
+    margin-inline-end: 6px;
+}
+
+.anticon {
+    display: inline-flex;
+    align-items: center;
+    color: inherit;
+    font-style: normal;
+    line-height: 0;
+    text-align: center;
+    text-transform: none;
+    vertical-align: -0.125em;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.ant-input {
+    line-height: 1;
+    color: var(--text-primary);
+}
+
+.error {
+    color: var(--text-danger);
+    margin-top: 2px;
+}
+
+
+.ant-form-item .ant-form .ant-btn {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--bg-secondary);
+    color: #fff;
+
+}
+
+
+.ant-form-item .ant-form .ant-btn:hover {
+    background: var(--bg-primary);
+}
+
+.login-min-wrapper .ant-form .ant-form-item .ant-btn {
+    background: var(--bg-secondary);
+    color: #fff;
+    padding: 12px 16px;
+    width: 100%;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.ant-btn-primary {
+    height: auto;
+    line-height: 1;
+}
+
+.login-min-wrapper .ant-form .ant-form-item .ant-btn:hover {
+    background: var(--bg-primary);
+}
+
+.login-min-wrapper .ant-card-head-wrapper .ant-card-head-title {
+    font-size: var(--h2-font-size);
+
+
+}
