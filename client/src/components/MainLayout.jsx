@@ -33,13 +33,16 @@ const MainLayout = ({ children }) => {
           padding: '0 24px', 
           background: '#fff', 
           display: 'flex', 
+          gap:10,
           alignItems: 'center', 
           justifyContent: 'flex-end' 
-        }}>
+        }}>{
+          userData?.name
+        }
           <Dropdown overlay={userMenu} trigger={['click']}>
-            {(userData?.img && userData?.img != "") ? 
-           <img src="#" alt="User Profile" /> :    <Avatar icon={<UserOutlined />} style={{ cursor: 'pointer' }} />
-          }
+           
+             <Avatar icon={<UserOutlined />} style={{ cursor: 'pointer' }} />
+          
             
           </Dropdown>
         </Header>
