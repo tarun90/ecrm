@@ -275,7 +275,7 @@ const ContactListAndAdd = () => {
 
                 {/* Modal for Adding/Editing Contact */ }
                 { isModalOpen && (
-                    <div className="modal-overlay">
+                    <div className="modal-overlay edit-contact-model">
                         <div className="modal-content">
                             <h2>{ isEditing ? 'Edit Contact' : 'Create Contact' }</h2>
                             <form onSubmit={ handleSubmit }>

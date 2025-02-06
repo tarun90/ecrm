@@ -4,6 +4,7 @@ import {
   HomeOutlined,
   DollarOutlined,
   TeamOutlined,
+  UnorderedListOutlined,
   SettingOutlined,
 } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -45,7 +46,7 @@ const Sidebar = ({ collapsed, onCollapse }) => {
     },
     {
       key: '4',
-      icon: <TeamOutlined />,
+      icon: <UnorderedListOutlined />,
       label: 'Tasks',
       onClick: () => navigate('/tasks'),
     },

@@ -1,29 +1,3 @@
-:root {
-  --primary-color: #1f1f1f;
-  --secondary-color: #5f6368;
-  --border-color: #dadce0;
-  --background-color: #f8f9fa;
-  --card-background: #ffffff;
-  --text-primary: #202124;
-  --text-secondary: #5f6368;
-  --success-color: #34a853;
-  --warning-color: #fbbc04;
-  --danger-color: #ea4335;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background-color: var(--background-color);
-  color: var(--text-primary);
-  line-height: 1.5;
-}
-
 .app-container {
   min-height: 100vh;
   display: flex;
@@ -31,16 +5,18 @@ body {
 }
 
 /* Navigation */
-.top-nav {
-  background: white;
-  border-bottom: 1px solid var(--border-color);
+.add-task-dashboard .top-nav {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   padding: 1rem 2rem;
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
-.nav-content {
+.add-task-dashboard .nav-content {
   max-width: 1400px;
   margin: 0 auto;
   display: flex;
@@ -48,7 +24,7 @@ body {
   align-items: center;
 }
 
-.search-input {
+.add-task-dashboard .search-input {
   padding: 0.5rem 1rem;
   border: 1px solid var(--border-color);
   border-radius: 4px;
@@ -56,12 +32,13 @@ body {
   font-size: 0.9rem;
 }
 
-.nav-actions {
+.add-task-dashboard .nav-actions {
   display: flex;
   gap: 1rem;
 }
 
-.filter-btn, .create-btn {
+.add-task-dashboard .filter-btn,
+.add-task-dashboard .create-btn {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -73,71 +50,84 @@ body {
   transition: background-color 0.2s;
 }
 
-.filter-btn {
-  background-color: var(--background-color);
-  color: var(--text-primary);
-}
-
-.create-btn {
+.add-task-dashboard .update-btn {
   background-color: var(--primary-color);
-  color: white;
-}
-
-.update-btn {
-  background-color: var(--primary-color);
-  color: white;
+  color: #FFF;
 }
 
 /* Board Layout */
-.board-container {
+.add-task-dashboard .board-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
   padding: 2rem;
-  max-width: 1400px;
-  margin: 0 auto;
+  ;
   width: 100%;
 }
 
-.board-column {
-  background: var(--background-color);
+.add-task-dashboard .board-column {
   border-radius: 8px;
   padding: 1rem;
+  background-color: #FFF;
 }
 
-.column-title {
+
+.add-task-dashboard .column-title {
   font-size: 1rem;
   font-weight: 600;
-  color: var(--text-secondary);
   margin-bottom: 1rem;
-  padding: 0 0.5rem;
+  padding: 0.5rem;
+  background-color: #eee;
+  color: #131313;
 }
 
-.tasks-container {
+.add-task-dashboard .tasks-container {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
+.complet-task .task-card {
+  background: linear-gradient(45deg, rgb(56, 139, 70), rgb(139 225 154), rgb(177 247 189));
+}
+
+.add-task-dashboard .board-column .task-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.anticon-edit {
+  color: #2e7d32;
+}
+
+.ant-btn.ant-btn-icon-only {
+  width: 32px;
+  background: #ffffff57;
+}
+
+
 /* Task Cards */
-.task-card {
-  background: var(--card-background);
+.add-task-dashboard .task-card {
   border-radius: 8px;
   padding: 1rem;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-.task-header {
+.add-task-dashboard .add-task-dashboard .task-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 1rem;
 }
 
-.task-title {
+.add-task-dashboard .task-title {
   font-size: 1rem;
   font-weight: 500;
-  color: var(--text-primary);
+  color: #fff;
+  background: rgb(0 0 0 / 20%);
+  padding: 3px 10px;
+  border-radius: 4px;
 }
 
 .task-actions {
@@ -145,7 +135,7 @@ body {
   gap: 0.5rem;
 }
 
-.icon-btn {
+.add-task-dashboard .icon-btn {
   background: none;
   border: none;
   cursor: pointer;
@@ -155,26 +145,27 @@ body {
   transition: background-color 0.2s;
 }
 
-.icon-btn:hover {
+.add-task-dashboard .icon-btn:hover {
   background-color: var(--background-color);
 }
 
-.task-info {
+.add-task-dashboard .task-info {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   margin-bottom: 1rem;
+  padding: 8px;
 }
 
-.info-item {
+.add-task-dashboard .info-item {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--text-secondary);
+  color: #fff;
   font-size: 0.875rem;
 }
 
-.task-status {
+.add-task-dashboard .task-status {
   display: inline-block;
   padding: 0.25rem 0.75rem;
   border-radius: 12px;
@@ -182,12 +173,12 @@ body {
   font-weight: 500;
 }
 
-.task-status.pending {
+.add-task-dashboard .task-status.pending {
   background-color: #fff3e0;
   color: #e65100;
 }
 
-.task-status.in-progress {
+.add-task-dashboard .task-status.in-progress {
   background-color: #e3f2fd;
   color: #1565c0;
 }
@@ -198,7 +189,7 @@ body {
 }
 
 /* Modal */
-.modal-overlay {
+.add-task-dashboard .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -211,7 +202,7 @@ body {
   z-index: 1000;
 }
 
-.modal {
+.add-task-dashboard .modal {
   background: white;
   border-radius: 8px;
   width: 90%;
@@ -219,7 +210,7 @@ body {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.modal-header {
+.add-task-dashboard .modal-header {
   padding: 1rem;
   border-bottom: 1px solid var(--border-color);
   display: flex;
@@ -227,27 +218,27 @@ body {
   align-items: center;
 }
 
-.modal-content {
-  padding: 1.5rem;
+.add-task-dashboard .modal-content {
+  padding: 1.5rem 0;
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.modal-input {
+.add-task-dashboard .modal-input {
   padding: 0.75rem;
   border: 1px solid var(--border-color);
   border-radius: 4px;
   font-size: 0.9rem;
 }
 
-.date-inputs {
+.add-task-dashboard .date-inputs {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
 
-.submit-btn {
+.add-task-dashboard .submit-btn {
   background-color: var(--primary-color);
   color: white;
   padding: 0.75rem;
@@ -259,13 +250,13 @@ body {
 }
 
 /* Filters Panel */
-.filters-panel {
+.add-task-dashboard .filters-panel {
   background: white;
   border-bottom: 1px solid var(--border-color);
   padding: 1rem 2rem;
 }
 
-.filters-content {
+.add-task-dashboard .filters-content {
   max-width: 1400px;
   margin: 0 auto;
   display: flex;
@@ -273,14 +264,14 @@ body {
   align-items: center;
 }
 
-.filter-input {
+.add-task-dashboard .filter-input {
   padding: 0.5rem 1rem;
   border: 1px solid var(--border-color);
   border-radius: 4px;
   font-size: 0.9rem;
 }
 
-.apply-filter-btn {
+.add-task-dashboard .apply-filter-btn {
   background-color: var(--primary-color);
   color: white;
   padding: 0.5rem 1rem;
@@ -290,7 +281,7 @@ body {
   cursor: pointer;
 }
 
-.clear-filter-btn {
+.add-task-dashboard .clear-filter-btn {
   background-color: var(--background-color);
   color: var(--text-primary);
   padding: 0.5rem 1rem;

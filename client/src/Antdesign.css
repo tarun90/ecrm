@@ -140,3 +140,11 @@
 .submit-btn:hover {
     background-color: var(--btn-bg-primary-hover);
 }
+
+.anticon-edit {
+    color: #2e7d32;
+}
+
+.anticon-delete {
+    color: #ff4d4f;
+}
