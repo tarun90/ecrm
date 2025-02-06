@@ -8,6 +8,8 @@ import nodemailer from 'nodemailer';
 import dealRoutes from './routes/deals.js';
 import contactRoutes from './routes/contacts.js';
 import createTaskRoutes from './routes/createTaskRoutes.js';
+import productRoutes from './routes/products.js';
+import invoiceRoutes from './routes/invoice.js';
 
 dotenv.config();
 
@@ -53,6 +55,8 @@ const { router: taskRouter, checkReminders } = createTaskRoutes(transporter);
 
 // Mount routes at /api/tasks
 app.use('/api/tasks', taskRouter);
+app.use('/api/products', productRoutes);
+app.use('/api/invoices', invoiceRoutes);
 
 // Start the reminder check every minute
 // setInterval(checkReminders, 60 * 1000);
