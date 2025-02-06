@@ -18,17 +18,18 @@ function Login() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const token = queryParams.get("token");
-  console.log(token, "ketul token")
+  const react_url = import.meta.env.VITE_REACT_URL;
+  const HRMS_URI = 
   useEffect(() => {
     if (token) {
       ssoLoginApi(token);
     }
   }, []);
   const handleSSO = () => {
-    const originalUrl = `http://localhost:5173/login`;
+    const originalUrl = `${react_url}/login`;
     const encodedUrl = encodeURIComponent(originalUrl);
     window.open(
-      `http://hrms.elsner.com/signin?redirect_uri=${encodedUrl}`,
+      `${import.meta.env.VITE_REACT_APP_HRMS_URI}?redirect_uri=${encodedUrl}`,
       "_self"
     );
 
@@ -39,7 +40,7 @@ function Login() {
       tokenData: token
     }
     await axios.post(
-      'http://localhost:5000/api/auth/redirectToBack',
+      `${import.meta.env.VITE_TM_API_URL}/api/auth/redirectToBack`,
       body,
       {
         headers: {
@@ -81,7 +82,7 @@ function Login() {
   const onFinish = async (values) => {
     try {
       if (isRegister) {
-        await axios.post('http://localhost:5000/api/auth/register', values);
+        await axios.post(`${import.meta.env.VITE_TM_API_URL}/api/auth/register`, values);
         message.success('Registration successful! Please login.');
         setIsRegister(false);
         form.resetFields();

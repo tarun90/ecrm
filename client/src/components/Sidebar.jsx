@@ -20,6 +20,7 @@ const Sidebar = ({ collapsed, onCollapse }) => {
     if (path.includes('/dashboard')) return '1';
     if (path.includes('/deals')) return '2';
     if (path.includes('/contacts')) return '3';
+    if (path.includes('/tasks')) return '4';
     return '1';
   };
 
@@ -41,6 +42,12 @@ const Sidebar = ({ collapsed, onCollapse }) => {
       icon: <TeamOutlined />,
       label: 'Contacts',
       onClick: () => navigate('/contacts'),
+    },
+    {
+      key: '4',
+      icon: <TeamOutlined />,
+      label: 'Tasks',
+      onClick: () => navigate('/tasks'),
     },
   ];
 

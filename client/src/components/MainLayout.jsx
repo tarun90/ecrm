@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 
 const { Header, Content } = Layout;
-
+const userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : {}
 const MainLayout = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false);
   const { logout } = useAuth();
@@ -37,7 +37,10 @@ const MainLayout = ({ children }) => {
           justifyContent: 'flex-end' 
         }}>
           <Dropdown overlay={userMenu} trigger={['click']}>
-            <Avatar icon={<UserOutlined />} style={{ cursor: 'pointer' }} />
+            {(userData?.img && userData?.img != "") ? 
+           <img src="#" alt="User Profile" /> :    <Avatar icon={<UserOutlined />} style={{ cursor: 'pointer' }} />
+          }
+            
           </Dropdown>
         </Header>
         <Content style={{ margin: '10px 10px', padding: 10 }}>

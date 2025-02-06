@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = `${import.meta.env.VITE_TM_API_URL}/api`;
 
 // Configure axios defaults
 axios.interceptors.request.use((config) => {
