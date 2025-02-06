@@ -58,6 +58,7 @@ router.post('/redirectToBack', async (req, res) => {
   try {
 
     const { tokenData } = req.body;
+    console.log("🚀 ~ router.post ~ tokenData:", tokenData)
 
     const decodedToken = jwt.verify(tokenData, process.env.JWT_SECRET);
 
