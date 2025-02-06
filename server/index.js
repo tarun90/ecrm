@@ -193,6 +193,22 @@ transporter.verify((error, success) => {
 app.get('/api/tasks', async (req, res) => {
   try {
     const tasks = await Task.find();
+    /*const currentDate = new Date();
+
+    // Separate upcoming and past due tasks
+    const upcomingTasks = tasks.filter(task => new Date(task.dueDate) >= currentDate);
+    const pastTasks = tasks.filter(task => new Date(task.dueDate) < currentDate);
+
+    // Sort upcoming tasks in ascending order
+    upcomingTasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+
+    // Sort past tasks in ascending order
+    pastTasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+
+    // Combine: Upcoming tasks first, past tasks at the end
+    const sortedTasks = [...upcomingTasks, ...pastTasks];
+    res.json(sortedTasks);*/
+
     res.json(tasks);
   } catch (err) {
     res.status(500).json({ message: err.message });

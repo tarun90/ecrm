@@ -34,7 +34,19 @@ function CrmPage() {
 
   const fetchTasks = async () => {
     const response = await axios.get('http://localhost:5000/api/tasks');
-    setTasks(response.data);
+
+    const currentDate = new Date();
+
+    // Separate upcoming and past due tasks
+    const completedTasks = response.data.filter(task => task.status === 'Completed');
+    const upcomingTasks = response.data.filter(task => task.status !== 'Completed' && new Date(task.dueDate) >= currentDate);
+    const pastTasks = response.data.filter(task => task.status !== 'Completed' && new Date(task.dueDate) < currentDate);
+
+    // Sort both groups in ascending order
+    upcomingTasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+    pastTasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+
+    setTasks(response.data);setTasks([...completedTasks, ...upcomingTasks, ...pastTasks]);
   };
 
   const handleInputChange = (e) => {
@@ -163,7 +175,7 @@ function CrmPage() {
           <h2 className="column-title">New Tasks</h2>
           <div className="tasks-container">
             {tasks.filter(task => task.status === 'Pending').map(task => (
-              <div key={task._id} className="task-card">
+              <div key={task._id} style={{ backgroundColor: task.status !== 'Completed' && new Date(task.dueDate) < new Date() ? '#ffcccb' : 'white' }} className="task-card">
                 <div className="task-header">
                   <h3 className="task-title">{task.name}</h3>
                   <div className="task-actions">
@@ -190,8 +202,8 @@ function CrmPage() {
                     <span>{new Date(task.dueDate).toLocaleDateString()}</span>
                   </div>
                 </div>
-                <div className={`task-status ${task.status.toLowerCase().replace(' ', '-')}`}>
-                  {task.status}
+                <div className={`task-status ${task.status !== 'Completed' && new Date(task.dueDate) < new Date() ? 'due' : ''} ${task.status.toLowerCase().replace(' ', '-')}`}>
+                  {task.status !== 'Completed' && new Date(task.dueDate) < new Date() ? 'Due' : task.status}
                 </div>
               </div>
             ))}
@@ -202,7 +214,7 @@ function CrmPage() {
           <h2 className="column-title">In Progress</h2>
           <div className="tasks-container">
             {tasks.filter(task => task.status === 'In Progress').map(task => (
-              <div key={task._id} className="task-card">
+              <div key={task._id} style={{ backgroundColor: task.status !== 'Completed' && new Date(task.dueDate) < new Date() ? '#ffcccb' : 'white' }} className="task-card">
                 <div className="task-header">
                   <h3 className="task-title">{task.name}</h3>
                   <div className="task-actions">
@@ -229,8 +241,8 @@ function CrmPage() {
                     <span>{new Date(task.dueDate).toLocaleDateString()}</span>
                   </div>
                 </div>
-                <div className={`task-status ${task.status.toLowerCase().replace(' ', '-')}`}>
-                  {task.status}
+                <div className={`task-status ${task.status !== 'Completed' && new Date(task.dueDate) < new Date() ? 'due' : ''} ${task.status.toLowerCase().replace(' ', '-')}`}>
+                  {task.status !== 'Completed' && new Date(task.dueDate) < new Date() ? 'Due' : task.status}
                 </div>
               </div>
             ))}
