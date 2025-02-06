@@ -1,0 +1,28 @@
+services:
+  dev_elsner_crm_client:
+    container_name: dev_elsner_crm_client
+    env_file:
+      - /home/ecrm/client/.env
+    build:
+      context: /home/ecrm/client
+      dockerfile: Dockerfile
+    stdin_open: true
+    tty: true
+    restart: always
+    volumes:
+      - /home/ecrm:/home
+    ports:
+      - "8102:5173"
+
+  dev_elsner_crm_server:
+    container_name: dev_elsner_crm_server
+    build:
+      context: /home/ecrm/server
+      dockerfile: Dockerfile
+    stdin_open: true
+    tty: true
+    restart: always
+    volumes:
+      - /home/ecrm:/home
+    ports:
+      - "8103:5000"
