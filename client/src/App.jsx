@@ -7,6 +7,7 @@ import ContactListAndAdd from './pages/contacts/ContactListAndAdd';
 import Deals from './pages/Deals/Deals';
 import Dashboard from './pages/Dashboard/Dashboard';
 import "./variable.css"
+import "./Antdesign.css"
 const PrivateRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
   let token = localStorage.getItem('token');

@@ -272,7 +272,7 @@ function Deals() {
   };
 
   const userMenu = (
-    <Menu>
+    <Menu className='logout'>
       {/* <Menu.Item key="profile" icon={<UserOutlined />}>
         Profile
       </Menu.Item> */}

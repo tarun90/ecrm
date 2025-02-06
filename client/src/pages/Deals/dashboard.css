@@ -14,7 +14,13 @@
     background: #fdfdfd17;
 }
 
+.Sidebar .ant-layout-sider-children .ant-menu .ant-menu-item span {
+    color: #fff;
+}
 
+.Sidebar .ant-layout-sider-children .ant-menu .ant-menu-item:hover {
+    background: #fdfdfd17;
+}
 
 .ant-layout-header .ant-btn-primary {
     align-items: center;
