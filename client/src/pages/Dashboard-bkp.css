@@ -1,6 +1,9 @@
 .layout {
-  min-height: 100vh;
+  min-height: 100svh;
+  background: var(--gradient-background);
 }
+
+
 
 .logo {
   height: 32px;
@@ -84,7 +87,7 @@
 
 .kanbanBoard {
   display: flex;
-  gap: 24px;
+  gap: 10px;
   padding: 16px;
   overflow-x: auto;
   min-height: calc(100vh - 150px);
@@ -128,18 +131,18 @@
 }
 
 .dealCard {
-  background: white;
+  background: #1c669b05;
   border-radius: 8px;
   padding: 16px;
   margin-bottom: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 2px 1px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
 }
 
 .dealCard:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 1px 4px 6px -1px rgb(0 0 0 / 13%);
 }
 
 .dealCard.isDragging {
@@ -205,6 +208,8 @@
 .viewDealContent {
   padding: 16px 0;
 }
+
+
 
 .viewDealItem {
   margin-bottom: 16px;

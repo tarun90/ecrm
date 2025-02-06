@@ -7,6 +7,7 @@ import {
   SettingOutlined,
 } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
+import HeaderLogo from '../assets/Icons/headerlogo';
 
 const { Sider } = Layout;
 
@@ -27,7 +28,7 @@ const Sidebar = ({ collapsed, onCollapse }) => {
       key: '1',
       icon: <HomeOutlined />,
       label: 'Dashboard',
-      onClick: () => navigate('/dashboard'),
+      onClick: () => navigate('/'),
     },
     {
       key: '2',
@@ -44,23 +45,25 @@ const Sidebar = ({ collapsed, onCollapse }) => {
   ];
 
   return (
-    <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
-      <div style={{ 
-        height: '64px', 
-        display: 'flex', 
-        alignItems: 'center', 
+    <Sider collapsible collapsed={ collapsed } onCollapse={ onCollapse } className='Sidebar'>
+      <div style={ {
+        height: '64px',
+        display: 'flex',
+        alignItems: 'center',
         justifyContent: 'center',
         color: 'white',
         fontSize: '20px',
-        fontWeight: 'bold' 
-      }}>
-        {collapsed ? 'DM' : 'Deal Manager'}
+        fontWeight: 'bold'
+      } }>
+        <div className='sidebar-logo'>
+          <HeaderLogo />
+        </div>
       </div>
       <Menu
         theme="dark"
         mode="inline"
-        defaultSelectedKeys={[getDefaultSelectedKey()]}
-        items={menuItems}
+        defaultSelectedKeys={ [getDefaultSelectedKey()] }
+        items={ menuItems }
       />
     </Sider>
   );
