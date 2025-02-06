@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
 import Login from './pages/login/Login';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { AuthProvider } from './contexts/AuthContext';
 import './App.css';
 import ContactListAndAdd from './pages/contacts/ContactListAndAdd';
 import Deals from './pages/Deals/Deals';
@@ -9,10 +9,10 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import "./variable.css"
 import EventManager from "./pages/EvenetManager/EventManager"
 import Tasks from './pages/tasks/Tasks';
+import MainLayout from './components/MainLayout';
+import "./Antdesign.css";
 
-import "./Antdesign.css"
 const PrivateRoute = ({ children }) => {
-  const { isAuthenticated } = useAuth();
   let token = localStorage.getItem('token');
   return token ? children : <Navigate to="/login" />;
 };
@@ -20,57 +20,33 @@ const PrivateRoute = ({ children }) => {
 function App() {
   return (
     <ConfigProvider
-      theme={ {
+      theme={{
         token: {
-          // Seed Token
           colorPrimary: '#03497a',
-          // Alias Token
           colorBgContainer: '#f6ffed',
         },
-      } }
+      }}
     >
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/login" element={ <Login /> } />
-            <Route
+            {/* Public Route */}
+            <Route path="/login" element={<Login />} />
 
-              path="/"
-              element={
-                <PrivateRoute>
-                  <Dashboard />
-                </PrivateRoute>
-              }
-            />
+            {/* Private Routes inside MainLayout */}
             <Route
-              path="/deals"
+              path="/*"
               element={
                 <PrivateRoute>
-                  <Deals />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/contacts"
-              element={
-                <PrivateRoute>
-                  <ContactListAndAdd />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/event-manager"
-              element={
-                <PrivateRoute>
-                  <EventManager />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/tasks"
-              element={
-                <PrivateRoute>
-                  <Tasks />
+                  <MainLayout>
+                    <Routes>
+                      <Route path="/" element={<Dashboard />} />
+                      <Route path="/deals" element={<Deals />} />
+                      <Route path="/contacts" element={<ContactListAndAdd />} />
+                      <Route path="/event-manager" element={<EventManager />} />
+                      <Route path="/tasks" element={<Tasks />} />
+                    </Routes>
+                  </MainLayout>
                 </PrivateRoute>
               }
             />
@@ -82,3 +58,4 @@ function App() {
 }
 
 export default App;
+  

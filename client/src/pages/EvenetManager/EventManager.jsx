@@ -108,7 +108,7 @@ function EventManager() {
         EventId: newEvent.id,
       };
 
-      const response = await fetch('http://localhost:5000/api/events', {
+      const response = await fetch(`${import.meta.env.VITE_TM_API_URL}/api/events`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -140,7 +140,7 @@ function EventManager() {
         throw new Error('Failed to retrieve updated event ID from Google Calendar');
       }
 
-      const response = await fetch(`http://localhost:5000/api/events/${eventData.id}`, {
+      const response = await fetch(`${import.meta.env.VITE_TM_API_URL}/api/events/${eventData.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -197,7 +197,6 @@ function EventManager() {
 
   if (!isAuthenticated) {
     return (
-      <MainLayout>
       <div className="auth-container">
         <div className="auth-card">
           <div className="auth-icon-container">
@@ -214,12 +213,10 @@ function EventManager() {
           </button>
         </div>
       </div>
-      </MainLayout>
     );
   }
 
   return (
-    <MainLayout>
     <div className="app-container">
       <header className="app-header">
         <div className="header-content">
@@ -297,7 +294,6 @@ function EventManager() {
 
       <Toaster position="bottom-right" />
     </div>
-    </MainLayout>
   );
 }
 
