@@ -1,5 +1,6 @@
 .layout {
   min-height: 100vh;
+  background: var(--gradient-background);
 }
 
 .logo {
@@ -28,12 +29,20 @@
   width: 100%;
 }
 
+.headerContent .ant-form .ant-input-outlined {
+  padding: 14px 16px;
+  border-color: #0077bd;
+  background-color: #fff;
+  color: rgba(0, 0, 0, 0.88);
+}
+
 .headerActions {
   display: flex;
   gap: 8px;
   flex: 1;
 }
-.create-deal-btn{
+
+.create-deal-btn {
   margin-left: auto;
 }
 
@@ -88,7 +97,7 @@
 
 .kanbanBoard {
   display: flex;
-  gap: 24px;
+  gap: 10px;
   padding: 16px;
   overflow-x: auto;
   min-height: calc(100vh - 150px);
@@ -99,7 +108,7 @@
   background: #fff;
   border-radius: 8px;
   padding: 16px;
-  height: 100%;
+  height: auto;
 }
 
 .kanbanColumn h3 {
@@ -203,6 +212,7 @@
 .dealCompany {
   color: #8c8c8c;
   font-size: 13px;
+  text-align: left;
 }
 
 /* View Deal Modal Styles */
@@ -210,10 +220,15 @@
   padding: 16px 0;
 }
 
+.viewDealItem:nth-child(odd) {
+  background-color: #cccccc46;
+}
+
 .viewDealItem {
-  margin-bottom: 16px;
+  margin-bottom: 10px;
   display: flex;
   flex-direction: column;
+  padding: 10px;
   gap: 4px;
 }
 

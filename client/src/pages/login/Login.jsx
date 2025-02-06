@@ -1,11 +1,12 @@
-import { Form, Input, Button, Card, message } from 'antd';
+import { Form, Input, Button, Card, message, Row, Col } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import styles from './Login.module.css';
+import './Login.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import LogoIcon from '../assets/Icons/LogoIcon';
 function Login() {
   const navigate = useNavigate();
   const { login, authenticatedData } = useAuth();
@@ -47,7 +48,7 @@ function Login() {
       const { token, user } = response.data;
       localStorage.setItem('token', token);
       authenticatedData(user, token)
-    
+
       navigate('/');
 
     });
@@ -93,61 +94,68 @@ function Login() {
   };
 
   return (
-    <div className={styles.loginContainer}>
-      <Card title="Deal Management System" className={styles.loginCard}>
-        <Form
-          form={form}
-          name="login"
-          onFinish={onFinish}
-          autoComplete="off"
-        >
-          {isRegister && (
+    <Row className='main-login-page-wrapper'>
+      <Col span={ 12 } className="min-logo-wrapper">
+        <div className="login-page-logo">
+          <LogoIcon />
+        </div>
+      </Col>
+      <Col span={ 12 } className="login-min-wrapper">
+        <Card title="Sign In" className={ styles.loginCard }>
+          <Form
+            form={ form }
+            name="login"
+            onFinish={ onFinish }
+            autoComplete="off"
+          >
+            { isRegister && (
+              <Form.Item
+                name="name"
+                rules={ [{ required: true, message: 'Please input your name!' }] }
+              >
+                <Input prefix={ <UserOutlined /> } placeholder="Full Name" />
+              </Form.Item>
+            ) }
+
             <Form.Item
-              name="name"
-              rules={[{ required: true, message: 'Please input your name!' }]}
+              name="email"
+              rules={ [
+                { required: true, message: 'Please input your email!' },
+                { type: 'email', message: 'Please enter a valid email!' }
+              ] }
             >
-              <Input prefix={<UserOutlined />} placeholder="Full Name" />
+              <Input prefix={ <UserOutlined /> } placeholder="Email" />
             </Form.Item>
-          )}
 
-          <Form.Item
-            name="email"
-            rules={[
-              { required: true, message: 'Please input your email!' },
-              { type: 'email', message: 'Please enter a valid email!' }
-            ]}
-          >
-            <Input prefix={<UserOutlined />} placeholder="Email" />
-          </Form.Item>
+            <Form.Item
+              name="password"
+              rules={ [{ required: true, message: 'Please input your password!' }] }
+            >
+              <Input.Password prefix={ <LockOutlined /> } placeholder="Password" />
+            </Form.Item>
 
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: 'Please input your password!' }]}
-          >
-            <Input.Password prefix={<LockOutlined />} placeholder="Password" />
-          </Form.Item>
-
-          <Form.Item>
-            <Button type="primary" htmlType="submit" block>
-              {isRegister ? 'Register' : 'Log in'}
-            </Button>
-          </Form.Item>
-          {!isRegister &&
             <Form.Item>
-              <Button type="primary" block onClick={() => {
-                handleSSO();
-              }}>
-                Sign in with HRMS
+              <Button type="primary" htmlType="submit" block>
+                { isRegister ? 'Register' : 'Log in' }
               </Button>
             </Form.Item>
-          }
+            { !isRegister &&
+              <Form.Item>
+                <Button type="primary" block onClick={ () => {
+                  handleSSO();
+                } }>
+                  Sign in with HRMS
+                </Button>
+              </Form.Item>
+            }
 
-          {/* <Button type="link" block onClick={() => setIsRegister(!isRegister)}>
+            {/* <Button type="link" block onClick={() => setIsRegister(!isRegister)}>
             {isRegister ? 'Already have an account? Login' : 'Need an account? Register'}
           </Button> */}
-        </Form>
-      </Card>
-    </div>
+          </Form>
+        </Card>
+      </Col>
+    </Row>
   );
 }
 
