@@ -44,7 +44,7 @@ router.post('/login', async (req, res) => {
     }
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
-    res.json({ token, user: { id: user._id, email: user.email, name: user.name } });
+    res.json({ token, user: { id: user._id, email: user.email, name: user.name, img: user.img } });
   } catch (error) {
     console.log("🚀 ~ router.post ~ error:", error)
     res.status(500).json({ message: 'Error logging in' });
@@ -56,31 +56,32 @@ router.post('/login', async (req, res) => {
 
 router.post('/redirectToBack', async (req, res) => {
   try {
-    
+
     const { tokenData } = req.body;
 
     const decodedToken = jwt.verify(tokenData, process.env.JWT_SECRET);
 
     const user_details = await dataForJWT(decodedToken.user);
     console.log(user_details)
-    const { email, password, first_name, last_name } = user_details;
+    const { email, password, first_name, last_name, user_img } = user_details;
 
     const user = await User.findOne({ email });
     if (!user) {
-      let name = first_name.trim()+" "+last_name.trim();
-      const user = new User({ email, password,name });
-    await user.save();
+      let name = first_name.trim() + " " + last_name.trim();
+      let img = user_img;
+      const user = new User({ email, password, name, img });
+      await user.save();
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
-    res.status(201).json({ token, user: { id: user._id, email: user.email, name: user.name } });
-    } else {
-    
-  
       const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
-      res.json({ token, user: { id: user._id, email: user.email, name: user.name } });
+      res.status(201).json({ token, user: { id: user._id, email: user.email, name: user.name } });
+    } else {
+
+
+      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
+      res.json({ token, user: { id: user._id, email: user.email, name: user.name, img: user.img } });
     }
 
-   
+
   } catch (error) {
     console.log("🚀 ~ router.post ~ error:", error)
     res.status(500).json({ message: 'Error logging in' });

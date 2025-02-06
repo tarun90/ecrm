@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  img: String
 }, { timestamps: true });
 
 userSchema.methods.comparePassword = function (candidatePassword, cb) {
