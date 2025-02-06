@@ -366,31 +366,6 @@ export function EventModal({ isOpen, onClose, onSubmit, onDelete, selectedDate, 
             placeholder="Add location"
           />
         </div>
-
-        <div className="form-group">
-          <label className="form-label">Repeat</label>
-          <select 
-            className="form-select"
-            value={recurrence}
-            onChange={(e) => setRecurrence(e.target.value)}
-          >
-            {recurrenceOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">Description</label>
-          <textarea
-            className="form-textarea"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
-
         <div className="form-group">
           <label className="form-label">Attendees</label>
           <div className="attendees-container">
@@ -437,7 +412,29 @@ export function EventModal({ isOpen, onClose, onSubmit, onDelete, selectedDate, 
             )}
           </div>
         </div>
+        <div className="form-group">
+          <label className="form-label">Description</label>
+          <textarea
+            className="form-textarea"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </div>
 
+        <div className="form-group">
+          <label className="form-label">Repeat</label>
+          <select 
+            className="form-select"
+            value={recurrence}
+            onChange={(e) => setRecurrence(e.target.value)}
+          >
+            {recurrenceOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
         <div className="form-group">
           <label className="form-label">Reminder</label>
           <div className="reminder-settings">
@@ -455,6 +452,7 @@ export function EventModal({ isOpen, onClose, onSubmit, onDelete, selectedDate, 
             </select>
           </div>
         </div>
+
 
         {event?.meetingLink && (
           <div className="meeting-link">
