@@ -5,6 +5,7 @@ import {
   DollarOutlined,
   TeamOutlined,
   SettingOutlined,
+  CalendarOutlined,
   ProductOutlined,
   FileTextOutlined
 } from '@ant-design/icons';
@@ -44,6 +45,12 @@ const Sidebar = ({ collapsed, onCollapse }) => {
       icon: <TeamOutlined />,
       label: 'Contacts',
       onClick: () => navigate('/contacts'),
+    },
+    {
+      key: '5',
+      icon: <CalendarOutlined />,
+      label: 'Event-Manager',
+      onClick: () => navigate('/event-manager'),
     },
     {
       key: '4',

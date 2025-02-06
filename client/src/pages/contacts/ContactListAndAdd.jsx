@@ -196,7 +196,6 @@ const ContactListAndAdd = () => {
     };
 
     return (
-        <MainLayout>
             <div className="contact-container">
                 <div className="contact-header">
                     <div className="search-container">
@@ -342,7 +341,6 @@ const ContactListAndAdd = () => {
                     </div>
                 ) }
             </div>
-        </MainLayout>
     );
 };
 

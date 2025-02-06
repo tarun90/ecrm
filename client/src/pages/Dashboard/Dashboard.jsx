@@ -23,13 +23,8 @@ const stages = [
 
 function Dashboard() {
   const navigate = useNavigate();
-
-  
-
   return (
-    <MainLayout>
-    Welcome to E-CRM
-    </MainLayout>
+     <p> Welcome to E-CRM</p>
   );
 }
 

@@ -109,7 +109,6 @@ function Tasks() {
   };
 
   return (
-    <MainLayout>
     <div className="app-container">
       <nav className="top-nav">
         <div className="nav-content">
@@ -409,7 +408,6 @@ function Tasks() {
         </div>
       </Modal>
     </div>
-    </MainLayout>
   );
 }
 

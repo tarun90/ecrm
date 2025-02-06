@@ -7,6 +7,7 @@ import bodyParser from 'body-parser';
 import nodemailer from 'nodemailer';
 import dealRoutes from './routes/deals.js';
 import contactRoutes from './routes/contacts.js';
+import eventmanager from "./routes/eventmanager.js"
 import createTaskRoutes from './routes/createTaskRoutes.js';
 import productRoutes from './routes/products.js';
 import invoiceRoutes from './routes/invoice.js';
@@ -49,6 +50,7 @@ transporter.verify((error, success) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/deals', dealRoutes);
 app.use('/api/contacts', contactRoutes);
+app.use('/api/events', eventmanager); 
 
 // Initialize task routes with the transporter dependency
 const { router: taskRouter, checkReminders } = createTaskRoutes(transporter);

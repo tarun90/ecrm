@@ -5,15 +5,16 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import ContactListAndAdd from './pages/contacts/ContactListAndAdd';
 import Deals from './pages/Deals/Deals';
 import Dashboard from './pages/Dashboard/Dashboard';
+import EventManager from "./pages/EvenetManager/EventManager"
 import Tasks from './pages/tasks/Tasks';
+import MainLayout from './components/MainLayout';
+import "./Antdesign.css";
 import Products from './pages/Product/Products';
 import Invoices from './pages/Invoice/Invoices';
 import './App.css';
 import "./variable.css"
-import "./Antdesign.css"
 
 const PrivateRoute = ({ children }) => {
-  const { isAuthenticated } = useAuth();
   let token = localStorage.getItem('token');
   return token ? children : <Navigate to="/login" />;
 };
@@ -23,9 +24,7 @@ function App() {
     <ConfigProvider
       theme={{
         token: {
-          // Seed Token
           colorPrimary: '#03497a',
-          // Alias Token
           colorBgContainer: '#f6ffed',
         },
       }}
@@ -33,37 +32,35 @@ function App() {
       <AuthProvider>
         <BrowserRouter>
           <Routes>
+            {/* Public Route */}
             <Route path="/login" element={<Login />} />
-            <Route
 
-              path="/"
-              element={
-                <PrivateRoute>
-                  <Dashboard />
-                </PrivateRoute>
-              }
-            />
+            {/* Private Routes inside MainLayout */}
             <Route
-              path="/deals"
+              path="/*"
               element={
                 <PrivateRoute>
-                  <Deals />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/contacts"
-              element={
-                <PrivateRoute>
-                  <ContactListAndAdd />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/tasks"
-              element={
-                <PrivateRoute>
-                  <Tasks />
+                  <MainLayout>
+                    <Routes>
+                      <Route path="/" element={<Dashboard />} />
+                      <Route path="/deals" element={<Deals />} />
+                      <Route path="/contacts" element={<ContactListAndAdd />} />
+                      <Route path="/event-manager" element={<EventManager />} />
+                      <Route path="/tasks" element={<Tasks />} />
+                      <Route
+                        path="/products"
+                        element={
+                          <Products />
+                        }
+                      />
+                      <Route
+                        path="/invoices"
+                        element={
+                          <Invoices />
+                        }
+                      />
+                    </Routes>
+                  </MainLayout>
                 </PrivateRoute>
               }
             />
