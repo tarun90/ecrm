@@ -21,6 +21,7 @@ const Sidebar = ({ collapsed, onCollapse }) => {
     if (path.includes('/dashboard')) return '1';
     if (path.includes('/deals')) return '2';
     if (path.includes('/contacts')) return '3';
+    if (path.includes('/tasks')) return '4';
     return '1';
   };
 
@@ -49,22 +50,20 @@ const Sidebar = ({ collapsed, onCollapse }) => {
       label: 'Event-Manager',
       onClick: () => navigate('/event-manager'),
     },
+    {
+      key: '4',
+      icon: <TeamOutlined />,
+      label: 'Tasks',
+      onClick: () => navigate('/tasks'),
+    },
   ];
 
   return (
     <Sider collapsible collapsed={ collapsed } onCollapse={ onCollapse } className='Sidebar'>
-      <div style={ {
-        height: '64px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'white',
-        fontSize: '20px',
-        fontWeight: 'bold'
-      } }>
-        <div className='sidebar-logo'>
-          <HeaderLogo />
-        </div>
+      <div className='sidebar-logo'>
+
+        <HeaderLogo />
+
       </div>
       <Menu
         theme="dark"

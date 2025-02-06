@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && vite preview --host --port 5173",
     "lint": "eslint .",
     "preview": "vite preview",
     "server": "nodemon server/index.js"
@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.2.1",
-    "dotenv": "^16.4.4",
+    "dotenv": "^16.4.7",
     "eslint": "^8.56.0",
     "nodemon": "^3.0.3",
     "vite": "^5.1.3"

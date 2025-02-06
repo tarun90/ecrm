@@ -15,6 +15,10 @@ export default defineConfig(({ mode }) => {
         prev[key] = JSON.stringify(env[key]);
         return prev;
       }, {})
-    }
+    },
+    server: {
+      port: 5173,
+      allowedHosts: ['crm.elsner.com'],
+    },
   };
 });

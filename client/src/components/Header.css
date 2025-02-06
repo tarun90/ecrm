@@ -1,0 +1,35 @@
+.sidebar-logo {
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    transition: all .5s ease;
+}
+
+.sidebar-logo svg {
+    width: 90px;
+    height: 90px;
+
+
+}
+
+.ant-layout-sider-collapsed .sidebar-logo svg {
+    width: 50px;
+    height: 50px;
+
+}
+
+.ant-layout-sider-collapsed .sidebar-logo {
+    padding: 10px;
+}
+
+.site-header .ant-avatar {
+    background: #fdfdfd17;
+}
+
+.logout .ant-dropdown-menu-item .ant-dropdown-menu-title-content,
+.logout .ant-dropdown-menu-item .anticon svg {
+    color: var(--text-danger);
+    font-size: 14px;
+}

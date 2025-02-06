@@ -8,6 +8,9 @@ import Deals from './pages/Deals/Deals';
 import Dashboard from './pages/Dashboard/Dashboard';
 import "./variable.css"
 import EventManager from "./pages/EvenetManager/EventManager"
+import Tasks from './pages/tasks/Tasks';
+
+import "./Antdesign.css"
 const PrivateRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
   let token = localStorage.getItem('token');
@@ -60,6 +63,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <EventManager />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/tasks"
+              element={
+                <PrivateRoute>
+                  <Tasks />
                 </PrivateRoute>
               }
             />
