@@ -6,6 +6,8 @@ import styles from './Login.module.css';
 import './Login.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+const HRMS_link = import.meta.env.REACT_APP_HRMS_URI;
+
 import LogoIcon from '../../assets/Icons/LogoIcon';
 // import LogoIcon from '../assets/Icons/LogoIcon';
 // import LogoIcon from 'client/src/assets/Icons/LogoIcon.jsx'

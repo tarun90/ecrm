@@ -7,6 +7,7 @@ import ContactListAndAdd from './pages/contacts/ContactListAndAdd';
 import Deals from './pages/Deals/Deals';
 import Dashboard from './pages/Dashboard/Dashboard';
 import "./variable.css"
+import EventManager from "./pages/EvenetManager/EventManager"
 const PrivateRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
   let token = localStorage.getItem('token');
@@ -51,6 +52,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <ContactListAndAdd />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/event-manager"
+              element={
+                <PrivateRoute>
+                  <EventManager />
                 </PrivateRoute>
               }
             />

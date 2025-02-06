@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/auth.js';
 import dealRoutes from './routes/deals.js';
 import contactRoutes from './routes/contacts.js';
-
+import eventmanager from "./routes/eventmanager.js"
 dotenv.config();
 
 const app = express();
@@ -22,6 +22,7 @@ mongoose.connect(process.env.MONGODB_URI)
 app.use('/api/auth', authRoutes);
 app.use('/api/deals', dealRoutes);
 app.use('/api/contacts', contactRoutes);
+app.use('/api/events', eventmanager); 
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
