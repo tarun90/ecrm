@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import "./variable.css"
 import Tasks from './pages/tasks/Tasks';
 
+import "./Antdesign.css"
 const PrivateRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
   let token = localStorage.getItem('token');

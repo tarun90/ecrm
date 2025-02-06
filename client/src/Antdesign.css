@@ -1,0 +1,142 @@
+/* ant design  */
+.ant-layout {
+    height: 100svh;
+}
+
+.ant-layout-content {
+    overflow: auto;
+    height: calc(100% - 64px);
+}
+
+.ant-layout-content::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 4px rgba(153, 152, 152, 0.315);
+    border-radius: 10px;
+    background-color: #F5F5F5;
+}
+
+.ant-layout-content::-webkit-scrollbar {
+    width: 8px;
+    background-color: #F5F5F5;
+}
+
+.ant-layout-content::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 4px #999999;
+    background-color: #bdbdbd;
+}
+
+
+.ant-modal-wrap .ant-modal-content .ant-modal-body .ant-btn-variant-dashed:hover,
+.ant-modal-wrap .ant-modal-content .ant-modal-body .ant-btn-variant-outlined:hover {
+    border-color: var(--text-quaternary);
+    color: var(--mantion-select-hover-btn);
+}
+
+.ant-modal .ant-modal-content .ant-modal-header .ant-modal-title {
+    font-size: 1.25rem;
+}
+
+.ant-modal-wrap .ant-modal-content .ant-modal-body .ant-select-selector {
+    padding: .875rem 1rem;
+    border-color: #0077bd;
+    background-color: #fff;
+    color: rgba(0, 0, 0, 0.88);
+}
+
+.ant-modal-wrap .ant-modal-content .ant-modal-body .ant-form .ant-form-item-control .ant-input-number-input,
+.ant-modal-wrap .ant-modal-content .ant-modal-body .ant-form .ant-form-item-control .ant-form-item-control-input .ant-input {
+    padding: .875rem 1rem;
+    border: .0625rem solid #0077bd;
+    background-color: #fff;
+    color: rgba(0, 0, 0, 0.88);
+}
+
+.ant-input-number-outlined {
+    border: none;
+}
+
+.ant-modal-wrap .ant-modal-content .ant-modal-body .ant-picker,
+.ant-modal-wrap .ant-modal-content .ant-modal-body .ant-input-number-input,
+.ant-modal-wrap .ant-modal-content .ant-modal-body .ant-input {
+    font-size: .875rem;
+    height: 2.1875rem;
+    padding: .875rem 1rem;
+    border: .0625rem solid #0077bd;
+    background-color: #fff;
+}
+
+.ant-modal-wrap .ant-modal-content .ant-modal-body .ant-select-focused .ant-select-selector:focus {
+    box-shadow: none !important;
+}
+
+.ant-modal-wrap .ant-modal-content .ant-modal-body .ant-input-number-outlined:focus-within {
+    box-shadow: none !important;
+}
+
+.ant-input-group-wrapper .ant-input-wrapper .ant-input-search-button,
+.ant-input-group-wrapper .ant-input-wrapper .ant-input-affix-wrapper {
+    background-color: #fff;
+}
+
+.ant-modal-wrap .ant-modal-content .ant-modal-body .ant-form-item {
+    margin-bottom: 10px;
+}
+
+.ant-modal-wrap .ant-modal-content .ant-modal-footer .text-btn:hover {
+    background-color: #ffff;
+    color: var(--btn-bg-primary-hover);
+}
+
+.close-btn,
+.text-btn {
+    align-items: center;
+    background: #cccccc44;
+    background: var(--mantion-select-hover);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    display: inline-flex;
+    justify-content: center;
+    line-height: 1;
+    padding: .625rem 1rem;
+    height: auto;
+    border-radius: 6px;
+    transition: all .3s ease;
+    cursor: pointer;
+}
+
+.close-btn:hover,
+.text-btn:hover {
+    background-color: #ffff;
+    color: var(--btn-bg-primary-hover);
+}
+
+.ant-layout .ant-layout-header .text-btn:hover {
+    background-color: #ffff;
+    color: var(--btn-bg-primary-hover);
+}
+
+.ant-layout-sider-collapsed .ant-menu-vertical .ant-menu-item .anticon {
+    font-size: 18px;
+}
+
+.ant-menu-title-content {
+    text-align: left;
+}
+
+.submit-btn,
+.ant-btn-primary {
+    align-items: center;
+    background: #03497a;
+    background: var(--btn-bg-primary);
+    color: #fff;
+    color: var(--text-white);
+    display: inline-flex;
+    justify-content: center;
+    line-height: 1;
+    padding: .625rem 1rem;
+    height: auto;
+}
+
+.submit-btn:hover {
+    background-color: var(--btn-bg-primary-hover);
+}

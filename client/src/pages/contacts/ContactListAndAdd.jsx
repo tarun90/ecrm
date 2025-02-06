@@ -217,7 +217,7 @@ const ContactListAndAdd = () => {
                             style={ { display: 'none' } }
                             id="csv-upload"
                         />
-                        <label htmlFor="csv-upload" className="import-btn">
+                        <label htmlFor="csv-upload" className="text-btn">
                             Import CSV
                         </label>
                         <button className="export-btn" onClick={ handleExport }>
@@ -331,11 +331,13 @@ const ContactListAndAdd = () => {
                                     <option value="--">--</option>
                                     <option value="Qualified">Qualified</option>
                                 </select>
-                                <button type="submit" className="submit-btn">
-                                    { isEditing ? 'Update Contact' : 'Create Contact' }
-                                </button>
+                                <footer className='model-footer'>
+                                    <button className="close-btn" onClick={ closeModal }>Cancel </button>
+                                    <button type="submit" className="submit-btn">
+                                        { isEditing ? 'Update Contact' : 'Create Contact' }
+                                    </button>
+                                </footer>
                             </form>
-                            <button className="close-btn" onClick={ closeModal }>Close</button>
                         </div>
                     </div>
                 ) }

@@ -53,18 +53,10 @@ const Sidebar = ({ collapsed, onCollapse }) => {
 
   return (
     <Sider collapsible collapsed={ collapsed } onCollapse={ onCollapse } className='Sidebar'>
-      <div style={ {
-        height: '64px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'white',
-        fontSize: '20px',
-        fontWeight: 'bold'
-      } }>
-        <div className='sidebar-logo'>
-          <HeaderLogo />
-        </div>
+      <div className='sidebar-logo'>
+
+        <HeaderLogo />
+
       </div>
       <Menu
         theme="dark"
