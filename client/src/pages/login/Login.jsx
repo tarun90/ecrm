@@ -6,7 +6,9 @@ import styles from './Login.module.css';
 import './Login.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import LogoIcon from '../assets/Icons/LogoIcon';
+import LogoIcon from '../../assets/Icons/LogoIcon';
+// import LogoIcon from '../assets/Icons/LogoIcon';
+// import LogoIcon from 'client/src/assets/Icons/LogoIcon.jsx'
 function Login() {
   const navigate = useNavigate();
   const { login, authenticatedData } = useAuth();

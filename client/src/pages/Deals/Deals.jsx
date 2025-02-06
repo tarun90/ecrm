@@ -24,8 +24,8 @@ import './dashboard.css'
 import dayjs from 'dayjs';
 import { useLocation, useNavigate } from 'react-router-dom';
 import MainLayout from '../../components/MainLayout';
-import LogoIcon from '../assets/Icons/LogoIcon';
-import HeaderLogo from '../assets/Icons/headerlogo';
+// import LogoIcon from '../assets/Icons/LogoIcon';
+// import HeaderLogo from '../assets/Icons/headerlogo';
 
 
 const { Header, Sider, Content } = Layout;
@@ -293,26 +293,28 @@ function Deals() {
   const getDealsInStage = (stage) => filteredDeals.filter((deal) => deal.stage === stage);
 
   return (
-    <Layout className={ styles.layout }>
-      <Sider collapsible collapsed={ collapsed } onCollapse={ setCollapsed } className='Sidebar'>
-        <div className={ styles.logo }>
-          <HeaderLogo />
-        </div>
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={ ['1'] }>
-          <Menu.Item key="1" icon={ <HomeOutlined /> }>
-            Dashboard
-          </Menu.Item>
-          <Menu.Item key="2" icon={ <DollarOutlined /> }>
-            Deals
-          </Menu.Item>
-          <Menu.Item key="3" icon={ <TeamOutlined /> }>
-            Contacts
-          </Menu.Item>
-          {/* <Menu.Item key="4" icon={<SettingOutlined />}>
-            Settings
-          </Menu.Item> */}
-        </Menu>
-      </Sider>
+    // <MainLayout>
+    // <Layout className={ styles.layout }>
+    // <Sider collapsible collapsed={ collapsed } onCollapse={ setCollapsed } className='Sidebar'>
+    //   <div className={ styles.logo }>
+    //     <HeaderLogo />
+    //   </div>
+    //   <Menu theme="dark" mode="inline" defaultSelectedKeys={ ['1'] }>
+    //     <Menu.Item key="1" icon={ <HomeOutlined /> }>
+    //       Dashboard
+    //     </Menu.Item>
+    //     <Menu.Item key="2" icon={ <DollarOutlined /> }>
+    //       Deals
+    //     </Menu.Item>
+    //     <Menu.Item key="3" icon={ <TeamOutlined /> }>
+    //       Contacts
+    //     </Menu.Item>
+    //     {/* <Menu.Item key="4" icon={<SettingOutlined />}>
+    //       Settings
+    //     </Menu.Item> */}
+    //   </Menu>
+    // </Sider>
+    <MainLayout>
       <Layout>
         <Header className={ styles.header }>
           <div className={ styles.headerContent }>
@@ -353,9 +355,7 @@ function Deals() {
                 <Button icon={ <UploadOutlined /> } className="text-btn ">Import</Button>
               </Dropdown>
             </div>
-            <Dropdown overlay={ userMenu } trigger={ ['click'] }>
-              <Avatar icon={ <UserOutlined /> } />
-            </Dropdown>
+
           </div>
         </Header>
         <Content className={ styles.content }>
