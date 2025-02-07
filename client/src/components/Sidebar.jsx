@@ -6,6 +6,9 @@ import {
   TeamOutlined,
   UnorderedListOutlined,
   SettingOutlined,
+  CalendarOutlined,
+  ProductOutlined,
+  FileTextOutlined
 } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import HeaderLogo from '../assets/Icons/headerlogo';
@@ -45,10 +48,28 @@ const Sidebar = ({ collapsed, onCollapse }) => {
       onClick: () => navigate('/contacts'),
     },
     {
+      key: '5',
+      icon: <CalendarOutlined />,
+      label: 'Event-Manager',
+      onClick: () => navigate('/event-manager'),
+    },
+    {
       key: '4',
       icon: <UnorderedListOutlined />,
       label: 'Tasks',
       onClick: () => navigate('/tasks'),
+    },
+    {
+      key: '5',
+      icon: <ProductOutlined />,
+      label: 'Products',
+      onClick: () => navigate('/products'),
+    },
+    {
+      key: '6',
+      icon: <FileTextOutlined />,
+      label: 'Invoices',
+      onClick: () => navigate('/invoices'),
     },
   ];
 

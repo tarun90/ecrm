@@ -31,7 +31,7 @@ const MainLayout = ({ children }) => {
       <Layout>
         <Header className='site-header' style={ {
           padding: '0 24px',
-          background: '#fff',
+          // background: '#fff',
           display: 'flex',
           gap:10,
           color:"#ffff",

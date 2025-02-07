@@ -314,7 +314,6 @@ function Deals() {
     //     </Menu.Item> */}
     //   </Menu>
     // </Sider>
-    <MainLayout>
       <Layout>
         <Header className={ styles.header }>
           <div className={ styles.headerContent }>
@@ -820,7 +819,6 @@ function Deals() {
           </Dragger>
         </Modal>
       </Layout>
-    </MainLayout>
   );
 }
 
