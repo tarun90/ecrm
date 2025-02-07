@@ -87,13 +87,7 @@
   border-color: #1890ff;
 }
 
-.content {
-  margin: 24px;
-  padding: 0;
-  background: transparent;
-  min-height: 280px;
-  overflow: hidden;
-}
+
 
 .kanbanBoard {
   display: flex;
@@ -120,14 +114,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background-color: #eee;
+  color: #131313;
+  padding: 10px;
+
 }
 
 .columnCount {
-  background: #e6e6e6;
+  background: rgb(97, 97, 97);
+  color: rgb(255, 255, 255);
   padding: 2px 8px;
   border-radius: 12px;
   font-size: 12px;
-  color: #666;
 }
 
 .dealList {

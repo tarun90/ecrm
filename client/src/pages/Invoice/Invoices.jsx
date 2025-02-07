@@ -5,7 +5,7 @@ import "jspdf-autotable";
 import { FileText, Plus, Download, Search } from "lucide-react";
 import MainLayout from "../../components/MainLayout";
 import "../../components/custome.css";
-
+import { Layout, Menu, Button, Avatar, Dropdown, Modal, Form, Input, Select, DatePicker, InputNumber, message, Popconfirm, Upload } from 'antd';
 function Invoices() {
   const [invoices, setInvoices] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -462,407 +462,407 @@ function Invoices() {
   };
 
   return (
-    <MainLayout>
-      <div className="invoice-section">
-        <div className="invoice-header">
-          <div className="search-container">
-            <Search className="search-icon" />
-            <input
-              type="text"
-              placeholder="Search invoices..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="search-invoice"
-            />
-          </div>
-          <div className="action-buttons">
-            <button
-              onClick={exportPDF}
-              disabled={selectedInvoices.length === 0}
-              className="export-invoice"
-            >
-              <Download className="icon" />
-              Export Selected
-            </button>
-            <button
-              onClick={() => {
-                setIsEditing(false);
-                setFormData(initialFormData);
-                setIsModalOpen(true);
-              }}
-              className="new-invoice"
-            >
-              <Plus className="icon" />
-              New Invoice
-            </button>
-          </div>
+
+    <Layout className='main-content-wrapper'>
+      <div className="invoice-header">
+        <div className="search-container">
+          <Search className="search-icon" />
+          <input
+            type="text"
+            placeholder="Search invoices..."
+            value={ searchTerm }
+            onChange={ (e) => setSearchTerm(e.target.value) }
+            className="search-invoice"
+          />
         </div>
+        <div className="action-buttons">
+          <button
+            onClick={ exportPDF }
+            disabled={ selectedInvoices.length === 0 }
+            className="export-invoice"
+          >
+            <Download className="icon" />
+            Export Selected
+          </button>
+          <button
+            onClick={ () => {
+              setIsEditing(false);
+              setFormData(initialFormData);
+              setIsModalOpen(true);
+            } }
+            className="new-invoice"
+          >
+            <Plus className="icon" />
+            New Invoice
+          </button>
+        </div>
+      </div>
 
-        {error && (
-          <div className="error-message">
-            <p>{error}</p>
-          </div>
-        )}
+      { error && (
+        <div className="error-message">
+          <p>{ error }</p>
+        </div>
+      ) }
 
-        {loading ? (
-          <div className="loading-spinner">
-            <div className="spinner"></div>
-          </div>
-        ) : (
-          <div className="invoice-table">
-            <table>
-              <thead>
-                <tr>
-                  <th className="checkbox-column">
+      { loading ? (
+        <div className="loading-spinner">
+          <div className="spinner"></div>
+        </div>
+      ) : (
+        <div className="invoice-table">
+          <table>
+            <thead>
+              <tr>
+                <th className="checkbox-column">
+                  <input
+                    type="checkbox"
+                    className="checkbox-select-all"
+                    onChange={ (e) => {
+                      if (e.target.checked) {
+                        setSelectedInvoices(
+                          invoices.map((invoice) => invoice._id)
+                        );
+                      } else {
+                        setSelectedInvoices([]);
+                      }
+                    } }
+                  />
+                </th>
+                <th>Invoice Number</th>
+                <th>Customer</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Total</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              { invoices.map((invoice) => (
+                <tr key={ invoice._id }>
+                  <td>
                     <input
                       type="checkbox"
-                      className="checkbox-select-all"
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setSelectedInvoices(
-                            invoices.map((invoice) => invoice._id)
-                          );
-                        } else {
-                          setSelectedInvoices([]);
-                        }
-                      }}
+                      checked={ selectedInvoices.includes(invoice._id) }
+                      onChange={ () => {
+                        setSelectedInvoices((prev) =>
+                          prev.includes(invoice._id)
+                            ? prev.filter((id) => id !== invoice._id)
+                            : [...prev, invoice._id]
+                        );
+                      } }
+                      className="checkbox-select"
                     />
-                  </th>
-                  <th>Invoice Number</th>
-                  <th>Customer</th>
-                  <th>Due Date</th>
-                  <th>Status</th>
-                  <th>Total</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {invoices.map((invoice) => (
-                  <tr key={invoice._id}>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={selectedInvoices.includes(invoice._id)}
-                        onChange={() => {
-                          setSelectedInvoices((prev) =>
-                            prev.includes(invoice._id)
-                              ? prev.filter((id) => id !== invoice._id)
-                              : [...prev, invoice._id]
-                          );
-                        }}
-                        className="checkbox-select"
-                      />
-                    </td>
-                    <td>{invoice.invoice_number}</td>
-                    <td>{invoice.customer}</td>
-                    <td>{new Date(invoice.due_date).toLocaleDateString()}</td>
-                    <td className={`status ${invoice.payment_status}`}>
-                      {invoice.payment_status}
-                    </td>
-                    <td>
-                      {invoice.currency} {invoice.grand_total}
-                    </td>
-                    <td>
-                      <button
-                        onClick={() => handleEdit(invoice)}
-                        className="edit-button"
-                      >
-                        Edit
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-
-        {isModalOpen && (
-          <div className="modal">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h2>{isEditing ? "Edit Invoice" : "Create New Invoice"}</h2>
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="close-btn"
-                >
-                  &times;
-                </button>
-              </div>
-
-              <form onSubmit={handleSubmit}>
-                <div className="form-grid">
-                  {/* Invoice Number */}
-                  <div className="form-group">
-                    <label htmlFor="invoice_number">Invoice Number *</label>
-                    <input
-                      id="invoice_number"
-                      type="text"
-                      placeholder="Invoice Number"
-                      value={formData.invoice_number}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          invoice_number: e.target.value,
-                        })
-                      }
-                      className="form-input"
-                      required
-                    />
-                  </div>
-
-                  {/* Customer Name */}
-                  <div className="form-group">
-                    <label htmlFor="customer">Customer Name *</label>
-                    <input
-                      id="customer"
-                      type="text"
-                      placeholder="Customer Name"
-                      value={formData.customer}
-                      onChange={(e) =>
-                        setFormData({ ...formData, customer: e.target.value })
-                      }
-                      className="form-input"
-                      required
-                    />
-                  </div>
-
-                  {/* Due Date */}
-                  <div className="form-group">
-                    <label htmlFor="due_date">Due Date *</label>
-                    <input
-                      id="due_date"
-                      type="date"
-                      value={formData.due_date}
-                      onChange={(e) =>
-                        setFormData({ ...formData, due_date: e.target.value })
-                      }
-                      className="form-input"
-                      required
-                    />
-                  </div>
-
-                  {/* Payment Status */}
-                  <div className="form-group">
-                    <label htmlFor="payment_status">Payment Status</label>
-                    <select
-                      id="payment_status"
-                      value={formData.payment_status}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          payment_status: e.target.value,
-                        })
-                      }
-                      className="form-select"
-                    >
-                      <option value="unpaid">Unpaid</option>
-                      <option value="paid">Paid</option>
-                      <option value="partially_paid">Partially Paid</option>
-                      <option value="overdue">Overdue</option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* Line Items */}
-                <div className="line-items">
-                  <h3>Line Items</h3>
-                  <button
-                    type="button"
-                    onClick={addLineItem}
-                    className="add-line-item"
-                  >
-                    Add Item
-                  </button>
-                </div>
-                {formData.items.map((item, index) => (
-                  <div key={index} className="line-item">
-                    <div className="form-group">
-                      <label>Select Product</label>
-                      <select
-                        value={item.product}
-                        onChange={(e) =>
-                          handleProductSelect(index, e.target.value)
-                        }
-                        className="form-select"
-                      >
-                        <option value="">Select Product</option>
-                        {products.map((product) => (
-                          <option key={product._id} value={product._id}>
-                            {product.name} - {product.currency}{" "}
-                            {product.unit_cost} (Tax: {product.tax_rate}%)
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div className="form-group">
-                      <label>Quantity</label>
-                      <input
-                        type="number"
-                        value={item.quantity}
-                        onChange={(e) =>
-                          handleLineItemChange(index, "quantity", e.target.value)
-                        }
-                        className="form-input"
-                        min="1"
-                        disabled={!item.product} // Disable when no product is selected
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label>Unit Price</label>
-                      <input
-                        type="number"
-                        value={item.unit_price}
-                        onChange={(e) =>
-                          handleLineItemChange(
-                            index,
-                            "unit_price",
-                            e.target.value
-                          )
-                        }
-                        className="form-input"
-                        min="0"
-                        step="0.01"
-                        disabled={!item.product} // Disable when no product is selected
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label>Total Price</label>
-                      <input
-                        type="number"
-                        value={item.total_price}
-                        className="form-input"
-                        readOnly
-                      />
-                    </div>
-
+                  </td>
+                  <td>{ invoice.invoice_number }</td>
+                  <td>{ invoice.customer }</td>
+                  <td>{ new Date(invoice.due_date).toLocaleDateString() }</td>
+                  <td className={ `status ${invoice.payment_status}` }>
+                    { invoice.payment_status }
+                  </td>
+                  <td>
+                    { invoice.currency } { invoice.grand_total }
+                  </td>
+                  <td>
                     <button
-                      type="button"
-                      onClick={() => removeLineItem(index)}
-                      className="remove-line-item"
+                      onClick={ () => handleEdit(invoice) }
+                      className="edit-button"
                     >
-                      Remove
+                      Edit
                     </button>
-                  </div>
-                ))}
+                  </td>
+                </tr>
+              )) }
+            </tbody>
+          </table>
+        </div>
+      ) }
 
-                {/* Totals Section */}
-                <div className="form-grid">
-                  <div className="form-group">
-                    <label>Subtotal</label>
-                    <input
-                      type="number"
-                      value={formData.subtotal}
-                      className="form-input"
-                      readOnly
-                    />
-                  </div>
+      { isModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h2>{ isEditing ? "Edit Invoice" : "Create New Invoice" }</h2>
+              <button
+                onClick={ () => setIsModalOpen(false) }
+                className="close-btn"
+              >
+                &times;
+              </button>
+            </div>
 
-                  <div className="form-group">
-                    <label>Tax Amount</label>
-                    <input
-                      type="number"
-                      value={formData.tax_amount}
-                      className="form-input"
-                      readOnly
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Discount Amount</label>
-                    <input
-                      type="number"
-                      value={formData.discount_amount}
-                      onChange={(e) => handleDiscountChange(e.target.value)}
-                      className="form-input"
-                      min="0"
-                      step="0.01"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Grand Total</label>
-                    <input
-                      type="number"
-                      value={formData.grand_total}
-                      className="form-input"
-                      readOnly
-                    />
-                  </div>
-                </div>
-
-                {/* Currency Section */}
+            <form onSubmit={ handleSubmit }>
+              <div className="form-grid">
+                {/* Invoice Number */ }
                 <div className="form-group">
-                  <label>Currency</label>
-                  <select
-                    value={formData.currency}
-                    onChange={(e) =>
-                      setFormData({ ...formData, currency: e.target.value })
-                    }
-                    className="form-select"
-                  >
-                    <option value="USD">USD</option>
-                    <option value="EUR">EUR</option>
-                    <option value="GBP">GBP</option>
-                    <option value="JPY">JPY</option>
-                  </select>
-                </div>
-
-                {/* Notes */}
-                <div className="form-group">
-                  <label>Notes</label>
-                  <textarea
-                    value={formData.notes}
-                    onChange={(e) =>
-                      setFormData({ ...formData, notes: e.target.value })
-                    }
-                    className="form-input"
-                    rows="2"
-                  />
-                </div>
-
-                {/* Terms and Conditions */}
-                <div className="form-group">
-                  <label>Terms and Conditions</label>
-                  <textarea
-                    value={formData.termsConditions}
-                    onChange={(e) =>
+                  <label htmlFor="invoice_number">Invoice Number *</label>
+                  <input
+                    id="invoice_number"
+                    type="text"
+                    placeholder="Invoice Number"
+                    value={ formData.invoice_number }
+                    onChange={ (e) =>
                       setFormData({
                         ...formData,
-                        termsConditions: e.target.value,
+                        invoice_number: e.target.value,
                       })
                     }
                     className="form-input"
-                    rows="2"
+                    required
                   />
                 </div>
 
-                {/* Submit Button */}
-                <div className="form-actions">
+                {/* Customer Name */ }
+                <div className="form-group">
+                  <label htmlFor="customer">Customer Name *</label>
+                  <input
+                    id="customer"
+                    type="text"
+                    placeholder="Customer Name"
+                    value={ formData.customer }
+                    onChange={ (e) =>
+                      setFormData({ ...formData, customer: e.target.value })
+                    }
+                    className="form-input"
+                    required
+                  />
+                </div>
+
+                {/* Due Date */ }
+                <div className="form-group">
+                  <label htmlFor="due_date">Due Date *</label>
+                  <input
+                    id="due_date"
+                    type="date"
+                    value={ formData.due_date }
+                    onChange={ (e) =>
+                      setFormData({ ...formData, due_date: e.target.value })
+                    }
+                    className="form-input"
+                    required
+                  />
+                </div>
+
+                {/* Payment Status */ }
+                <div className="form-group">
+                  <label htmlFor="payment_status">Payment Status</label>
+                  <select
+                    id="payment_status"
+                    value={ formData.payment_status }
+                    onChange={ (e) =>
+                      setFormData({
+                        ...formData,
+                        payment_status: e.target.value,
+                      })
+                    }
+                    className="form-select"
+                  >
+                    <option value="unpaid">Unpaid</option>
+                    <option value="paid">Paid</option>
+                    <option value="partially_paid">Partially Paid</option>
+                    <option value="overdue">Overdue</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Line Items */ }
+              <div className="line-items">
+                <h3>Line Items</h3>
+                <button
+                  type="button"
+                  onClick={ addLineItem }
+                  className="add-line-item"
+                >
+                  Add Item
+                </button>
+              </div>
+              { formData.items.map((item, index) => (
+                <div key={ index } className="line-item">
+                  <div className="form-group">
+                    <label>Select Product</label>
+                    <select
+                      value={ item.product }
+                      onChange={ (e) =>
+                        handleProductSelect(index, e.target.value)
+                      }
+                      className="form-select"
+                    >
+                      <option value="">Select Product</option>
+                      { products.map((product) => (
+                        <option key={ product._id } value={ product._id }>
+                          { product.name } - { product.currency }{ " " }
+                          { product.unit_cost } (Tax: { product.tax_rate }%)
+                        </option>
+                      )) }
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label>Quantity</label>
+                    <input
+                      type="number"
+                      value={ item.quantity }
+                      onChange={ (e) =>
+                        handleLineItemChange(index, "quantity", e.target.value)
+                      }
+                      className="form-input"
+                      min="1"
+                      disabled={ !item.product } // Disable when no product is selected
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Unit Price</label>
+                    <input
+                      type="number"
+                      value={ item.unit_price }
+                      onChange={ (e) =>
+                        handleLineItemChange(
+                          index,
+                          "unit_price",
+                          e.target.value
+                        )
+                      }
+                      className="form-input"
+                      min="0"
+                      step="0.01"
+                      disabled={ !item.product } // Disable when no product is selected
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Total Price</label>
+                    <input
+                      type="number"
+                      value={ item.total_price }
+                      className="form-input"
+                      readOnly
+                    />
+                  </div>
+
                   <button
                     type="button"
-                    onClick={() => setIsModalOpen(false)}
-                    className="cancel-btn"
+                    onClick={ () => removeLineItem(index) }
+                    className="remove-line-item"
                   >
-                    Cancel
-                  </button>
-                  <button type="submit" disabled={loading} className="submit-btn">
-                    {loading
-                      ? "Saving..."
-                      : isEditing
-                        ? "Update Invoice"
-                        : "Create Invoice"}
+                    Remove
                   </button>
                 </div>
-              </form>
-            </div>
+              )) }
+
+              {/* Totals Section */ }
+              <div className="form-grid">
+                <div className="form-group">
+                  <label>Subtotal</label>
+                  <input
+                    type="number"
+                    value={ formData.subtotal }
+                    className="form-input"
+                    readOnly
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Tax Amount</label>
+                  <input
+                    type="number"
+                    value={ formData.tax_amount }
+                    className="form-input"
+                    readOnly
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Discount Amount</label>
+                  <input
+                    type="number"
+                    value={ formData.discount_amount }
+                    onChange={ (e) => handleDiscountChange(e.target.value) }
+                    className="form-input"
+                    min="0"
+                    step="0.01"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Grand Total</label>
+                  <input
+                    type="number"
+                    value={ formData.grand_total }
+                    className="form-input"
+                    readOnly
+                  />
+                </div>
+              </div>
+
+              {/* Currency Section */ }
+              <div className="form-group">
+                <label>Currency</label>
+                <select
+                  value={ formData.currency }
+                  onChange={ (e) =>
+                    setFormData({ ...formData, currency: e.target.value })
+                  }
+                  className="form-select"
+                >
+                  <option value="USD">USD</option>
+                  <option value="EUR">EUR</option>
+                  <option value="GBP">GBP</option>
+                  <option value="JPY">JPY</option>
+                </select>
+              </div>
+
+              {/* Notes */ }
+              <div className="form-group">
+                <label>Notes</label>
+                <textarea
+                  value={ formData.notes }
+                  onChange={ (e) =>
+                    setFormData({ ...formData, notes: e.target.value })
+                  }
+                  className="form-input"
+                  rows="2"
+                />
+              </div>
+
+              {/* Terms and Conditions */ }
+              <div className="form-group">
+                <label>Terms and Conditions</label>
+                <textarea
+                  value={ formData.termsConditions }
+                  onChange={ (e) =>
+                    setFormData({
+                      ...formData,
+                      termsConditions: e.target.value,
+                    })
+                  }
+                  className="form-input"
+                  rows="2"
+                />
+              </div>
+
+              {/* Submit Button */ }
+              <div className="form-actions">
+                <button
+                  type="button"
+                  onClick={ () => setIsModalOpen(false) }
+                  className="cancel-btn"
+                >
+                  Cancel
+                </button>
+                <button type="submit" disabled={ loading } className="submit-btn">
+                  { loading
+                    ? "Saving..."
+                    : isEditing
+                      ? "Update Invoice"
+                      : "Create Invoice" }
+                </button>
+              </div>
+            </form>
           </div>
-        )}
-      </div>
-    </MainLayout>
+        </div>
+      ) }
+    </Layout>
+
   );
 }
 

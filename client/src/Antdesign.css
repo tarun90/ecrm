@@ -5,7 +5,19 @@
 
 .ant-layout-content {
     overflow: auto;
-    height: calc(100% - 64px);
+    height: 100%;
+    max-height: calc(100% - 64px);
+}
+
+.ant-layout-content .ant-layout-header {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 .ant-layout-content::-webkit-scrollbar-track {

@@ -1,8 +1,9 @@
 /* Base Styles */
-:root{
+:root {
   --side-bar-hover: #002742;
   --color-white: #ffffff;
 }
+
 :root {
 
   --primary-color: #03497A;
@@ -117,7 +118,7 @@
   --mantion-select-hover-btn: #03497A;
 }
 
-*{
+* {
   box-sizing: border-box;
 }
 
@@ -180,19 +181,18 @@
 } */
 
 /* Layout */
-body{
+body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
-.app-container {
-  display: flex;
-  min-height: 100vh;
+
+.custom-calendar-event:hover {
+  background-color: var(--mantion-select-hover-btn) !important;
 }
-.custom-calendar-event:hover{
- background-color: var(--mantion-select-hover-btn) !important; 
-}
-textarea{
+
+textarea {
   font-family: inherit;
 }
+
 /* Sidebar */
 .sidebar {
   width: 72px;
@@ -381,15 +381,16 @@ textarea{
   .sidebar {
     width: 64px;
   }
-  
+
   .search-bar {
     width: 200px;
   }
-  
+
   .pipeline-column {
     min-width: 250px;
   }
 }
+
 /* Global Styles */
 body {
   margin: 0;
@@ -451,7 +452,7 @@ body {
 
 /* Authentication Container */
 .auth-container {
-  min-height: 100vh;
+  min-height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -517,7 +518,6 @@ body {
 .app-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
 }
 
 .app-header {

@@ -183,9 +183,9 @@ function EventManager() {
         <div className="error-card">
           <AlertCircle className="error-icon" />
           <h2 className="error-title">Calendar Error</h2>
-          <p className="error-message">{error}</p>
+          <p className="error-message">{ error }</p>
           <button
-            onClick={() => window.location.reload()}
+            onClick={ () => window.location.reload() }
             className="error-retry-button"
           >
             Try Again
@@ -205,7 +205,7 @@ function EventManager() {
           <h1 className="auth-title">Calendar Event Manager</h1>
           <p className="auth-description">Connect with Google Calendar to manage your events</p>
           <button
-            onClick={handleAuth}
+            onClick={ handleAuth }
             className="auth-button"
           >
             <LogIn className="button-icon" />
@@ -217,48 +217,48 @@ function EventManager() {
   }
 
   return (
-    <div className="app-container">
-      <header className="app-header">
+    <Layout className='main-content-wrapper'>
+      <Header className="content-header">
         <div className="header-content">
           <h1 className="header-title">Event Planner</h1>
           <div className="view-toggle">
             <button
-              onClick={() => setViewType('calendar')}
-              className={`view-button ${viewType === 'calendar' ? 'active' : ''}`}
+              onClick={ () => setViewType('calendar') }
+              className={ `view-button ${viewType === 'calendar' ? 'active' : ''}` }
             >
               <CalendarIcon className="button-icon" />
               <span>Calendar</span>
             </button>
             <button
-              onClick={() => setViewType('list')}
-              className={`view-button ${viewType === 'list' ? 'active' : ''}`}
+              onClick={ () => setViewType('list') }
+              className={ `view-button ${viewType === 'list' ? 'active' : ''}` }
             >
               <List className="button-icon" />
               <span>List</span>
             </button>
           </div>
         </div>
-      </header>
+      </Header>
 
-      <main className="app-main">
+      <Content className="content-warpper">
         <div className="calendar-container">
           <FullCalendar
-            plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
-            initialView={viewType === 'calendar' ? 'dayGridMonth' : 'listMonth'}
-            headerToolbar={{
+            plugins={ [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin] }
+            initialView={ viewType === 'calendar' ? 'dayGridMonth' : 'listMonth' }
+            headerToolbar={ {
               left: 'prev,next today',
               center: 'title',
               right: viewType === 'calendar'
                 ? 'dayGridMonth,timeGridWeek,timeGridDay'
                 : 'listDay,listWeek,listMonth,listYear',
-            }}
-            views={{
+            } }
+            views={ {
               listDay: { buttonText: 'Day' },
               listWeek: { buttonText: 'Week' },
               listMonth: { buttonText: 'Month' },
               listYear: { buttonText: 'Year' },
-            }}
-            events={events.map((event) => ({
+            } }
+            events={ events.map((event) => ({
               id: event.id,
               title: event.title,
               start: event.start,
@@ -266,34 +266,34 @@ function EventManager() {
               description: event.description,
               location: event.location,
               className: 'custom-calendar-event',
-            }))}
-            dateClick={handleDateClick}
-            eventClick={handleEventClick}
+            })) }
+            dateClick={ handleDateClick }
+            eventClick={ handleEventClick }
             height="auto"
-            aspectRatio={2}
-            dayMaxEvents={4}
+            aspectRatio={ 2 }
+            dayMaxEvents={ 4 }
           />
         </div>
-      </main>
+      </Content>
 
-      <footer className="app-footer">
-        <p>Copyright © {new Date().getFullYear()} Elsner Technologies Private Limited</p>
+      <footer className="site-footer">
+        <p>Copyright © { new Date().getFullYear() } Elsner Technologies Private Limited</p>
       </footer>
 
       <EventModal
-        isOpen={isModalOpen}
-        onClose={() => {
+        isOpen={ isModalOpen }
+        onClose={ () => {
           setIsModalOpen(false);
           setSelectedEvent(null);
-        }}
-        onSubmit={selectedEvent ? handleEventUpdate : handleEventCreate}
-        onDelete={handleEventDelete}
-        selectedDate={selectedDate}
-        event={selectedEvent}
+        } }
+        onSubmit={ selectedEvent ? handleEventUpdate : handleEventCreate }
+        onDelete={ handleEventDelete }
+        selectedDate={ selectedDate }
+        event={ selectedEvent }
       />
 
       <Toaster position="bottom-right" />
-    </div>
+    </Layout>
   );
 }
 

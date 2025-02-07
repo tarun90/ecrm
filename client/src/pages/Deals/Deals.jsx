@@ -290,7 +290,7 @@ function Deals() {
     showUploadList: false,
   };
 
-  const getDealsInStage = (stage) => filteredDeals.filter((deal) => deal.stage === stage);
+  const getDealsInStage = (stage) => filteredDeals?.filter((deal) => deal?.stage === stage);
 
   return (
     // <MainLayout>
@@ -314,8 +314,8 @@ function Deals() {
     //     </Menu.Item> */}
     //   </Menu>
     // </Sider>
-    <Layout>
-      <Header className={ styles.header }>
+    <Layout className='main-content-wrapper'>
+      <Header className="content-header">
         <div className={ styles.headerContent }>
           <div className={ styles.headerActions }>
             <Search
@@ -357,7 +357,7 @@ function Deals() {
 
         </div>
       </Header>
-      <Content className={ styles.content }>
+      <Content className="content-warpper">
         <DragDropContext onDragEnd={ onDragEnd }>
           <div className={ styles.kanbanBoard }>
             { stages.map((stage) => {

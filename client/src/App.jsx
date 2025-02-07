@@ -22,31 +22,31 @@ const PrivateRoute = ({ children }) => {
 function App() {
   return (
     <ConfigProvider
-      theme={{
+      theme={ {
         token: {
           colorPrimary: '#03497a',
           colorBgContainer: '#f6ffed',
         },
-      }}
+      } }
     >
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            {/* Public Route */}
-            <Route path="/login" element={<Login />} />
+            {/* Public Route */ }
+            <Route path="/login" element={ <Login /> } />
 
-            {/* Private Routes inside MainLayout */}
+            {/* Private Routes inside MainLayout */ }
             <Route
               path="/*"
               element={
                 <PrivateRoute>
                   <MainLayout>
                     <Routes>
-                      <Route path="/" element={<Dashboard />} />
-                      <Route path="/deals" element={<Deals />} />
-                      <Route path="/contacts" element={<ContactListAndAdd />} />
-                      <Route path="/event-manager" element={<EventManager />} />
-                      <Route path="/tasks" element={<Tasks />} />
+                      <Route path="/" element={ <Dashboard /> } />
+                      <Route path="/deals" element={ <Deals /> } />
+                      <Route path="/contacts" element={ <ContactListAndAdd /> } />
+                      <Route path="/event-manager" element={ <EventManager /> } />
+                      <Route path="/tasks" element={ <Tasks /> } />
                       <Route
                         path="/products"
                         element={
@@ -64,22 +64,7 @@ function App() {
                 </PrivateRoute>
               }
             />
-            <Route
-              path="/products"
-              element={
-                <PrivateRoute>
-                  <Products />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/invoices"
-              element={
-                <PrivateRoute>
-                  <Invoices />
-                </PrivateRoute>
-              }
-            />
+
           </Routes>
         </BrowserRouter>
       </AuthProvider>
