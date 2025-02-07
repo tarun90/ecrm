@@ -33,6 +33,8 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userData');
+    localStorage.removeItem('isWebMailLoggedin');
+
 
     setUser(null);
     setIsAuthenticated(false);

@@ -11,6 +11,7 @@ import eventmanager from "./routes/eventmanager.js"
 import createTaskRoutes from './routes/createTaskRoutes.js';
 import productRoutes from './routes/products.js';
 import invoiceRoutes from './routes/invoice.js';
+import emails from './routes/emails.js';
 
 dotenv.config();
 
@@ -51,6 +52,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/deals', dealRoutes);
 app.use('/api/contacts', contactRoutes);
 app.use('/api/events', eventmanager); 
+// app.use('/api/emails', emails); 
+
 
 // Initialize task routes with the transporter dependency
 const { router: taskRouter, checkReminders } = createTaskRoutes(transporter);
@@ -59,6 +62,7 @@ const { router: taskRouter, checkReminders } = createTaskRoutes(transporter);
 app.use('/api/tasks', taskRouter);
 app.use('/api/products', productRoutes);
 app.use('/api/invoices', invoiceRoutes);
+app.use('/api/emails', emails);
 
 // Start the reminder check every minute
 // setInterval(checkReminders, 60 * 1000);
