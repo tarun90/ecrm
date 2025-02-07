@@ -44,7 +44,7 @@ function Invoices() {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/products");
+      const response = await axios.get(`${import.meta.env.VITE_TM_API_URL}/api/products`);
       setProducts(response.data);
     } catch (err) {
       setError("Failed to fetch products. Please try again later.");
@@ -56,7 +56,7 @@ function Invoices() {
     setError(null);
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/invoices?page=${currentPage}`
+        `${import.meta.env.VITE_TM_API_URL}/api/invoices?page=${currentPage}`
       );
       setInvoices(response.data);
     } catch (err) {
@@ -90,11 +90,11 @@ function Invoices() {
     try {
       if (isEditing && currentInvoice) {
         await axios.put(
-          `http://localhost:5000/api/invoices/${currentInvoice._id}`,
+          `${import.meta.env.VITE_TM_API_URL}/api/invoices/${currentInvoice._id}`,
           formData
         );
       } else {
-        await axios.post("http://localhost:5000/api/invoices", formData);
+        await axios.post(`${import.meta.env.VITE_TM_API_URL}/api/invoices`, formData);
       }
       setIsModalOpen(false);
       setFormData(initialFormData);

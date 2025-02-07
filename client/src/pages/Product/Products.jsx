@@ -36,7 +36,7 @@ function Products() {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get('http://localhost:5000/api/products');
+      const response = await axios.get(`${import.meta.env.VITE_TM_API_URL}/api/products`);
       setProducts(response.data);
     } catch (error) {
       setError('Failed to fetch products. Please try again later.');
@@ -58,9 +58,9 @@ function Products() {
 
     try {
       if (isEditing && currentProduct) {
-        await axios.put(`http://localhost:5000/api/products/${currentProduct._id}`, formData);
+        await axios.put(`${import.meta.env.VITE_TM_API_URL}/api/products/${currentProduct._id}`, formData);
       } else {
-        await axios.post('http://localhost:5000/api/products', formData);
+        await axios.post(`${import.meta.env.VITE_TM_API_URL}/api/products`, formData);
       }
       setIsModalOpen(false);
       setFormData(initialFormData);

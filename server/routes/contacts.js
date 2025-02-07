@@ -13,8 +13,8 @@ const upload = multer({ storage: multer.memoryStorage() });
 router.get('/', auth, async (req, res) => {
   try {
     const { search } = req.query;
-    let query = { contactOwner: req.user.userId };
-    
+    let query = { contactOwner: req.user.user._id };
+
     if (search) {
       query = {
         ...query,
@@ -26,10 +26,11 @@ router.get('/', auth, async (req, res) => {
         ]
       };
     }
-    
+
     const contacts = await Contact.find(query).populate('contactOwner');
     res.json(contacts);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: 'Error fetching contacts' });
   }
 });
@@ -39,9 +40,9 @@ router.get('/', auth, async (req, res) => {
 // Delete contact
 router.delete('/:id', auth, async (req, res) => {
   try {
-    const contact = await Contact.findOneAndDelete({ 
+    const contact = await Contact.findOneAndDelete({
       _id: req.params.id,
-      contactOwner: req.user.userId 
+      contactOwner: req.user.user._id
     });
     if (!contact) {
       return res.status(404).json({ message: 'Contact not found' });
@@ -56,7 +57,7 @@ router.delete('/:id', auth, async (req, res) => {
 router.put('/:id', auth, async (req, res) => {
   try {
     const contact = await Contact.findOneAndUpdate(
-      { _id: req.params.id, contactOwner: req.user.userId },
+      { _id: req.params.id, contactOwner: req.user.user._id },
       { ...req.body },
       { new: true }
     );
@@ -101,22 +102,22 @@ router.post('/import', auth, upload.single('file'), async (req, res) => {
 
     // Set up promise to handle parsing
     const parseCSV = new Promise((resolve, reject) => {
-      parser.on('readable', function() {
+      parser.on('readable', function () {
         let record;
         while ((record = parser.read()) !== null) {
           // Add contactOwner to each record
           records.push({
             ...record,
-            contactOwner: req.user.userId // Make sure this matches your schema
+            contactOwner: req.user.user._id // Make sure this matches your schema
           });
         }
       });
 
-      parser.on('error', function(err) {
+      parser.on('error', function (err) {
         reject(err);
       });
 
-      parser.on('end', function() {
+      parser.on('end', function () {
         resolve();
       });
     });
@@ -144,15 +145,15 @@ router.post('/import', auth, upload.single('file'), async (req, res) => {
 
 router.get('/export', auth, async (req, res) => {
   try {
-    const contacts = await Contact.find({ contactOwner: req.user.userId })
+    const contacts = await Contact.find({ contactOwner: req.user.user._id })
       .populate('contactOwner', 'name');
-    
-    const fields = ['firstName', 'lastName', 'email', 'phoneNumber', 
+
+    const fields = ['firstName', 'lastName', 'email', 'phoneNumber',
       'jobTitle', 'lifecycleStage', 'leadStatus', 'createdAt'];
-    
+
     const json2csvParser = new Parser({ fields });
     const csv = json2csvParser.parse(contacts);
-    
+
     res.header('Content-Type', 'text/csv');
     res.attachment('contacts.csv');
     res.send(csv);

@@ -13,13 +13,36 @@ import Products from './pages/Product/Products';
 import Invoices from './pages/Invoice/Invoices';
 import './App.css';
 import "./variable.css"
+import WebMailLogin from './pages/webmail/WebMailLogin';
+import WebMailDashboard from './pages/webmail/WebMailDashboard';
+import { useState, useEffect } from 'react';
 
 const PrivateRoute = ({ children }) => {
   let token = localStorage.getItem('token');
   return token ? children : <Navigate to="/login" />;
 };
 
+
+
 function App() {
+
+
+  const [userData, setUserData] = useState(() => {
+    return localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : {};
+  });
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setUserData(localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : {});
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
   return (
     <ConfigProvider
       theme={ {
@@ -47,18 +70,14 @@ function App() {
                       <Route path="/contacts" element={ <ContactListAndAdd /> } />
                       <Route path="/event-manager" element={ <EventManager /> } />
                       <Route path="/tasks" element={ <Tasks /> } />
-                      <Route
-                        path="/products"
-                        element={
-                          <Products />
-                        }
-                      />
-                      <Route
-                        path="/invoices"
-                        element={
-                          <Invoices />
-                        }
-                      />
+                      <Route path="/products" element={ <Products /> } />
+                      <Route path="/invoices" element={ <Invoices /> } />
+                      {/* <Route path="/webmail" element={userData?.tokens ? <WebMailDashboard /> : <WebMailLogin />} /> */ }
+                      <Route path="/webmail" element={ <WebMailDashboard /> } />
+                      <Route path="/webmail-setup" element={ <WebMailLogin /> } />
+
+
+
                     </Routes>
                   </MainLayout>
                 </PrivateRoute>
