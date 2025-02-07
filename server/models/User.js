@@ -15,7 +15,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  img: String
+  img: String,
+  tokens: Object,
+  lastLogin: { type: Date, default: Date.now },
+  isActive: { type: Boolean, default: true }
 }, { timestamps: true });
 
 userSchema.methods.comparePassword = function (candidatePassword, cb) {

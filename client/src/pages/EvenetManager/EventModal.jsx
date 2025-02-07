@@ -159,7 +159,7 @@ export function EventModal({ isOpen, onClose, onSubmit, onDelete, selectedDate, 
 
       try {
         await onDelete(eventId, deleteType);
-        const response = await fetch(`http://localhost:5000/api/events/${eventId}`, { method: 'DELETE' });
+        const response = await fetch(`${import.meta.env.VITE_TM_API_URL}/api/events/${eventId}`, { method: 'DELETE' });
 
         if (!response.ok) {
           const result = await response.json();

@@ -24,6 +24,13 @@ const Sidebar = ({ collapsed, onCollapse }) => {
     if (path.includes('/deals')) return '2';
     if (path.includes('/contacts')) return '3';
     if (path.includes('/tasks')) return '4';
+    if (path.includes('/event-manager')) return '5';
+    if (path.includes('/products')) return '6';
+    if (path.includes('/invoices')) return '7';
+    if (path.includes('/webmail')) return '8';
+
+
+    
     return '1';
   };
 
@@ -47,12 +54,6 @@ const Sidebar = ({ collapsed, onCollapse }) => {
       onClick: () => navigate('/contacts'),
     },
     {
-      key: '5',
-      icon: <CalendarOutlined />,
-      label: 'Event-Manager',
-      onClick: () => navigate('/event-manager'),
-    },
-    {
       key: '4',
       icon: <TeamOutlined />,
       label: 'Tasks',
@@ -60,15 +61,27 @@ const Sidebar = ({ collapsed, onCollapse }) => {
     },
     {
       key: '5',
+      icon: <CalendarOutlined />,
+      label: 'Event-Manager',
+      onClick: () => navigate('/event-manager'),
+    },
+    {
+      key: '6',
       icon: <ProductOutlined />,
       label: 'Products',
       onClick: () => navigate('/products'),
     },
     {
-      key: '6',
+      key: '7',
       icon: <FileTextOutlined />,
       label: 'Invoices',
       onClick: () => navigate('/invoices'),
+    },
+    {
+      key: '8',
+      icon: <FileTextOutlined />,
+      label: 'Web Mail',
+      onClick: () => navigate('/webmail-setup'),
     },
   ];
 
