@@ -66,9 +66,10 @@ function EventManager() {
     }
   }, [isAuthenticated, fetchEvents]);
 
-  const handleAuth = async () => {
+ const handleAuth = async () => {
     try {
-      await authenticate();
+      const response = await authenticate();
+      console.log('Google Login Response:', response);
       setIsAuthenticated(true);
       setError(null);
       toast.success('Successfully connected to Google Calendar');

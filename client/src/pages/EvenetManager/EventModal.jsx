@@ -69,7 +69,7 @@ export function EventModal({ isOpen, onClose, onSubmit, onDelete, selectedDate, 
       setStartTime(format(event.start, 'HH:mm'));
       setEndTime(format(event.end, 'HH:mm'));
       setLocation(event.location || '');
-      setSelectedAttendees(event.attendees || []);
+      setSelectedAttendees(event.attendees ? [...event.attendees] : []);
       setRecurrence(event.recurrence || '');
       setUseDefaultReminder(event.reminders?.useDefault ?? true);
       if (event.reminders?.overrides?.[0]) {
@@ -209,7 +209,7 @@ export function EventModal({ isOpen, onClose, onSubmit, onDelete, selectedDate, 
 
   const addAttendee = (email) => {
     if (email && !selectedAttendees.includes(email)) {
-      setSelectedAttendees([...selectedAttendees, email]);
+      setSelectedAttendees((prevAttendees) => [...prevAttendees, email]);
       setInputValue('');
       setSuggestions([]);
       setShowSuggestions(false);
@@ -266,222 +266,223 @@ export function EventModal({ isOpen, onClose, onSubmit, onDelete, selectedDate, 
 
   return (
     <div className="modal-overlay">
-    <div className="modal-container">
-      <div className="modal-header">
-        <h2 className="modal-title">{event ? 'Edit Event' : 'Create Event'}</h2>
-        <div className="modal-actions">
-          {event && onDelete && (
-            <div className="delete-container" ref={deleteOptionsRef}>
-              <button 
-                className="delete-button"
-                onClick={() => setShowDeleteOptions(!showDeleteOptions)} 
-                disabled={isDeleting || isSubmitting}
-              >
-                <Trash2 className="delete-icon" /> 
-                <span>Delete</span>
-              </button>
+      <div className="modal-container">
+        <div className="modal-header">
+          <h2 className="modal-title">{event ? 'Edit Event' : 'Create Event'}</h2>
+          <div className="modal-actions">
+            {event && onDelete && (
+              <div className="delete-container" ref={deleteOptionsRef}>
+                <button
+                  className="delete-button"
+                  onClick={() => setShowDeleteOptions(!showDeleteOptions)}
+                  disabled={isDeleting || isSubmitting}
+                >
+                  <Trash2 className="delete-icon" />
+                  <span>Delete</span>
+                </button>
 
-              {showDeleteOptions && (
-                <div className="delete-options">
-                  <button className="delete-option" onClick={() => handleDelete('single')}>
-                    Delete this event
-                  </button>
-                  {isRecurringEvent && (
-                    <>
-                      <button className="delete-option" onClick={() => handleDelete('future')}>
-                        Delete this and following events
+                {showDeleteOptions && (
+                  <div className="delete-options">
+                    <button className="delete-option" onClick={() => handleDelete('single')}>
+                      Delete this event
+                    </button>
+                    {isRecurringEvent && (
+                      <>
+                        <button className="delete-option" onClick={() => handleDelete('future')}>
+                          Delete this and following events
+                        </button>
+                        <button className="delete-option" onClick={() => handleDelete('all')}>
+                          Delete all events in series
+                        </button>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+            <button className="close-button" onClick={onClose}>
+              <X size={24} />
+            </button>
+          </div>
+        </div>
+
+        {error && <div className="error-message">{error}</div>}
+
+        <form className="event-form" onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label className="form-label">Event Title</label>
+            <input
+              className="form-input"
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+              placeholder="Enter event title"
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Date</label>
+            <input
+              className="form-input disabled"
+              type="text"
+              value={format(selectedDate, 'MMMM d, yyyy')}
+              disabled
+            />
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label className="form-label">Start Time</label>
+              <input
+                className="form-input"
+                type="time"
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">End Time</label>
+              <input
+                className="form-input"
+                type="time"
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
+                min={startTime}
+                required
+              />
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Location</label>
+            <input
+              className="form-input"
+              type="text"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              placeholder="Add location"
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Attendees</label>
+            <div className="attendees-container">
+              <div className="attendees-input-wrapper">
+                <input
+                  className="form-input"
+                  type="text"
+                  value={inputValue}
+                  onChange={handleInputChange}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Enter attendee email"
+                  ref={inputRef}
+                />
+              </div>
+              {selectedAttendees.length > 0 && (
+                <div className="attendees-list">
+                  {selectedAttendees.map((attendee, index) => (
+                    <div key={index} className="attendee-chip">
+                      <span className="attendee-email">{attendee}</span>
+                      <button
+                        type="button"
+                        className="remove-attendee"
+                        onClick={() => removeAttendee(attendee)}
+                      >
+                        <X size={16} />
                       </button>
-                      <button className="delete-option" onClick={() => handleDelete('all')}>
-                        Delete all events in series
-                      </button>
-                    </>
-                  )}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {showSuggestions && suggestions.length > 0 && (
+                <div className="suggestions-list" ref={suggestionsRef}>
+                  {suggestions.map((suggestion) => (
+                    <button
+                      key={suggestion}
+                      type="button"
+                      className="suggestion-item"
+                      onClick={() => addAttendee(suggestion)}
+                    >
+                      {suggestion}
+                    </button>
+                  ))}
                 </div>
               )}
             </div>
-          )}
-          <button className="close-button" onClick={onClose}>
-            <X size={24} />
-          </button>
-        </div>
-      </div>
-
-      {error && <div className="error-message">{error}</div>}
-
-      <form className="event-form" onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label className="form-label">Event Title</label>
-          <input
-            className="form-input"
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-            placeholder="Enter event title"
-          />
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">Date</label>
-          <input
-            className="form-input disabled"
-            type="text"
-            value={format(selectedDate, 'MMMM d, yyyy')}
-            disabled
-          />
-        </div>
-
-        <div className="form-row">
+          </div>
           <div className="form-group">
-            <label className="form-label">Start Time</label>
-            <input
-              className="form-input"
-              type="time"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-              required
+            <label className="form-label">Description</label>
+            <textarea
+              className="form-textarea"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             />
           </div>
 
           <div className="form-group">
-            <label className="form-label">End Time</label>
-            <input
-              className="form-input"
-              type="time"
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-              min={startTime}
-              required
-            />
-          </div>
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">Location</label>
-          <input
-            className="form-input"
-            type="text"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            placeholder="Add location"
-          />
-        </div>
-        <div className="form-group">
-          <label className="form-label">Attendees</label>
-          <div className="attendees-container">
-            <div className="attendees-input-wrapper">
-              <input
-                className="form-input"
-                type="text"
-                value={inputValue}
-                onChange={handleInputChange}
-                onKeyDown={handleKeyDown}
-                placeholder="Enter attendee email"
-                ref={inputRef}
-              />
-            </div>
-            {selectedAttendees.length > 0 && (
-              <div className="attendees-list">
-                {selectedAttendees.map((attendee) => (
-                  <div key={attendee} className="attendee-chip">
-                    <span className="attendee-email">{attendee}</span>
-                    <button
-                      type="button"
-                      className="remove-attendee"
-                      onClick={() => removeAttendee(attendee)}
-                    >
-                      <X size={16} />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-            {showSuggestions && suggestions.length > 0 && (
-              <div className="suggestions-list" ref={suggestionsRef}>
-                {suggestions.map((suggestion) => (
-                  <button
-                    key={suggestion}
-                    type="button"
-                    className="suggestion-item"
-                    onClick={() => addAttendee(suggestion)}
-                  >
-                    {suggestion}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-        <div className="form-group">
-          <label className="form-label">Description</label>
-          <textarea
-            className="form-textarea"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">Repeat</label>
-          <select 
-            className="form-select"
-            value={recurrence}
-            onChange={(e) => setRecurrence(e.target.value)}
-          >
-            {recurrenceOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="form-group">
-          <label className="form-label">Reminder</label>
-          <div className="reminder-settings">
+            <label className="form-label">Repeat</label>
             <select
               className="form-select"
-              value={reminderTime}
-              onChange={(e) => setReminderTime(e.target.value)}
-              disabled={useDefaultReminder}
+              value={recurrence}
+              onChange={(e) => setRecurrence(e.target.value)}
             >
-              {reminderTimeOptions.map((option) => (
+              {recurrenceOptions.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
               ))}
             </select>
           </div>
-        </div>
-
-
-        {event?.meetingLink && (
-          <div className="meeting-link">
-            <Link size={20} />
-            <span className="meeting-link-text">{event.meetingLink}</span>
-            <button
-              type="button"
-              className="copy-link-button"
-              onClick={copyMeetingLink}
-            >
-              <Copy size={16} />
-            </button>
-            {showMeetingLinkCopied && (
-              <span className="copied-message">Link copied!</span>
-            )}
+          <div className="form-group">
+            <label className="form-label">Reminder</label>
+            <div className="reminder-settings">
+              <select
+                className="form-select"
+                value={reminderTime}
+                onChange={(e) => setReminderTime(e.target.value)}
+                disabled={useDefaultReminder}
+              >
+                {reminderTimeOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
-        )}
 
-        <div className="form-actions">
-          <button
-            type="submit"
-            className="submit-button"
-            disabled={isSubmitting || isDeleting}
-          >
-            {isSubmitting ? 'Saving...' : event ? 'Update Event' : 'Create Event'}
-          </button>
-        </div>
-      </form>
+
+          {event?.meetingLink && (
+            <div className="meeting-link">
+              <Link size={20} />
+              <span className="meeting-link-text">{event.meetingLink}</span>
+              <button
+                type="button"
+                className="copy-link-button"
+                onClick={copyMeetingLink}
+              >
+                <Copy size={16} />
+              </button>
+              {showMeetingLinkCopied && (
+                <span className="copied-message">Link copied!</span>
+              )}
+            </div>
+          )}
+
+          <div className="form-actions">
+            <button
+              type="submit"
+              className="submit-button"
+              disabled={isSubmitting || isDeleting}
+            >
+              {isSubmitting ? 'Saving...' : event ? 'Update Event' : 'Create Event'}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
-  </div>
   );
 }
