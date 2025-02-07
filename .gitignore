@@ -27,3 +27,6 @@ client/.env
 client/yarn.lock
 server/.env
 server/yarn.lock
+client/Dockerfile
+server/Dockerfile
+docker-compose.yml
