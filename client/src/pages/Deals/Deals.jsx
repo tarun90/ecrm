@@ -314,188 +314,188 @@ function Deals() {
     //     </Menu.Item> */}
     //   </Menu>
     // </Sider>
-      <Layout>
-        <Header className={ styles.header }>
-          <div className={ styles.headerContent }>
-            <div className={ styles.headerActions }>
-              <Search
-                placeholder="Search deals by name or company..."
-                allowClear
-                onChange={ (e) => handleSearch(e.target.value) }
-                className={ styles.searchBar }
-              />
-              <Button
-                type="primary"
-                icon={ <PlusOutlined /> }
-                onClick={ () => setIsModalVisible(true) }
-                style={ { marginLeft: 'auto' } }
-              >
-                {/* karan final save */ }
-                Create Deal
-              </Button>
-              <Dropdown
-                menu={ {
-                  items: [
-                    {
-                      key: 'deals',
-                      label: 'Import Deals',
-                      icon: <UploadOutlined />,
-                      onClick: () => showImportModal('deals')
-                    },
-                    // {
-                    //   key: 'contacts',
-                    //   label: 'Import Contacts',
-                    //   icon: <UploadOutlined />,
-                    //   onClick: () => showImportModal('contacts')
-                    // }
-                  ]
-                } }
-              >
-                <Button icon={ <UploadOutlined /> } className="text-btn ">Import</Button>
-              </Dropdown>
-            </div>
-
-          </div>
-        </Header>
-        <Content className={ styles.content }>
-          <DragDropContext onDragEnd={ onDragEnd }>
-            <div className={ styles.kanbanBoard }>
-              { stages.map((stage) => {
-                const stageDeals = getDealsInStage(stage);
-                return (
-                  <div key={ stage } className={ styles.kanbanColumn }>
-                    <h3>
-                      { stage }
-                      <span className={ styles.columnCount }>{ stageDeals.length }</span>
-                    </h3>
-                    <Droppable droppableId={ stage }>
-                      { (provided, snapshot) => (
-                        <div
-                          ref={ provided.innerRef }
-                          { ...provided.droppableProps }
-                          className={ `${styles.dealList} ${snapshot.isDraggingOver ? styles.isDraggingOver : ''}` }
-                        >
-                          { stageDeals.map((deal, index) => (
-                            <Draggable
-                              key={ deal._id }
-                              draggableId={ String(deal._id) }
-                              index={ index }
-                            >
-                              { (provided, snapshot) => (
-                                <div
-                                  ref={ provided.innerRef }
-                                  { ...provided.draggableProps }
-                                  { ...provided.dragHandleProps }
-                                  className={ `${styles.dealCard} ${snapshot.isDragging ? styles.isDragging : ''}` }
-                                  onClick={ () => openViewModal(deal) }
-                                >
-                                  <div className={ styles.dealHeader }>
-                                    <h4>{ deal.name }</h4>
-                                    <div className={ styles.dealActions }>
-                                      <Button
-                                        type="text"
-                                        icon={ <EyeOutlined /> }
-                                        onClick={ (e) => {
-                                          e.stopPropagation();
-                                          openViewModal(deal);
-                                        } }
-                                      />
-                                      <Button
-                                        type="text"
-                                        icon={ <EditOutlined /> }
-                                        onClick={ (e) => {
-                                          e.stopPropagation();
-                                          openEditModal(deal);
-                                        } }
-                                      />
-                                      <Popconfirm
-                                        title="Delete deal"
-                                        description="Are you sure you want to delete this deal?"
-                                        onConfirm={ (e) => {
-                                          e.stopPropagation();
-                                          handleDeleteDeal(deal._id);
-                                        } }
-                                        okText="Yes"
-                                        cancelText="No"
-                                      >
-                                        <Button
-                                          type="text"
-                                          danger
-                                          icon={ <DeleteOutlined /> }
-                                          onClick={ (e) => e.stopPropagation() }
-                                        />
-                                      </Popconfirm>
-                                    </div>
-                                  </div>
-                                  <p className={ styles.dealCompany }>{ deal.company }</p>
-                                  <div className={ styles.dealInfo }>
-                                    <span className={ `${styles.dealAmount} ${deal.amount < 0 ? styles.negative : ''}` }>
-                                      ${ deal.amount.toLocaleString() }
-                                    </span>
-                                    <span>•</span>
-                                    <span>
-                                      <ClockCircleOutlined /> { new Date(deal.closeDate).toLocaleDateString() }
-                                    </span>
-                                  </div>
-                                </div>
-                              ) }
-                            </Draggable>
-                          )) }
-                          { provided.placeholder }
-                        </div>
-                      ) }
-                    </Droppable>
-                  </div>
-                );
-              }) }
-            </div>
-          </DragDropContext>
-        </Content>
-
-        {/* Create Deal Modal */ }
-        <Modal
-          title="Create Deal"
-          open={ isModalVisible }
-          onCancel={ () => {
-            setIsModalVisible(false);
-            form.resetFields();
-          } }
-          footer={ [
+    <Layout>
+      <Header className={ styles.header }>
+        <div className={ styles.headerContent }>
+          <div className={ styles.headerActions }>
+            <Search
+              placeholder="Search deals by name or company..."
+              allowClear
+              onChange={ (e) => handleSearch(e.target.value) }
+              className={ styles.searchBar }
+            />
             <Button
-              key="cancel"
-              className='text-btn'
-              onClick={ () => {
-                setIsModalVisible(false);
-                form.resetFields();
+              type="primary"
+              icon={ <PlusOutlined /> }
+              onClick={ () => setIsModalVisible(true) }
+              style={ { marginLeft: 'auto' } }
+            >
+              {/* karan final save */ }
+              Create Deal
+            </Button>
+            <Dropdown
+              menu={ {
+                items: [
+                  {
+                    key: 'deals',
+                    label: 'Import Deals',
+                    icon: <UploadOutlined />,
+                    onClick: () => showImportModal('deals')
+                  },
+                  // {
+                  //   key: 'contacts',
+                  //   label: 'Import Contacts',
+                  //   icon: <UploadOutlined />,
+                  //   onClick: () => showImportModal('contacts')
+                  // }
+                ]
               } }
             >
-              Cancel
-            </Button>,
-            <Button
-              key="create"
-              type="primary"
-              onClick={ () => form.submit() }
-              loading={ loading }
-            >
-              Create
-            </Button>
-          ] }
-          width={ 600 }
-        >
-          <Form
-            form={ form }
-            layout="vertical"
-            onFinish={ handleCreateDeal }
-          >
-            <Form.Item
-              name="name"
-              label="Deal name"
-              rules={ [{ required: true, message: 'Please enter deal name' }] }
-            >
-              <Input placeholder="Enter deal name" />
-            </Form.Item>
+              <Button icon={ <UploadOutlined /> } className="text-btn ">Import</Button>
+            </Dropdown>
+          </div>
 
-            {/* <Form.Item
+        </div>
+      </Header>
+      <Content className={ styles.content }>
+        <DragDropContext onDragEnd={ onDragEnd }>
+          <div className={ styles.kanbanBoard }>
+            { stages.map((stage) => {
+              const stageDeals = getDealsInStage(stage);
+              return (
+                <div key={ stage } className={ styles.kanbanColumn }>
+                  <h3>
+                    { stage }
+                    <span className={ styles.columnCount }>{ stageDeals.length }</span>
+                  </h3>
+                  <Droppable droppableId={ stage }>
+                    { (provided, snapshot) => (
+                      <div
+                        ref={ provided.innerRef }
+                        { ...provided.droppableProps }
+                        className={ `${styles.dealList} ${snapshot.isDraggingOver ? styles.isDraggingOver : ''}` }
+                      >
+                        { stageDeals.map((deal, index) => (
+                          <Draggable
+                            key={ deal._id }
+                            draggableId={ String(deal._id) }
+                            index={ index }
+                          >
+                            { (provided, snapshot) => (
+                              <div
+                                ref={ provided.innerRef }
+                                { ...provided.draggableProps }
+                                { ...provided.dragHandleProps }
+                                className={ `${styles.dealCard} ${snapshot.isDragging ? styles.isDragging : ''}` }
+                                onClick={ () => openViewModal(deal) }
+                              >
+                                <div className={ styles.dealHeader }>
+                                  <h4>{ deal.name }</h4>
+                                  <div className={ styles.dealActions }>
+                                    <Button
+                                      type="text"
+                                      icon={ <EyeOutlined /> }
+                                      onClick={ (e) => {
+                                        e.stopPropagation();
+                                        openViewModal(deal);
+                                      } }
+                                    />
+                                    <Button
+                                      type="text"
+                                      icon={ <EditOutlined /> }
+                                      onClick={ (e) => {
+                                        e.stopPropagation();
+                                        openEditModal(deal);
+                                      } }
+                                    />
+                                    <Popconfirm
+                                      title="Delete deal"
+                                      description="Are you sure you want to delete this deal?"
+                                      onConfirm={ (e) => {
+                                        e.stopPropagation();
+                                        handleDeleteDeal(deal._id);
+                                      } }
+                                      okText="Yes"
+                                      cancelText="No"
+                                    >
+                                      <Button
+                                        type="text"
+                                        danger
+                                        icon={ <DeleteOutlined /> }
+                                        onClick={ (e) => e.stopPropagation() }
+                                      />
+                                    </Popconfirm>
+                                  </div>
+                                </div>
+                                <p className={ styles.dealCompany }>{ deal.company }</p>
+                                <div className={ styles.dealInfo }>
+                                  <span className={ `${styles.dealAmount} ${deal.amount < 0 ? styles.negative : ''}` }>
+                                    ${ deal.amount.toLocaleString() }
+                                  </span>
+                                  <span>•</span>
+                                  <span>
+                                    <ClockCircleOutlined /> { new Date(deal.closeDate).toLocaleDateString() }
+                                  </span>
+                                </div>
+                              </div>
+                            ) }
+                          </Draggable>
+                        )) }
+                        { provided.placeholder }
+                      </div>
+                    ) }
+                  </Droppable>
+                </div>
+              );
+            }) }
+          </div>
+        </DragDropContext>
+      </Content>
+
+      {/* Create Deal Modal */ }
+      <Modal
+        title="Create Deal"
+        open={ isModalVisible }
+        onCancel={ () => {
+          setIsModalVisible(false);
+          form.resetFields();
+        } }
+        footer={ [
+          <Button
+            key="cancel"
+            className='text-btn'
+            onClick={ () => {
+              setIsModalVisible(false);
+              form.resetFields();
+            } }
+          >
+            Cancel
+          </Button>,
+          <Button
+            key="create"
+            type="primary"
+            onClick={ () => form.submit() }
+            loading={ loading }
+          >
+            Create
+          </Button>
+        ] }
+        width={ 600 }
+      >
+        <Form
+          form={ form }
+          layout="vertical"
+          onFinish={ handleCreateDeal }
+        >
+          <Form.Item
+            name="name"
+            label="Deal name"
+            rules={ [{ required: true, message: 'Please enter deal name' }] }
+          >
+            <Input placeholder="Enter deal name" />
+          </Form.Item>
+
+          {/* <Form.Item
               name="pipeline"
               label="Pipeline"
               initialValue="deals"
@@ -506,178 +506,57 @@ function Deals() {
               </Select>
             </Form.Item> */}
 
-            <Form.Item
-              name="stage"
-              label="Deal stage"
-              initialValue="New Leads"
-              rules={ [{ required: true, message: 'Please select deal stage' }] }
-            >
-              <Select placeholder="Select stage">
-                { stages.map(stage => (
-                  <Option key={ stage } value={ stage }>{ stage }</Option>
-                )) }
-              </Select>
-            </Form.Item>
-
-            <Form.Item
-              name="amount"
-              label="Amount"
-              rules={ [{ required: true, message: 'Please enter amount' }] }
-            >
-              <InputNumber
-                style={ { width: '100%' } }
-                formatter={ value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }
-                parser={ value => value.replace(/\$\s?|(,*)/g, '') }
-                placeholder="0.00"
-              />
-            </Form.Item>
-
-            <Form.Item
-              name="closeDate"
-              label="Close date"
-              rules={ [{ required: true, message: 'Please select close date' }] }
-            >
-              <DatePicker style={ { width: '100%' } } />
-            </Form.Item>
-
-            <Form.Item
-              name="type"
-              label="Deal type"
-              rules={ [{ required: true, message: 'Please select deal type' }] }
-            >
-              <Select placeholder="Select type">
-                <Option value="new">New Business</Option>
-                <Option value="existing">Existing Business</Option>
-              </Select>
-            </Form.Item>
-
-            <Form.Item
-              name="contact"
-              label="Contact"
-              rules={ [{ required: true, message: 'Please select contact' }] }
-            >
-              {/* <Select
-                showSearch
-                placeholder="Search contacts"
-                filterOption={(input, option) =>
-                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                }
-              >
-                {contacts.map(contact => (
-                  <Option key={contact._id} value={contact._id}>
-                    {contact.name}
-                  </Option>
-                ))}
-              </Select> */}
-              <Input placeholder="Enter Contact" />
-            </Form.Item>
-
-            <Form.Item
-              name="company"
-              label="Company"
-              rules={ [{ required: true, message: 'Please enter company name' }] }
-            >
-              <Input placeholder="Enter company name" />
-            </Form.Item>
-          </Form>
-        </Modal>
-
-        {/* Edit Deal Modal */ }
-        <Modal
-          title="Edit Deal"
-          open={ isEditModalVisible }
-          onCancel={ () => {
-            setIsEditModalVisible(false);
-            setSelectedDeal(null);
-            editForm.resetFields();
-          } }
-          footer={ [
-            <Button
-              key="cancel"
-              className='text-btn'
-
-              onClick={ () => {
-                setIsEditModalVisible(false);
-                setSelectedDeal(null);
-                editForm.resetFields();
-              } }
-            >
-              Cancel
-            </Button>,
-            <Button
-              key="update"
-              type="primary"
-              onClick={ () => editForm.submit() }
-              loading={ loading }
-            >
-              Update
-            </Button>
-          ] }
-          width={ 600 }
-        >
-          <Form
-            form={ editForm }
-            layout="vertical"
-            onFinish={ handleEditDeal }
+          <Form.Item
+            name="stage"
+            label="Deal stage"
+            initialValue="New Leads"
+            rules={ [{ required: true, message: 'Please select deal stage' }] }
           >
-            <Form.Item
-              name="name"
-              label="Deal name"
-              rules={ [{ required: true, message: 'Please enter deal name' }] }
-            >
-              <Input placeholder="Enter deal name" />
-            </Form.Item>
+            <Select placeholder="Select stage">
+              { stages.map(stage => (
+                <Option key={ stage } value={ stage }>{ stage }</Option>
+              )) }
+            </Select>
+          </Form.Item>
 
-            <Form.Item
-              name="stage"
-              label="Deal stage"
-              rules={ [{ required: true, message: 'Please select deal stage' }] }
-            >
-              <Select placeholder="Select stage">
-                { stages.map(stage => (
-                  <Option key={ stage } value={ stage }>{ stage }</Option>
-                )) }
-              </Select>
-            </Form.Item>
+          <Form.Item
+            name="amount"
+            label="Amount"
+            rules={ [{ required: true, message: 'Please enter amount' }] }
+          >
+            <InputNumber
+              style={ { width: '100%' } }
+              formatter={ value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }
+              parser={ value => value.replace(/\$\s?|(,*)/g, '') }
+              placeholder="0.00"
+            />
+          </Form.Item>
 
-            <Form.Item
-              name="amount"
-              label="Amount"
-              rules={ [{ required: true, message: 'Please enter amount' }] }
-            >
-              <InputNumber
-                style={ { width: '100%' } }
-                formatter={ value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }
-                parser={ value => value.replace(/\$\s?|(,*)/g, '') }
-                placeholder="0.00"
-              />
-            </Form.Item>
+          <Form.Item
+            name="closeDate"
+            label="Close date"
+            rules={ [{ required: true, message: 'Please select close date' }] }
+          >
+            <DatePicker style={ { width: '100%' } } />
+          </Form.Item>
 
-            <Form.Item
-              name="closeDate"
-              label="Close date"
-              rules={ [{ required: true, message: 'Please select close date' }] }
-            >
-              <DatePicker style={ { width: '100%' } } />
-            </Form.Item>
+          <Form.Item
+            name="type"
+            label="Deal type"
+            rules={ [{ required: true, message: 'Please select deal type' }] }
+          >
+            <Select placeholder="Select type">
+              <Option value="new">New Business</Option>
+              <Option value="existing">Existing Business</Option>
+            </Select>
+          </Form.Item>
 
-            <Form.Item
-              name="type"
-              label="Deal type"
-              rules={ [{ required: true, message: 'Please select deal type' }] }
-            >
-              <Select placeholder="Select type">
-                <Option value="new">New Business</Option>
-                <Option value="existing">Existing Business</Option>
-              </Select>
-            </Form.Item>
-
-            <Form.Item
-              name="contact"
-              label="Contact"
-              rules={ [{ required: true, message: 'Please select contact' }] }
-            >
-              {/* <Select
+          <Form.Item
+            name="contact"
+            label="Contact"
+            rules={ [{ required: true, message: 'Please select contact' }] }
+          >
+            {/* <Select
                 showSearch
                 placeholder="Search contacts"
                 filterOption={(input, option) =>
@@ -690,135 +569,256 @@ function Deals() {
                   </Option>
                 ))}
               </Select> */}
-              <Input placeholder="Enter Contact" />
-            </Form.Item>
+            <Input placeholder="Enter Contact" />
+          </Form.Item>
 
-            <Form.Item
-              name="company"
-              label="Company"
-              rules={ [{ required: true, message: 'Please enter company name' }] }
-            >
-              <Input placeholder="Enter company name" />
-            </Form.Item>
-          </Form>
-        </Modal>
+          <Form.Item
+            name="company"
+            label="Company"
+            rules={ [{ required: true, message: 'Please enter company name' }] }
+          >
+            <Input placeholder="Enter company name" />
+          </Form.Item>
+        </Form>
+      </Modal>
 
-        {/* View Deal Modal */ }
-        <Modal
-          title="View Deal"
-          open={ isViewModalVisible }
-          onCancel={ () => {
-            setIsViewModalVisible(false);
-            setSelectedDeal(null);
-          } }
-          footer={ [
-            <Button
-              className='text-btn'
-              key="close"
-              onClick={ () => {
-                setIsViewModalVisible(false);
-                setSelectedDeal(null);
-              } }
-            >
-              Cancel
-            </Button>,
-            <Button
-              key="edit"
-              type="primary"
-              onClick={ () => {
-                setIsViewModalVisible(false);
-                openEditModal(selectedDeal);
-              } }
-            >
-              Edit Deal
-            </Button>
-          ] }
-          width={ 600 }
+      {/* Edit Deal Modal */ }
+      <Modal
+        title="Edit Deal"
+        open={ isEditModalVisible }
+        onCancel={ () => {
+          setIsEditModalVisible(false);
+          setSelectedDeal(null);
+          editForm.resetFields();
+        } }
+        footer={ [
+          <Button
+            key="cancel"
+            className='text-btn'
+
+            onClick={ () => {
+              setIsEditModalVisible(false);
+              setSelectedDeal(null);
+              editForm.resetFields();
+            } }
+          >
+            Cancel
+          </Button>,
+          <Button
+            key="update"
+            type="primary"
+            onClick={ () => editForm.submit() }
+            loading={ loading }
+          >
+            Update
+          </Button>
+        ] }
+        width={ 600 }
+      >
+        <Form
+          form={ editForm }
+          layout="vertical"
+          onFinish={ handleEditDeal }
         >
-          { selectedDeal && (
-            <div className={ styles.viewDealContent }>
-              <div className={ styles.viewDealItem }>
-                <strong>Deal Name:</strong>
-                <span>{ selectedDeal.name }</span>
-              </div>
-              <div className={ styles.viewDealItem }>
-                <strong>Company:</strong>
-                <span>{ selectedDeal.company }</span>
-              </div>
-              <div className={ styles.viewDealItem }>
-                <strong>Stage:</strong>
-                <span>{ selectedDeal.stage }</span>
-              </div>
-              <div className={ styles.viewDealItem }>
-                <strong>Amount:</strong>
-                <span>${ selectedDeal.amount.toLocaleString() }</span>
-              </div>
-              <div className={ styles.viewDealItem }>
-                <strong>Close Date:</strong>
-                <span>{ new Date(selectedDeal.closeDate).toLocaleDateString() }</span>
-              </div>
-              <div className={ styles.viewDealItem }>
-                <strong>Deal Type:</strong>
-                <span>{ selectedDeal.type === 'new' ? 'New Business' : 'Existing Business' }</span>
-              </div>
-              { selectedDeal.notes && (
-                <div className={ styles.viewDealItem }>
-                  <strong>Notes:</strong>
-                  <span>{ selectedDeal.notes }</span>
-                </div>
-              ) }
+          <Form.Item
+            name="name"
+            label="Deal name"
+            rules={ [{ required: true, message: 'Please enter deal name' }] }
+          >
+            <Input placeholder="Enter deal name" />
+          </Form.Item>
+
+          <Form.Item
+            name="stage"
+            label="Deal stage"
+            rules={ [{ required: true, message: 'Please select deal stage' }] }
+          >
+            <Select placeholder="Select stage">
+              { stages.map(stage => (
+                <Option key={ stage } value={ stage }>{ stage }</Option>
+              )) }
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            name="amount"
+            label="Amount"
+            rules={ [{ required: true, message: 'Please enter amount' }] }
+          >
+            <InputNumber
+              style={ { width: '100%' } }
+              formatter={ value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }
+              parser={ value => value.replace(/\$\s?|(,*)/g, '') }
+              placeholder="0.00"
+            />
+          </Form.Item>
+
+          <Form.Item
+            name="closeDate"
+            label="Close date"
+            rules={ [{ required: true, message: 'Please select close date' }] }
+          >
+            <DatePicker style={ { width: '100%' } } />
+          </Form.Item>
+
+          <Form.Item
+            name="type"
+            label="Deal type"
+            rules={ [{ required: true, message: 'Please select deal type' }] }
+          >
+            <Select placeholder="Select type">
+              <Option value="new">New Business</Option>
+              <Option value="existing">Existing Business</Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            name="contact"
+            label="Contact"
+            rules={ [{ required: true, message: 'Please select contact' }] }
+          >
+            {/* <Select
+                showSearch
+                placeholder="Search contacts"
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+              >
+                {contacts.map(contact => (
+                  <Option key={contact._id} value={contact._id}>
+                    {contact.name}
+                  </Option>
+                ))}
+              </Select> */}
+            <Input placeholder="Enter Contact" />
+          </Form.Item>
+
+          <Form.Item
+            name="company"
+            label="Company"
+            rules={ [{ required: true, message: 'Please enter company name' }] }
+          >
+            <Input placeholder="Enter company name" />
+          </Form.Item>
+        </Form>
+      </Modal>
+
+      {/* View Deal Modal */ }
+      <Modal
+        title="View Deal"
+        open={ isViewModalVisible }
+        onCancel={ () => {
+          setIsViewModalVisible(false);
+          setSelectedDeal(null);
+        } }
+        footer={ [
+          <Button
+            className='text-btn'
+            key="close"
+            onClick={ () => {
+              setIsViewModalVisible(false);
+              setSelectedDeal(null);
+            } }
+          >
+            Cancel
+          </Button>,
+          <Button
+            key="edit"
+            type="primary"
+            onClick={ () => {
+              setIsViewModalVisible(false);
+              openEditModal(selectedDeal);
+            } }
+          >
+            Edit Deal
+          </Button>
+        ] }
+        width={ 600 }
+      >
+        { selectedDeal && (
+          <div className={ styles.viewDealContent }>
+            <div className={ styles.viewDealItem }>
+              <strong>Deal Name:</strong>
+              <span>{ selectedDeal.name }</span>
             </div>
-          ) }
-        </Modal>
-
-        {/* Import Modal */ }
-        <Modal
-
-          title={ `Import ${importType === 'deals' ? 'Deals' : 'Contacts'}` }
-          open={ isImportModalVisible }
-          onCancel={ () => setIsImportModalVisible(false) }
-          footer={ null }
-        >
-          <div className={ styles.importInstructions }>
-            <h4>Instructions:</h4>
-            <p>1. Prepare your CSV file with the following columns:</p>
-            { importType === 'deals' ? (
-              <ul>
-                <li>name (required)</li>
-                <li>amount (required)</li>
-                <li>stage</li>
-                <li>company (required)</li>
-                <li>closeDate (YYYY-MM-DD format)</li>
-                <li>type (new/existing)</li>
-                <li>contact (contact ID)</li>
-              </ul>
-            ) : (
-              <ul>
-                <li>name (required)</li>
-                <li>email (required)</li>
-                <li>phone</li>
-                <li>company</li>
-                <li>industry</li>
-                <li>region</li>
-                <li>leadSource</li>
-                <li>serviceCategory</li>
-                <li>tags (comma-separated)</li>
-              </ul>
+            <div className={ styles.viewDealItem }>
+              <strong>Company:</strong>
+              <span>{ selectedDeal.company }</span>
+            </div>
+            <div className={ styles.viewDealItem }>
+              <strong>Stage:</strong>
+              <span>{ selectedDeal.stage }</span>
+            </div>
+            <div className={ styles.viewDealItem }>
+              <strong>Amount:</strong>
+              <span>${ selectedDeal.amount.toLocaleString() }</span>
+            </div>
+            <div className={ styles.viewDealItem }>
+              <strong>Close Date:</strong>
+              <span>{ new Date(selectedDeal.closeDate).toLocaleDateString() }</span>
+            </div>
+            <div className={ styles.viewDealItem }>
+              <strong>Deal Type:</strong>
+              <span>{ selectedDeal.type === 'new' ? 'New Business' : 'Existing Business' }</span>
+            </div>
+            { selectedDeal.notes && (
+              <div className={ styles.viewDealItem }>
+                <strong>Notes:</strong>
+                <span>{ selectedDeal.notes }</span>
+              </div>
             ) }
-            <p>2. Make sure your CSV file uses comma (,) as the delimiter</p>
-            <p>3. Upload your file using the area below</p>
           </div>
-          <Dragger { ...uploadProps } className={ styles.importUploader }>
-            <p className="ant-upload-drag-icon">
-              <UploadOutlined />
-            </p>
-            <p className="ant-upload-text">Click or drag CSV file to this area to upload</p>
-            <p className="ant-upload-hint">
-              Support for single CSV file upload only
-            </p>
-          </Dragger>
-        </Modal>
-      </Layout>
+        ) }
+      </Modal>
+
+      {/* Import Modal */ }
+      <Modal
+
+        title={ `Import ${importType === 'deals' ? 'Deals' : 'Contacts'}` }
+        open={ isImportModalVisible }
+        onCancel={ () => setIsImportModalVisible(false) }
+        footer={ null }
+      >
+        <div className={ styles.importInstructions }>
+          <h4>Instructions:</h4>
+          <p>1. Prepare your CSV file with the following columns:</p>
+          { importType === 'deals' ? (
+            <ul>
+              <li>name (required)</li>
+              <li>amount (required)</li>
+              <li>stage</li>
+              <li>company (required)</li>
+              <li>closeDate (YYYY-MM-DD format)</li>
+              <li>type (new/existing)</li>
+              <li>contact (contact ID)</li>
+            </ul>
+          ) : (
+            <ul>
+              <li>name (required)</li>
+              <li>email (required)</li>
+              <li>phone</li>
+              <li>company</li>
+              <li>industry</li>
+              <li>region</li>
+              <li>leadSource</li>
+              <li>serviceCategory</li>
+              <li>tags (comma-separated)</li>
+            </ul>
+          ) }
+          <p>2. Make sure your CSV file uses comma (,) as the delimiter</p>
+          <p>3. Upload your file using the area below</p>
+        </div>
+        <Dragger { ...uploadProps } className={ styles.importUploader }>
+          <p className="ant-upload-drag-icon">
+            <UploadOutlined />
+          </p>
+          <p className="ant-upload-text">Click or drag CSV file to this area to upload</p>
+          <p className="ant-upload-hint">
+            Support for single CSV file upload only
+          </p>
+        </Dragger>
+      </Modal>
+    </Layout>
   );
 }
 

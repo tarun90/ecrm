@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, Input, Select, DatePicker, Modal, message } from 'antd';
+import { Button, Input, Select, DatePicker, Modal, message, Form } from 'antd';
 import {
   PlusOutlined,
   FilterOutlined,
@@ -16,6 +16,10 @@ import dayjs from 'dayjs';
 import MainLayout from '../../components/MainLayout';
 
 function Tasks() {
+  const [form] = Form.useForm();
+  const [editForm] = Form.useForm();
+
+
   const [tasks, setTasks] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
@@ -72,6 +76,8 @@ function Tasks() {
     message.success('Task added successfully!');
     setShowModal(false);
     fetchTasks();
+    form.resetFields();
+
     setNewTask({ name: '', owner: '', startDate: '', dueDate: '', status: 'Pending' });
   };
 
@@ -81,6 +87,7 @@ function Tasks() {
       message.success('Task updated successfully!');
       setEditingTask(null);
       fetchTasks();
+      editForm.resetFields()
     } catch (err) {
       message.error('Error updating task');
       console.error('Error updating task:', err);
@@ -109,7 +116,7 @@ function Tasks() {
   };
 
   return (
-    <MainLayout>
+    <>
       <div className="app-container add-task-dashboard">
         <nav className="top-nav">
           <div className="nav-content">
@@ -298,118 +305,211 @@ function Tasks() {
         <Modal
           title="Add New Task"
           open={ showModal }
-          onCancel={ () => setShowModal(false) }
+          onCancel={ () => { setShowModal(false); form.resetFields(); } }
           footer={ [
-            <Button key="cancel" onClick={ () => setShowModal(false) }>
+            <Button
+              key="cancel"
+              className="text-btn"
+              onClick={ () => { setShowModal(false); form.resetFields(); } }
+            >
               Cancel
             </Button>,
-            <Button key="submit" type="primary" className='update-btn' onClick={ handleAddTask }>
+            <Button
+              key="submit"
+              type="primary"
+              className="update-btn"
+              onClick={ () => form.submit() }
+
+            // onClick={ handleAddTask }
+            >
               Add Task
             </Button>
           ] }
+          width={ 600 }
         >
-          <div className="modal-content">
-
-            <Input
-              placeholder="Task Name"
+          <Form
+            layout="vertical"
+            form={ form }
+            onFinish={ handleAddTask }
+          >
+            <Form.Item
               name="name"
-              value={ newTask.name }
-              onChange={ handleInputChange }
-            />
-            <Input
-              // prefix={<UserOutlined />}
-              placeholder="Owner"
+              label="Task Name"
+              rules={ [{ required: true, message: 'Please enter task name' }] }
+            >
+              <Input
+                placeholder="Task Name"
+                value={ newTask.name }
+                name='name'
+                onChange={ handleInputChange }
+              />
+            </Form.Item>
+
+            <Form.Item
               name="owner"
-              value={ newTask.owner }
-              onChange={ handleInputChange }
-            />
-            <div className="date-inputs">
+              label="Owner"
+              rules={ [{ required: true, message: 'Please enter owner name' }] }
+            >
+              <Input
+                name='owner'
+                placeholder="Owner"
+                value={ newTask.owner }
+                onChange={ handleInputChange }
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="startDate"
+              label="Start Date"
+              rules={ [{ required: true, message: 'Please select start date' }] }
+            >
               <DatePicker
+                style={ { width: '100%' } }
                 placeholder="Start Date"
                 onChange={ (date) => setNewTask({ ...newTask, startDate: date }) }
               />
+            </Form.Item>
+
+            <Form.Item
+              name="dueDate"
+              label="Due Date"
+              rules={ [{ required: true, message: 'Please select due date' }] }
+            >
               <DatePicker
+                style={ { width: '100%' } }
                 placeholder="Due Date"
                 onChange={ (date) => setNewTask({ ...newTask, dueDate: date }) }
               />
-            </div>
-            <Select
-              placeholder="Status"
-              value={ newTask.status }
-              onChange={ (value) => setNewTask({ ...newTask, status: value }) }
-              style={ { width: '100%' } }
+            </Form.Item>
+
+            <Form.Item
+              name="status"
+              label="Status"
+              rules={ [{ required: true, message: 'Please select task status' }] }
             >
-              <Select.Option value="Pending">Pending</Select.Option>
-              <Select.Option value="In Progress">In Progress</Select.Option>
-              <Select.Option value="Completed">Completed</Select.Option>
-            </Select>
-          </div>
+              <Select
+                placeholder="Select Status"
+                value={ newTask.status }
+                onChange={ (value) => setNewTask({ ...newTask, status: value }) }
+                style={ { width: '100%' } }
+              >
+                <Select.Option value="Pending">Pending</Select.Option>
+                <Select.Option value="In Progress">In Progress</Select.Option>
+                <Select.Option value="Completed">Completed</Select.Option>
+              </Select>
+            </Form.Item>
+          </Form>
         </Modal>
+
 
         <Modal
           title="Edit Task"
           open={ editingTask !== null }
-          onCancel={ () => setEditingTask(null) }
+          onCancel={ () => { setEditingTask(null); editForm.resetFields(); } }
           footer={ [
-            <Button key="cancel" onClick={ () => setEditingTask(null) }>
+            <Button
+              key="cancel"
+              className="text-btn"
+              onClick={ () => { setEditingTask(null); editForm.resetFields(); } }
+            >
               Cancel
             </Button>,
-            <Button key="submit" type="primary" className='update-btn' onClick={ handleUpdateTask }>
+            <Button
+              key="submit"
+              type="primary"
+              className="update-btn"
+              onClick={ () => editForm.submit() }
+            >
               Update Task
             </Button>
           ] }
+          width={ 600 }
         >
-          <div className="modal-content">
-            <Input
-              placeholder="Task Name"
+          <Form
+            layout="vertical"
+            form={ editForm }
+            initialValues={ {
+              name: editingTask?.name,
+              owner: editingTask?.owner,
+              startDate: editingTask?.startDate ? dayjs(editingTask.startDate) : null,
+              dueDate: editingTask?.dueDate ? dayjs(editingTask.dueDate) : null,
+              status: editingTask?.status
+            } }
+            onFinish={ handleUpdateTask }
+          >
+            <Form.Item
               name="name"
-              value={ editingTask?.name }
-              onChange={ handleEditInputChange }
-            />
-            <Input
-
-              placeholder="Owner"
-              name="owner"
-              value={ editingTask?.owner }
-              onChange={ handleEditInputChange }
-            />
-            <div className="date-inputs">
-              <DatePicker
-                placeholder="Start Date"
-                onChange={ (date) =>
-                  setEditingTask({ ...editingTask, startDate: date })
-                }
-                value={ editingTask?.startDate ? dayjs(editingTask.startDate) : null }
-
-
-              // value={editingTask?.startDate}
-              // onChange={(date) => setEditingTask({ ...editingTask, startDate: date })}
+              label="Task Name"
+              rules={ [{ required: true, message: 'Please enter task name' }] }
+            >
+              <Input
+                name='name'
+                placeholder="Task Name"
+                value={ editingTask?.name }
+                onChange={ handleEditInputChange }
               />
+            </Form.Item>
+
+            <Form.Item
+              name="owner"
+              label="Owner"
+              rules={ [{ required: true, message: 'Please enter owner name' }] }
+            >
+              <Input
+                name='owner '
+                placeholder="Owner"
+                value={ editingTask?.owner }
+                onChange={ handleEditInputChange }
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="startDate"
+              label="Start Date"
+              rules={ [{ required: true, message: 'Please select start date' }] }
+            >
               <DatePicker
+                style={ { width: '100%' } }
+                placeholder="Start Date"
+                value={ editingTask?.startDate ? dayjs(editingTask.startDate) : null }
+                onChange={ (date) => setEditingTask({ ...editingTask, startDate: date }) }
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="dueDate"
+              label="Due Date"
+              rules={ [{ required: true, message: 'Please select due date' }] }
+            >
+              <DatePicker
+                style={ { width: '100%' } }
                 placeholder="Due Date"
                 value={ editingTask?.dueDate ? dayjs(editingTask.dueDate) : null }
-                onChange={ (date) =>
-                  setEditingTask({ ...editingTask, dueDate: date })
-                }
-
-              // value={editingTask?.dueDate}
-              // onChange={(date) => setEditingTask({ ...editingTask, dueDate: date })}
+                onChange={ (date) => setEditingTask({ ...editingTask, dueDate: date }) }
               />
-            </div>
-            <Select
-              placeholder="Status"
-              value={ editingTask?.status }
-              onChange={ (value) => setEditingTask({ ...editingTask, status: value }) }
-              style={ { width: '100%' } }
+            </Form.Item>
+
+            <Form.Item
+              name="status"
+              label="Status"
+              rules={ [{ required: true, message: 'Please select task status' }] }
             >
-              <Select.Option value="Pending">Pending</Select.Option>
-              <Select.Option value="In Progress">In Progress</Select.Option>
-              <Select.Option value="Completed">Completed</Select.Option>
-            </Select>
-          </div>
+              <Select
+                placeholder="Select Status"
+                value={ editingTask?.status }
+                onChange={ (value) => setEditingTask({ ...editingTask, status: value }) }
+                style={ { width: '100%' } }
+              >
+                <Select.Option value="Pending">Pending</Select.Option>
+                <Select.Option value="In Progress">In Progress</Select.Option>
+                <Select.Option value="Completed">Completed</Select.Option>
+              </Select>
+            </Form.Item>
+          </Form>
         </Modal>
+
       </div>
-    </MainLayout>
+    </>
   );
 }
 
