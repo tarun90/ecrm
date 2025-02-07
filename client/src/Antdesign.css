@@ -147,6 +147,7 @@
     line-height: 1;
     padding: .625rem 1rem;
     height: auto;
+    box-shadow: none;
 }
 
 .submit-btn:hover {
