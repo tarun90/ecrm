@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
+import dayjs from "dayjs";
 import { FileText, Plus, Download, Search } from "lucide-react";
 import MainLayout from "../../components/MainLayout";
 import "../../components/custome.css";
-import "../Invoice/Invoice.css";
+import "./Invoice.css";
 import { Layout, Menu, Button, Avatar, Dropdown, Modal, Form, Input, Select, DatePicker, InputNumber, message, Popconfirm, Upload } from 'antd';
 import { DownloadOutlined, PlusOutlined } from "@ant-design/icons";
 function Invoices() {
@@ -229,7 +230,8 @@ function Invoices() {
 
     const formattedInvoice = {
       ...invoice,
-      due_date: formatDate(invoice.due_date),
+      // due_date: formatDate(invoice.due_date),
+      due_date: dayjs(),
       subtotal: invoice.subtotal?.toString() || "",
       tax_amount: invoice.tax_amount?.toString() || "",
       discount_amount: invoice.discount_amount?.toString() || "",
@@ -651,16 +653,25 @@ const InvoiceForm = ({
             <Input placeholder="Customer Name" />
           </Form.Item>
 
-          <Form.Item label="Due Date" name="due_date" rules={ [{ required: true }] }>
-            <DatePicker onChange={ (value) => setFormData({ ...formData, due_date: value }) } style={ { width: "100%" } } />
-          </Form.Item>
+          {/* <Form.Item label="Due Date" name="due_date" rules={ [{ required: true }] }>
+            <DatePicker
+              //  onChange={ (value) => setFormData({ ...formData, due_date: value }) } 
+              style={ { width: "100%" } } />
+          </Form.Item> */}
 
+          <Form.Item label="Due Date" name="due_date" rules={ [{ required: true }] }>
+            <DatePicker
+              style={ { width: "100%" } }
+              value={ formData.due_date ? dayjs(formData.due_date) : null }
+              onChange={ (date) => setFormData({ ...formData, due_date: date ? date.toISOString() : null }) }
+            />
+          </Form.Item>
           <Form.Item label="Payment Status" name="payment_status">
             <Select>
-              <Option value="unpaid">Unpaid</Option>
-              <Option value="paid">Paid</Option>
-              <Option value="partially_paid">Partially Paid</Option>
-              <Option value="overdue">Overdue</Option>
+              <Select.Option value="unpaid">Unpaid</Select.Option>
+              <Select.Option value="paid">Paid</Select.Option>
+              <Select.Option value="partially_paid">Partially Paid</Select.Option>
+              <Select.Option value="overdue">Overdue</Select.Option>
             </Select>
           </Form.Item>
           <div className="line-items">
@@ -672,9 +683,9 @@ const InvoiceForm = ({
               <Form.Item label="Select Product">
                 <Select onChange={ (value) => handleProductSelect(index, value) }>
                   { products.map((product) => (
-                    <Option key={ product._id } value={ product._id }>
+                    <Select.Option key={ product._id } value={ product._id }>
                       { product.name } - { product.currency } { product.unit_cost } (Tax: { product.tax_rate }%)
-                    </Option>
+                    </Select.Option>
                   )) }
                 </Select>
               </Form.Item>
@@ -725,10 +736,10 @@ const InvoiceForm = ({
           </div>
           <Form.Item label="Currency">
             <Select onChange={ (value) => setFormData({ ...formData, currency: value }) }>
-              <Option value="USD">USD</Option>
-              <Option value="EUR">EUR</Option>
-              <Option value="GBP">GBP</Option>
-              <Option value="JPY">JPY</Option>
+              <Select.Option value="USD">USD</Select.Option>
+              <Select.Option value="EUR">EUR</Select.Option>
+              <Select.Option value="GBP">GBP</Select.Option>
+              <Select.Option value="JPY">JPY</Select.Option>
             </Select>
           </Form.Item>
 

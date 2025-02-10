@@ -33,14 +33,14 @@ const MainLayout = ({ children }) => {
           padding: '0 24px',
           // background: '#fff',
           display: 'flex',
-          gap:10,
-          color:"#ffff",
-          fontWeight:600,
+          gap: 10,
+          color: "#ffff",
+          fontWeight: 600,
           alignItems: 'center',
           justifyContent: 'flex-end',
           background: " var(--bg-primary)"
         } }>
-          <span>{userData?.name}</span>
+          <span>{ userData?.name }</span>
           <Dropdown overlay={ userMenu } trigger={ ['click'] }>
             <Avatar icon={ <UserOutlined /> } style={ { cursor: 'pointer' } } />
           </Dropdown>
