@@ -1,27 +1,33 @@
-.dashboard {
+.mail-dashboard {
   display: flex;
-  height: 100vh;
-  background-color: #f6f8fc;
+  flex-wrap: wrap;
+  position: relative;
 }
 
-.sidebar {
+.mail-dashboard .sidebar {
   width: 256px;
-  background-color: white;
+  height: 100svh;
+  max-height: calc(100vh - 105px);
+  background-color: #fff;
   padding: 20px;
-  border-right: 1px solid #e0e0e0;
+  border-radius: 10px;
+  position: sticky;
+  top: 0;
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3);
 }
 
-.user-info {
-  padding: 16px;
+.mail-dashboard .user-info {
+  padding: 16px 0;
   margin-bottom: 20px;
   border-bottom: 1px solid #e0e0e0;
 }
 
-.user-email {
+.mail-dashboard .user-email {
   display: block;
-  font-size: 0.9em;
-  color: #5f6368;
+  font-size: 1em;
   margin-bottom: 10px;
+  font-weight: 500;
+  color: #001d35;
 }
 
 .logout-button {
@@ -41,17 +47,17 @@
   display: block;
   background-color: #c2e7ff;
   color: #001d35;
-  padding: 16px 24px;
+  padding: 10px 20px;
   border-radius: 16px;
   text-decoration: none;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   text-align: center;
   font-weight: 500;
   transition: box-shadow 0.2s;
 }
 
 .compose-btn:hover {
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 
 .nav-menu {
@@ -86,17 +92,18 @@
   font-weight: 500;
 }
 
-.main-content {
+.mail-dashboard .main-content {
   flex: 1;
-  padding: 20px;
+  padding: 0 20px;
   overflow: auto;
 }
 
-.search-bar {
-  background: white;
+.mail-dashboard .search-bar {
+  background: #fff;
   padding: 12px 20px;
   margin-bottom: 20px;
   border-radius: 8px;
+  border: none;
   box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3);
 }
 
@@ -119,19 +126,8 @@
   border-color: #1a73e8;
 }
 
-.search-bar button {
-  background: #1a73e8;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
 
-.search-bar button:hover {
-  background: #1557b0;
-}
+
 
 .search-bar button:disabled {
   background: #ccc;
@@ -152,6 +148,11 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-} 
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

@@ -50,9 +50,11 @@ Status: ${task.status}`,
   // GET all tasks
   router.get('/', auth, async (req, res) => {
     try {
+      console.log("Hello from get tasks api", req?.user?.user?._id)
       const tasks = await Task.find({
-        createdBy: new mongoose.Types.ObjectId(req?.user?.userId)
+        createdBy: new mongoose.Types.ObjectId(req?.user?.user?._id)
       });
+      console.log("------", tasks)
       res.json(tasks);
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -61,10 +63,11 @@ Status: ${task.status}`,
 
   // POST: Add a new task
   router.post('/', auth, async (req, res) => {
+    console.log("Hello from post tasks api", req?.user?.user?._id)
     // Create a new task, including a createdBy field if req.user exists
     const task = new Task({
       ...req.body,
-      createdBy: req.user?.userId, // Corrected: use req.user?.userId instead of "req ? user?.userId"
+      createdBy: req.user?._id, // Corrected: use req.user?.userId instead of "req ? user?.userId"
     });
 
     try {

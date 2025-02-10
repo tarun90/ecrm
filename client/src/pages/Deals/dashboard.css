@@ -4,6 +4,9 @@
 
 .Sidebar .ant-menu {
     background: transparent;
+    overflow: auto;
+    height: 100%;
+    max-height: calc(100svh - 120px);
 }
 
 .Sidebar .ant-layout-sider-trigger {
@@ -81,7 +84,6 @@
 }
 
 .header-content .ant-form .ant-input-outlined {
-    padding: 14px 16px;
     border-color: #0077bd;
     background-color: #fff;
     color: rgba(0, 0, 0, 0.88);

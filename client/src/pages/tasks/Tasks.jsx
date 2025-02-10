@@ -135,6 +135,47 @@ function Tasks() {
       <div className="app-container add-task-dashboard">
         <div className="top-nav">
           <div className="nav-content">
+
+            { showFilters && (
+              <div className="filters-panel">
+                <div className="filters-content">
+                  <Input
+                    className="filter-input"
+                    name="owner"
+                    placeholder="Filter by Owner"
+                    value={ filters.owner }
+                    onChange={ handleFilterChange }
+                  />
+                  <DatePicker
+                    className="filter-input"
+                    onChange={ date => setFilters({ ...filters, dueDate: date }) }
+                  />
+                  <Button
+                    type="primary"
+                    icon={ <FilterOutlined /> }
+                    onClick={ generateReport }
+                    className="apply-filter-btn"
+                  >
+                    Apply Filters
+                  </Button>
+                  <Button
+                    icon={ <ReloadOutlined /> }
+                    onClick={ handleClearFilter }
+                    className="text-btn"
+                  >
+                    Clear
+                  </Button>
+
+                  <Button
+                    icon={ <CloseOutlined /> }
+                    onClick={ () => setShowFilters(false) }
+                    className="delete-btn"
+                  >
+                    Close
+                  </Button>
+                </div>
+              </div>
+            ) }
             <div className="nav-actions">
               <Button
                 icon={ <FilterOutlined /> }
@@ -155,51 +196,12 @@ function Tasks() {
           </div>
         </div>
 
-        { showFilters && (
-          <div className="filters-panel">
-            <div className="filters-content">
-              <Input
-                className="filter-input"
-                name="owner"
-                placeholder="Filter by Owner"
-                value={ filters.owner }
-                onChange={ handleFilterChange }
-              />
-              <DatePicker
-                className="filter-input"
-                onChange={ date => setFilters({ ...filters, dueDate: date }) }
-              />
-              <Button
-                type="primary"
-                icon={ <FilterOutlined /> }
-                onClick={ generateReport }
-                className="apply-filter-btn"
-              >
-                Apply Filters
-              </Button>
-              <Button
-                icon={ <ReloadOutlined /> }
-                onClick={ handleClearFilter }
-                className="clear-filter-btn"
-              >
-                Clear
-              </Button>
 
-              <Button
-                icon={ <CloseOutlined /> }
-                onClick={ () => setShowFilters(false) }
-                style={ { background: "red" } }
-              >
-                Close
-              </Button>
-            </div>
-          </div>
-        ) }
 
         <div className="board-container">
           <div className="board-column">
             <h2 className="column-title">New Tasks</h2>
-            <div className="tasks-container">
+            <div className="tasks-container scroll">
               { tasks
                 .filter(task => task.status === "Pending")
                 .map(task => (
@@ -258,7 +260,7 @@ function Tasks() {
 
           <div className="board-column">
             <h2 className="column-title">In Progress</h2>
-            <div className="tasks-container">
+            <div className="tasks-container scroll">
               { tasks
                 .filter(task => task.status === "In Progress")
                 .map(task => (
@@ -316,7 +318,7 @@ function Tasks() {
 
           <div className="board-column complet-task">
             <h2 className="column-title">Completed</h2>
-            <div className="tasks-container">
+            <div className="tasks-container scroll">
               { tasks
                 .filter(task => task.status === "Completed")
                 .map(task => (

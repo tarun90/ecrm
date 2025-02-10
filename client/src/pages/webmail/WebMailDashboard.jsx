@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, Link, useLocation, useNavigate } from 'react-r
 import EmailList from './EmailList';
 import ComposeEmail from './ComposeEmail';
 import './WebMailDashboard.css';
+import { SearchOutlined, SyncOutlined } from '@ant-design/icons';
 
 const WebMailDashboard = () => {
   // const { userEmail, logout } = useAuth();
@@ -46,40 +47,40 @@ const WebMailDashboard = () => {
   }
 
   return (
-    <div className="dashboard">
+    <div className="mail-dashboard">
       <aside className="sidebar">
         <div className="user-info">
-          <span className="user-email">{userEmail}</span>
+          <span className="user-email">{ userEmail }</span>
 
         </div>
-        <div onClick={() => { changeActiveState('compose') }} className="compose-btn">
+        <div onClick={ () => { changeActiveState('compose') } } className="compose-btn">
           Compose
         </div>
         <nav className="nav-menu">
-          <div onClick={() => { changeActiveState('inbox') }} className={`nav-item ${isActive('inbox')}`}>
+          <div onClick={ () => { changeActiveState('inbox') } } className={ `nav-item ${isActive('inbox')}` }>
             <i className="fas fa-inbox"></i> Inbox
           </div>
-          <div onClick={() => { changeActiveState('sent') }} className={`nav-item ${isActive('  sent')}`}>
+          <div onClick={ () => { changeActiveState('sent') } } className={ `nav-item ${isActive('  sent')}` }>
             <i className="fas fa-paper-plane"></i> Sent
           </div>
         </nav>
       </aside>
       <main className="main-content">
         <div className="search-bar">
-          <form onSubmit={handleSearch}>
+          <form onSubmit={ handleSearch }>
             <input
               type="text"
               placeholder="Search emails..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              disabled={isSearching}
+              value={ searchQuery }
+              onChange={ (e) => setSearchQuery(e.target.value) }
+              disabled={ isSearching }
             />
-            <button type="submit" disabled={isSearching}>
-              {isSearching ? (
-                <i className="fas fa-spinner fa-spin"></i>
+            <button className='close-btn' disabled={ isSearching }>
+              { isSearching ? (
+                <SyncOutlined spin />
               ) : (
-                <i className="fas fa-search"></i>
-              )}
+                <SearchOutlined />
+              ) }
             </button>
           </form>
         </div>
@@ -90,10 +91,10 @@ const WebMailDashboard = () => {
           <Route path="/webmail/compose" element={<ComposeEmail />} />
         </Routes> */}
 
-{activeState === 'inbox' && <EmailList type="inbox" searchQuery={searchQuery} />}
-        {activeState === 'compose' && <ComposeEmail />}
-        {activeState === 'sent' && <EmailList type="sent" searchQuery={searchQuery} />}
-        {activeState === 'search' && <EmailList type="search" searchQuery={searchQuery} />}
+        { activeState === 'inbox' && <EmailList type="inbox" searchQuery={ searchQuery } /> }
+        { activeState === 'compose' && <ComposeEmail /> }
+        { activeState === 'sent' && <EmailList type="sent" searchQuery={ searchQuery } /> }
+        { activeState === 'search' && <EmailList type="search" searchQuery={ searchQuery } /> }
 
       </main>
     </div>

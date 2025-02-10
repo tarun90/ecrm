@@ -1,4 +1,9 @@
 /* ant design  */
+
+.ant-modal {
+    width: 600px;
+}
+
 .ant-layout {
     height: 100svh;
 }
@@ -15,8 +20,6 @@
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     padding: 1rem 2rem;
-    position: sticky;
-    top: 0;
     z-index: 100;
 }
 
@@ -49,7 +52,6 @@
 }
 
 .ant-modal-wrap .ant-modal-content .ant-modal-body .ant-select-selector {
-    padding: .875rem 1rem;
     border-color: #0077bd;
     background-color: #fff;
     color: rgba(0, 0, 0, 0.88);
@@ -57,7 +59,6 @@
 
 .ant-modal-wrap .ant-modal-content .ant-modal-body .ant-form .ant-form-item-control .ant-input-number-input,
 .ant-modal-wrap .ant-modal-content .ant-modal-body .ant-form .ant-form-item-control .ant-form-item-control-input .ant-input {
-    padding: .875rem 1rem;
     border: .0625rem solid #0077bd;
     background-color: #fff;
     color: rgba(0, 0, 0, 0.88);
@@ -69,10 +70,9 @@
 
 .ant-modal-wrap .ant-modal-content .ant-modal-body .ant-picker,
 .ant-modal-wrap .ant-modal-content .ant-modal-body .ant-input-number-input,
-.ant-modal-wrap .ant-modal-content .ant-modal-body .ant-input {
+.ant-modal-wrap .ant-modal-content .ant-modal-body .ant-input[type="text"] {
     font-size: .875rem;
     height: 2.1875rem;
-    padding: .875rem 1rem;
     border: .0625rem solid #0077bd;
     background-color: #fff;
 }
@@ -108,8 +108,7 @@
     color: var(--text-primary);
     display: inline-flex;
     justify-content: center;
-    line-height: 1;
-    padding: .625rem 1rem;
+    padding: 0.5rem 1rem;
     height: auto;
     border-radius: 6px;
     transition: all .3s ease;
@@ -144,10 +143,26 @@
     color: var(--text-white);
     display: inline-flex;
     justify-content: center;
-    line-height: 1;
-    padding: .625rem 1rem;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
     height: auto;
     box-shadow: none;
+}
+
+.ant-btn-primary:hover {
+    background: #185d87;
+}
+
+.ant-input-outlined:focus,
+.ant-input-outlined:hover,
+.ant-input-outlined,
+.ant-picker:focus,
+.ant-picker:hover,
+.ant-input,
+.ant-input:focus,
+.ant-picker,
+.ant-input:hover {
+    background: transparent;
 }
 
 .submit-btn:hover {

@@ -28,7 +28,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
 }
 
 .modal-title {
@@ -53,20 +52,23 @@
 
 .form-group,
 .form-row,
-.event-form .meeting-link{
+.event-form .meeting-link {
   margin-bottom: 5px;
   max-width: calc(50% - 8px);
   width: 100%;
 }
-.event-form .meeting-link{
+
+.event-form .meeting-link {
   margin-top: 0;
 }
-.event-form .form-actions{
+
+.event-form .form-actions {
   width: 100%;
   text-align: center;
   justify-content: center;
   margin-top: 20px;
 }
+
 .form-row {
   display: flex;
   gap: 16px;
@@ -294,19 +296,22 @@
   border: none;
   color: #0284
 }
-.calendar-container .fc .fc-button-primary{
-  background:var(--primary-color);
+
+.calendar-container .fc .fc-button-primary {
+  background: var(--primary-color);
 }
-.calendar-container .fc .fc-button-primary:not(:disabled).fc-button-active, 
-.calendar-container  .fc .fc-button-primary:not(:disabled):active,
+
+.calendar-container .fc .fc-button-primary:not(:disabled).fc-button-active,
+.calendar-container .fc .fc-button-primary:not(:disabled):active,
 .calendar-container .fc .fc-list-event:hover td,
-.calendar-container .fc .fc-button-primary:hover{
+.calendar-container .fc .fc-button-primary:hover {
   background: var(--mantion-select-hover-btn);
 }
 
-.calendar-container .fc .fc-button-primary:not(:disabled):focus{
+.calendar-container .fc .fc-button-primary:not(:disabled):focus {
   box-shadow: none;
 }
+
 .event-form .meeting-link .copied-message {
   position: absolute;
   top: 0;
@@ -321,15 +326,20 @@
   border-radius: 4px;
   background: #f4f4f4;
 }
+
 .event-form .meeting-link {
   position: relative;
 }
+
 /* mobile  */
-@media (max-width:767px){
-  .form-group, .form-row{
+@media (max-width:767px) {
+
+  .form-group,
+  .form-row {
     max-width: 100%;
   }
-  .event-form{
+
+  .event-form {
     gap: 10px;
   }
 }

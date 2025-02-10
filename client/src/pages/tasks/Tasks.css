@@ -13,7 +13,6 @@
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  padding: 1rem 2rem;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -21,7 +20,13 @@
 
 .add-task-dashboard .nav-content {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
+  align-items: center;
+}
+
+.add-task-dashboard:has(.filters-panel) .nav-content {
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -35,7 +40,14 @@
 
 .add-task-dashboard .nav-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
+  height: 40px;
+}
+
+.add-task-dashboard .nav-content .filter-btn:hover {
+  background-color: #bae6fd;
+  border-color: #bae6fd;
 }
 
 .add-task-dashboard .filter-btn,
@@ -47,7 +59,7 @@
   border-radius: 4px;
   font-weight: 500;
   cursor: pointer;
-  border: none;
+  height: auto;
   transition: background-color 0.2s;
 }
 
@@ -63,7 +75,7 @@
   gap: 1rem;
   padding-top: 2rem;
   height: 100%;
-  max-height: calc(100svh - 4rem);
+  max-height: calc(100svh - 4.625rem);
   width: 100%;
 }
 
@@ -263,11 +275,12 @@
 }
 
 /* Filters Panel */
-.add-task-dashboard .filters-panel {
-  background: white;
-  border-bottom: 1px solid var(--border-color);
-  padding: 1rem 2rem;
+
+.add-task-dashboard .filters-content .ant-input {
+  background-color: transparent;
 }
+
+
 
 .add-task-dashboard .filters-content {
   max-width: 1400px;
@@ -282,26 +295,12 @@
   border: 1px solid var(--border-color);
   border-radius: 4px;
   font-size: 0.9rem;
+  background-color: #ffff;
+  max-width: 300px;
 }
 
-.add-task-dashboard .apply-filter-btn {
-  background-color: var(--primary-color);
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-.add-task-dashboard .clear-filter-btn {
-  background-color: var(--background-color);
-  color: var(--text-primary);
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  font-weight: 500;
-  cursor: pointer;
+.add-task-dashboard .top-nav .filters-panel .ant-picker {
+  width: 350px;
 }
 
 

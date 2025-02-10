@@ -25,9 +25,7 @@ div.buisness-manage-container {
   transition: 0.2s all;
 }
 
-button.border-indigo-500.text-indigo-600.flex.items-center.whitespace-nowrap.py-4.px-1.border-b-2.font-medium.text-sm {
-  margin-left: 0;
-}
+
 
 .buisness-manage-container .nav-bar-items button.invoice-btn:hover {
   color: #fff;
@@ -42,19 +40,22 @@ button.border-indigo-500.text-indigo-600.flex.items-center.whitespace-nowrap.py-
   padding: 0;
 }
 
-div.invoice-header {
-  padding: 11px 20px;
-  background: #ffffff;
+.invoice-header {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  z-index: 100;
+  ;
+
 }
 
 .invoice-table {
   margin: 0 auto;
-  max-width: 80%;
+  width: 100%;
 }
 
-button.border-transparent.product-btn.text-gray-500.hover\:text-gray-700.hover\:border-gray-300.flex.items-center.whitespace-nowrap.py-4.px-1.border-b-2.font-medium.text-sm {
-  margin: 0;
-}
 
 .buisness-manage-container .nav-bar-items h2 a {
   color: #ffff;
@@ -65,34 +66,14 @@ button.border-transparent.product-btn.text-gray-500.hover\:text-gray-700.hover\:
   display: block;
 }
 
-button.border-transparent.product-btn.text-gray-500.hover\:text-gray-700.hover\:border-gray-300.flex.items-center.whitespace-nowrap.py-4.px-1.border-b-2.font-medium.text-sm {
-  margin: 0;
-  width: 100%;
-  justify-content: center;
-  /* text-align: center; */
-}
 
-button.border-indigo-500.text-indigo-600.flex.items-center.whitespace-nowrap.py-4.px-1.border-b-2.font-medium.text-sm {
-  margin-left: 0;
-  width: 100%;
-  justify-content: center;
-}
 
 div.product-header {
-  padding: 11px 20px;
-  background: #ffffff;
-}
-
-
-.invoice-header button.export-invoice:hover {
-  opacity: 0.5;
-  background: black;
-}
-
-.invoice-header button.export-invoice {
-  transition: all 0.2s;
-  background: black;
-  opacity: 1;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  z-index: 100;
 }
 
 /* PRODUCT CSS*/
@@ -124,19 +105,12 @@ div.product-header {
 
 .product-search {
   width: 100%;
-  padding: 0.75rem 2.5rem 0.75rem 2.5rem;
+  padding: 4px 30px;
   border: 1px solid #d1d5db;
   border-radius: 0.375rem;
   font-size: 1rem;
   color: #4b5563;
 }
-
-.product-search:focus {
-  outline: none;
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.4);
-}
-
 
 
 
@@ -151,17 +125,7 @@ div.product-header {
   gap: 1rem;
 }
 
-.product-card {
-  background-color: white;
-  border-radius: 0.375rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  padding: 1.5rem;
-  transition: box-shadow 0.2s;
-}
 
-.product-card:hover {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
 
 .product-info {
   display: flex;
@@ -238,15 +202,15 @@ div.product-header {
 }
 
 .close-icon {
-  width: 24px;
-  height: 24px;
+  width: 18px;
+  height: 18px;
 }
 
 .form-container {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-top: 1.5rem;
+  margin-top: 15px;
 }
 
 .input-field {
@@ -344,26 +308,13 @@ div.product-header {
 button {
   cursor: pointer;
   font-size: 14px;
-  padding: 8px 16px;
+  padding: 8px;
   border-radius: 5px;
   transition: background-color 0.3s ease;
+  background-color: #ffff;
 }
 
-/* Export selected button */
-.export-invoice {
-  background-color: #38a169;
-  color: white;
-}
 
-.export-invoice:hover {
-  background-color: #2f855a;
-}
-
-/* New Invoice button */
-button:hover {
-  background-color: var(--btn-bg-primary);
-  color: white;
-}
 
 /* Table container */
 .invoice-table {
@@ -441,10 +392,14 @@ button:hover {
   background-color: white;
   padding: 20px;
   border-radius: 5px;
-  max-width: 800px;
+  max-width: 600px;
   width: 100%;
   overflow-y: auto;
   max-height: 100vh;
+}
+
+.modal .modal-content.scroll {
+  max-height: calc(100vh - 220px);
 }
 
 .modal-header {
@@ -457,13 +412,6 @@ button:hover {
   font-size: 18px;
 }
 
-.close-btn {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 20px;
-  color: #ccc;
-}
 
 /* Form and inputs inside modal */
 .modal input,
@@ -482,17 +430,6 @@ button:hover {
 
 .modal select:disabled {
   background-color: #f7fafc;
-}
-
-.modal button {
-  background-color: var(--btn-bg-primary);
-  color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
-}
-
-.modal button:hover {
-  background-color: #2e3b8b;
 }
 
 /* Invoice Line Item */
@@ -662,11 +599,6 @@ button:hover {
   cursor: pointer;
 }
 
-.cancel-btn:hover,
-.submit-btn:hover {
-  background-color: #2b3d92;
-}
-
 .cancel-btn {
   background-color: #e53e3e;
 }
@@ -675,13 +607,6 @@ button:hover {
   background-color: #c53030;
 }
 
-.submit-btn {
-  background-color: #38a169;
-}
-
-.submit-btn:hover {
-  background-color: #2f855a;
-}
 
 /* Input Textarea Styling */
 textarea {
@@ -814,4 +739,72 @@ textarea {
 /* Main Content */
 .main-content {
   padding-top: 24px;
+}
+
+
+
+
+
+
+.product-card {
+  background: linear-gradient(285deg, #187cb70f 25.9%, #36a0df24 94.4%);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0px 2px 3px 0 #36a0df66;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  text-align: left;
+}
+
+
+
+.product-card:hover {
+  box-shadow: -1px 3px 2px 0 #36a0df66;
+}
+
+.edit-button svg {
+  width: 16px;
+  height: 16px;
+  color: #2e7d32;
+}
+
+.product-card .edit-button:hover svg {
+  color: #2e7d32;
+}
+
+.edit-button:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.product-details {
+  margin-top: 1rem;
+}
+
+
+@media (min-width:992px) and (max-width: 1440px) {
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+}
+
+@media (min-width:767px) and (max-width: 991px) {
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+}
+
+@media (min-width:320px) and (max-width:767px) {
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 10px;
+  }
+
 }

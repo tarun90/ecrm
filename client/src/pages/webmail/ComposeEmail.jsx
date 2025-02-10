@@ -4,6 +4,7 @@ import axios from 'axios';
 import './ComposeEmail.css';
 import EmailSuggestions from './EmailSuggestions';
 import { useAuth } from '../../contexts/AuthContext';
+import { Button } from 'antd';
 const ComposeEmail = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -72,21 +73,21 @@ const ComposeEmail = () => {
     const value = e.target.value;
     setTo(value);
     console.log('Recipient input changed:', value);
-    
+
     if (value.trim()) {
       try {
         const searchTerm = value.toLowerCase();
         console.log('Filtering contacts with term:', searchTerm);
         console.log('Available contacts:', recentContacts);
-        
+
         const filtered = recentContacts.filter(contact => {
           if (!contact || typeof contact !== 'object') return false;
-          
+
           const emailMatch = contact.email?.toLowerCase().includes(searchTerm);
           const nameMatch = contact.name?.toLowerCase().includes(searchTerm);
           return emailMatch || nameMatch;
         });
-        
+
         console.log('Filtered contacts:', filtered);
         setSuggestions(filtered);
         setShowSuggestions(true);
@@ -148,57 +149,56 @@ const ComposeEmail = () => {
     }
   };
 
-  const composerClass = `compose-container ${minimized ? 'minimized' : ''} ${
-    fullscreen ? 'fullscreen' : ''
-  }`;
+  const composerClass = `compose-container ${minimized ? 'minimized' : ''} ${fullscreen ? 'fullscreen' : ''
+    }`;
 
   return (
-    <div className={composerClass}>
+    <div className={ composerClass }>
       <div className="compose-header">
         <h2>New Message</h2>
         <div className="compose-controls">
-          <button 
-            className="control-btn" 
-            onClick={() => setMinimized(!minimized)}
-            title={minimized ? 'Maximize' : 'Minimize'}
+          <button
+            className="control-btn"
+            onClick={ () => setMinimized(!minimized) }
+            title={ minimized ? 'Maximize' : 'Minimize' }
           >
-            <i className={`fas fa-${minimized ? 'expand' : 'minus'}`}></i>
+            <i className={ `fas fa-${minimized ? 'expand' : 'minus'}` }></i>
           </button>
-          <button 
-            className="control-btn" 
-            onClick={() => setFullscreen(!fullscreen)}
-            title={fullscreen ? 'Exit full screen' : 'Full screen'}
+          <button
+            className="control-btn"
+            onClick={ () => setFullscreen(!fullscreen) }
+            title={ fullscreen ? 'Exit full screen' : 'Full screen' }
           >
-            <i className={`fas fa-${fullscreen ? 'compress' : 'expand-arrows-alt'}`}></i>
+            <i className={ `fas fa-${fullscreen ? 'compress' : 'expand-arrows-alt'}` }></i>
           </button>
-          <button 
-            className="control-btn" 
-            onClick={handleClose}
+          <button
+            className="control-btn"
+            onClick={ handleClose }
             title="Close"
           >
             <i className="fas fa-times"></i>
           </button>
         </div>
       </div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={ handleSubmit }>
         <div className="compose-field">
           <label>To:</label>
           <div className="input-wrapper">
             <input
               type="email"
-              value={to}
-              onChange={handleRecipientChange}
-              onFocus={() => {
+              value={ to }
+              onChange={ handleRecipientChange }
+              onFocus={ () => {
                 console.log('Input focused, current value:', to);
                 if (to.trim()) setShowSuggestions(true);
-              }}
+              } }
               required
               placeholder="Recipients"
             />
             <EmailSuggestions
-              suggestions={suggestions}
-              onSelect={handleSuggestionSelect}
-              visible={showSuggestions}
+              suggestions={ suggestions }
+              onSelect={ handleSuggestionSelect }
+              visible={ showSuggestions }
             />
           </div>
         </div>
@@ -206,28 +206,28 @@ const ComposeEmail = () => {
           <label>Subject:</label>
           <input
             type="text"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
+            value={ subject }
+            onChange={ (e) => setSubject(e.target.value) }
             required
             placeholder="Subject"
           />
         </div>
         <div className="compose-body">
           <textarea
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
+            value={ message }
+            onChange={ (e) => setMessage(e.target.value) }
             required
             placeholder="Write your message here..."
           />
         </div>
         <div className="compose-footer">
           <div className="compose-actions">
-            <button 
-              type="submit" 
-              className="send-btn" 
-              disabled={sending}
+            <Button
+              type="primary"
+              className=""
+              disabled={ sending }
             >
-              {sending ? (
+              { sending ? (
                 <>
                   <i className="fas fa-spinner fa-spin"></i>
                   Sending...
@@ -237,12 +237,12 @@ const ComposeEmail = () => {
                   <i className="fas fa-paper-plane"></i>
                   Send
                 </>
-              )}
-            </button>
-            <button 
-              type="button" 
-              className="discard-btn"
-              onClick={handleClose}
+              ) }
+            </Button>
+            <button
+              type="button"
+              className="close-btn"
+              onClick={ handleClose }
             >
               <i className="fas fa-trash"></i>
               Discard

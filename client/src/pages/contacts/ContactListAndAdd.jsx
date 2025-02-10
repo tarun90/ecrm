@@ -4,6 +4,7 @@ import './ContactListAndAdd.css';
 import moment from 'moment';
 import axios from 'axios';
 import MainLayout from '../../components/MainLayout';
+import Search from 'antd/es/transfer/search';
 
 
 const ContactListAndAdd = () => {
@@ -196,151 +197,155 @@ const ContactListAndAdd = () => {
     };
 
     return (
-            <div className="contact-container">
-                <div className="contact-header">
-                    <div className="search-container">
-                        <input
-                            type="text"
-                            placeholder="Search by name, email, or phone..."
-                            value={ searchTerm }
-                            onChange={ (e) => setSearchTerm(e.target.value) }
-                            className="search-input"
-                        />
-                        { isSearching && <span className="searching-indicator">Searching...</span> }
-                    </div>
-                    <div className="action-buttons">
-                        <input
-                            type="file"
-                            accept=".csv"
-                            onChange={ handleImport }
-                            style={ { display: 'none' } }
-                            id="csv-upload"
-                        />
-                        <label htmlFor="csv-upload" className="text-btn">
-                            Import CSV
-                        </label>
-                        <button className="export-btn" onClick={ handleExport }>
-                            Export CSV
-                        </button>
-                        <button className="add-contact-btn" onClick={ openAddModal }>
-                            Add Contact
-                        </button>
-                    </div>
-                </div>
+        <div className="contact-container">
+            <div className="contact-header">
+                <div className="search-container">
 
-                <div className="contact-table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Phone Number</th>
-                                <th>Owner</th>
-                                <th>Primary Company</th>
-                                <th>Lead Status</th>
-                                <th>Create Date</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            { contacts.map(contact => (
-                                <tr key={ contact?._id }>
-                                    <td>{ contact?.firstName } { contact?.lastName }</td>
-                                    <td>{ contact?.email }</td>
-                                    <td>{ contact?.phoneNumber }</td>
-                                    <td>{ contact?.contactOwner?.name }</td>
-                                    <td>{ contact?.jobTitle }</td>
-                                    <td>{ contact?.leadStatus }</td>
-                                    <td>{ moment(contact?.createdAt).format('DD-MM-YYYY HH:mm') }</td>
-                                    <td>
-                                        <button
-                                            className="edit-btn"
-                                            onClick={ () => handleEdit(contact) }
-                                        >
-                                            Edit
-                                        </button>
-                                        <button
-                                            className="delete-btn"
-                                            onClick={ () => handleDelete(contact._id) }
-                                        >
-                                            Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                            )) }
-                        </tbody>
-                    </table>
+                    <Search
+                        allowClear
+                        placeholder="Search by name, email, or phone..."
+                        value={ searchTerm }
+                        onChange={ (e) => setSearchTerm(e.target.value) }
+                        className="search-input"
+                        style={ {
+                            width: 200,
+                        } }
+                    />
+                    { isSearching && <span className="searching-indicator">Searching...</span> }
                 </div>
-
-                {/* Modal for Adding/Editing Contact */ }
-                { isModalOpen && (
-                    <div className="modal-overlay edit-contact-model">
-                        <div className="modal-content">
-                            <h2>{ isEditing ? 'Edit Contact' : 'Create Contact' }</h2>
-                            <form onSubmit={ handleSubmit }>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value={ contact.email }
-                                    onChange={ handleChange }
-                                    placeholder="Email"
-                                    required
-                                />
-                                <input
-                                    type="text"
-                                    name="firstName"
-                                    value={ contact.firstName }
-                                    onChange={ handleChange }
-                                    placeholder="First Name"
-                                />
-                                <input
-                                    type="text"
-                                    name="lastName"
-                                    value={ contact.lastName }
-                                    onChange={ handleChange }
-                                    placeholder="Last Name"
-                                />
-                                <input
-                                    type="text"
-                                    name="jobTitle"
-                                    value={ contact.jobTitle }
-                                    onChange={ handleChange }
-                                    placeholder="Job Title"
-                                />
-                                <input
-                                    type="text"
-                                    name="phoneNumber"
-                                    value={ contact.phoneNumber }
-                                    onChange={ handleChange }
-                                    placeholder="Phone Number"
-                                />
-                                <select
-                                    name="lifecycleStage"
-                                    value={ contact.lifecycleStage }
-                                    onChange={ handleChange }
-                                >
-                                    <option value="Lead">Lead</option>
-                                    <option value="Customer">Customer</option>
-                                </select>
-                                <select
-                                    name="leadStatus"
-                                    value={ contact.leadStatus }
-                                    onChange={ handleChange }
-                                >
-                                    <option value="--">--</option>
-                                    <option value="Qualified">Qualified</option>
-                                </select>
-                                <footer className='model-footer'>
-                                    <button className="close-btn" onClick={ closeModal }>Cancel </button>
-                                    <button type="submit" className="submit-btn">
-                                        { isEditing ? 'Update Contact' : 'Create Contact' }
-                                    </button>
-                                </footer>
-                            </form>
-                        </div>
-                    </div>
-                ) }
+                <div className="action-buttons">
+                    <input
+                        type="file"
+                        accept=".csv"
+                        onChange={ handleImport }
+                        style={ { display: 'none' } }
+                        id="csv-upload"
+                    />
+                    <label htmlFor="csv-upload" className="text-btn">
+                        Import CSV
+                    </label>
+                    <button className="export-btn" onClick={ handleExport }>
+                        Export CSV
+                    </button>
+                    <button className="add-contact-btn" onClick={ openAddModal }>
+                        Add Contact
+                    </button>
+                </div>
             </div>
+
+            <div className="contact-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone Number</th>
+                            <th>Owner</th>
+                            <th>Primary Company</th>
+                            <th>Lead Status</th>
+                            <th>Create Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        { contacts.map(contact => (
+                            <tr key={ contact?._id }>
+                                <td>{ contact?.firstName } { contact?.lastName }</td>
+                                <td>{ contact?.email }</td>
+                                <td>{ contact?.phoneNumber }</td>
+                                <td>{ contact?.contactOwner?.name }</td>
+                                <td>{ contact?.jobTitle }</td>
+                                <td>{ contact?.leadStatus }</td>
+                                <td>{ moment(contact?.createdAt).format('DD-MM-YYYY HH:mm') }</td>
+                                <td>
+                                    <button
+                                        className="edit-btn"
+                                        onClick={ () => handleEdit(contact) }
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        className="delete-btn"
+                                        onClick={ () => handleDelete(contact._id) }
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        )) }
+                    </tbody>
+                </table>
+            </div>
+
+            {/* Modal for Adding/Editing Contact */ }
+            { isModalOpen && (
+                <div className="modal-overlay edit-contact-model">
+                    <div className="modal-content">
+                        <h2>{ isEditing ? 'Edit Contact' : 'Create Contact' }</h2>
+                        <form onSubmit={ handleSubmit }>
+                            <input
+                                type="email"
+                                name="email"
+                                value={ contact.email }
+                                onChange={ handleChange }
+                                placeholder="Email"
+                                required
+                            />
+                            <input
+                                type="text"
+                                name="firstName"
+                                value={ contact.firstName }
+                                onChange={ handleChange }
+                                placeholder="First Name"
+                            />
+                            <input
+                                type="text"
+                                name="lastName"
+                                value={ contact.lastName }
+                                onChange={ handleChange }
+                                placeholder="Last Name"
+                            />
+                            <input
+                                type="text"
+                                name="jobTitle"
+                                value={ contact.jobTitle }
+                                onChange={ handleChange }
+                                placeholder="Job Title"
+                            />
+                            <input
+                                type="text"
+                                name="phoneNumber"
+                                value={ contact.phoneNumber }
+                                onChange={ handleChange }
+                                placeholder="Phone Number"
+                            />
+                            <select
+                                name="lifecycleStage"
+                                value={ contact.lifecycleStage }
+                                onChange={ handleChange }
+                            >
+                                <option value="Lead">Lead</option>
+                                <option value="Customer">Customer</option>
+                            </select>
+                            <select
+                                name="leadStatus"
+                                value={ contact.leadStatus }
+                                onChange={ handleChange }
+                            >
+                                <option value="--">--</option>
+                                <option value="Qualified">Qualified</option>
+                            </select>
+                            <footer className='model-footer'>
+                                <button className="close-btn" onClick={ closeModal }>Cancel </button>
+                                <button type="submit" className="submit-btn">
+                                    { isEditing ? 'Update Contact' : 'Create Contact' }
+                                </button>
+                            </footer>
+                        </form>
+                    </div>
+                </div>
+            ) }
+        </div>
     );
 };
 

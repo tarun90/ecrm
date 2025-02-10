@@ -159,98 +159,100 @@ function Products() {
           <div className="modal-content">
             <div className="modal-header">
               <h2 className="modal-title">{ isEditing ? 'Edit Product' : 'Add New Product' }</h2>
-              <button onClick={ () => setIsModalOpen(false) } className="close-modal-button">
+              <button onClick={ () => setIsModalOpen(false) } >
                 <svg className="close-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={ 2 } d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
             <form onSubmit={ handleSubmit } className="form-container">
-              <input
-                type="text"
-                placeholder="Product Name"
-                value={ formData.name }
-                onChange={ (e) => setFormData({ ...formData, name: e.target.value }) }
-                className="input-field"
-              />
-              <textarea
-                placeholder="Short Description"
-                value={ formData.description_short }
-                onChange={ (e) => setFormData({ ...formData, description_short: e.target.value }) }
-                className="input-field"
-                rows="2"
-              />
-              <textarea
-                placeholder="Long Description"
-                value={ formData.description_long }
-                onChange={ (e) => setFormData({ ...formData, description_long: e.target.value }) }
-                className="input-field"
-                rows="3"
-              />
-              <select
-                value={ formData.product_type }
-                onChange={ (e) => setFormData({ ...formData, product_type: e.target.value }) }
-                className="input-field"
-              >
-                <option value="">Select Product Type</option>
-                <option value="physical">Physical</option>
-                <option value="digital">Digital</option>
-                <option value="subscription">Subscription</option>
-                <option value="service">Service</option>
-              </select>
-              <input
-                type="text"
-                placeholder="SKU"
-                value={ formData.sku }
-                onChange={ (e) => setFormData({ ...formData, sku: e.target.value }) }
-                className="input-field"
-              />
-              <input
-                type="text"
-                placeholder="Billing Frequency (e.g., monthly, annually)"
-                value={ formData.billing_frequency }
-                onChange={ (e) => setFormData({ ...formData, billing_frequency: e.target.value }) }
-                className="input-field"
-              />
-              <input
-                type="text"
-                placeholder="Term (e.g., 12 months)"
-                value={ formData.term }
-                onChange={ (e) => setFormData({ ...formData, term: e.target.value }) }
-                className="input-field"
-              />
-              <input
-                type="number"
-                placeholder="Unit Cost"
-                value={ formData.unit_cost }
-                onChange={ (e) => setFormData({ ...formData, unit_cost: e.target.value }) }
-                className="input-field"
-              />
-              <select
-                value={ formData.currency }
-                onChange={ (e) => setFormData({ ...formData, currency: e.target.value }) }
-                className="input-field"
-              >
-                <option value="USD">USD</option>
-                <option value="EUR">EUR</option>
-                <option value="GBP">GBP</option>
-                <option value="JPY">JPY</option>
-              </select>
-              <input
-                type="number"
-                placeholder="Tax Rate (%)"
-                value={ formData.tax_rate }
-                onChange={ (e) => setFormData({ ...formData, tax_rate: e.target.value }) }
-                className="input-field"
-                min="0"
-                max="100"
-                step="0.01"
-              />
+              <div className="modal-content scroll">
+                <input
+                  type="text"
+                  placeholder="Product Name"
+                  value={ formData.name }
+                  onChange={ (e) => setFormData({ ...formData, name: e.target.value }) }
+                  className="input-field"
+                />
+                <textarea
+                  placeholder="Short Description"
+                  value={ formData.description_short }
+                  onChange={ (e) => setFormData({ ...formData, description_short: e.target.value }) }
+                  className="input-field"
+                  rows="2"
+                />
+                <textarea
+                  placeholder="Long Description"
+                  value={ formData.description_long }
+                  onChange={ (e) => setFormData({ ...formData, description_long: e.target.value }) }
+                  className="input-field"
+                  rows="3"
+                />
+                <select
+                  value={ formData.product_type }
+                  onChange={ (e) => setFormData({ ...formData, product_type: e.target.value }) }
+                  className="input-field"
+                >
+                  <option value="">Select Product Type</option>
+                  <option value="physical">Physical</option>
+                  <option value="digital">Digital</option>
+                  <option value="subscription">Subscription</option>
+                  <option value="service">Service</option>
+                </select>
+                <input
+                  type="text"
+                  placeholder="SKU"
+                  value={ formData.sku }
+                  onChange={ (e) => setFormData({ ...formData, sku: e.target.value }) }
+                  className="input-field"
+                />
+                <input
+                  type="text"
+                  placeholder="Billing Frequency (e.g., monthly, annually)"
+                  value={ formData.billing_frequency }
+                  onChange={ (e) => setFormData({ ...formData, billing_frequency: e.target.value }) }
+                  className="input-field"
+                />
+                <input
+                  type="text"
+                  placeholder="Term (e.g., 12 months)"
+                  value={ formData.term }
+                  onChange={ (e) => setFormData({ ...formData, term: e.target.value }) }
+                  className="input-field"
+                />
+                <input
+                  type="number"
+                  placeholder="Unit Cost"
+                  value={ formData.unit_cost }
+                  onChange={ (e) => setFormData({ ...formData, unit_cost: e.target.value }) }
+                  className="input-field"
+                />
+                <select
+                  value={ formData.currency }
+                  onChange={ (e) => setFormData({ ...formData, currency: e.target.value }) }
+                  className="input-field"
+                >
+                  <option value="USD">USD</option>
+                  <option value="EUR">EUR</option>
+                  <option value="GBP">GBP</option>
+                  <option value="JPY">JPY</option>
+                </select>
+                <input
+                  type="number"
+                  placeholder="Tax Rate (%)"
+                  value={ formData.tax_rate }
+                  onChange={ (e) => setFormData({ ...formData, tax_rate: e.target.value }) }
+                  className="input-field"
+                  min="0"
+                  max="100"
+                  step="0.01"
+                />
+              </div>
               <div className="form-actions">
-                <button type="button" onClick={ () => setIsModalOpen(false) } className="cancel-button">
+                <button type="button" onClick={ () => setIsModalOpen(false) } className="text-btn">
                   Cancel
                 </button>
-                <button type="submit" disabled={ loading } className="submit-button">
+                <button type="submit" disabled={ loading } className="submit-btn">
                   { loading ? 'Saving...' : isEditing ? 'Update Product' : 'Create Product' }
                 </button>
               </div>

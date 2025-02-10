@@ -1,0 +1,28 @@
+.ant-input-number,
+.item-wrapper .ant-input-number,
+.item-wrapper .ant-form-item {
+    width: 100%;
+}
+
+.modal-content.scroll {
+    max-height: calc(100vh - 250px);
+}
+
+.modal-footer .ant-form-item .ant-form-item-control-input-content {
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 5px;
+    display: flex;
+}
+
+.line-items {
+    margin-top: 25px;
+}
+
+.item-wrapper {
+    margin: 10px 0;
+}
+
+.item-wrapper .delete-btn {
+    margin: 0;
+}

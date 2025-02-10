@@ -8,7 +8,8 @@ import {
   SettingOutlined,
   CalendarOutlined,
   ProductOutlined,
-  FileTextOutlined
+  FileTextOutlined,
+  MailOutlined
 } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import HeaderLogo from '../assets/Icons/headerlogo';
@@ -31,7 +32,7 @@ const Sidebar = ({ collapsed, onCollapse }) => {
     if (path.includes('/webmail')) return '8';
 
 
-    
+
     return '1';
   };
 
@@ -80,7 +81,7 @@ const Sidebar = ({ collapsed, onCollapse }) => {
     },
     {
       key: '8',
-      icon: <FileTextOutlined />,
+      icon: <MailOutlined />,
       label: 'Web Mail',
       onClick: () => navigate('/webmail-setup'),
     },

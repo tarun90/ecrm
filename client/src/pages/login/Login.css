@@ -38,7 +38,6 @@
 }
 
 .ant-form .ant-input-outlined {
-    padding: 14px 16px;
     border-color: #0077bd;
     background-color: #fff;
     color: rgba(0, 0, 0, 0.88);
@@ -98,7 +97,6 @@
 
 .ant-btn-primary {
     height: auto;
-    line-height: 1;
 }
 
 .login-min-wrapper .ant-form .ant-form-item .ant-btn:hover {
