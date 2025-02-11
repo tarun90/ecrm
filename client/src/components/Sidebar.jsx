@@ -28,6 +28,8 @@ const Sidebar = ({ collapsed, onCollapse }) => {
     if (path.includes('/products')) return '6';
     if (path.includes('/invoices')) return '7';
     if (path.includes('/webmail')) return '8';
+    if (path.includes('/company')) return '9';
+
 
 
     
@@ -82,6 +84,12 @@ const Sidebar = ({ collapsed, onCollapse }) => {
       icon: <FileTextOutlined />,
       label: 'Web Mail',
       onClick: () => navigate('/webmail-setup'),
+    },
+    {
+      key: '9',
+      icon: <FileTextOutlined />,
+      label: 'Company',
+      onClick: () => navigate('/company'),
     },
   ];
 
