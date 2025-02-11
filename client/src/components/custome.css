@@ -588,17 +588,6 @@ button {
   background-color: #c53030;
 }
 
-/* Button Styles */
-.cancel-btn,
-.submit-btn {
-  background-color: var(--btn-bg-primary);
-  color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
 .cancel-btn {
   background-color: #e53e3e;
 }

@@ -373,7 +373,7 @@ function Deals() {
                       <div
                         ref={ provided.innerRef }
                         { ...provided.droppableProps }
-                        className={ `${styles.dealList} ${snapshot.isDraggingOver ? styles.isDraggingOver : ''}` }
+                        className={ `${styles.dealList} ${snapshot.isDraggingOver ? styles.isDraggingOver : 'scroll'}` }
                       >
                         { stageDeals.map((deal, index) => (
                           <Draggable

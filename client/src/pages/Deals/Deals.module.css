@@ -130,6 +130,10 @@
 
 .dealList {
   min-height: 100px;
+  height: 100svh;
+  max-height: calc(100svh - 300px);
+  overflow-y: auto;
+  padding: 0 5px;
   transition: background-color 0.2s ease;
 }
 
