@@ -4,7 +4,7 @@ import './ContactListAndAdd.css';
 import moment from 'moment';
 import axios from 'axios';
 import MainLayout from '../../components/MainLayout';
-
+import { getCompaniesNames } from '../Company/APIServices';
 
 const ContactListAndAdd = () => {
     const [contacts, setContacts] = useState([]);
@@ -16,8 +16,10 @@ const ContactListAndAdd = () => {
         phoneNumber: '',
         lifecycleStage: 'Lead',
         leadStatus: '',
-        contactOwner: ''
+        contactOwner: '',
+        company:'',
     });
+    const [companies, setCompanies] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editingId, setEditingId] = useState(null);
@@ -76,7 +78,18 @@ const ContactListAndAdd = () => {
             fetchContacts();
         }
     }, [searchTerm]);
-
+    useEffect(()=>{
+        fetchCompanies();
+    },[])
+    const fetchCompanies = async ()=>{
+        try{
+            let data = await getCompaniesNames();
+            setCompanies(data);
+        }
+        catch(error){
+            console.log(error);
+        }
+    }
     const fetchContacts = async (search = '') => {
         setIsSearching(true);
         try {
@@ -116,7 +129,8 @@ const ContactListAndAdd = () => {
             phoneNumber: contactToEdit.phoneNumber,
             lifecycleStage: contactToEdit.lifecycleStage,
             leadStatus: contactToEdit.leadStatus,
-            contactOwner: contactToEdit.contactOwner
+            contactOwner: contactToEdit.contactOwner,
+            company: contactToEdit?.company
         });
         setEditingId(contactToEdit._id);
         setIsEditing(true);
@@ -329,6 +343,16 @@ const ContactListAndAdd = () => {
                                 >
                                     <option value="--">--</option>
                                     <option value="Qualified">Qualified</option>
+                                </select>
+                                <select
+                                    name="company"
+                                    value={ contact.company }
+                                    onChange={ handleChange }
+                                >
+                                    <option value="--">Select Company</option>
+                                    {companies?.map((company)=>{
+                                        return <option value={company?._id}>{company.companyName}</option>
+                                    })}
                                 </select>
                                 <footer className='model-footer'>
                                     <button className="close-btn" onClick={ closeModal }>Cancel </button>

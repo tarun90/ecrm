@@ -1,6 +1,7 @@
 import express from 'express';
 import Company from '../models/Company.js';
 import auth from '../middleware/auth.js';
+import mongoose from 'mongoose';
 const router = express.Router();
 
 // Create a new company
@@ -54,7 +55,7 @@ router.get('/', auth, async (req, res) => {
 
 
 // Get company by ID
-router.get('/:id', auth, async (req, res) => {
+router.get('/view/:id', auth, async (req, res) => {
   try {
     const company = await Company.findOne({ 
       _id: req.params.id,
@@ -139,5 +140,31 @@ router.delete('/:id', auth, async (req, res) => {
     });
   }
 });
+
+// API to fetch only companyName and _id
+router.get('/names', auth, async (req, res) => {
+  try {
+    const { searchTerm } = req.query;
+    const filter = { createdBy: req.user.user._id };
+
+    if (searchTerm) {
+      filter.$or = [
+        { companyName: { $regex: searchTerm, $options: 'i' } },
+        { email: { $regex: searchTerm, $options: 'i' } },
+        { phone: { $regex: searchTerm, $options: 'i' } },
+        { industry: { $regex: searchTerm, $options: 'i' } },
+      ];
+    }
+
+    const companies = await Company.find(filter).select("companyName _id");
+    res.json(companies);
+  } catch (error) {
+    res.status(500).json({ 
+      message: 'Error fetching companies',
+      error: error.message 
+    });
+  }
+});
+
 
 export default router;
