@@ -138,24 +138,22 @@ function Invoices() {
     }
   };
 
-  const handleProductSelect = (index, selectedOption) => {
-    const selectedProduct = products.find(
-      (p) => p._id === selectedOption.value
-    );
+  const handleProductSelect = (index, selectedProductId) => {
+    const selectedProduct = products.find((p) => p._id === selectedProductId);
     if (selectedProduct) {
-      const updatedItems = formData.items.map((item, i) => {
-        if (i === index) {
-          return {
-            ...item,
-            product: selectedProduct._id,
-            product_name: selectedProduct.name,
-            unit_price: selectedProduct.unit_cost.toString(),
-            tax_rate: selectedProduct.tax_rate.toString(),
-          };
-        }
-        return item;
-      });
+      const updatedItems = formData.items.map((item, i) =>
+        i === index
+          ? {
+              ...item,
+              product: selectedProduct._id,
+              product_name: selectedProduct.name,
+              unit_price: selectedProduct.unit_cost.toString(),
+              tax_rate: selectedProduct.tax_rate.toString(),
+            }
+          : item
+      );
 
+      setFormData({ ...formData, items: updatedItems }); // Update the state correctly
       calculateTotals(updatedItems);
     }
   };

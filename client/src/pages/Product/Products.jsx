@@ -291,9 +291,18 @@ function Products() {
                   <option value="JPY">JPY</option>
                 </select>
                 <select
-                  value={formData.tax_rate || ""} // Ensures value updates dynamically
+                  value={
+                    formData.tax_rate !== null &&
+                    formData.tax_rate !== undefined
+                      ? formData.tax_rate
+                      : ""
+                  } // Ensure correct value
                   onChange={(e) =>
-                    setFormData({ ...formData, tax_rate: e.target.value })
+                    setFormData({
+                      ...formData,
+                      tax_rate:
+                        e.target.value !== "" ? Number(e.target.value) : null, // Convert to number, reset to null if empty
+                    })
                   }
                   className="input-field"
                 >
