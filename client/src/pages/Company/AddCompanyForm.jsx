@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { 
-  Form, 
-  Input, 
-  Select, 
-  Button, 
-  Space, 
-  Typography, 
+import React from 'react';
+import {
+  Form,
+  Input,
+  Select,
+  Button,
+  Space,
+  Typography,
   Card,
   Divider,
   message
@@ -13,39 +13,40 @@ import {
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { createCompany, getCompanyById, updateCompany } from './APIServices';
 import { useParams, useNavigate } from 'react-router-dom';
-const { Title } = Typography;
+import './AddCompanyForm.css';
 
+const { Title } = Typography;
 
 const AddCompanyForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [form] = Form.useForm();
- 
 
-  const fetchCompanybyId = async (id)=>{
+  const fetchCompanybyId = async (id) => {
     let data = await getCompanyById(id);
-    console.log(data)
-    form.setFieldValue('companyOwner', data.companyOwner)
-    form.setFieldValue('companyName', data.companyName)
+    console.log(data);
+    form.setFieldValue('companyOwner', data.companyOwner);
+    form.setFieldValue('companyName', data.companyName);
     form.setFieldValue('email', data.email);
-        form.setFieldValue('phone', data.phone);
-        form.setFieldValue('mobile', data.mobile);
-        form.setFieldValue('website', data.website);
-        form.setFieldValue('industry', data.industry);
-        form.setFieldValue('currency', data.currency);
-        form.setFieldValue('gstin', data.gstin);
-        form.setFieldValue('street', data.address.street);
-        form.setFieldValue('city', data.address.city);
-        form.setFieldValue('state', data.address.state);
-        form.setFieldValue('country', data.address.country);
-        form.setFieldValue('region', data.address.region);
+    form.setFieldValue('phone', data.phone);
+    form.setFieldValue('mobile', data.mobile);
+    form.setFieldValue('website', data.website);
+    form.setFieldValue('industry', data.industry);
+    form.setFieldValue('currency', data.currency);
+    form.setFieldValue('gstin', data.gstin);
+    form.setFieldValue('street', data.address.street);
+    form.setFieldValue('city', data.address.city);
+    form.setFieldValue('state', data.address.state);
+    form.setFieldValue('country', data.address.country);
+    form.setFieldValue('region', data.address.region);
+  };
 
-  }
-  if(id){
+  if (id) {
     fetchCompanybyId(id);
   }
+
   const industries = [
-    'Technology', 'Manufacturing', 'Healthcare', 'Retail', 
+    'Technology', 'Manufacturing', 'Healthcare', 'Retail',
     'Financial Services', 'Education', 'Other'
   ];
 
@@ -53,15 +54,14 @@ const AddCompanyForm = () => {
 
   const handleSubmit = async (values) => {
     try {
-      if(id)
-      {
+      if (id) {
         const response = await updateCompany(id, values);
         message.success('Company updated successfully');
-        navigate('/company'); // Adjust the route as needed
-      }else{
-      const response = await createCompany(values);
-      message.success('Company created successfully');
-      navigate('/company'); // Adjust the route as needed
+        navigate('/company');
+      } else {
+        const response = await createCompany(values);
+        message.success('Company created successfully');
+        navigate('/company');
       }
     } catch (error) {
       message.error(error.message || 'Error creating company');
@@ -69,37 +69,35 @@ const AddCompanyForm = () => {
   };
 
   return (
-    <div style={{ background: '#f0f2f5', padding: 24, minHeight: '100vh' }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        {/* Back Button */}
-        <Button 
-          icon={<ArrowLeftOutlined />} 
-          type="link" 
-          onClick={() => window.history.back()}
-          style={{ marginBottom: 16 }}
+    <div className="company-form-container">
+      <div className="company-form-wrapper">
+        <Button
+          icon={ <ArrowLeftOutlined /> }
+          type="link"
+          onClick={ () => window.history.back() }
+          className="back-button text-btn"
         >
           Back to Companies
         </Button>
 
-        <Card style={{background:'#fff'}}>
+        <Card className="form-card">
           <Form
-            form={form}
+            form={ form }
             layout="vertical"
-            onFinish={handleSubmit}
-            initialValues={{
+            onFinish={ handleSubmit }
+            initialValues={ {
               industry: '',
               currency: ''
-            }}
+            } }
           >
-            {/* Company Information Section */}
-            <Title level={4}>Company Information</Title>
+            <Title level={ 4 }>Company Information</Title>
             <Divider />
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+            <div className="form-grid">
               <Form.Item
                 label="Company Owner"
                 name="companyOwner"
-                rules={[{ required: true, message: 'Please input company owner!' }]}
+                rules={ [{ required: true, message: 'Please input company owner!' }] }
               >
                 <Input />
               </Form.Item>
@@ -107,7 +105,7 @@ const AddCompanyForm = () => {
               <Form.Item
                 label="Company Name"
                 name="companyName"
-                rules={[{ required: true, message: 'Please input company name!' }]}
+                rules={ [{ required: true, message: 'Please input company name!' }] }
               >
                 <Input />
               </Form.Item>
@@ -115,10 +113,10 @@ const AddCompanyForm = () => {
               <Form.Item
                 label="Email"
                 name="email"
-                rules={[
+                rules={ [
                   { required: true, message: 'Please input email!' },
                   { type: 'email', message: 'Please enter a valid email!' }
-                ]}
+                ] }
               >
                 <Input />
               </Form.Item>
@@ -140,7 +138,7 @@ const AddCompanyForm = () => {
               <Form.Item
                 label="Website"
                 name="website"
-                rules={[{ type: 'url', message: 'Please enter a valid URL!' }]}
+                rules={ [{ type: 'url', message: 'Please enter a valid URL!' }] }
               >
                 <Input />
               </Form.Item>
@@ -150,11 +148,11 @@ const AddCompanyForm = () => {
                 name="industry"
               >
                 <Select placeholder="Select Industry">
-                  {industries.map(industry => (
-                    <Select.Option key={industry} value={industry}>
-                      {industry}
+                  { industries.map(industry => (
+                    <Select.Option key={ industry } value={ industry }>
+                      { industry }
                     </Select.Option>
-                  ))}
+                  )) }
                 </Select>
               </Form.Item>
 
@@ -163,11 +161,11 @@ const AddCompanyForm = () => {
                 name="currency"
               >
                 <Select placeholder="Select Currency">
-                  {currencies.map(currency => (
-                    <Select.Option key={currency} value={currency}>
-                      {currency}
+                  { currencies.map(currency => (
+                    <Select.Option key={ currency } value={ currency }>
+                      { currency }
                     </Select.Option>
-                  ))}
+                  )) }
                 </Select>
               </Form.Item>
 
@@ -179,15 +177,14 @@ const AddCompanyForm = () => {
               </Form.Item>
             </div>
 
-            {/* Address Information Section */}
-            <Title level={4} style={{ marginTop: 32 }}>Address Information</Title>
+            <Title level={ 4 } className="address-title">Address Information</Title>
             <Divider />
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+            <div className="form-grid">
               <Form.Item
                 label="Street"
                 name="street"
-                style={{ gridColumn: '1 / -1' }}
+                className="full-width"
               >
                 <Input />
               </Form.Item>
@@ -221,15 +218,14 @@ const AddCompanyForm = () => {
               </Form.Item>
             </div>
 
-            {/* Form Actions */}
             <Divider />
-            <div style={{ textAlign: 'right' }}>
+            <div className="form-actions">
               <Space>
-                <Button onClick={() => window.history.back()}>
+                <Button className='text-btn' onClick={ () => window.history.back() }>
                   Cancel
                 </Button>
                 <Button type="primary" htmlType="submit">
-                  { id ? "Update Company" : "Save Company"}
+                  { id ? "Update Company" : "Save Company" }
                 </Button>
               </Space>
             </div>

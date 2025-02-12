@@ -55,6 +55,21 @@
     border-color: #0077bd;
     background-color: #fff;
     color: rgba(0, 0, 0, 0.88);
+
+}
+
+.ant-select-single .ant-select-selector .ant-select-selection-item {
+    text-align: left;
+}
+
+.ant-form-item .ant-select .ant-select-selector {
+    border-color: #0077bd;
+    background-color: #fff;
+    color: rgba(0, 0, 0, 0.88);
+}
+
+.ant-form-item .ant-form-item-explain-error {
+    text-align: left;
 }
 
 .ant-modal-wrap .ant-modal-content .ant-modal-body .ant-form .ant-form-item-control .ant-input-number-input,

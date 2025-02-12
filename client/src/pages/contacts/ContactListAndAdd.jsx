@@ -5,6 +5,7 @@ import moment from 'moment';
 import axios from 'axios';
 import MainLayout from '../../components/MainLayout';
 import { getCompaniesNames } from '../Company/APIServices';
+import Search from 'antd/es/transfer/search';
 
 const ContactListAndAdd = () => {
     const [contacts, setContacts] = useState([]);

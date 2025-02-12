@@ -13,6 +13,8 @@ import {
 } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import HeaderLogo from '../assets/Icons/headerlogo';
+import CompanyIcon from '../../public/Company';
+
 
 const { Sider } = Layout;
 
@@ -89,7 +91,7 @@ const Sidebar = ({ collapsed, onCollapse }) => {
     },
     {
       key: '9',
-      icon: <FileTextOutlined />,
+      icon: <CompanyIcon />,
       label: 'Company',
       onClick: () => navigate('/company'),
     },

@@ -1,0 +1,44 @@
+.company-form-container {
+    background: #f0f2f5;
+    padding: 24px;
+}
+
+.company-form-wrapper {
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+.company-form-container .company-form-wrapper .text-btn:hover {
+    background-color: #ffff;
+    color: var(--btn-bg-primary-hover);
+}
+
+.company-form-wrapper .ant-form-item {
+    margin-bottom: 10px;
+}
+
+.company-form-container .back-button {
+    margin-bottom: 16px;
+    display: flex;
+    gap: 10px;
+}
+
+.company-form-container .form-card {
+    background: #fff;
+}
+
+.company-form-container .address-title {
+    margin-top: 32px;
+}
+
+.company-form-container .full-width {
+    grid-column: 1 / -1;
+}
+
+.form-actions {
+    text-align: right;
+}
+
+.company-form-container .ant-typography {
+    text-align: left;
+}

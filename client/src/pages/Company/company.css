@@ -81,7 +81,6 @@
   color: var(--text-white);
   display: inline-flex;
   justify-content: center;
-  line-height: 1;
   padding: 10px 16px;
 }
 
@@ -180,13 +179,12 @@ tr:hover {
   z-index: 1000;
 }
 
-.modal-content {
-  background-color: white;
-  padding: 24px;
-  border-radius: 8px;
-  width: 100%;
-  max-width: 500px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.modal-content .modal-content {
+  padding: 0;
+}
+
+.modal-content .modal-header button:hover {
+  background-color: #d6d6d648;
 }
 
 .modal-content h2 {
@@ -219,23 +217,7 @@ tr:hover {
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
 }
 
-.submit-btn {
-  background-color: #166534;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 6px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.submit-btn:hover {
-  background-color: #15803d;
-}
-
 .close-btn {
-  margin-top: 16px;
   padding: 8px 16px;
   background-color: #f3f4f6;
   border: 1px solid #e5e7eb;
