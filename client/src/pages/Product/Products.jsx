@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Package, Edit2, Search, Plus } from "lucide-react";
+import { Package, Edit2, Search, Plus, Trash2} from "lucide-react";
 import MainLayout from "../../components/MainLayout";
 import "../../components/custome.css";
 
 function Products() {
   const [products, setProducts] = useState([]);
+  const [selectedProducts, setSelectedProducts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isEditing, setIsEditing] = useState(false);
@@ -45,6 +46,39 @@ function Products() {
       console.error("Error fetching products:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const deleteProduct = async (productId) => {
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_TM_API_URL}/api/products/${productId}`
+      );
+      setProducts(products.filter((product) => product._id !== productId));
+    } catch (error) {
+      setError("Failed to delete product. Please try again.");
+      console.error("Error deleting product:", error);
+    }
+  };
+
+  const deleteMultipleProducts = async () => {
+    if (selectedProducts.length === 0) {
+      setError("Please select at least one product to delete.");
+      return;
+    }
+
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_TM_API_URL}/api/products/delete-multiple`,
+        { productIds: selectedProducts }
+      );
+      setProducts(
+        products.filter((product) => !selectedProducts.includes(product._id))
+      );
+      setSelectedProducts([]); // Clear selection after deletion
+    } catch (error) {
+      setError("Failed to delete selected products. Please try again.");
+      console.error("Error deleting multiple products:", error);
     }
   };
 
@@ -105,17 +139,27 @@ function Products() {
             className="product-search"
           />
         </div>
-        <button
-          onClick={() => {
-            setIsEditing(false);
-            setFormData(initialFormData);
-            setIsModalOpen(true);
-          }}
-          className="ant-btn-primary"
-        >
-          <Plus className="add-icon" />
-          Add Product
-        </button>
+        <div className="btn-wrapper">
+          <button
+            onClick={() => {
+              setIsEditing(false);
+              setFormData(initialFormData);
+              setIsModalOpen(true);
+            }}
+            className="ant-btn-primary"
+          >
+            <Plus className="add-icon" />
+            Add Product
+          </button>
+          <button
+            onClick={deleteMultipleProducts}
+            disabled={selectedProducts.length === 0}
+            className="ant-btn-primary delete-selected-button"
+          >
+            <Trash2 className="delete-icon" />
+            Delete Selected
+          </button>
+        </div>
       </div>
 
       {/* Error Message */}
@@ -141,6 +185,17 @@ function Products() {
         <div className="products-grid">
           {filteredProducts.map((product) => (
             <div key={product._id} className="product-card">
+              <input
+                type="checkbox"
+                checked={selectedProducts.includes(product._id)}
+                onChange={() => {
+                  setSelectedProducts((prev) =>
+                    prev.includes(product._id)
+                      ? prev.filter((id) => id !== product._id)
+                      : [...prev, product._id]
+                  );
+                }}
+              />
               <div className="product-info">
                 <div>
                   <h3 className="product-name">{product.name}</h3>
@@ -151,6 +206,12 @@ function Products() {
                   className="edit-button"
                 >
                   <Edit2 className="edit-icon" />
+                </button>
+                <button
+                  onClick={() => deleteProduct(product._id)}
+                  className="delete-btn"
+                >
+                  🗑️
                 </button>
               </div>
               <div className="product-details">

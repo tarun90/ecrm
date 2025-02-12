@@ -32,7 +32,7 @@ function Invoices() {
   const [size, setSize] = useState("large");
   const initialFormData = {
     invoice_number: "",
-    customer: "",
+    contact: "",
     due_date: "",
     items: [],
     subtotal: "",
@@ -92,14 +92,47 @@ function Invoices() {
     }
   };
 
+  const deleteInvoice = async (invoiceId) => {
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_TM_API_URL}/api/invoices/${invoiceId}`
+      );
+      setInvoices(invoices.filter((invoice) => invoice._id !== invoiceId));
+    } catch (error) {
+      setError("Failed to delete invoice. Please try again.");
+      console.error("Error deleting invoice:", error);
+    }
+  };
+
+  const deleteMultipleInvoices = async () => {
+    if (selectedInvoices.length === 0) {
+      setError("Please select at least one invoice to delete.");
+      return;
+    }
+
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_TM_API_URL}/api/invoices/delete-multiple`,
+        { invoiceIds: selectedInvoices }
+      );
+      setInvoices(
+        invoices.filter((invoice) => !selectedInvoices.includes(invoice._id))
+      );
+      setSelectedInvoices([]); // Clear selection after deletion
+    } catch (error) {
+      setError("Failed to delete selected invoices. Please try again.");
+      console.error("Error deleting multiple invoices:", error);
+    }
+  };
+
   const handleSubmit = async (e) => {
     // e.preventDefault();
     setLoading(true);
     setError(null);
 
-    const { customer, invoice_number, due_date, items } = formData;
+    const { contact, invoice_number, due_date, items } = formData;
 
-    if (!customer || !invoice_number || !due_date) {
+    if (!contact || !invoice_number || !due_date) {
       setError("Please fill all required fields.");
       setLoading(false);
       return;
@@ -353,7 +386,7 @@ function Invoices() {
       doc.text("Bill To:", pageWidth - margin - detailsBoxWidth + 5, yPos + 10);
       doc.setFont("helvetica", "bold");
       doc.text(
-        invoice.customer,
+        invoice.contact,
         pageWidth - margin - detailsBoxWidth + 5,
         yPos + 20
       );
@@ -525,6 +558,15 @@ function Invoices() {
           </Button>
 
           <Button
+            onClick={deleteMultipleInvoices}
+            disabled={selectedInvoices.length === 0}
+            type="danger"
+            className="delete-invoice"
+          >
+            Delete Selected
+          </Button>
+
+          <Button
             icon={<PlusOutlined />}
             type="primary"
             onClick={handleNewInvoice}
@@ -591,7 +633,11 @@ function Invoices() {
                     />
                   </td>
                   <td>{invoice.invoice_number}</td>
-                  <td>{invoice.customer}</td>
+                  <td>
+                    {invoice.contact
+                      ? `${invoice.contact.firstName} ${invoice.contact.lastName}`
+                      : "Unknown Customer"}
+                  </td>
                   <td>{new Date(invoice.due_date).toLocaleDateString()}</td>
                   <td className={`status ${invoice.payment_status}`}>
                     {invoice.payment_status}
@@ -605,6 +651,12 @@ function Invoices() {
                       className="edit-btn"
                     >
                       Edit
+                    </button>
+                    <button
+                      onClick={() => deleteInvoice(invoice._id)}
+                      className="delete-btn"
+                    >
+                      Delete
                     </button>
                   </td>
                 </tr>
@@ -681,9 +733,9 @@ const InvoiceForm = ({
             <Select
               showSearch
               placeholder="Select Customer"
-              value={formData.customer || null}
+              value={formData.contact || null}
               onChange={(value) =>
-                setFormData({ ...formData, customer: value })
+                setFormData({ ...formData, contact: value })
               }
               className="searchable-dropdown"
               optionFilterProp="children"
