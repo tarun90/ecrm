@@ -47,11 +47,7 @@ const invoiceSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
-  customer: {
-    type: String,
-    ref: 'Customer',  // Reference to the Customer model
-    required: true
-  },
+  contact: { type: mongoose.Schema.Types.ObjectId, ref: "Contact" }, // Ensure this exists!
   items: [invoiceItemSchema],
   subtotal: {
     type: Number,

@@ -6,7 +6,10 @@ const router = express.Router();
 // Get all Invoices
 router.get('/', async (req, res) => {
   try {
-    const invoices = await Invoice.find();
+    const invoices = await Invoice.find().populate({
+        path: 'contact', 
+        select: 'firstName lastName' // Fetch only firstName and lastName
+      });;
     console.log(invoices, "Hello invoicesss");
     res.status(200).json(invoices);
   } catch (error) {
@@ -64,6 +67,28 @@ router.delete('/:id', async (req, res) => {
       return res.status(404).json({ message: 'Invoice not found' });
     }
     res.status(200).json({ message: 'Invoice deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Delete multiple invoices by IDs
+router.post('/delete-multiple', async (req, res) => {
+  try {
+    const { invoiceIds } = req.body;
+
+    if (!invoiceIds || invoiceIds.length === 0) {
+      return res.status(400).json({ message: 'No invoice IDs provided' });
+    }
+
+    // Use deleteMany to delete multiple invoices
+    const result = await Invoice.deleteMany({ _id: { $in: invoiceIds } });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: 'No invoices found to delete' });
+    }
+
+    res.status(200).json({ message: 'Invoices deleted successfully', deletedCount: result.deletedCount });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
