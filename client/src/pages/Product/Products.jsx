@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Package, Edit2, Search, Plus, Trash2} from "lucide-react";
+import { Package, Edit2, Search, Plus, Trash2 } from "lucide-react";
 import MainLayout from "../../components/MainLayout";
 import "../../components/custome.css";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { Button } from "antd";
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -96,8 +98,7 @@ function Products() {
     try {
       if (isEditing && currentProduct) {
         await axios.put(
-          `${import.meta.env.VITE_TM_API_URL}/api/products/${
-            currentProduct._id
+          `${import.meta.env.VITE_TM_API_URL}/api/products/${currentProduct._id
           }`,
           formData
         );
@@ -127,43 +128,45 @@ function Products() {
 
   return (
     <div className="products-section">
-      {/* Search and Add Product Bar */}
+      {/* Search and Add Product Bar */ }
       <div className="product-header">
         <div className="search-container">
           <Search className="search-icon" />
           <input
             type="text"
             placeholder="Search products..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            value={ searchTerm }
+            onChange={ (e) => setSearchTerm(e.target.value) }
             className="product-search"
           />
         </div>
         <div className="btn-wrapper">
           <button
-            onClick={() => {
+            onClick={ () => {
               setIsEditing(false);
               setFormData(initialFormData);
               setIsModalOpen(true);
-            }}
+            } }
             className="ant-btn-primary"
           >
             <Plus className="add-icon" />
             Add Product
           </button>
-          <button
-            onClick={deleteMultipleProducts}
-            disabled={selectedProducts.length === 0}
-            className="ant-btn-primary delete-selected-button"
+          <Button
+            type="text"
+            icon={ <DeleteOutlined /> }
+            onClick={ deleteMultipleProducts }
+            disabled={ selectedProducts.length === 0 }
+            className="delete-btn"
           >
-            <Trash2 className="delete-icon" />
+
             Delete Selected
-          </button>
+          </Button>
         </div>
       </div>
 
-      {/* Error Message */}
-      {error && (
+      {/* Error Message */ }
+      { error && (
         <div className="error-message">
           <div className="error-content">
             <svg className="error-icon" viewBox="0 0 20 20" fill="currentColor">
@@ -173,70 +176,77 @@ function Products() {
                 clipRule="evenodd"
               />
             </svg>
-            <p className="error-text">{error}</p>
+            <p className="error-text">{ error }</p>
           </div>
         </div>
-      )}
+      ) }
 
-      {/* Products Grid */}
-      {loading ? (
+      {/* Products Grid */ }
+      { loading ? (
         <div className="loading-spinner"></div>
       ) : (
         <div className="products-grid">
-          {filteredProducts.map((product) => (
-            <div key={product._id} className="product-card">
+          { filteredProducts.map((product) => (
+            <div key={ product._id } className="product-card">
               <input
                 type="checkbox"
-                checked={selectedProducts.includes(product._id)}
-                onChange={() => {
+                checked={ selectedProducts.includes(product._id) }
+                onChange={ () => {
                   setSelectedProducts((prev) =>
                     prev.includes(product._id)
                       ? prev.filter((id) => id !== product._id)
                       : [...prev, product._id]
                   );
-                }}
+                } }
               />
               <div className="product-info">
                 <div>
-                  <h3 className="product-name">{product.name}</h3>
-                  <p className="product-sku">SKU: {product.sku}</p>
+                  <h3 className="product-name">{ product.name }</h3>
+                  <p className="product-sku">SKU: { product.sku }</p>
                 </div>
-                <button
-                  onClick={() => handleEdit(product)}
-                  className="edit-button"
-                >
-                  <Edit2 className="edit-icon" />
-                </button>
-                <button
-                  onClick={() => deleteProduct(product._id)}
-                  className="delete-btn"
-                >
-                  🗑️
-                </button>
+                <div>
+
+                  <Button
+                    type="text"
+                    icon={ <EditOutlined /> }
+                    onClick={ () => handleEdit(product) }
+                    className="edit-button"
+                  >
+
+                  </Button>
+                  <Button
+                    type="text"
+                    danger
+                    icon={ <DeleteOutlined /> }
+                    onClick={ () => deleteProduct(product._id) }
+                    className="delete-btn"
+                  >
+                  </Button>
+                </div>
               </div>
               <div className="product-details">
-                <p className="short-description">{product.description_short}</p>
+                <p className="short-description">{ product.description_short }</p>
                 <div className="price-container">
                   <span className="price">
-                    {product.currency} {product.unit_cost}
+                    { product.currency } { product.unit_cost }
                   </span>
-                  <span className="product-type">{product.product_type}</span>
+                  <span className="product-type">{ product.product_type }</span>
                 </div>
               </div>
             </div>
-          ))}
+          )) }
         </div>
-      )}
+      ) }
 
-      {/* Modal */}
-      {isModalOpen && (
+      {/* Modal */ }
+      { isModalOpen && (
         <div className="modal">
           <div className="modal-content">
             <div className="modal-header">
               <h2 className="modal-title">
-                {isEditing ? "Edit Product" : "Add New Product"}
+                { isEditing ? "Edit Product" : "Add New Product" }
               </h2>
-              <button onClick={() => setIsModalOpen(false)}>
+              <button onClick={ () => setIsModalOpen(false) }>
                 <svg
                   className="close-icon"
                   fill="none"
@@ -246,27 +256,27 @@ function Products() {
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    strokeWidth={2}
+                    strokeWidth={ 2 }
                     d="M6 18L18 6M6 6l12 12"
                   />
                 </svg>
               </button>
             </div>
-            <form onSubmit={handleSubmit} className="form-container">
+            <form onSubmit={ handleSubmit } className="form-container">
               <div className="modal-content scroll">
                 <input
                   type="text"
                   placeholder="Product Name"
-                  value={formData.name}
-                  onChange={(e) =>
+                  value={ formData.name }
+                  onChange={ (e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
                   className="input-field"
                 />
                 <textarea
                   placeholder="Short Description"
-                  value={formData.description_short}
-                  onChange={(e) =>
+                  value={ formData.description_short }
+                  onChange={ (e) =>
                     setFormData({
                       ...formData,
                       description_short: e.target.value,
@@ -277,8 +287,8 @@ function Products() {
                 />
                 <textarea
                   placeholder="Long Description"
-                  value={formData.description_long}
-                  onChange={(e) =>
+                  value={ formData.description_long }
+                  onChange={ (e) =>
                     setFormData({
                       ...formData,
                       description_long: e.target.value,
@@ -288,8 +298,8 @@ function Products() {
                   rows="3"
                 />
                 <select
-                  value={formData.product_type}
-                  onChange={(e) =>
+                  value={ formData.product_type }
+                  onChange={ (e) =>
                     setFormData({ ...formData, product_type: e.target.value })
                   }
                   className="input-field"
@@ -303,8 +313,8 @@ function Products() {
                 <input
                   type="text"
                   placeholder="SKU"
-                  value={formData.sku}
-                  onChange={(e) =>
+                  value={ formData.sku }
+                  onChange={ (e) =>
                     setFormData({ ...formData, sku: e.target.value })
                   }
                   className="input-field"
@@ -312,8 +322,8 @@ function Products() {
                 <input
                   type="text"
                   placeholder="Billing Frequency (e.g., monthly, annually)"
-                  value={formData.billing_frequency}
-                  onChange={(e) =>
+                  value={ formData.billing_frequency }
+                  onChange={ (e) =>
                     setFormData({
                       ...formData,
                       billing_frequency: e.target.value,
@@ -324,8 +334,8 @@ function Products() {
                 <input
                   type="text"
                   placeholder="Term (e.g., 12 months)"
-                  value={formData.term}
-                  onChange={(e) =>
+                  value={ formData.term }
+                  onChange={ (e) =>
                     setFormData({ ...formData, term: e.target.value })
                   }
                   className="input-field"
@@ -333,15 +343,15 @@ function Products() {
                 <input
                   type="number"
                   placeholder="Unit Cost"
-                  value={formData.unit_cost || ""} // Ensures value updates dynamically
-                  onChange={(e) =>
+                  value={ formData.unit_cost || "" } // Ensures value updates dynamically
+                  onChange={ (e) =>
                     setFormData({ ...formData, unit_cost: e.target.value })
                   }
                   className="input-field"
                 />
                 <select
-                  value={formData.currency}
-                  onChange={(e) =>
+                  value={ formData.currency }
+                  onChange={ (e) =>
                     setFormData({ ...formData, currency: e.target.value })
                   }
                   className="input-field"
@@ -354,11 +364,11 @@ function Products() {
                 <select
                   value={
                     formData.tax_rate !== null &&
-                    formData.tax_rate !== undefined
+                      formData.tax_rate !== undefined
                       ? formData.tax_rate
                       : ""
                   } // Ensure correct value
-                  onChange={(e) =>
+                  onChange={ (e) =>
                     setFormData({
                       ...formData,
                       tax_rate:
@@ -380,23 +390,23 @@ function Products() {
               <div className="form-actions">
                 <button
                   type="button"
-                  onClick={() => setIsModalOpen(false)}
+                  onClick={ () => setIsModalOpen(false) }
                   className="text-btn"
                 >
                   Cancel
                 </button>
-                <button type="submit" disabled={loading} className="submit-btn">
-                  {loading
+                <button type="submit" disabled={ loading } className="submit-btn">
+                  { loading
                     ? "Saving..."
                     : isEditing
-                    ? "Update Product"
-                    : "Create Product"}
+                      ? "Update Product"
+                      : "Create Product" }
                 </button>
               </div>
             </form>
           </div>
         </div>
-      )}
+      ) }
     </div>
   );
 }

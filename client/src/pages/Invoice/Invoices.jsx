@@ -16,7 +16,7 @@ import {
   DatePicker,
   InputNumber,
 } from "antd";
-import { DownloadOutlined, PlusOutlined } from "@ant-design/icons";
+import { DeleteOutlined, DownloadOutlined, PlusOutlined } from "@ant-design/icons";
 function Invoices() {
   const [invoices, setInvoices] = useState([]);
   const [contacts, setContacts] = useState([]);
@@ -149,8 +149,7 @@ function Invoices() {
     try {
       if (isEditing && currentInvoice) {
         await axios.put(
-          `${import.meta.env.VITE_TM_API_URL}/api/invoices/${
-            currentInvoice._id
+          `${import.meta.env.VITE_TM_API_URL}/api/invoices/${currentInvoice._id
           }`,
           formData
         );
@@ -177,12 +176,12 @@ function Invoices() {
       const updatedItems = formData.items.map((item, i) =>
         i === index
           ? {
-              ...item,
-              product: selectedProduct._id,
-              product_name: selectedProduct.name,
-              unit_price: selectedProduct.unit_cost.toString(),
-              tax_rate: selectedProduct.tax_rate.toString(),
-            }
+            ...item,
+            product: selectedProduct._id,
+            product_name: selectedProduct.name,
+            unit_price: selectedProduct.unit_cost.toString(),
+            tax_rate: selectedProduct.tax_rate.toString(),
+          }
           : item
       );
 
@@ -305,12 +304,12 @@ function Invoices() {
       grand_total: invoice.grand_total?.toString() || "",
       items: invoice.items?.length
         ? invoice.items.map((item) => ({
-            ...item,
-            quantity: item.quantity?.toString() || "",
-            unit_price: item.unit_price?.toString() || "",
-            total_price: item.total_price?.toString() || "",
-            tax_rate: item.tax_rate?.toString() || "",
-          }))
+          ...item,
+          quantity: item.quantity?.toString() || "",
+          unit_price: item.unit_price?.toString() || "",
+          total_price: item.total_price?.toString() || "",
+          tax_rate: item.tax_rate?.toString() || "",
+        }))
         : [],
     };
 
@@ -540,17 +539,17 @@ function Invoices() {
           <input
             type="text"
             placeholder="Search invoices..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            value={ searchTerm }
+            onChange={ (e) => setSearchTerm(e.target.value) }
             className="search-invoice"
           />
         </div>
         <div className="action-buttons">
           <Button
-            onClick={exportPDF}
-            disabled={selectedInvoices.length === 0}
-            icon={<DownloadOutlined />}
-            size={size}
+            onClick={ exportPDF }
+            disabled={ selectedInvoices.length === 0 }
+            icon={ <DownloadOutlined /> }
+            size={ size }
             type="primary"
             className="export-invoice"
           >
@@ -558,18 +557,19 @@ function Invoices() {
           </Button>
 
           <Button
-            onClick={deleteMultipleInvoices}
-            disabled={selectedInvoices.length === 0}
+            onClick={ deleteMultipleInvoices }
+            disabled={ selectedInvoices.length === 0 }
             type="danger"
-            className="delete-invoice"
+            icon={ <DeleteOutlined /> }
+            className="delete-btn"
           >
             Delete Selected
           </Button>
 
           <Button
-            icon={<PlusOutlined />}
+            icon={ <PlusOutlined /> }
             type="primary"
-            onClick={handleNewInvoice}
+            onClick={ handleNewInvoice }
             className="new-invoice"
           >
             New Invoice
@@ -577,13 +577,13 @@ function Invoices() {
         </div>
       </div>
 
-      {error && (
+      { error && (
         <div className="error-message">
-          <p>{error}</p>
+          <p>{ error }</p>
         </div>
-      )}
+      ) }
 
-      {loading ? (
+      { loading ? (
         <div className="loading-spinner">
           <div className="spinner"></div>
         </div>
@@ -596,7 +596,7 @@ function Invoices() {
                   <input
                     type="checkbox"
                     className="checkbox-select-all"
-                    onChange={(e) => {
+                    onChange={ (e) => {
                       if (e.target.checked) {
                         setSelectedInvoices(
                           invoices.map((invoice) => invoice._id)
@@ -604,7 +604,7 @@ function Invoices() {
                       } else {
                         setSelectedInvoices([]);
                       }
-                    }}
+                    } }
                   />
                 </th>
                 <th>Invoice Number</th>
@@ -616,74 +616,74 @@ function Invoices() {
               </tr>
             </thead>
             <tbody>
-              {invoices.map((invoice) => (
-                <tr key={invoice._id}>
+              { invoices.map((invoice) => (
+                <tr key={ invoice._id }>
                   <td>
                     <input
                       type="checkbox"
-                      checked={selectedInvoices.includes(invoice._id)}
-                      onChange={() => {
+                      checked={ selectedInvoices.includes(invoice._id) }
+                      onChange={ () => {
                         setSelectedInvoices((prev) =>
                           prev.includes(invoice._id)
                             ? prev.filter((id) => id !== invoice._id)
                             : [...prev, invoice._id]
                         );
-                      }}
+                      } }
                       className="checkbox-select"
                     />
                   </td>
-                  <td>{invoice.invoice_number}</td>
+                  <td>{ invoice.invoice_number }</td>
                   <td>
-                    {invoice.contact
+                    { invoice.contact
                       ? `${invoice.contact.firstName} ${invoice.contact.lastName}`
-                      : "Unknown Customer"}
+                      : "Unknown Customer" }
                   </td>
-                  <td>{new Date(invoice.due_date).toLocaleDateString()}</td>
-                  <td className={`status ${invoice.payment_status}`}>
-                    {invoice.payment_status}
+                  <td>{ new Date(invoice.due_date).toLocaleDateString() }</td>
+                  <td className={ `status ${invoice.payment_status}` }>
+                    { invoice.payment_status }
                   </td>
                   <td>
-                    {invoice.currency} {invoice.grand_total}
+                    { invoice.currency } { invoice.grand_total }
                   </td>
                   <td>
                     <button
-                      onClick={() => handleEdit(invoice)}
+                      onClick={ () => handleEdit(invoice) }
                       className="edit-btn"
                     >
                       Edit
                     </button>
                     <button
-                      onClick={() => deleteInvoice(invoice._id)}
+                      onClick={ () => deleteInvoice(invoice._id) }
                       className="delete-btn"
                     >
                       Delete
                     </button>
                   </td>
                 </tr>
-              ))}
+              )) }
             </tbody>
           </table>
         </div>
-      )}
+      ) }
 
-      {isModalOpen && (
+      { isModalOpen && (
         <InvoiceForm
-          isEditing={isEditing}
-          isModalOpen={isModalOpen}
-          setIsModalOpen={setIsModalOpen}
-          formData={formData}
-          contacts={contacts}
-          setFormData={setFormData}
-          handleSubmit={handleSubmit}
-          addLineItem={addLineItem}
-          removeLineItem={removeLineItem}
-          handleLineItemChange={handleLineItemChange}
-          handleProductSelect={handleProductSelect}
-          handleDiscountChange={handleDiscountChange}
-          products={products}
-          loading={loading}
+          isEditing={ isEditing }
+          isModalOpen={ isModalOpen }
+          setIsModalOpen={ setIsModalOpen }
+          formData={ formData }
+          contacts={ contacts }
+          setFormData={ setFormData }
+          handleSubmit={ handleSubmit }
+          addLineItem={ addLineItem }
+          removeLineItem={ removeLineItem }
+          handleLineItemChange={ handleLineItemChange }
+          handleProductSelect={ handleProductSelect }
+          handleDiscountChange={ handleDiscountChange }
+          products={ products }
+          loading={ loading }
         />
-      )}
+      ) }
     </Layout>
   );
 }
@@ -708,64 +708,64 @@ const InvoiceForm = ({
 }) => {
   return (
     <Modal
-      title={isEditing ? "Edit Invoice" : "Create New Invoice"}
-      open={isModalOpen}
-      onCancel={() => setIsModalOpen(false)}
-      footer={null}
+      title={ isEditing ? "Edit Invoice" : "Create New Invoice" }
+      open={ isModalOpen }
+      onCancel={ () => setIsModalOpen(false) }
+      footer={ null }
     >
-      <Form layout="vertical" onFinish={handleSubmit} initialValues={formData}>
+      <Form layout="vertical" onFinish={ handleSubmit } initialValues={ formData }>
         <div className="modal-content scroll">
           <Form.Item
-            onChange={(value) =>
+            onChange={ (value) =>
               setFormData({ ...formData, invoice_number: value.target.value })
             }
             label="Invoice Number"
             name="invoice_number"
-            rules={[{ required: true }]}
+            rules={ [{ required: true }] }
           >
             <Input placeholder="Invoice Number" />
           </Form.Item>
           <Form.Item
             label="Customer Name"
             name="customer"
-            rules={[{ required: true, message: "Customer Name is required" }]}
+            rules={ [{ required: true, message: "Customer Name is required" }] }
           >
             <Select
               showSearch
               placeholder="Select Customer"
-              value={formData.contact || null}
-              onChange={(value) =>
+              value={ formData.contact || null }
+              onChange={ (value) =>
                 setFormData({ ...formData, contact: value })
               }
               className="searchable-dropdown"
               optionFilterProp="children"
-              filterOption={(input, option) =>
+              filterOption={ (input, option) =>
                 option?.children?.toLowerCase().includes(input.toLowerCase())
               }
             >
-              {contacts.map((contact) => (
-                <Select.Option key={contact._id} value={contact._id}>
-                  {`${contact.firstName} ${contact.lastName}`}
+              { contacts.map((contact) => (
+                <Select.Option key={ contact._id } value={ contact._id }>
+                  { `${contact.firstName} ${contact.lastName}` }
                 </Select.Option>
-              ))}
+              )) }
             </Select>
           </Form.Item>
           <Form.Item
             label="Due Date"
             name="due_date"
-            rules={[{ required: true, message: "Due Date is required" }]}
+            rules={ [{ required: true, message: "Due Date is required" }] }
           >
             <DatePicker
-              style={{ width: "100%" }}
+              style={ { width: "100%" } }
               format="YYYY-MM-DD"
               value={
                 formData.due_date
                   ? dayjs(formData.due_date, "YYYY-MM-DD")
                   : null
               } // Ensure proper parsing
-              onChange={(date, dateString) => {
+              onChange={ (date, dateString) => {
                 setFormData({ ...formData, due_date: dateString || null }); // Store as string
-              }}
+              } }
             />
           </Form.Item>
           <Form.Item label="Payment Status" name="payment_status">
@@ -784,96 +784,96 @@ const InvoiceForm = ({
               type="dashed"
               className="export-btn"
               htmlType="button"
-              onClick={addLineItem}
+              onClick={ addLineItem }
             >
               Add Item
             </Button>
           </div>
-          {formData.items.map((item, index) => (
-            <div key={index} className="item-wrapper">
+          { formData.items.map((item, index) => (
+            <div key={ index } className="item-wrapper">
               <Form.Item label="Select Product">
                 <Select
                   showSearch
                   placeholder="Search Product"
                   optionFilterProp="children"
-                  value={formData.items[index]?.product || null} // Ensure selected value is set
-                  filterOption={(input, option) =>
+                  value={ formData.items[index]?.product || null } // Ensure selected value is set
+                  filterOption={ (input, option) =>
                     option?.children
                       ?.toLowerCase()
                       .includes(input.toLowerCase())
                   }
-                  onChange={(value) => handleProductSelect(index, value)}
+                  onChange={ (value) => handleProductSelect(index, value) }
                 >
-                  {products.map((product) => (
-                    <Select.Option key={product._id} value={product._id}>
-                      {`${product.name} - ${product.currency} ${product.unit_cost} (Tax: ${product.tax_rate}%)`}
+                  { products.map((product) => (
+                    <Select.Option key={ product._id } value={ product._id }>
+                      { `${product.name} - ${product.currency} ${product.unit_cost} (Tax: ${product.tax_rate}%)` }
                     </Select.Option>
-                  ))}
+                  )) }
                 </Select>
               </Form.Item>
 
               <div className="line-items-wrapper">
                 <Form.Item label="Quantity">
                   <InputNumber
-                    min={1}
-                    value={item.quantity}
-                    onChange={(value) =>
+                    min={ 1 }
+                    value={ item.quantity }
+                    onChange={ (value) =>
                       handleLineItemChange(index, "quantity", value)
                     }
-                    disabled={!item.product}
+                    disabled={ !item.product }
                   />
                 </Form.Item>
 
                 <Form.Item label="Unit Price">
                   <InputNumber
-                    min={0}
-                    step={0.01}
-                    value={item.unit_price}
-                    onChange={(value) =>
+                    min={ 0 }
+                    step={ 0.01 }
+                    value={ item.unit_price }
+                    onChange={ (value) =>
                       handleLineItemChange(index, "unit_price", value)
                     }
-                    disabled={!item.product}
+                    disabled={ !item.product }
                   />
                 </Form.Item>
 
                 <Form.Item label="Total Price">
-                  <InputNumber value={item.total_price} readOnly />
+                  <InputNumber value={ item.total_price } readOnly />
                 </Form.Item>
               </div>
               <Button
                 type="link"
                 className="delete-btn"
-                onClick={() => removeLineItem(index)}
+                onClick={ () => removeLineItem(index) }
               >
                 Remove
               </Button>
             </div>
-          ))}
+          )) }
           <div className="line-items-wrapper">
             <Form.Item label="Subtotal">
-              <InputNumber value={formData.subtotal} readOnly />
+              <InputNumber value={ formData.subtotal } readOnly />
             </Form.Item>
 
             <Form.Item label="Tax Amount">
-              <InputNumber value={formData.tax_amount} readOnly />
+              <InputNumber value={ formData.tax_amount } readOnly />
             </Form.Item>
 
             <Form.Item label="Discount Amount">
               <InputNumber
-                min={0}
-                step={0.01}
-                value={formData.discount_amount}
-                onChange={handleDiscountChange}
+                min={ 0 }
+                step={ 0.01 }
+                value={ formData.discount_amount }
+                onChange={ handleDiscountChange }
               />
             </Form.Item>
 
             <Form.Item label="Grand Total">
-              <InputNumber value={formData.grand_total} readOnly />
+              <InputNumber value={ formData.grand_total } readOnly />
             </Form.Item>
           </div>
           <Form.Item label="Currency">
             <Select
-              onChange={(value) =>
+              onChange={ (value) =>
                 setFormData({ ...formData, currency: value })
               }
             >
@@ -885,18 +885,18 @@ const InvoiceForm = ({
           </Form.Item>
           <Form.Item label="Notes">
             <Input.TextArea
-              rows={2}
-              value={formData.notes}
-              onChange={(e) =>
+              rows={ 2 }
+              value={ formData.notes }
+              onChange={ (e) =>
                 setFormData({ ...formData, notes: e.target.value })
               }
             />
           </Form.Item>
           <Form.Item label="Terms and Conditions">
             <Input.TextArea
-              rows={2}
-              value={formData.termsConditions}
-              onChange={(e) =>
+              rows={ 2 }
+              value={ formData.termsConditions }
+              onChange={ (e) =>
                 setFormData({ ...formData, termsConditions: e.target.value })
               }
             />
@@ -904,15 +904,15 @@ const InvoiceForm = ({
         </div>
         <div className="modal-footer">
           <Form.Item>
-            <Button className="text-btn" onClick={() => setIsModalOpen(false)}>
+            <Button className="text-btn" onClick={ () => setIsModalOpen(false) }>
               Cancel
             </Button>
-            <Button type="primary" htmlType="submit" loading={loading}>
-              {loading
+            <Button type="primary" htmlType="submit" loading={ loading }>
+              { loading
                 ? "Saving..."
                 : isEditing
-                ? "Update Invoice"
-                : "Create Invoice"}
+                  ? "Update Invoice"
+                  : "Create Invoice" }
             </Button>
           </Form.Item>
         </div>

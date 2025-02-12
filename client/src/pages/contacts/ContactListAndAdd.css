@@ -172,6 +172,10 @@ table {
   background-color: #fee2e2;
 }
 
+.ant-layout-content .products-section .delete-btn:hover {
+  background-color: #fee2e2;
+}
+
 /* Modal Styles */
 .edit-contact-model .modal-content {
   padding: 20px;
