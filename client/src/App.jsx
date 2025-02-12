@@ -16,6 +16,9 @@ import "./variable.css"
 import WebMailLogin from './pages/webmail/WebMailLogin';
 import WebMailDashboard from './pages/webmail/WebMailDashboard';
 import { useState, useEffect } from 'react';
+import CompanyList from './pages/Company/CompanyList';
+import AddCompanyForm from './pages/Company/AddCompanyForm';
+import ViewCompany from './pages/Company/ViewCompany';
 
 const PrivateRoute = ({ children }) => {
   let token = localStorage.getItem('token');
@@ -75,6 +78,12 @@ function App() {
                       {/* <Route path="/webmail" element={userData?.tokens ? <WebMailDashboard /> : <WebMailLogin />} /> */ }
                       <Route path="/webmail" element={ <WebMailDashboard /> } />
                       <Route path="/webmail-setup" element={ <WebMailLogin /> } />
+                      <Route path="/company" element={ <CompanyList /> } />
+                      <Route path="/company/add" element={ <AddCompanyForm /> } />
+                      <Route path="/company/edit/:id" element={ <AddCompanyForm /> } />
+                      <Route path="/company/view/:id" element={ <ViewCompany /> } />
+
+
 
 
 

@@ -12,6 +12,7 @@ import createTaskRoutes from './routes/createTaskRoutes.js';
 import productRoutes from './routes/products.js';
 import invoiceRoutes from './routes/invoice.js';
 import emails from './routes/emails.js';
+import company from "./routes/Company.js"
 
 dotenv.config();
 
@@ -63,6 +64,7 @@ app.use('/api/tasks', taskRouter);
 app.use('/api/products', productRoutes);
 app.use('/api/invoices', invoiceRoutes);
 app.use('/api/emails', emails);
+app.use('/api/company',company)
 
 // Start the reminder check every minute
 // setInterval(checkReminders, 60 * 1000);
