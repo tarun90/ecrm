@@ -1,0 +1,90 @@
+/* ViewCompany.css - Improved Styling */
+
+.view-company-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.view-company-container .back-button {
+    margin-bottom: 16px;
+    display: flex;
+    gap: 10px;
+}
+
+.view-company-wrapper {
+    width: 100%;
+    max-width: 900px;
+    ;
+    padding: 30px;
+    border-radius: 12px;
+    transition: all 0.3s ease-in-out;
+}
+
+.back-button {
+    margin-bottom: 20px;
+    color: #1890ff;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.company-details-card {
+    border: none;
+    padding: 25px;
+    background-color: #ffff;
+    border-radius: 10px;
+    box-shadow: 0 1px 6px 0px rgba(0, 0, 0, 0.15);
+}
+
+.company-section,
+.address-section {
+    margin-bottom: 30px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 10px;
+}
+
+.info-item {
+
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    gap: 10px;
+    align-items: self-start;
+}
+
+.info-item>span {
+    font-size: 16px;
+}
+
+.full-width {
+    grid-column: span 2;
+}
+
+.info-value {
+    font-size: 15px;
+    color: #333;
+    font-weight: 500;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.action-buttons button {
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 6px;
+}
+
+.ant-card-bordered .action-buttons .text-btn:hover {
+    background-color: #ffff;
+    color: var(--btn-bg-primary-hover);
+}
