@@ -19,6 +19,7 @@ import { useState, useEffect } from 'react';
 import CompanyList from './pages/Company/CompanyList';
 import AddCompanyForm from './pages/Company/AddCompanyForm';
 import ViewCompany from './pages/Company/ViewCompany';
+import ViewContact from './pages/contacts/ViewContact';
 
 const PrivateRoute = ({ children }) => {
   let token = localStorage.getItem('token');
@@ -82,6 +83,7 @@ function App() {
                       <Route path="/company/add" element={ <AddCompanyForm /> } />
                       <Route path="/company/edit/:id" element={ <AddCompanyForm /> } />
                       <Route path="/company/view/:id" element={ <ViewCompany /> } />
+                      <Route path="/contact/view/:id" element={ <ViewContact /> } />
 
 
 

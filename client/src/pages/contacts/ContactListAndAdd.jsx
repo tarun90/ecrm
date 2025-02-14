@@ -6,8 +6,10 @@ import axios from 'axios';
 import MainLayout from '../../components/MainLayout';
 import { getCompaniesNames } from '../Company/APIServices';
 import Search from 'antd/es/transfer/search';
+import { useNavigate } from 'react-router-dom';
 
 const ContactListAndAdd = () => {
+    const navigate = useNavigate();
     const [contacts, setContacts] = useState([]);
     const [contact, setContact] = useState({
         email: '',
@@ -137,6 +139,10 @@ const ContactListAndAdd = () => {
         setIsEditing(true);
         setIsModalOpen(true);
     };
+
+   const handleView = (contact)=>{
+        navigate(`/contact/view/${contact._id}`);        
+    }
 
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this contact?')) {
@@ -272,6 +278,12 @@ const ContactListAndAdd = () => {
                                 <td>{ contact?.leadStatus }</td>
                                 <td>{ moment(contact?.createdAt).format('DD-MM-YYYY HH:mm') }</td>
                                 <td>
+                                <button
+                                        className="edit-btn"
+                                        onClick={ () => handleView(contact) }
+                                    >
+                                        View
+                                    </button>
                                     <button
                                         className="edit-btn"
                                         onClick={ () => handleEdit(contact) }

@@ -60,6 +60,26 @@ export const contactService = {
       throw error;
     }
   },
+
+  getContactById: async (id) => {
+    try {
+      const response = await axios.get(`${API_URL}/contacts/view/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching contacts:', error);
+      throw error;
+    }
+  },
+
+  getContactList: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/contacts/contactList`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching contacts:', error);
+      throw error;
+    }
+  },
   exportContacts: async () => {
     try {
       const response = await axios.get(`${API_URL}/contacts/export`, {

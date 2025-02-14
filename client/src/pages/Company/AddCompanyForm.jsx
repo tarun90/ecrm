@@ -14,7 +14,7 @@ import { ArrowLeftOutlined } from '@ant-design/icons';
 import { createCompany, getCompanyById, updateCompany } from './APIServices';
 import { useParams, useNavigate } from 'react-router-dom';
 import './AddCompanyForm.css';
-
+import currenciesData from './currency';
 const { Title } = Typography;
 
 const AddCompanyForm = () => {
@@ -72,9 +72,9 @@ const AddCompanyForm = () => {
     <div className="company-form-container">
       <div className="company-form-wrapper">
         <Button
-          icon={ <ArrowLeftOutlined /> }
+          icon={<ArrowLeftOutlined />}
           type="link"
-          onClick={ () => window.history.back() }
+          onClick={() => window.history.back()}
           className="back-button text-btn"
         >
           Back to Companies
@@ -82,22 +82,22 @@ const AddCompanyForm = () => {
 
         <Card className="form-card">
           <Form
-            form={ form }
+            form={form}
             layout="vertical"
-            onFinish={ handleSubmit }
-            initialValues={ {
+            onFinish={handleSubmit}
+            initialValues={{
               industry: '',
               currency: ''
-            } }
+            }}
           >
-            <Title level={ 4 }>Company Information</Title>
+            <Title level={4}>Company Information</Title>
             <Divider />
 
             <div className="form-grid">
               <Form.Item
                 label="Company Owner"
                 name="companyOwner"
-                rules={ [{ required: true, message: 'Please input company owner!' }] }
+                rules={[{ required: true, message: 'Please input company owner!' }]}
               >
                 <Input />
               </Form.Item>
@@ -105,7 +105,7 @@ const AddCompanyForm = () => {
               <Form.Item
                 label="Company Name"
                 name="companyName"
-                rules={ [{ required: true, message: 'Please input company name!' }] }
+                rules={[{ required: true, message: 'Please input company name!' }]}
               >
                 <Input />
               </Form.Item>
@@ -113,10 +113,10 @@ const AddCompanyForm = () => {
               <Form.Item
                 label="Email"
                 name="email"
-                rules={ [
+                rules={[
                   { required: true, message: 'Please input email!' },
                   { type: 'email', message: 'Please enter a valid email!' }
-                ] }
+                ]}
               >
                 <Input />
               </Form.Item>
@@ -138,7 +138,7 @@ const AddCompanyForm = () => {
               <Form.Item
                 label="Website"
                 name="website"
-                rules={ [{ type: 'url', message: 'Please enter a valid URL!' }] }
+                rules={[{ type: 'url', message: 'Please enter a valid URL!' }]}
               >
                 <Input />
               </Form.Item>
@@ -148,26 +148,34 @@ const AddCompanyForm = () => {
                 name="industry"
               >
                 <Select placeholder="Select Industry">
-                  { industries.map(industry => (
-                    <Select.Option key={ industry } value={ industry }>
-                      { industry }
+                  {industries.map(industry => (
+                    <Select.Option key={industry} value={industry}>
+                      {industry}
                     </Select.Option>
-                  )) }
+                  ))}
                 </Select>
               </Form.Item>
 
               <Form.Item
-                label="Currency"
-                name="currency"
-              >
-                <Select placeholder="Select Currency">
-                  { currencies.map(currency => (
-                    <Select.Option key={ currency } value={ currency }>
-                      { currency }
-                    </Select.Option>
-                  )) }
-                </Select>
-              </Form.Item>
+    label="Currency"
+    name="currency"
+  >
+    <Select
+    showSearch
+      placeholder="Select Currency"
+      style={{ width: '100%' }}
+    >
+      {currenciesData.map(currency => (
+        <Select.Option 
+          key={currency.code}
+          value={currency.code}
+        >
+          <span style={{ fontWeight: 500 }}>{currency.code}</span>
+          <span style={{ color: '#666', marginLeft: 8 }}>{currency.name}</span>
+        </Select.Option>
+      ))}
+    </Select>
+  </Form.Item>
 
               <Form.Item
                 label="GSTIN"
@@ -177,7 +185,7 @@ const AddCompanyForm = () => {
               </Form.Item>
             </div>
 
-            <Title level={ 4 } className="address-title">Address Information</Title>
+            <Title level={4} className="address-title">Address Information</Title>
             <Divider />
 
             <div className="form-grid">
@@ -221,11 +229,11 @@ const AddCompanyForm = () => {
             <Divider />
             <div className="form-actions">
               <Space>
-                <Button className='text-btn' onClick={ () => window.history.back() }>
+                <Button className='text-btn' onClick={() => window.history.back()}>
                   Cancel
                 </Button>
                 <Button type="primary" htmlType="submit">
-                  { id ? "Update Company" : "Save Company" }
+                  {id ? "Update Company" : "Save Company"}
                 </Button>
               </Space>
             </div>
