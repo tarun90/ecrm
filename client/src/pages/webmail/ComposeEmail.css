@@ -112,6 +112,11 @@
   align-items: center;
 }
 
+.contact-container .contact-header .action-buttons .add-contact-btn:hover {
+  background: #185d87;
+  color: #fff;
+}
+
 .send-btn {
   background: #1a73e8;
   color: white;

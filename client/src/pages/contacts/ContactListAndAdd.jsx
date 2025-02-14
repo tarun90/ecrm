@@ -7,6 +7,8 @@ import MainLayout from '../../components/MainLayout';
 import { getCompaniesNames } from '../Company/APIServices';
 import Search from 'antd/es/transfer/search';
 import { useNavigate } from 'react-router-dom';
+import { PlusOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
 
 const ContactListAndAdd = () => {
     const navigate = useNavigate();
@@ -247,9 +249,9 @@ const ContactListAndAdd = () => {
                     <button className="export-btn" onClick={ handleExport }>
                         Export CSV
                     </button>
-                    <button className="add-contact-btn" onClick={ openAddModal }>
+                    <Button className="add-contact-btn" icon={ <PlusOutlined /> } onClick={ openAddModal }>
                         Add Contact
-                    </button>
+                    </Button>
                 </div>
             </div>
 

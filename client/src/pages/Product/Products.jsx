@@ -3,7 +3,7 @@ import axios from "axios";
 import { Package, Edit2, Search, Plus, Trash2 } from "lucide-react";
 import MainLayout from "../../components/MainLayout";
 import "../../components/custome.css";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 
 function Products() {
@@ -141,7 +141,8 @@ function Products() {
           />
         </div>
         <div className="btn-wrapper">
-          <button
+          <Button
+            icon={ <PlusOutlined /> }
             onClick={ () => {
               setIsEditing(false);
               setFormData(initialFormData);
@@ -149,9 +150,9 @@ function Products() {
             } }
             className="ant-btn-primary"
           >
-            <Plus className="add-icon" />
+
             Add Product
-          </button>
+          </Button>
           <Button
             type="text"
             icon={ <DeleteOutlined /> }

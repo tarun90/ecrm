@@ -4,8 +4,10 @@ import moment from 'moment';
 import axios from 'axios';
 import { getCompanies, deleteCompany } from './APIServices';
 import { useNavigate } from 'react-router-dom';
-import { message, Popconfirm } from 'antd';
+import { message, Popconfirm, Button } from 'antd';
 import CompanyFormModal from './CompanyFormModal';
+// import { Button, message } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 const CompanyList = () => {
     const navigate = useNavigate();
 
