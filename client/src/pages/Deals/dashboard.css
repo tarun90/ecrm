@@ -7,6 +7,24 @@
     overflow: auto;
     height: 100%;
     max-height: calc(100svh - 120px);
+
+}
+
+.Sidebar .ant-menu::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 4px rgba(194, 194, 194, 0.151);
+    border-radius: 8px;
+    background-color: var(--bg-primary);
+}
+
+.Sidebar .ant-menu::-webkit-scrollbar {
+    width: 5px;
+    background-color: var(--bg-primary);
+}
+
+.Sidebar .ant-menu::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 4px #b9b9b9;
+    background-color: var(--bg-primary);
 }
 
 .Sidebar .ant-layout-sider-trigger {
@@ -197,7 +215,7 @@
     border-radius: 4px;
 }
 
-.deal-card {
+.header .deal-card {
     background: white;
     border-radius: 8px;
     padding: 16px;
@@ -207,7 +225,7 @@
     cursor: pointer;
 }
 
-.deal-card:hover {
+.dealList .deal-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }

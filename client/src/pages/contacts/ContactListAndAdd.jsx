@@ -142,8 +142,8 @@ const ContactListAndAdd = () => {
         setIsModalOpen(true);
     };
 
-   const handleView = (contact)=>{
-        navigate(`/contact/view/${contact._id}`);        
+    const handleView = (contact) => {
+        navigate(`/contact/view/${contact._id}`);
     }
 
     const handleDelete = async (id) => {
@@ -272,7 +272,7 @@ const ContactListAndAdd = () => {
                     <tbody>
                         { contacts.map(contact => (
                             <tr key={ contact?._id }>
-                                <td  onClick={ () => handleView(contact) }>{ contact?.firstName } { contact?.lastName }</td>
+                                <td onClick={ () => handleView(contact) }> <a href='#'> { contact?.firstName } { contact?.lastName }</a></td>
                                 <td>{ contact?.email }</td>
                                 <td>{ contact?.phoneNumber }</td>
                                 <td>{ contact?.contactOwner?.name }</td>
@@ -280,7 +280,7 @@ const ContactListAndAdd = () => {
                                 <td>{ contact?.leadStatus }</td>
                                 <td>{ moment(contact?.createdAt).format('DD-MM-YYYY HH:mm') }</td>
                                 <td>
-                                {/* <button
+                                    {/* <button
                                         className="edit-btn"
                                        
                                     >

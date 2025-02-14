@@ -334,13 +334,13 @@ textarea {
   color: #6b7280;
 }
 
-.deal-card {
+.dealList .deal-card {
   padding: 16px;
   border-bottom: 1px solid #e5e7eb;
   cursor: pointer;
 }
 
-.deal-card:hover {
+.dealList .deal-card:hover {
   background-color: #f9fafb;
 }
 

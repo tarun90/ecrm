@@ -103,12 +103,12 @@
   overflow: hidden;
 }
 
-table {
+.contact-table table {
   width: 100%;
   border-collapse: collapse;
 }
 
-th {
+.contact-table th {
   background-color: #e0f2fe;
   color: #0369a1;
   font-weight: 600;
@@ -118,7 +118,7 @@ th {
   border-bottom: 1px solid #e2e8f0;
 }
 
-td {
+.contact-table td {
   padding: 10px 16px;
   color: #374151;
   text-align: left;
@@ -126,11 +126,11 @@ td {
   border-bottom: 1px solid #e2e8f0;
 }
 
-tr:nth-child(odd) {
+.contact-table tr:nth-child(odd) {
   background-color: #e8e7e74a;
 }
 
-tr:hover {
+.contact-table tr:hover {
   background-color: #f8fafc;
 }
 
@@ -258,8 +258,8 @@ tr:hover {
     overflow-x: auto;
   }
 
-  th,
-  td {
+  .contact-table th,
+  .contact-table td {
     padding: 8px 12px;
   }
 

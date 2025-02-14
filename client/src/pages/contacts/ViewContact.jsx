@@ -1,107 +1,145 @@
-import React, { useState, useEffect } from 'react';
-import { Card, Typography, Button, Space, Divider, message } from 'antd';
-import { ArrowLeftOutlined, MailOutlined, PhoneOutlined, HomeOutlined } from '@ant-design/icons';
-import { contactService } from '../../services/api';
-import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React from 'react';
+import { Settings, Plus, ArrowLeft, Edit, Mail, Phone, Calendar, MoreHorizontal } from 'lucide-react';
+import './ViewContact.css';
+import { Button } from 'antd';
+import { CaretDownOutlined } from '@ant-design/icons';
+const ActionButton = ({ icon, label }) => {
+  return (
+    <div className="action-button">
+      <button className="icon-button">{ icon }</button>
+      <span className="button-label">{ label }</span>
+    </div>
+  );
+};
 
-const { Title, Text } = Typography;
-const ViewContact = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const [contact, setContact] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchContactById(id);
-  }, [id]);
-
-  const fetchContactById = async (id) => {
-    try {
-      const data = await contactService.getContactById(id);
-      setContact(data);
-    } catch (error) {
-      message.error('Failed to fetch Contact details');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) {
-    return <Text type="secondary" style={{ display: 'block', textAlign: 'center', marginTop: 50 }}>Loading...</Text>;
-  }
-
-  if (!contact) {
-    return <Text type="danger">Contact not found.</Text>;
-  }
+const MainContent = () => {
+  const sections = ['Contacts', 'Companies', 'Deals'];
 
   return (
-    <div style={{ background: '#f0f2f5', padding: 24, minHeight: '100vh' }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        {/* Back Button */}
-        <Button
-          icon={<ArrowLeftOutlined />}
-          type="link"
-          onClick={() => navigate('/contacts')}
-          style={{ marginBottom: 16 }}
-        >
-          Back to Contacts
-        </Button>
-
-        {/* Company Details Card */}
-        <Card style={{ background: '#fff', padding: 20, borderRadius: 8, boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)' }}>
-      {/* Header with Avatar */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
-        {/* <Avatar size={64} icon={<UserOutlined />} /> */}
-        <div>
-          <Title level={4} style={{ margin: 0 }}>
-            {contact.firstName} {contact.lastName || '-'}
-          </Title>
-          <Text type="secondary">{contact.jobTitle || 'No Job Title'}</Text>
+    <div className="main-content">
+      { sections.map((section) => (
+        <div key={ section } className="content-section">
+          <div className="section-header">
+            <h2>{ section }</h2>
+            <div className="header-actions">
+              <button className="add-button add-contact-btn">
+                <Plus />
+                add
+              </button>
+              <Settings />
+            </div>
+          </div>
+          <div className="section-content">
+            <p>No associated objects of this type exist or you don't have permission to view them.</p>
+          </div>
         </div>
+      )) }
+    </div>
+  );
+};
+
+// Sidebar Component
+const Sidebar = () => {
+  const actions = [
+    { icon: <Edit />, label: 'Note' },
+    { icon: <Mail />, label: 'Email' },
+    { icon: <Phone />, label: 'Call' },
+    { icon: <Edit />, label: 'Task' },
+    { icon: <Calendar />, label: 'Meeting' },
+    { icon: <MoreHorizontal />, label: 'More' }
+  ];
+
+  return (
+    <div className="sidebar">
+      <div className="sidebar-header">
+        <ArrowLeft className="back-icon" />
+        <span>Contacts</span>
+        <Button icon={ <CaretDownOutlined /> }>Actions </Button>
       </div>
 
-      <Divider />
+      <div className="contact-card scroll">
+        <div className="deal-card">
+          <div className="deal-header">
+            <h2 className="deal-title">
+              Nicksbuilding.com - New Deal
+            </h2>
+            <button className="edit-button">
+              <Edit />
+            </button>
+          </div>
 
-      {/* Contact Details in Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-        <div>
-          <Text strong>Email:</Text><br />
-          <MailOutlined style={{ marginRight: 8 }} />
-          {contact.email || '-'}
+          <div className="deal-content">
+            <div className="field-group">
+              <p className="field-label">Amount:</p>
+              <p className="field-value">$50,000</p>
+            </div>
+
+            <div className="field-group">
+              <p className="field-label">Close Date:</p>
+              <div className="date-field export-btn">
+                <Calendar className="calendar-icon" />
+                <span className="field-value">02/01/2025</span>
+              </div>
+            </div>
+
+            <div className="field-group">
+              <p className="field-label">Stage:</p>
+              <Button icon={ <CaretDownOutlined /> } className="stage-button">
+                Appointment Scheduled
+
+              </Button>
+            </div>
+
+            <div className="field-group">
+              <p className="field-label">Pipeline:</p>
+              <p className="pipeline-value">Xumulus Pipeline</p>
+            </div>
+          </div>
         </div>
 
-        <div>
-          <Text strong>Phone:</Text><br />
-          <PhoneOutlined style={{ marginRight: 8 }} />
-          {contact.phoneNumber || '-'}
+        <div className="action-buttons">
+          { actions.map((action, index) => (
+            <ActionButton key={ index } icon={ action.icon } label={ action.label } />
+          )) }
         </div>
 
-        <div>
-          <Text strong>Lifecycle Stage:</Text><br />
-          {contact.lifecycleStage || '-'}
-        </div>
+        <div className="about-section">
+          <div className="about-header">
+            <h3>About this ...</h3>
+            <div className="about-actions">
+              <Button icon={ <CaretDownOutlined /> }>Actions </Button>
 
-        <div>
-          <Text strong>Lead Status:</Text><br />
-          {contact.leadStatus || '-'}
-        </div>
-        <div>
-        <Text strong>Company:</Text><br />
-       
-        {contact.company?.companyName || '-'}
-      </div>
-   
+              <Settings />
+            </div>
+          </div>
 
-      <div>
-        <Text strong>Contact Owner:</Text><br />
-        {contact.contactOwner?.name || '-'}
-      </div>
-      </div>
-    </Card>
+          <div className="contact-fields">
+            <div className="field">
+              <p className="label">Email</p>
+              <p className="value">info.dbderrick2@aol.com</p>
+            </div>
+            <div className="field">
+              <p className="label">Phone number</p>
+            </div>
+            <div className="field">
+              <p className="label">Contact owner</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
-export default ViewContact;
+const DealView = () => {
+  return (
+    <div className="contact-management">
+      <Sidebar />
+      <MainContent />
+    </div>
+  );
+};
+
+
+
+export default DealView; 
