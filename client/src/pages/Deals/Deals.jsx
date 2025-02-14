@@ -298,7 +298,8 @@ function Deals() {
 
   const openViewModal = (deal) => {
     setSelectedDeal(deal);
-    setIsViewModalVisible(true);
+    handleView(deal._id);
+    // setIsViewModalVisible(true);
   };
 
   const userMenu = (
@@ -311,7 +312,9 @@ function Deals() {
       </Menu.Item>
     </Menu>
   );
-
+  const handleView = (id) => {
+    navigate(`/deals/view/${id}`);
+};
   const uploadProps = {
     name: 'file',
     multiple: false,

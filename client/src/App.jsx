@@ -20,7 +20,7 @@ import CompanyList from './pages/Company/CompanyList';
 import AddCompanyForm from './pages/Company/AddCompanyForm';
 import ViewCompany from './pages/Company/ViewCompany';
 import ViewContact from './pages/contacts/ViewContact';
-
+import DealView from './pages/Deals/DealView';
 const PrivateRoute = ({ children }) => {
   let token = localStorage.getItem('token');
   return token ? children : <Navigate to="/login" />;
@@ -84,6 +84,8 @@ function App() {
                       <Route path="/company/edit/:id" element={ <AddCompanyForm /> } />
                       <Route path="/company/view/:id" element={ <ViewCompany /> } />
                       <Route path="/contact/view/:id" element={ <ViewContact /> } />
+                      <Route path="/deals/view/:id" element={ <DealView /> } />
+
 
 
 

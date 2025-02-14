@@ -208,16 +208,13 @@ const CompanyList = () => {
         <tbody>
             {companies.map(company => (
                 <tr key={company?._id}>
-                    <td>{company?.companyName || '-'}</td>
+                    <td onClick={() => handleView(company._id)}>{company?.companyName || '-'}</td>
                     <td>{company?.companyOwner || '-'}</td>
                     <td>{company?.phoneNumber || '-'}</td>
                     <td>{company?.email || '-'}</td>
                     <td>{company?.city || '-'}</td>
                     <td>{company?.country || '-'}</td>
                     <td>
-                        <button className="edit-btn" onClick={() => handleView(company._id)}>
-                            View
-                        </button>
                         <button className="edit-btn" onClick={() => handleEditCompany(company._id)}>
                             Edit
                         </button>

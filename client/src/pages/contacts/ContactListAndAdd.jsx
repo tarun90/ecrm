@@ -272,7 +272,7 @@ const ContactListAndAdd = () => {
                     <tbody>
                         { contacts.map(contact => (
                             <tr key={ contact?._id }>
-                                <td>{ contact?.firstName } { contact?.lastName }</td>
+                                <td  onClick={ () => handleView(contact) }>{ contact?.firstName } { contact?.lastName }</td>
                                 <td>{ contact?.email }</td>
                                 <td>{ contact?.phoneNumber }</td>
                                 <td>{ contact?.contactOwner?.name }</td>
@@ -280,12 +280,12 @@ const ContactListAndAdd = () => {
                                 <td>{ contact?.leadStatus }</td>
                                 <td>{ moment(contact?.createdAt).format('DD-MM-YYYY HH:mm') }</td>
                                 <td>
-                                <button
+                                {/* <button
                                         className="edit-btn"
-                                        onClick={ () => handleView(contact) }
+                                       
                                     >
                                         View
-                                    </button>
+                                    </button> */}
                                     <button
                                         className="edit-btn"
                                         onClick={ () => handleEdit(contact) }
