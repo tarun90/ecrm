@@ -314,6 +314,7 @@ const OutReachList = () => {
                             <th>Status</th>
                             <th>Region</th>
                             <th>Campaign</th>
+                            <th>Category</th>
                             <th>Created By</th>
                             <th>Actions</th>
                         </tr>
@@ -336,6 +337,7 @@ const OutReachList = () => {
                                 <td>{item.status}</td>
                                 <td>{item.region.regionName}</td>
                                 <td>{item.campaign.campaignName}</td>
+                                <td>{item.category.categoryName}</td>
                                 <td>{item.createdBy.name}</td>
                                 <td>
                                     <Button onClick={() => handleEditOutreach(item._id)}>Edit</Button>
