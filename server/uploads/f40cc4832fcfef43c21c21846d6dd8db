@@ -1,6 +1,0 @@
-name,email,phone,website,linkedin,country,status
-John Smith,john.smith@example.com,+1-555-0123,www.example.com/john,linkedin.com/in/johnsmith,USA,New
-Sarah Johnson,sarah.j@company.co.uk,+44-20-7123-4567,www.sarahj.com,linkedin.com/in/sarahjohnson,UK,New
-Michael Chen,m.chen@tech.com,+86-10-8765-4321,www.chentech.com,linkedin.com/in/michaelchen,China,New
-Anna Kowalski,anna.k@startup.pl,+48-501-234-567,www.annak.pl,linkedin.com/in/annakowalski,Poland,New
-Carlos Rodriguez,c.rodriguez@empresa.es,+34-911-234-567,www.carlosr.es,linkedin.com/in/carlosrodriguez,Spain,New

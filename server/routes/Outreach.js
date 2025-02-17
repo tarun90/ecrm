@@ -33,7 +33,7 @@ router.get('/', async (req, res) => {
       .populate('campaign', 'campaignName') // Populate campaign and retrieve only the name field
       .populate('region', 'regionName')   // Populate region and retrieve only the name field
       .populate('createdBy', 'name email') // Populate createdBy and retrieve name and email
-
+      .populate('category', 'categoryName')
     res.status(200).send(outreaches);
   } catch (error) {
     res.status(500).send({ message: 'Internal Server Error', error });
