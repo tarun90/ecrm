@@ -23,6 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 
+uploads/
+
 client/.env
 client/yarn.lock
 server/.env
@@ -30,3 +32,4 @@ server/yarn.lock
 client/Dockerfile
 server/Dockerfile
 docker-compose.yml
+server/uploads/
