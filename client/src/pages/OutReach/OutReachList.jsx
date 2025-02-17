@@ -5,7 +5,14 @@ import { getCampaigns } from '../Campaigns/campaignService';
 import { getRegions } from '../Regions/RegionsService';
 import './outreach.css';
 import { getCategories } from '../Categories/categoryService';
-
+import { 
+    getOutreach, 
+    createOutreach, 
+    updateOutreach, 
+    deleteOutreach, 
+    importCSV,
+    assignOutreach 
+} from './outreachService';
 const { Dragger } = Upload;
 
 const OutReachList = () => {
@@ -17,9 +24,14 @@ const OutReachList = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [importModalVisible, setImportModalVisible] = useState(false);
     const [selectedOutreach, setSelectedOutreach] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [editMode, setEditMode] = useState(false);
+    const [editId, setEditId] = useState(null);
+
     const [importData, setImportData] = useState({
         campaign: undefined,
         region: '',
+        category: undefined,
         file: null
     });
 
@@ -33,7 +45,7 @@ const OutReachList = () => {
         status: 'New',
         region: '',
         campaign: '',
-        categories:'',
+        category: '',
     });
 
     useEffect(() => {
@@ -62,9 +74,15 @@ const OutReachList = () => {
     };
 
     const fetchOutreach = async () => {
-        // TODO: Implement API call
-        // const data = await getOutreach(searchTerm);
-        // setOutreach(data);
+        try {
+            setLoading(true);
+            const data = await getOutreach();
+            setOutreach(data);
+        } catch (error) {
+            message.error('Failed to fetch outreach data');
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleImportCSV = () => {
@@ -72,32 +90,37 @@ const OutReachList = () => {
     };
 
     const handleImportSubmit = async () => {
-        if (!importData.campaign) {
-            message.error('Please select a campaign');
-            return;
-        }
-        if (!importData.category) {
-            message.error('Please select a category');
-            return;
-        }
-        if (!importData.region) {
-            message.error('Please select a region');
-            return;
-        }
-        if (!importData.file) {
-            message.error('Please upload a CSV file');
-            return;
-        }
+        try {
+            console.log(importData,"ketul")
+            if (!importData.campaign || !importData.region || !importData.category || !importData.file) {
+                message.error('Please fill in all required fields');
+                return;
+            }
 
-        // TODO: Implement the actual import logic here
-        message.success('CSV import started');
-        setImportModalVisible(false);
-        setImportData({
-            campaign: undefined,
-            region: '',
-            category: undefined,
-            file: null
-        });
+            const formData = new FormData();
+            formData.append('file', importData.file);
+            formData.append('campaign', importData.campaign);
+            formData.append('region', importData.region);
+            formData.append('category', importData.category);
+
+            setLoading(true);
+            await importCSV(formData);
+            message.success('CSV imported successfully');
+            setImportModalVisible(false);
+            fetchOutreach(); // Refresh the list
+            
+            // Reset import form
+            setImportData({
+                campaign: undefined,
+                region: '',
+                category: undefined,
+                file: null
+            });
+        } catch (error) {
+            message.error('Failed to import CSV');
+        } finally {
+            setLoading(false);
+        }
     };
 
     const uploadProps = {
@@ -124,9 +147,55 @@ const OutReachList = () => {
         value: region._id,
         label: region.regionName
     }));
-
     const handleAddOutreach = () => {
+        setEditMode(false);
+        setEditId(null);
+        setFormData({
+            name: '',
+            email: '',
+            phone: '',
+            website: '',
+            linkedin: '',
+            country: '',
+            status: 'New',
+            region: '',
+            campaign: '',
+            category: '',
+        });
         setModalVisible(true);
+    };
+
+    const handleEditOutreach = (id) => {
+        const outreachItem = outreach.find(item => item._id === id);
+        if (outreachItem) {
+            setFormData({
+                name: outreachItem.name,
+                email: outreachItem.email,
+                phone: outreachItem.phone,
+                website: outreachItem.website,
+                linkedin: outreachItem.linkedin,
+                country: outreachItem.country,
+                status: outreachItem.status,
+                region: outreachItem.region,
+                campaign: outreachItem.campaign,
+                category: outreachItem.category,
+            });
+            setEditMode(true);
+            setEditId(id);
+            setModalVisible(true);
+        }
+    };
+    const handleDelete = async (id) => {
+        try {
+            setLoading(true);
+            await deleteOutreach(id);
+            message.success('Outreach deleted successfully');
+            fetchOutreach();
+        } catch (error) {
+            message.error('Failed to delete outreach');
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleCheckboxChange = (id) => {
@@ -147,10 +216,41 @@ const OutReachList = () => {
     };
 
     const handleSubmit = async () => {
-        // TODO: Implement outreach creation/update logic
-        message.success('Outreach added successfully');
-        setModalVisible(false);
-        fetchOutreach();
+        try {
+            setLoading(true);
+            if (editMode) {
+                await updateOutreach(editId, formData);
+                message.success('Outreach updated successfully');
+            } else {
+                await createOutreach(formData);
+                message.success('Outreach created successfully');
+            }
+            setModalVisible(false);
+            fetchOutreach();
+        } catch (error) {
+            message.error(editMode ? 'Failed to update outreach' : 'Failed to create outreach');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleAssignOutreach = async (userId) => {
+        if (selectedOutreach.length === 0) {
+            message.warning('Please select outreach items to assign');
+            return;
+        }
+
+        try {
+            setLoading(true);
+            await assignOutreach(selectedOutreach, userId);
+            message.success('Outreach assigned successfully');
+            fetchOutreach();
+            setSelectedOutreach([]);
+        } catch (error) {
+            message.error('Failed to assign outreach');
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleViewReports = () => {
@@ -234,9 +334,9 @@ const OutReachList = () => {
                                 <td>{item.linkedin}</td>
                                 <td>{item.country}</td>
                                 <td>{item.status}</td>
-                                <td>{item.region}</td>
-                                <td>{item.campaign}</td>
-                                <td>{item.createdBy}</td>
+                                <td>{item.region.regionName}</td>
+                                <td>{item.campaign.campaignName}</td>
+                                <td>{item.createdBy.name}</td>
                                 <td>
                                     <Button onClick={() => handleEditOutreach(item._id)}>Edit</Button>
                                     <Popconfirm
@@ -356,7 +456,8 @@ const OutReachList = () => {
                     setImportData({
                         campaign: undefined,
                         region: '',
-                        file: null
+                        file: null,
+                        category:undefined
                     });
                 }}
                 onOk={handleImportSubmit}
@@ -378,8 +479,8 @@ const OutReachList = () => {
 
                     
                     <Select
-                        value={formData.category}
-                        onChange={(value) => setFormData({...formData, category: value})}
+                        value={importData.category}
+                        onChange={(value) => setImportData({...formData, category: value})}
                         placeholder="Select Category"
                         className="form-input"
                     >
