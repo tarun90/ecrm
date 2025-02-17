@@ -1,0 +1,6 @@
+name,email,phone,website,linkedin,country
+John Smith,john.smith@example.com,-677,www.example.com/john,linkedin.com/in/johnsmith,USA
+Sarah Johnson,sarah.j@company.co.uk,-11666,www.sarahj.com,linkedin.com/in/sarahjohnson,UK
+Michael Chen,m.chen@tech.com,-13010,www.chentech.com,linkedin.com/in/michaelchen,China
+Anna Kowalski,anna.k@startup.pl,-1254,www.annak.pl,linkedin.com/in/annakowalski,Poland
+Carlos Rodriguez,c.rodriguez@empresa.es,-1678,www.carlosr.es,linkedin.com/in/carlosrodriguez,Spain
