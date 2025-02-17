@@ -7,14 +7,14 @@ import {
   UnorderedListOutlined,
   SettingOutlined,
   CalendarOutlined,
-  ProductOutlined,
   FileTextOutlined,
-  MailOutlined
+  MailOutlined,
+  FolderOutlined,
+  AppstoreOutlined
 } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import HeaderLogo from '../assets/Icons/headerlogo';
 import CompanyIcon from '../../public/Company';
-
 
 const { Sider } = Layout;
 
@@ -33,9 +33,7 @@ const Sidebar = ({ collapsed, onCollapse }) => {
     if (path.includes('/invoices')) return '7';
     if (path.includes('/webmail')) return '8';
     if (path.includes('/company')) return '9';
-
-
-
+    if (path.includes('/prospects')) return '10';
 
     return '1';
   };
@@ -73,7 +71,7 @@ const Sidebar = ({ collapsed, onCollapse }) => {
     },
     {
       key: '6',
-      icon: <ProductOutlined />,
+      icon: <AppstoreOutlined />,
       label: 'Products',
       onClick: () => navigate('/products'),
     },
@@ -95,20 +93,35 @@ const Sidebar = ({ collapsed, onCollapse }) => {
       label: 'Company',
       onClick: () => navigate('/company'),
     },
+    {
+      key: '10',
+      icon: <FolderOutlined />,
+      label: 'Prospects',
+      children: [
+        {
+          key: '10-1',
+          label: 'Campaign',
+          onClick: () => navigate('/prospects/campaign'),
+        },
+        {
+          key: '10-2',
+          label: 'Prospects',
+          onClick: () => navigate('/prospects/list'),
+        },
+      ],
+    },
   ];
 
   return (
-    <Sider collapsible collapsed={ collapsed } onCollapse={ onCollapse } className='Sidebar'>
-      <div className='sidebar-logo'>
-
+    <Sider collapsible collapsed={collapsed} onCollapse={onCollapse} className="Sidebar">
+      <div className="sidebar-logo">
         <HeaderLogo />
-
       </div>
       <Menu
         theme="dark"
         mode="inline"
-        defaultSelectedKeys={ [getDefaultSelectedKey()] }
-        items={ menuItems }
+        defaultSelectedKeys={[getDefaultSelectedKey()]}
+        items={menuItems}
       />
     </Sider>
   );
