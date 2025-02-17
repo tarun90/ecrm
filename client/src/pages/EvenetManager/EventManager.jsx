@@ -15,9 +15,10 @@ import {
   updateEvent,
   deleteEvent,
 } from '../../lib/google-calendar';
+import { Layout } from 'antd';
 import "./EvenetManager.css"
 import MainLayout from '../../components/MainLayout';
-
+const { Header, Sider, Content } = Layout;
 
 function EventManager() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
