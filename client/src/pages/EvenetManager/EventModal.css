@@ -357,6 +357,10 @@
   justify-content: center;
 }
 
+.ant-layout-content .evant-wrapper {
+  height: auto;
+}
+
 /* mobile  */
 @media (max-width:767px) {
 

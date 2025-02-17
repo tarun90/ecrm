@@ -218,7 +218,7 @@ function EventManager() {
   // }
 
   return (
-    <Layout className='main-content-wrapper'>
+    <Layout className='main-content-wrapper evant-wrapper '>
       <Header className="content-header evant-header">
         <div className="header-content">
           <h1 className="header-title">Event Planner</h1>
