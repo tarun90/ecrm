@@ -22,6 +22,7 @@ import ViewCompany from './pages/Company/ViewCompany';
 import ViewContact from './pages/contacts/ViewContact';
 import DealView from './pages/Deals/DealView';
 import CampaignList from './pages/Campaigns/CampaignsList';
+import OutReachList from './pages/OutReach/OutReachList';
 const PrivateRoute = ({ children }) => {
   let token = localStorage.getItem('token');
   return token ? children : <Navigate to="/login" />;
@@ -86,8 +87,8 @@ function App() {
                       <Route path="/company/view/:id" element={ <ViewCompany /> } />
                       <Route path="/contact/view/:id" element={ <ViewContact /> } />
                       <Route path="/deals/view/:id" element={ <DealView /> } />
-                      <Route path="/prospects/campaign" element={ <CampaignList /> } />
-
+                      <Route path="/outreach/campaign" element={ <CampaignList /> } />
+                      <Route path="/outreach/list" element={<OutReachList />} />
 
 
 

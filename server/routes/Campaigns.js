@@ -1,6 +1,6 @@
 import express from 'express';
 import Campaign from '../models/Campaign.js';
-import auth from '../middleware/auth.js';
+import auth from '../middleware/auth.js'; 
 const router = express.Router();
 
 // Create a new campaign

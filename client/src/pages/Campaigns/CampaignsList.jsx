@@ -92,7 +92,7 @@ const CampaignList = () => {
                     </button>
                 </div>
             </div>
-            <div className="campaign-table">
+            <div className="contact-table">
                 <table>
                     <thead>
                         <tr>

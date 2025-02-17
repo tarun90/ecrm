@@ -33,7 +33,7 @@ const Sidebar = ({ collapsed, onCollapse }) => {
     if (path.includes('/invoices')) return '7';
     if (path.includes('/webmail')) return '8';
     if (path.includes('/company')) return '9';
-    if (path.includes('/prospects')) return '10';
+    if (path.includes('/outreach')) return '10';
 
     return '1';
   };
@@ -96,17 +96,17 @@ const Sidebar = ({ collapsed, onCollapse }) => {
     {
       key: '10',
       icon: <FolderOutlined />,
-      label: 'Prospects',
+      label: 'Out-reach',
       children: [
         {
           key: '10-1',
           label: 'Campaign',
-          onClick: () => navigate('/prospects/campaign'),
+          onClick: () => navigate('/outreach/campaign'),
         },
         {
           key: '10-2',
-          label: 'Prospects',
-          onClick: () => navigate('/prospects/list'),
+          label: 'Out-reach',
+          onClick: () => navigate('/outreach/list'),
         },
       ],
     },
