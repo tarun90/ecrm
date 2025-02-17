@@ -4,12 +4,14 @@ import { UploadOutlined, FileExcelOutlined, BarChartOutlined, InboxOutlined } fr
 import { getCampaigns } from '../Campaigns/campaignService';
 import { getRegions } from '../Regions/RegionsService';
 import './outreach.css';
+import { getCategories } from '../Categories/categoryService';
 
 const { Dragger } = Upload;
 
 const OutReachList = () => {
     const [outreach, setOutreach] = useState([]);
     const [campaigns, setCampaigns] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [regions, setRegions] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
@@ -31,18 +33,29 @@ const OutReachList = () => {
         status: 'New',
         region: '',
         campaign: '',
+        categories:'',
     });
 
     useEffect(() => {
         fetchOutreach();
         fetchCampaigns();
         fetchRegions();
+        fetchCategories();
     }, [searchTerm]);
 
     const fetchCampaigns = async () => {
         try {
             const data = await getCampaigns();
             setCampaigns(data);
+        } catch (error) {
+            message.error('Failed to fetch campaigns');
+        }
+    };
+
+    const fetchCategories = async () => {
+        try {
+            const data = await getCategories();
+            setCategories(data);
         } catch (error) {
             message.error('Failed to fetch campaigns');
         }
@@ -63,6 +76,10 @@ const OutReachList = () => {
             message.error('Please select a campaign');
             return;
         }
+        if (!importData.category) {
+            message.error('Please select a category');
+            return;
+        }
         if (!importData.region) {
             message.error('Please select a region');
             return;
@@ -78,6 +95,7 @@ const OutReachList = () => {
         setImportData({
             campaign: undefined,
             region: '',
+            category: undefined,
             file: null
         });
     };
@@ -313,6 +331,19 @@ const OutReachList = () => {
                             </Select.Option>
                         ))}
                     </Select>
+
+                    <Select
+                        value={formData.category}
+                        onChange={(value) => setFormData({...formData, category: value})}
+                        placeholder="Category"
+                        className="form-input"
+                    >
+                        {categories.map(category => (
+                            <Select.Option key={category._id} value={category._id}>
+                                {category.categoryName}
+                            </Select.Option>
+                        ))}
+                    </Select>
                 </div>
             </Modal>
 
@@ -341,6 +372,20 @@ const OutReachList = () => {
                         {campaigns.map(campaign => (
                             <Select.Option key={campaign._id} value={campaign._id}>
                                 {campaign.campaignName}
+                            </Select.Option>
+                        ))}
+                    </Select>
+
+                    
+                    <Select
+                        value={formData.category}
+                        onChange={(value) => setFormData({...formData, category: value})}
+                        placeholder="Select Category"
+                        className="form-input"
+                    >
+                        {categories.map(category => (
+                            <Select.Option key={category._id} value={category._id}>
+                                {category.categoryName}
                             </Select.Option>
                         ))}
                     </Select>

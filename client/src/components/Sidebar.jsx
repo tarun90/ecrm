@@ -100,11 +100,16 @@ const Sidebar = ({ collapsed, onCollapse }) => {
       children: [
         {
           key: '10-1',
-          label: 'Campaign',
+          label: 'Campaigns',
           onClick: () => navigate('/outreach/campaign'),
         },
         {
           key: '10-2',
+          label: 'Categories',
+          onClick: () => navigate('/outreach/categories'),
+        },
+        {
+          key: '10-3',
           label: 'Out-reach',
           onClick: () => navigate('/outreach/list'),
         },
