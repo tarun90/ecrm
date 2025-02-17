@@ -418,10 +418,6 @@ button {
   align-items: center;
 }
 
-.modal-header h2 {
-  font-size: 18px;
-}
-
 
 /* Form and inputs inside modal */
 .modal input,
@@ -495,6 +491,7 @@ button {
   font-size: 14px;
   font-weight: 600;
   color: #333;
+  text-align: left;
   margin-bottom: 4px;
 }
 

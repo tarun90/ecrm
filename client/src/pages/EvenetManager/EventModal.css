@@ -13,7 +13,7 @@
 }
 
 .modal-container {
-  background-color: var(--color-white);
+  background-color: #ffff;
   border-radius: 8px;
   padding: 24px;
   width: 100%;
@@ -48,6 +48,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
+  padding: 20px 0;
 }
 
 .form-group,
@@ -65,7 +66,7 @@
 .event-form .form-actions {
   width: 100%;
   text-align: center;
-  justify-content: center;
+  justify-content: end;
   margin-top: 20px;
 }
 
@@ -327,8 +328,33 @@
   background: #f4f4f4;
 }
 
+.calendar-container .fc .fc-button-primary {
+  border-color: #fff;
+}
+
+.calendar-container .fc .fc-daygrid-day.fc-day-today {
+  background-color: rgb(40 167 255 / 13%);
+}
+
+.calendar-container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
 .event-form .meeting-link {
   position: relative;
+}
+
+.ant-layout-content .evant-warpper tr[role="row"] .fc-col-header-cell {
+  padding: 20px;
+}
+
+.fc .fc-daygrid-day-top {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
 }
 
 /* mobile  */
