@@ -8,11 +8,16 @@ import { getCompaniesNames } from '../Company/APIServices';
 import Search from 'antd/es/transfer/search';
 import { useNavigate } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+import { Button, Select } from 'antd';
+import CompanyFormModal from '../Company/CompanyFormModal';
 
 const ContactListAndAdd = () => {
     const navigate = useNavigate();
     const [contacts, setContacts] = useState([]);
+        const [modalVisible, setModalVisible] = useState(false);
+            const [editId, setEditId] = useState(null);
+        
+        const [searchText, setSearchText] = useState("");
     const [contact, setContact] = useState({
         email: '',
         firstName: '',
@@ -95,6 +100,7 @@ const ContactListAndAdd = () => {
             console.log(error);
         }
     }
+    
     const fetchContacts = async (search = '') => {
         setIsSearching(true);
         try {
@@ -218,6 +224,33 @@ const ContactListAndAdd = () => {
         setIsModalOpen(true);
     };
 
+
+    const handleAddCompany = () => {
+        setEditId(null);
+        setModalVisible(true);
+      };
+
+      const afterModalCloseSaveData = async (companyName) => {
+        try {
+            let data = await getCompaniesNames(); 
+            setCompanies(data);
+    
+            setModalVisible(false); 
+                let matchedCompany = data.find((cvl) => cvl.companyName === companyName);
+    
+            if (matchedCompany) {
+                setContact({
+                    company:matchedCompany._id
+                })
+            } else {
+                console.log("No matching company found.");
+            }
+        } catch (error) {
+            console.error("Error in afterModalCloseSaveData:", error);
+        }
+    };
+    
+    
     return (
         <div className="contact-container">
             <div className="contact-header">
@@ -363,16 +396,43 @@ const ContactListAndAdd = () => {
                                 <option value="--">--</option>
                                 <option value="Qualified">Qualified</option>
                             </select>
-                            <select
+                           
+
+                            <Select
+                                showSearch
+                                placeholder="Select Company"
                                 name="company"
-                                value={ contact.company }
-                                onChange={ handleChange }
+                                allowClear
+                                value={contact.company || undefined}
+                                onChange={handleChange}
+                                onSearch={(value) => setSearchText(value)}
+                              
+                                notFoundContent={
+                                    <>
+                                        <Button
+                                            style={{
+                                                backgroundColor: "#e0f2fe",
+                                                width: "100%",
+                                                color: "#0369a1",
+                                                border: "none", 
+                                                boxShadow: "none", 
+                                            }}
+                                          
+                                            onClick={() => handleAddCompany()}
+                                        >
+                                            + Add Company
+                                        </Button>
+</>
+                                }
                             >
-                                <option value="--">Select Company</option>
-                                { companies?.map((company) => {
-                                    return <option value={ company?._id }>{ company.companyName }</option>
-                                }) }
-                            </select>
+                                {companies?.map((company) => (
+                                    <Option key={company._id} value={company._id}>
+                                        {company.companyName}
+                                    </Option>
+                                ))}
+                            </Select>
+
+                            
                             <footer className='model-footer'>
                                 <button className="close-btn" onClick={ closeModal }>Cancel </button>
                                 <button type="submit" className="submit-btn">
@@ -383,6 +443,18 @@ const ContactListAndAdd = () => {
                     </div>
                 </div>
             ) }
+            
+            <CompanyFormModal
+        visible={modalVisible}
+        onCancel={(id)=>{
+            afterModalCloseSaveData(id);
+         
+        }
+        }
+        editId={editId}
+        fetchCompanies={fetchCompanies}
+        contectListComnyName={searchText.length>0?searchText:null}
+      />
         </div>
     );
 };
