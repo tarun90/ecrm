@@ -1,42 +1,23 @@
 import mongoose from 'mongoose';
 
-const productSchema = new mongoose.Schema({
-  name: {
+const outreachSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  phone: String,
+  website: String,
+  linkedin: String,
+  country: String,
+  status: {
     type: String,
-    required: true
+    enum: ['Unassigned', 'Not Contacted', 'Contacted', 'Followup', 'Converted to Deal'],
+    default: 'Unassigned'
   },
-  description_short: String,
-  description_long: String,
-  product_type: {
-    type: String,
-    enum: ['physical', 'digital', 'subscription', 'service'],
-    required: true
-  },
-  sku: {
-    type: String,
-    unique: true,
-    sparse: true
-  },
-  billing_frequency: String,
-  term: String,
-  url: String,
-  unit_cost: {
-    type: Number,
-    required: true,
-    default: 0
-  },
-  currency: {
-    type: String,
-    default: 'USD'
-  },
-  tax_rate: {
-    type: Number,
-    default: 0
-  }
-}, {
-  timestamps: true
+  region: String,
+  campaign: String,
+  createdBy: String,
+  assignedTo: String
 });
 
-const Product = mongoose.model('products', productSchema);
+const Outreach = mongoose.model('Outreach', outreachSchema);
 
-export default Product;
+export default Outreach;
