@@ -17,6 +17,7 @@ import {
 const { Dragger } = Upload;
 
 const OutReachList = () => {
+    let userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : {}
     const [outreach, setOutreach] = useState([]);
     const [fileList, setFileList] = useState([]);
     const [campaigns, setCampaigns] = useState([]);
@@ -61,15 +62,17 @@ const OutReachList = () => {
     useEffect(() => {
         fetchOutreach();
        
-    }, [searchTerm]);
+    }, []);
 
     const fetchUsers = async () => {
         try {
-            const data = await getUsers();
+    let userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : {}
+             let regionId = userData?.regionId || "";
+            const data = await getUsers(regionId);
             console.log(data)
             setUsers(data?.users);
         } catch (error) {
-            message.error('Failed to fetch users');
+            // message.error('Failed to fetch users');
         }
     };
 
@@ -78,7 +81,7 @@ const OutReachList = () => {
             const data = await getCampaigns();
             setCampaigns(data);
         } catch (error) {
-            message.error('Failed to fetch campaigns');
+            // message.error('Failed to fetch campaigns');
         }
     };
 
@@ -87,7 +90,7 @@ const OutReachList = () => {
             const data = await getCategories();
             setCategories(data);
         } catch (error) {
-            message.error('Failed to fetch campaigns');
+            // message.error('Failed to fetch campaigns');
         }
     };
 
@@ -97,7 +100,7 @@ const OutReachList = () => {
             const data = await getOutreach();
             setOutreach(data);
         } catch (error) {
-            message.error('Failed to fetch outreach data');
+            // message.error('Failed to fetch outreach data');
         } finally {
             setLoading(false);
         }
@@ -173,7 +176,7 @@ const OutReachList = () => {
             const data = await getRegions();
             setRegions(data);
         } catch (error) {
-            message.error('Failed to fetch regions');
+            // message.error('Failed to fetch regions');
         }
     };
 
@@ -279,7 +282,7 @@ const OutReachList = () => {
             fetchOutreach();
             setSelectedOutreach([]);
         } catch (error) {
-            message.error('Failed to assign outreach');
+            // message.error('Failed to assign outreach');
         } finally {
             setLoading(false);
         }
@@ -303,6 +306,7 @@ const OutReachList = () => {
                     />
                 </div>
                 <div className="action-buttons">
+                    {userData?.department?.name == "Lead Generation" && <>
                     <Button 
                         onClick={handleImportCSV}
                         icon={<UploadOutlined />}
@@ -316,14 +320,14 @@ const OutReachList = () => {
                         className="add-outreach-btn"
                     >
                         Add Outreach
-                    </Button>
-                    <Button 
+                    </Button> </> }
+                    {/* <Button 
                         onClick={handleViewReports}
                         icon={<BarChartOutlined />}
                         className="reports-btn"
                     >
                         Reports
-                    </Button>
+                    </Button> */}
                 </div>
             </div>
             {selectedOutreach.length > 0 && (
@@ -368,12 +372,14 @@ const OutReachList = () => {
                 <table>
                     <thead>
                         <tr>
+                            {userData?.isRegionHead &&
                             <th>
                                 <Checkbox
                                     onChange={(e) => handleSelectAll(e.target.checked)}
                                     checked={selectedOutreach.length === outreach.length}
                                 />
                             </th>
+}
                             <th>Name</th>
                             <th>Email</th>
                             <th>Phone</th>
@@ -386,18 +392,20 @@ const OutReachList = () => {
                             <th>Category</th>
                             <th>Assigned To</th>
                             <th>Created By</th>
-                            <th>Actions</th>
+                            {userData?.department?.name == "Lead Generation" && <th>Actions</th> }
                         </tr>
                     </thead>
                     <tbody>
                         {outreach.map(item => (
                             <tr key={item._id}>
+                                 {userData?.isRegionHead &&
                                 <td>
                                     <Checkbox
                                         checked={selectedOutreach.includes(item._id)}
                                         onChange={() => handleCheckboxChange(item._id)}
                                     />
                                 </td>
+}
                                 <td>{item?.name}</td>
                                 <td>{item?.email}</td>
                                 <td>{item?.phone}</td>
@@ -410,6 +418,7 @@ const OutReachList = () => {
                                 <td>{item?.category?.categoryName}</td>
                                 <td>{item?.assignedTo?.name ? item?.assignedTo.name : "-" }</td>
                                 <td>{item?.createdBy?.name}</td>
+                                 {userData?.department?.name == "Lead Generation" &&
                                 <td>
                                     <Button onClick={() => handleEditOutreach(item._id)}>Edit</Button>
                                     <Popconfirm
@@ -422,6 +431,7 @@ const OutReachList = () => {
                                         <Button danger>Delete</Button>
                                     </Popconfirm>
                                 </td>
+}
                             </tr>
                         ))}
                     </tbody>

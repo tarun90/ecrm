@@ -35,7 +35,7 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).populate('department', 'name');
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
@@ -153,15 +153,16 @@ router.post('/redirectToBack', async (req, res) => {
     console.log(user_details)
     const { email, password, first_name, last_name, user_img } = user_details;
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).populate('department', 'name');
     if (!user) {
       let name = first_name.trim() + " " + last_name.trim();
       let img = user_img;
       const user = new User({ email, password, name, img });
       await user.save();
+      const user1 = await User.findOne({ email }).populate('department', 'name');
 
-      const token = jwt.sign({ user: user }, process.env.JWT_SECRET);
-      res.status(201).json({ token, user:user });
+      const token = jwt.sign({ user: user1 }, process.env.JWT_SECRET);
+      res.status(201).json({ token, user:user1 });
     } else {
 
 
