@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { message, Popconfirm, Button, Input, Modal, Select, Checkbox, Upload } from 'antd';
 import { UploadOutlined, FileExcelOutlined, BarChartOutlined, InboxOutlined } from '@ant-design/icons';
+import { getUsers } from '../Users/userService';  // Add this import
 import { getCampaigns } from '../Campaigns/campaignService';
 import { getRegions } from '../Regions/RegionsService';
 import './outreach.css';
@@ -13,10 +14,13 @@ import {
     importCSV,
     assignOutreach 
 } from './outreachService';
+import { Link } from 'react-router-dom';
 const { Dragger } = Upload;
 
 const OutReachList = () => {
+    let userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : {}
     const [outreach, setOutreach] = useState([]);
+    const [fileList, setFileList] = useState([]);
     const [campaigns, setCampaigns] = useState([]);
     const [categories, setCategories] = useState([]);
     const [regions, setRegions] = useState([]);
@@ -27,7 +31,8 @@ const OutReachList = () => {
     const [loading, setLoading] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [editId, setEditId] = useState(null);
-
+    const [users, setUsers] = useState([]);
+    
     const [importData, setImportData] = useState({
         campaign: undefined,
         region: '',
@@ -42,7 +47,6 @@ const OutReachList = () => {
         website: '',
         linkedin: '',
         country: '',
-        status: 'New',
         region: '',
         campaign: '',
         category: '',
@@ -53,14 +57,32 @@ const OutReachList = () => {
         fetchCampaigns();
         fetchRegions();
         fetchCategories();
-    }, [searchTerm]);
+        fetchUsers();
+    }, []);
+
+    useEffect(() => {
+        fetchOutreach();
+       
+    }, []);
+
+    const fetchUsers = async () => {
+        try {
+    let userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : {}
+             let regionId = userData?.regionId || "";
+            const data = await getUsers(regionId);
+            console.log(data)
+            setUsers(data?.users);
+        } catch (error) {
+            // message.error('Failed to fetch users');
+        }
+    };
 
     const fetchCampaigns = async () => {
         try {
             const data = await getCampaigns();
             setCampaigns(data);
         } catch (error) {
-            message.error('Failed to fetch campaigns');
+            // message.error('Failed to fetch campaigns');
         }
     };
 
@@ -69,7 +91,7 @@ const OutReachList = () => {
             const data = await getCategories();
             setCategories(data);
         } catch (error) {
-            message.error('Failed to fetch campaigns');
+            // message.error('Failed to fetch campaigns');
         }
     };
 
@@ -79,13 +101,20 @@ const OutReachList = () => {
             const data = await getOutreach();
             setOutreach(data);
         } catch (error) {
-            message.error('Failed to fetch outreach data');
+            // message.error('Failed to fetch outreach data');
         } finally {
             setLoading(false);
         }
     };
 
     const handleImportCSV = () => {
+        setImportData({
+            campaign: undefined,
+            region: '',
+            category: undefined,
+            file: null
+        });
+        setFileList([]);
         setImportModalVisible(true);
     };
 
@@ -108,7 +137,7 @@ const OutReachList = () => {
             message.success('CSV imported successfully');
             setImportModalVisible(false);
             fetchOutreach(); // Refresh the list
-            
+           
             // Reset import form
             setImportData({
                 campaign: undefined,
@@ -116,6 +145,7 @@ const OutReachList = () => {
                 category: undefined,
                 file: null
             });
+          
         } catch (error) {
             message.error('Failed to import CSV');
         } finally {
@@ -127,10 +157,18 @@ const OutReachList = () => {
         accept: '.csv',
         beforeUpload: (file) => {
             setImportData(prev => ({ ...prev, file }));
+            setFileList([file]);
             return false; // Prevent automatic upload
         },
+        // onChange: ({ file }) => {
+        //     if (file.status === 'done') {
+        //         setImportData(prev => ({ ...prev, file: null })); // Clear file after processing
+        //         setFileList([]);
+        //     }
+        // },
         onRemove: () => {
             setImportData(prev => ({ ...prev, file: null }));
+            return true; 
         },
     };
 
@@ -139,13 +177,13 @@ const OutReachList = () => {
             const data = await getRegions();
             setRegions(data);
         } catch (error) {
-            message.error('Failed to fetch regions');
+            // message.error('Failed to fetch regions');
         }
     };
 
     const regionOptions = regions.map(region => ({
         value: region._id,
-        label: region.regionName
+        label: region?.regionName
     }));
     const handleAddOutreach = () => {
         setEditMode(false);
@@ -157,7 +195,6 @@ const OutReachList = () => {
             website: '',
             linkedin: '',
             country: '',
-            status: 'New',
             region: '',
             campaign: '',
             category: '',
@@ -175,10 +212,9 @@ const OutReachList = () => {
                 website: outreachItem.website,
                 linkedin: outreachItem.linkedin,
                 country: outreachItem.country,
-                status: outreachItem.status,
-                region: outreachItem.region,
-                campaign: outreachItem.campaign,
-                category: outreachItem.category,
+                region: outreachItem.region._id,
+                campaign: outreachItem.campaign._id,
+                category: outreachItem.category._id,
             });
             setEditMode(true);
             setEditId(id);
@@ -247,7 +283,7 @@ const OutReachList = () => {
             fetchOutreach();
             setSelectedOutreach([]);
         } catch (error) {
-            message.error('Failed to assign outreach');
+            // message.error('Failed to assign outreach');
         } finally {
             setLoading(false);
         }
@@ -271,6 +307,7 @@ const OutReachList = () => {
                     />
                 </div>
                 <div className="action-buttons">
+                    {userData?.department?.name == "Lead Generation" && <>
                     <Button 
                         onClick={handleImportCSV}
                         icon={<UploadOutlined />}
@@ -284,27 +321,66 @@ const OutReachList = () => {
                         className="add-outreach-btn"
                     >
                         Add Outreach
-                    </Button>
-                    <Button 
+                    </Button> </> }
+                    {/* <Button 
                         onClick={handleViewReports}
                         icon={<BarChartOutlined />}
                         className="reports-btn"
                     >
                         Reports
-                    </Button>
+                    </Button> */}
                 </div>
             </div>
-
+            {selectedOutreach.length > 0 && (
+    <div className="assignment-section" style={{ 
+        padding: '16px', 
+        background: '#f5f5f5', 
+        marginBottom: '16px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        borderRadius: '4px'
+    }}>
+        <span style={{ fontWeight: 500 }}>
+            {selectedOutreach.length} items selected
+        </span>
+        <Select
+            style={{ width: 200 }}
+            showSearch
+            placeholder="Assign to user"
+            onChange={handleAssignOutreach}
+            allowClear
+            filterOption={(input, option) =>
+                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+            }
+            optionFilterProp="children"
+        >
+            {users.map(user => (
+                <Select.Option key={user._id} value={user._id}>
+                    {user.name}
+                </Select.Option>
+            ))}
+        </Select>
+        {/* <Button 
+            onClick={() => setSelectedOutreach([])}
+            size="small"
+        >
+            Clear Selection
+        </Button> */}
+    </div>
+)}
             <div className="outreach-table">
                 <table>
                     <thead>
                         <tr>
+                            {userData?.isRegionHead &&
                             <th>
                                 <Checkbox
                                     onChange={(e) => handleSelectAll(e.target.checked)}
                                     checked={selectedOutreach.length === outreach.length}
                                 />
                             </th>
+}
                             <th>Name</th>
                             <th>Email</th>
                             <th>Phone</th>
@@ -315,30 +391,36 @@ const OutReachList = () => {
                             <th>Region</th>
                             <th>Campaign</th>
                             <th>Category</th>
+                            <th>Assigned To</th>
                             <th>Created By</th>
-                            <th>Actions</th>
+                            {userData?.department?.name == "Lead Generation" && <th>Actions</th> }
                         </tr>
                     </thead>
                     <tbody>
                         {outreach.map(item => (
                             <tr key={item._id}>
+                                 {userData?.isRegionHead &&
                                 <td>
                                     <Checkbox
                                         checked={selectedOutreach.includes(item._id)}
                                         onChange={() => handleCheckboxChange(item._id)}
                                     />
                                 </td>
-                                <td>{item.name}</td>
-                                <td>{item.email}</td>
-                                <td>{item.phone}</td>
-                                <td>{item.website}</td>
-                                <td>{item.linkedin}</td>
-                                <td>{item.country}</td>
-                                <td>{item.status}</td>
-                                <td>{item.region.regionName}</td>
-                                <td>{item.campaign.campaignName}</td>
-                                <td>{item.category.categoryName}</td>
-                                <td>{item.createdBy.name}</td>
+}
+<td><Link to={`/ViewOutReach/${item._id}`}>
+{item.name}</Link></td>
+                                <td>{item?.email}</td>
+                                <td>{item?.phone}</td>
+                                <td>{item?.website}</td>
+                                <td>{item?.linkedin}</td>
+                                <td>{item?.country}</td>
+                                <td>{item?.status}</td>
+                                <td>{item?.region?.regionName}</td>
+                                <td>{item?.campaign?.campaignName}</td>
+                                <td>{item?.category?.categoryName}</td>
+                                <td>{item?.assignedTo?.name ? item?.assignedTo.name : "-" }</td>
+                                <td>{item?.createdBy?.name}</td>
+                                 {userData?.department?.name == "Lead Generation" &&
                                 <td>
                                     <Button onClick={() => handleEditOutreach(item._id)}>Edit</Button>
                                     <Popconfirm
@@ -351,6 +433,7 @@ const OutReachList = () => {
                                         <Button danger>Delete</Button>
                                     </Popconfirm>
                                 </td>
+}
                             </tr>
                         ))}
                     </tbody>
@@ -402,18 +485,7 @@ const OutReachList = () => {
                         placeholder="Country"
                         className="form-input"
                     />
-                    <Select
-                        value={formData.status}
-                        onChange={(value) => setFormData({...formData, status: value})}
-                        placeholder="Status"
-                        className="form-input"
-                    >
-                        <Select.Option value="New">New</Select.Option>
-                        <Select.Option value="In Progress">In Progress</Select.Option>
-                        <Select.Option value="Contacted">Contacted</Select.Option>
-                        <Select.Option value="Qualified">Qualified</Select.Option>
-                        <Select.Option value="Not Interested">Not Interested</Select.Option>
-                    </Select>
+                 
                     <Select
                         value={formData.region}
                         onChange={(value) => setFormData({...formData, region: value})}
@@ -451,6 +523,7 @@ const OutReachList = () => {
 
             {/* Import CSV Modal */}
             <Modal
+             destroyOnClose={true} 
                 title="Import CSV"
                 open={importModalVisible}
                 onCancel={() => {
@@ -459,8 +532,12 @@ const OutReachList = () => {
                         campaign: undefined,
                         region: '',
                         file: null,
-                        category:undefined
+                        category: undefined
                     });
+                    // Clear the file from Dragger
+                    if (uploadProps.onChange) {
+                        uploadProps.onChange({ fileList: [] });
+                    }
                 }}
                 onOk={handleImportSubmit}
                 width={500}
@@ -482,7 +559,7 @@ const OutReachList = () => {
                     
                     <Select
                         value={importData.category}
-                        onChange={(value) => setImportData({...formData, category: value})}
+                        onChange={(value) => setImportData(prev => ({ ...prev, category: value }))}
                         placeholder="Select Category"
                         className="form-input"
                     >
@@ -501,7 +578,7 @@ const OutReachList = () => {
                         options={regionOptions}
                     />
                     
-                    <Dragger {...uploadProps} className="csv-uploader">
+                    <Dragger {...uploadProps} className="csv-uploader"  key={importModalVisible.toString()}>
                         <p className="ant-upload-drag-icon">
                             <InboxOutlined />
                         </p>

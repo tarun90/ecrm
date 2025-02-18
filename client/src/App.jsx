@@ -24,6 +24,7 @@ import DealView from './pages/Deals/DealView';
 import CampaignList from './pages/Campaigns/CampaignsList';
 import OutReachList from './pages/OutReach/OutReachList';
 import CategoryList from './pages/Categories/CategoryList';
+import ViewOutReach from './pages/viewOutreach/ViewOutReach'
 const PrivateRoute = ({ children }) => {
   let token = localStorage.getItem('token');
   return token ? children : <Navigate to="/login" />;
@@ -91,7 +92,7 @@ function App() {
                       <Route path="/outreach/campaign" element={ <CampaignList /> } />
                       <Route path="/outreach/list" element={<OutReachList />} />
                       <Route path="/outreach/categories" element={<CategoryList />} />
-
+<Route path='/ViewOutReach/:id' element={<ViewOutReach/>}/>
                       
 
 

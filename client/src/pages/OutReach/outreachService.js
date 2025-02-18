@@ -10,6 +10,17 @@ export const getOutreach = async () => {
     throw error;
   }
 };
+export const getOutreachDataById = async (id) => {
+  try {
+    const response = await axios.get(`${API_URL}/outreacbyid/${id}`);
+    console.log(response,'response');
+    
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 
 export const createOutreach = async (outreachData) => {
   try {

@@ -16,7 +16,9 @@ import company from "./routes/Company.js"
 import campaigns from "./routes/Campaigns.js"
 import Regions from "./routes/Regions.js";
 import Category from "./routes/Category.js";
+import Department from "./routes/Department.js";
 import Outreach from "./routes/Outreach.js";
+import Users from "./routes/Users.js";
 
 
 dotenv.config();
@@ -74,6 +76,8 @@ app.use('/api/campaign',campaigns)
 app.use('/api/regions', Regions)
 app.use('/api/categories',Category)
 app.use('/api/outreach',Outreach);
+app.use('/api/users',Users);
+app.use('/api/dept',Department);
 
 // Start the reminder check every minute
 // setInterval(checkReminders, 60 * 1000);
