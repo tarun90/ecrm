@@ -20,6 +20,8 @@ import Department from "./routes/Department.js";
 import Outreach from "./routes/Outreach.js";
 import Users from "./routes/Users.js";
 import noteRoutes from './routes/noteRoutes.js';
+import Activities from "./routes/Activities.js";
+
 
 dotenv.config();
 
@@ -80,6 +82,7 @@ app.use('/api/categories',Category)
 app.use('/api/outreach',Outreach);
 app.use('/api/users',Users);
 app.use('/api/dept',Department);
+app.use('/api/activities',Activities);
 
 // Start the reminder check every minute
 // setInterval(checkReminders, 60 * 1000);
