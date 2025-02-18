@@ -7,6 +7,7 @@ import { Search } from "lucide-react";
 import "../../components/custome.css";
 import "./Invoice.css";
 import elsnerLogo from "/elsner_logo.png";
+import currenciesData from '../Company/currency';
 import {
   Layout,
   Button,
@@ -16,6 +17,7 @@ import {
   Select,
   DatePicker,
   InputNumber,
+  Pagination
 } from "antd";
 import {
   DeleteOutlined,
@@ -24,6 +26,7 @@ import {
 } from "@ant-design/icons";
 function Invoices() {
   const [invoices, setInvoices] = useState([]);
+  const [sales, setSales] = useState([]);
   const [contacts, setContacts] = useState([]);
   const [products, setProducts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,9 +42,11 @@ function Invoices() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [isEditing, setIsEditing] = useState(false);
   const [currentInvoice, setCurrentInvoice] = useState(null);
   const [size, setSize] = useState("large");
+  const [totalItems, setTotalItems] = useState(0);
   const initialFormData = {
     invoice_number: "",
     contact: "",
@@ -62,10 +67,11 @@ function Invoices() {
   const [formData, setFormData] = useState(initialFormData);
 
   useEffect(() => {
+    fetchSales();
     fetchInvoices();
     fetchContacts();
     fetchProducts();
-  }, [currentPage]);
+  }, [currentPage, pageSize]);
 
   const fetchContacts = async () => {
     try {
@@ -94,11 +100,27 @@ function Invoices() {
     setError(null);
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_TM_API_URL}/api/invoices?page=${currentPage}`
+        `${import.meta.env.VITE_TM_API_URL}/api/invoices?page=${currentPage}&pageSize=${pageSize}`
       );
-      setInvoices(response.data);
+      setInvoices(response.data.data);
+      setTotalItems(response.data.total);
     } catch (err) {
       setError("Failed to fetch invoices. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchSales = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_TM_API_URL}/api/sales?page=${currentPage}`
+      );
+      setSales(response.data);
+    } catch (err) {
+      setError("Failed to fetch sales. Please try again later.");
     } finally {
       setLoading(false);
     }
@@ -161,13 +183,17 @@ function Invoices() {
     // 🔹 Find selected contact details from `contacts` list
     const selectedContact = contacts.find((c) => c._id === contact);
 
+    const selectedSales = sales.find((c) => c._id === sales);
+
     // 🔹 Append `customer` field to `formData`
     const updatedFormData = {
       ...formData,
       customer: selectedContact
         ? `${selectedContact.firstName} ${selectedContact.lastName}`
         : "Unknown Customer", // Default if not found
+      sales: selectedSales
     };
+
 
     try {
       if (isEditing && currentInvoice) {
@@ -197,14 +223,14 @@ function Invoices() {
   const handleProductSelect = (index, selectedProductId) => {
     const selectedProduct = products.find((p) => p._id === selectedProductId);
     if (selectedProduct) {
-      const updatedItems = formData.items.map((item, i) =>
+      const updatedItems = formData?.items?.map((item, i) =>
         i === index
           ? {
               ...item,
-              product: selectedProduct._id,
-              product_name: selectedProduct.name,
-              unit_price: selectedProduct.unit_cost.toString(),
-              tax_rate: selectedProduct.tax_rate.toString(),
+              product: selectedProduct?._id,
+              product_name: selectedProduct?.name,
+              unit_price: selectedProduct?.unit_cost?.toString(),
+              tax_rate: selectedProduct?.tax_rate?.toString(),
             }
           : item
       );
@@ -882,6 +908,8 @@ function Invoices() {
           setIsModalOpen={setIsModalOpen}
           formData={formData}
           contacts={contacts}
+          sales={sales}
+          currenciesData={currenciesData}
           setFormData={setFormData}
           handleSubmit={handleSubmit}
           addLineItem={addLineItem}
@@ -893,6 +921,19 @@ function Invoices() {
           loading={loading}
         />
       )}
+
+    <Pagination
+        current={currentPage}
+        pageSize={pageSize}
+        total={totalItems}
+        onChange={(page, pageSize) => {
+            setCurrentPage(page);
+            setPageSize(pageSize);
+            fetchSales();
+        }}
+        showSizeChanger
+        pageSizeOptions={['10', '20', '50', '100']}
+    />
     </Layout>
   );
 }
@@ -904,6 +945,8 @@ const InvoiceForm = ({
   isModalOpen,
   setIsModalOpen,
   formData,
+  sales,
+  currenciesData,
   contacts,
   setFormData,
   handleSubmit,
@@ -934,6 +977,31 @@ const InvoiceForm = ({
           >
             <Input placeholder="Invoice Number" />
           </Form.Item>
+
+          <Form.Item
+            label="Sales Number"
+            name="sales_number"
+            rules={[{ required: true, message: "Customer Name is required" }]}
+          >
+            <Select
+              showSearch
+              placeholder="Select Sales"
+              value={formData.sales_number || null}
+              onChange={(value) => setFormData({ ...formData, sales_number: value })}
+              className="searchable-dropdown"
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option?.children?.toLowerCase().includes(input.toLowerCase())
+              }
+            >
+              {sales.map((sales_numbers) => (
+                <Select.Option key={sales_numbers.sales_number} value={sales_numbers.sales_number}>
+                  {`SO-${sales_numbers.sales_number}`}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+
           <Form.Item
             label="Customer Name"
             name="contact"
@@ -1084,16 +1152,28 @@ const InvoiceForm = ({
               <InputNumber value={formData.grand_total} readOnly />
             </Form.Item>
           </div>
-          <Form.Item label="Currency">
+          <Form.Item
+            label="Currency"
+            name="currency"
+            rules={[{ required: true, message: 'Please select a currency!' }]}
+          >
             <Select
+              showSearch
+              placeholder="Select Currency"
+              style={{ width: '100%' }}
               onChange={(value) =>
                 setFormData({ ...formData, currency: value })
               }
             >
-              <Select.Option value="USD">USD</Select.Option>
-              <Select.Option value="EUR">EUR</Select.Option>
-              <Select.Option value="GBP">GBP</Select.Option>
-              <Select.Option value="JPY">JPY</Select.Option>
+              {currenciesData.map(currency => (
+                <Select.Option
+                  key={currency.code}
+                  value={currency.code}
+                >
+                  <span style={{ fontWeight: 500 }}>{currency.code}</span>
+                  <span style={{ color: '#666', marginLeft: 8 }}>{currency.name}</span>
+                </Select.Option>
+              ))}
             </Select>
           </Form.Item>
           <Form.Item label="Notes">

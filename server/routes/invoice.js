@@ -6,12 +6,23 @@ const router = express.Router();
 // Get all Invoices
 router.get('/', async (req, res) => {
   try {
-    const invoices = await Invoice.find().populate({
-        path: 'contact', 
-        select: 'firstName lastName' // Fetch only firstName and lastName
-      });
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 10;
+    const skip = (page - 1) * pageSize;
+
+    const total = await Invoice.countDocuments();
+    const invoices = await Invoice.find().populate({ path: 'contact', select: 'firstName lastName' }).skip(skip).limit(pageSize);
+    // const invoices = await Invoice.find().populate({
+    //     path: 'contact', 
+    //     select: 'firstName lastName' // Fetch only firstName and lastName
+    //   });
     console.log(invoices, "Hello invoicesss");
-    res.status(200).json(invoices);
+    res.status(200).json({
+      data: invoices,
+      total,
+      page,
+      pageSize
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

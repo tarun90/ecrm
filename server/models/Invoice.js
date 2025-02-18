@@ -43,6 +43,11 @@ const invoiceSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
+  sales_number: {
+    type: String,
+    required: true,
+    ref: 'Sales',
+  },
   due_date: {
     type: Date,
     required: true
