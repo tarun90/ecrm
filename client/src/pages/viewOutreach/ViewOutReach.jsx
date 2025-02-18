@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Settings, Plus, ArrowLeft, Edit, Mail, Phone, Calendar, MoreHorizontal, Copy } from 'lucide-react';
+import { Settings, Plus, ArrowLeft, Edit, Mail, Phone, Calendar, MoreHorizontal, Copy, Paperclip  } from 'lucide-react';
 import './ViewOutReach.css';
-import { Button, Checkbox, DatePicker, Divider, Form, Input, message, Modal, Upload } from 'antd';
-import { CaretDownOutlined, UploadOutlined } from '@ant-design/icons';
+import { Button, Checkbox, DatePicker, Divider, Form, Input, message, Modal, Upload,Card, Empty, List, Popconfirm, Space, Typography, Tooltip } from 'antd';
+import { CaretDownOutlined, UploadOutlined,  DeleteOutlined, 
+  PlusOutlined, 
+    } from '@ant-design/icons';
 import axios from 'axios';
 import { getOutreachDataById } from '../OutReach/outreachService';
 import { useNavigate, useParams } from 'react-router-dom';
+import { createNote, getNotesByOutreach, updateNote  } from './noteService';
+import moment from 'moment';
 const ActionButton = ({ icon, label, onClick }) => {
   return (
     <div className="action-button">
@@ -16,145 +20,211 @@ const ActionButton = ({ icon, label, onClick }) => {
 };
 
 
-// const Notes=(form)=>{
-//   const checkBoxOptions = ["Option 1", "Option 2", "Option 3", "Option 4"];
-//   return<>
-
-//   <Modal
-
-//       title={`User: `}
-//       open={true}
-//       // onCancel={onClose}
-//       footer={null}
-//       width={600}
-//     >
-//       <Form form={form} layout="vertical"
-//       //  onFinish={handleFinish}
-//       >
-//         {/* Section 1: User Checkboxes */}
-//         <Form.Item label="Select Options" name="options">
-//           <Checkbox.Group options={checkBoxOptions} />
-//         </Form.Item>
-
-//         {/* Section 2: Notes */}
-//         <Form.Item
-//           label="Message"
-//           name="message"
-//           rules={[{ required: true, message: "Please enter a message!" }]}
-//         >
-//           <Input.TextArea placeholder="Enter your message..." rows={3} />
-//         </Form.Item>
-
-//         {/* File Upload */}
-//         <Form.Item label="Attachment" name="attachment">
-//           <Upload beforeUpload={() => false}>
-//             <Button icon={<UploadOutlined />}>Upload Attachment</Button>
-//           </Upload>
-//         </Form.Item>
-
-//         {/* Date Picker */}
-//         <Form.Item label="Add Reminder" name="reminder">
-//           <DatePicker className="w-full" placeholder="Select date" />
-//         </Form.Item>
-
-//         {/* Modal Footer: Submit & Cancel Buttons */}
-//         <Form.Item className="text-right">
-//           <Button
-//           //  onClick={onClose} 
-//            style={{ marginRight: 10 }}>
-//             Cancel
-//           </Button>
-//           <Button type="primary" htmlType="submit">
-//             Save
-//           </Button>
-//         </Form.Item>
-//       </Form>
-//     </Modal></>
-// }
 
 const MainContent = ({ form, outReachData,modalOpen, modalOpenForNote,modalClose}) => {
+  let userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userDate')) : {}
   const sections = ['Notes'];
-  const checkBoxOptions = ["Email", "Phone", "IM", "Linkdin"];
+  const checkBoxOptions = ["Email", "Phone", "IM", "Linkedin"];
+  const [notes, setNotes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [editingNote, setEditingNote] = useState(null);
+  const fetchNotes = async () => {
+    try {
+      setLoading(true);
+      const fetchedNotes = await getNotesByOutreach(outReachData._id);
+      setNotes(fetchedNotes);
+    } catch (error) {
+      message.error('Failed to load notes');
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    if (outReachData._id) {
+      fetchNotes();
+    }
+  }, [outReachData._id]);
+  const handleSubmit = async (values) => {
+    try {
+      if (editingNote) {
+        await updateNote(editingNote._id, values);
+        message.success('Note updated successfully!');
+      } else {
+        await createNote(outReachData._id, values);
+        message.success('Note created successfully!');
+      }
+      fetchNotes();
+      handleModalClose();
+    } catch (error) {
+      message.error('Failed to ' + (editingNote ? 'update' : 'create') + ' note: ' + (error.message || 'Unknown error'));
+    }
+  };
+  const handleEdit = (note) => {
+    setEditingNote(note);
+    const initialValues = {
+      options: note.contactMethod,
+      message: note.message,
+      reminder: moment(note.reminderDate)
+    };
 
+    // Only add attachment if it exists
+    if (note.attachment) {
+      initialValues.attachment = [{
+        uid: '-1',
+        name: note.attachment.filename,
+        status: 'done',
+        url: `${import.meta.env.VITE_TM_API_URL}/${note.attachment.path}`,
+        response: note.attachment
+      }];
+    }
+
+    form.setFieldsValue(initialValues);
+    modalOpenForNote();
+  };
+  const handleModalClose = () => {
+    setEditingNote(null);
+    form.resetFields();
+    modalClose();
+  };
+  const normFile = (e) => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e?.fileList;
+  };
   return (
     <div className="main-content">
-      {sections.map((section) => (
-        <div key={section} className="content-section">
-          <div className="section-header">
-            <h2>{section}</h2>
-            <div className="header-actions">
-              <button className="add-button add-contact-btn"onClick={modalOpenForNote} >
-                <Plus />
-                add
-              </button>
-              {/* <Settings /> */}
-            </div>
-          </div>
-          <div className="section-content">
-            <p>No associated objects of this type exist or you don't have permission to view them.</p>
-          </div>
-        </div>
-      ))}
-
-<Modal
-  title={`${outReachData.name}`}
-  open={modalOpen}
-  onCancel={modalClose}
-  footer={null}
-  width={600}
->
-  <Divider></Divider>
-  <Form form={form} layout="vertical">
-    {/* ✅ Section 1: User Selection */}
-    <div style={{ borderBottom: "1px solid #ddd", paddingBottom: "15px", marginBottom: "20px" }}>
-      <h3 style={{ fontSize: "16px", marginBottom: "10px" }}>Contacted Through</h3>
-      <Form.Item name="options">
-        <Checkbox.Group options={checkBoxOptions} />
-      </Form.Item>
-    </div>
-
-    {/* ✅ Section 2: Notes */}
-    <div>
-      <h3 style={{ fontSize: "16px", marginBottom: "10px" }}>Notes</h3>
-
-      {/* Message */}
-      <Form.Item
-        label="Message"
-        name="message"
-        rules={[{ required: true, message: "Please enter a message!" }]}
+      { sections.map((section) => (
+             <div key={ section } className="content-section">
+               <div className="section-header">
+                 <h2>{ section }</h2>
+                 <div className="header-actions">
+                  {/* {userData?.department?.name?.toLowerCase() == 'outreach team' && */}
+                 <Button 
+                  type="primary" 
+                  icon={<PlusOutlined />} 
+                  onClick={modalOpenForNote}
+                >
+                  Add
+                </Button>
+{/* } */}
+                   {/* <Settings /> */}
+                 </div>
+               </div>
+               {/* <div className="section-content">
+                 <p>No associated objects of this type exist or you don't have permission to view them.</p>
+               </div> */}
+               <div className="section-content">
+                 <table>
+                                    <thead>
+                                        <tr>
+                                           
+                                            <th>Contact Method</th>
+                                            <th>Message</th>
+                                            <th>Reminder Date</th>
+                                            <th>Attachment</th>
+                                            <th>Created At</th>
+                                            {/* {userData?.department?.name?.toLowerCase() == 'outreach team' && */}
+                                             <th>Actions</th>
+                                              {/* } */}
+                                           
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {notes.map(item => (
+                                            <tr key={item?._id}>
+                                              
+                                                <td>{item?.contactMethod?.toString()}</td>
+                                                <td>{item?.message}</td>
+                                                <td>{moment(item?.reminderDate).format('DD-MM-YYYY HH:mm')}</td>
+                                                <td>{item?.attachment ? <a target="_blank" href={`${import.meta.env.VITE_TM_API_URL}/${item?.attachment.path}`}> {item?.attachment?.filename} </a>: "-"}</td>
+                                                <td>{moment(item?.createdAt).format('DD-MM-YYYY HH:mm')}</td>
+                                                {/* {userData?.department?.name?.toLowerCase() == 'outreach team' &&  */}
+                                                <td>
+                                                <Button 
+                        type="link" 
+                        icon={<Edit />} 
+                        onClick={() => handleEdit(item)}
+                      /></td> 
+                                                {/* } */}
+                                                
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+               </div>
+             </div>
+           )) }
+       <Modal
+        title={`${editingNote ? 'Edit' : 'Add'} Note - ${outReachData.name}`}
+        open={modalOpen}
+        onCancel={handleModalClose}
+        footer={null}
+        width={600}
       >
-        <Input.TextArea placeholder="Enter your message..." rows={3} />
-      </Form.Item>
+        <Divider />
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleSubmit}
+        >
+          <div style={{ borderBottom: "1px solid #ddd", paddingBottom: "15px", marginBottom: "20px" }}>
+            <h3 style={{ fontSize: "16px", marginBottom: "10px" }}>Contacted Through</h3>
+            <Form.Item name="options">
+              <Checkbox.Group options={checkBoxOptions} />
+            </Form.Item>
+          </div>
 
-      {/* File Upload */}
-      <Form.Item label="Attachment" name="attachment">
-        <Upload beforeUpload={() => false}>
-          <Button icon={<UploadOutlined />}>Upload Attachment</Button>
-        </Upload>
-      </Form.Item>
+          <div>
+            <h3 style={{ fontSize: "16px", marginBottom: "10px" }}>Notes</h3>
+            <Form.Item
+              label="Message"
+              name="message"
+              rules={[{ required: true, message: "Please enter a message!" }]}
+            >
+              <Input.TextArea placeholder="Enter your message..." rows={3} />
+            </Form.Item>
 
-      {/* Date Picker */}
-      <Form.Item label="Add Reminder" name="reminder"
-      rules={[{ required: true, message: "Please enter a reminder!" }]}>
-        <DatePicker showTime={{ format: 'HH:mm:ss' }} className="w-full" placeholder="Select date" style={{ width: "100%" }} />
-      </Form.Item>
-    </div>
-    <Divider></Divider>
+            <Form.Item 
+  label="Attachment" 
+  name="attachment"
+  valuePropName="fileList"
+  getValueFromEvent={normFile}
+>
+  <Upload 
+    beforeUpload={() => false}
+    maxCount={1}
+    listType="text"
+  >
+    <Button icon={<UploadOutlined />}>Upload Attachment</Button>
+  </Upload>
+</Form.Item>
 
-    {/* ✅ Modal Footer: Submit & Cancel Buttons */}
-    <div style={{ textAlign: "right", marginTop: "20px" }}>
-      <Button 
-      // onClick={onClose}
-       style={{ marginRight: 10 }} onClick={()=>{modalClose()}}>
-        Cancel
-      </Button>
-      <Button type="primary" htmlType="submit">
-        Save
-      </Button>
-    </div>
-  </Form>
-</Modal>
+            <Form.Item
+              label="Add Reminder"
+              name="reminder"
+              rules={[{ required: true, message: "Please enter a reminder!" }]}
+            >
+              <DatePicker
+                showTime={{ format: 'HH:mm:ss' }}
+                className="w-full"
+                placeholder="Select date"
+                style={{ width: "100%" }}
+              />
+            </Form.Item>
+          </div>
+          <Divider />
 
+          <div style={{ textAlign: "right", marginTop: "20px" }}>
+            <Button style={{ marginRight: 10 }} onClick={handleModalClose}>
+              Cancel
+            </Button>
+            <Button type="primary" htmlType="submit">
+              {editingNote ? 'Update' : 'Save'}
+            </Button>
+          </div>
+        </Form>
+      </Modal>
     </div>
   );
 };
@@ -164,6 +234,7 @@ const Sidebar = ({ outReachData,modalOpenForNote }) => {
   //   const [outReachData,setOutReachData]=useState({})
   // const paramsId=useParams()
   const navigate = useNavigate();
+  let userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userDate')) : {}
 
 
   // const fetchOutReachDataById=async()=>{
@@ -181,6 +252,24 @@ const Sidebar = ({ outReachData,modalOpenForNote }) => {
     { icon: <Edit />, label: 'Note',  onClick:()=>{
       modalOpenForNote()
     }},
+    {
+      icon: <Mail />, label: 'Email',
+      onClick: () => {
+        window.location.href = `mailto:${outReachData.email}`;
+      }
+    },
+    {
+      icon: <Phone />, label: 'Call',
+      onClick: () => window.location.href = `tel:${outReachData.phone}`
+    },
+
+    // { icon: <Edit />, label: 'Task' },
+    // { icon: <Calendar />, label: 'Meeting' },
+    // { icon: <MoreHorizontal />, label: 'More' }
+  ];
+
+  const actions2 = [
+   
     {
       icon: <Mail />, label: 'Email',
       onClick: () => {
@@ -228,10 +317,17 @@ const Sidebar = ({ outReachData,modalOpenForNote }) => {
         </div>
 
         <div className="action-buttons">
+          {userData?.department?.name?.toLowerCase == 'outreach team' ? <>
           {actions.map((action, index) => (
             <ActionButton key={index} icon={action.icon} label={action.label}
               onClick={action.onClick} />
           ))}
+          </> : <>
+          {actions2.map((action, index) => (
+            <ActionButton key={index} icon={action.icon} label={action.label}
+              onClick={action.onClick} />
+          ))}
+          </> }
         </div>
 
         <div className="about-section">

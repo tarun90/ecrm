@@ -2,11 +2,15 @@ import Note from '../models/Note.js';
 import Outreach from '../models/Outreach.js';
 import multer from 'multer';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const uploadDir = path.join(__dirname, '..', 'uploads', 'notes');
+fs.mkdirSync(uploadDir, { recursive: true });
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -25,7 +29,7 @@ const upload = multer({
     fileSize: 5 * 1024 * 1024 // 5MB limit
   },
   fileFilter: (req, file, cb) => {
-    const allowedTypes = ['.pdf', '.doc', '.docx', '.txt', '.jpg', '.jpeg', '.png'];
+    const allowedTypes = ['.pdf', '.doc', '.docx', '.txt', '.jpg', '.jpeg', '.png', '.xls', '.docx'];
     const ext = path.extname(file.originalname).toLowerCase();
     if (allowedTypes.includes(ext)) {
       cb(null, true);
@@ -52,12 +56,15 @@ export const createNote = async (req, res) => {
         return res.status(404).json({ message: 'Outreach not found' });
       }
 
+      // Check if there are any existing notes for this outreach
+      const existingNotesCount = await Note.countDocuments({ outreachId });
+
       const noteData = {
         outreachId,
         contactMethod: JSON.parse(contactMethod),
         message,
         reminderDate,
-        createdBy: req.user._id
+        createdBy: req.user?.user?._id
       };
 
       // Add attachment if file was uploaded
@@ -71,6 +78,12 @@ export const createNote = async (req, res) => {
 
       const note = await Note.create(noteData);
       await note.populate('createdBy', 'name email');
+
+      // Update outreach status based on whether it's first note or not
+      await Outreach.updateOne(
+        { _id: outreachId },
+        { $set: { status: existingNotesCount === 0 ? "Contacted" : "Follow Up" } }
+      );
 
       res.status(201).json(note);
     });
@@ -130,7 +143,7 @@ export const updateNote = async (req, res) => {
       }
 
       const { noteId } = req.params;
-      const { contactMethod, message, reminderDate } = req.body;
+      const { contactMethod, message, reminderDate, removeAttachment } = req.body;
 
       const noteData = {
         contactMethod: JSON.parse(contactMethod),
@@ -138,14 +151,19 @@ export const updateNote = async (req, res) => {
         reminderDate
       };
 
-      // Add new attachment if file was uploaded
+      // Handle attachment
       if (req.file) {
+        // New file uploaded
         noteData.attachment = {
           filename: req.file.originalname,
           path: req.file.path,
           mimetype: req.file.mimetype
         };
+      } else if (removeAttachment === 'true') {
+        // Remove attachment if flag is set
+        noteData.attachment = null;
       }
+      // If neither condition is met, leave attachment unchanged
 
       const note = await Note.findByIdAndUpdate(
         noteId,

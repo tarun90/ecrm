@@ -12,8 +12,8 @@ export const createNote = async (outreachId, noteData) => {
     formData.append('reminderDate', noteData.reminder.toISOString());
     
     // Add file if it exists
-    if (noteData.attachment?.fileList?.[0]) {
-      formData.append('attachment', noteData.attachment.fileList[0].originFileObj);
+    if (noteData.attachment) {
+      formData.append('attachment', noteData.attachment[0].originFileObj);
     }
 
     const response = await axios.post(
@@ -52,15 +52,17 @@ export const getNoteById = async (noteId) => {
 export const updateNote = async (noteId, noteData) => {
   try {
     const formData = new FormData();
-    
+    console.log(noteData,"ketul")
     // Add the contact methods as a JSON string
     formData.append('contactMethod', JSON.stringify(noteData.options));
     formData.append('message', noteData.message);
     formData.append('reminderDate', noteData.reminder.toISOString());
     
     // Add new file if it exists
-    if (noteData.attachment?.fileList?.[0]) {
-      formData.append('attachment', noteData.attachment.fileList[0].originFileObj);
+    if (noteData.attachment && noteData.attachment.length > 0 && noteData.attachment[0].originFileObj) {
+      formData.append('attachment', noteData.attachment[0].originFileObj);
+    } else if (!noteData.attachment || noteData.attachment.length === 0) {
+      formData.append('removeAttachment', 'true');
     }
 
     const response = await axios.put(
