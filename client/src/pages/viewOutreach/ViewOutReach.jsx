@@ -269,7 +269,7 @@ const Sidebar = ({ outReachData,modalOpenForNote }) => {
               <p className="label">Created By </p>
               <a >
                 <div
-                >{outReachData.createdBy.name}</div>
+                >{outReachData?.createdBy?.name}</div>
               </a>
 
             </div>
