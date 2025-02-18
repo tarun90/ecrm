@@ -92,11 +92,6 @@ function App() {
                       <Route path="/outreach/list" element={<OutReachList />} />
                       <Route path="/outreach/categories" element={<CategoryList />} />
 
-                      
-
-
-
-
                     </Routes>
                   </MainLayout>
                 </PrivateRoute>
