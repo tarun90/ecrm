@@ -4,7 +4,7 @@ import { Package, Edit2, Search, Plus, Trash2 } from "lucide-react";
 import MainLayout from "../../components/MainLayout";
 import "../../components/custome.css";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
-import { Modal, Form, Input, Select, Button } from "antd";
+import { Modal, Form, Input, Select, Button, Divider } from "antd";
 import TextArea from "antd/es/input/TextArea";
 
 function Products() {
@@ -251,33 +251,25 @@ function Products() {
         footer={ null }
         width={ 600 }
       >
-        <Form
-          form={ form }
-          layout="vertical"
-          onFinish={ handleSubmit }
-        >
+        <Divider />
+        <Form form={ form } layout="vertical" onFinish={ handleSubmit }>
           <Form.Item
+            label="Product Name"
             name="name"
             rules={ [{ required: true, message: 'Please input product name!' }] }
           >
             <Input placeholder="Product Name" />
           </Form.Item>
 
-          <Form.Item name="description_short">
-            <TextArea
-              placeholder="Short Description"
-              rows={ 2 }
-            />
+          <Form.Item label="Short Description" name="description_short">
+            <TextArea placeholder="Short Description" rows={ 2 } />
           </Form.Item>
 
-          <Form.Item name="description_long">
-            <TextArea
-              placeholder="Long Description"
-              rows={ 3 }
-            />
+          <Form.Item label="Long Description" name="description_long">
+            <TextArea placeholder="Long Description" rows={ 3 } />
           </Form.Item>
 
-          <Form.Item name="product_type">
+          <Form.Item label="Product Type" name="product_type">
             <Select placeholder="Select Product Type">
               <Select.Option value="physical">Physical</Select.Option>
               <Select.Option value="digital">Digital</Select.Option>
@@ -286,26 +278,23 @@ function Products() {
             </Select>
           </Form.Item>
 
-          <Form.Item name="sku">
+          <Form.Item label="SKU" name="sku">
             <Input placeholder="SKU" />
           </Form.Item>
 
-          <Form.Item name="billing_frequency">
+          <Form.Item label="Billing Frequency" name="billing_frequency">
             <Input placeholder="Billing Frequency (e.g., monthly, annually)" />
           </Form.Item>
 
-          <Form.Item name="term">
+          <Form.Item label="Term" name="term">
             <Input placeholder="Term (e.g., 12 months)" />
           </Form.Item>
 
-          <Form.Item name="unit_cost">
-            <Input
-              type="number"
-              placeholder="Unit Cost"
-            />
+          <Form.Item label="Unit Cost" name="unit_cost">
+            <Input type="number" placeholder="Unit Cost" />
           </Form.Item>
 
-          <Form.Item name="currency">
+          <Form.Item label="Currency" name="currency">
             <Select placeholder="Select Currency">
               <Select.Option value="USD">USD</Select.Option>
               <Select.Option value="EUR">EUR</Select.Option>
@@ -314,7 +303,7 @@ function Products() {
             </Select>
           </Form.Item>
 
-          <Form.Item name="tax_rate">
+          <Form.Item label="Tax Rate (%)" name="tax_rate">
             <Select placeholder="Select Tax Rate (%)">
               <Select.Option value={ 0 }>0%</Select.Option>
               <Select.Option value={ 5 }>5%</Select.Option>
@@ -325,21 +314,18 @@ function Products() {
               <Select.Option value={ 25 }>25%</Select.Option>
             </Select>
           </Form.Item>
-
+          <Divider />
           <Form.Item className="modal-footer">
             <Button onClick={ onClose } className='text-btn '>
               Cancel
             </Button>
-            <Button
-              type="primary"
-              htmlType="submit"
-              loading={ loading }
-            >
+            <Button type="primary" htmlType="submit" loading={ loading }>
               { isEditing ? "Update Product" : "Create Product" }
             </Button>
           </Form.Item>
         </Form>
       </Modal>
+
     </div>
   );
 }

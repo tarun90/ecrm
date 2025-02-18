@@ -127,9 +127,10 @@ const CompanyFormModal = ({ visible, onCancel, editId = null, fetchCompanies }) 
       title={ editId ? "Edit Company" : "Add Company" }
       open={ visible }
       onCancel={ onCancel }
-      width={ 800 }
+      width={ 600 }
       footer={ null }
     >
+      <Divider />
       <Form
         form={ form }
         layout="vertical"
@@ -141,7 +142,7 @@ const CompanyFormModal = ({ visible, onCancel, editId = null, fetchCompanies }) 
           webTechnologies: []
         } }
       >
-        <div className="form-grid" style={ { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' } }>
+        <div className="form-grid" style={ { display: 'grid', gridTemplateColumns: '1fr 1fr' } }>
           <Form.Item
             label="Company Name"
             name="companyName"

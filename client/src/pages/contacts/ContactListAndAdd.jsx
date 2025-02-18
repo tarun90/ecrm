@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Modal, Form, Input, Select, message } from 'antd';
+import { Button, Modal, Form, Input, Select, message, Divider } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import Search from 'antd/es/transfer/search';
 import moment from 'moment';
@@ -9,6 +9,7 @@ import axios from 'axios';
 import { contactService } from '../../services/api';
 import { getCompaniesNames } from '../Company/APIServices';
 import './ContactListAndAdd.css';
+import { Header } from 'antd/es/layout/layout';
 
 const ContactListAndAdd = () => {
     const navigate = useNavigate();
@@ -158,7 +159,7 @@ const ContactListAndAdd = () => {
 
     return (
         <div className="contact-container">
-            <div className="contact-header">
+            <Header className="contact-header">
                 <div className="search-container">
                     <Search
                         allowClear
@@ -191,7 +192,7 @@ const ContactListAndAdd = () => {
                         Add Contact
                     </Button>
                 </div>
-            </div>
+            </Header>
 
             <div className="contact-table">
                 <table>
@@ -251,12 +252,10 @@ const ContactListAndAdd = () => {
                 onCancel={ closeModal }
                 footer={ null }
             >
-                <Form
-                    form={ form }
-                    layout="vertical"
-                    onFinish={ handleSubmit }
-                >
+                <Divider />
+                <Form form={ form } layout="vertical" onFinish={ handleSubmit }>
                     <Form.Item
+                        label="Email"
                         name="email"
                         rules={ [
                             { required: true, message: 'Please input email!' },
@@ -266,37 +265,37 @@ const ContactListAndAdd = () => {
                         <Input placeholder="Email" />
                     </Form.Item>
 
-                    <Form.Item name="firstName">
+                    <Form.Item label="First Name" name="firstName">
                         <Input placeholder="First Name" />
                     </Form.Item>
 
-                    <Form.Item name="lastName">
+                    <Form.Item label="Last Name" name="lastName">
                         <Input placeholder="Last Name" />
                     </Form.Item>
 
-                    <Form.Item name="jobTitle">
+                    <Form.Item label="Job Title" name="jobTitle">
                         <Input placeholder="Job Title" />
                     </Form.Item>
 
-                    <Form.Item name="phoneNumber">
+                    <Form.Item label="Phone Number" name="phoneNumber">
                         <Input placeholder="Phone Number" />
                     </Form.Item>
 
-                    <Form.Item name="lifecycleStage">
+                    <Form.Item label="Lifecycle Stage" name="lifecycleStage">
                         <Select>
                             <Select.Option value="Lead">Lead</Select.Option>
                             <Select.Option value="Customer">Customer</Select.Option>
                         </Select>
                     </Form.Item>
 
-                    <Form.Item name="leadStatus">
+                    <Form.Item label="Lead Status" name="leadStatus">
                         <Select>
                             <Select.Option value="">--</Select.Option>
                             <Select.Option value="Qualified">Qualified</Select.Option>
                         </Select>
                     </Form.Item>
 
-                    <Form.Item name="company">
+                    <Form.Item label="Company" name="company">
                         <Select placeholder="Select Company">
                             <Select.Option value="">Select Company</Select.Option>
                             { companies?.map((company) => (
@@ -306,7 +305,7 @@ const ContactListAndAdd = () => {
                             )) }
                         </Select>
                     </Form.Item>
-
+                    <Divider />
                     <Form.Item className="flex justify-end gap-2">
                         <Button onClick={ closeModal } className='text-btn '>
                             Cancel
@@ -317,6 +316,7 @@ const ContactListAndAdd = () => {
                     </Form.Item>
                 </Form>
             </Modal>
+
         </div>
     );
 };

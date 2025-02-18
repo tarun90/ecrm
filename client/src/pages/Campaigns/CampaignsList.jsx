@@ -3,6 +3,7 @@ import { message, Popconfirm, Button, Input, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { getCampaigns, createCampaign, updateCampaign, deleteCampaign } from './campaignService';
 import './campaigns.css';
+import { Header } from 'antd/es/layout/layout';
 
 const CampaignList = () => {
     const [campaigns, setCampaigns] = useState([]);
@@ -62,7 +63,7 @@ const CampaignList = () => {
 
     return (
         <div className="campaign-container">
-            <div className="contact-header">
+            <Header className="contact-header">
                 <div className="search-container">
                     <input
                         type="text"
@@ -91,7 +92,7 @@ const CampaignList = () => {
                         Add Campaign
                     </button>
                 </div>
-            </div>
+            </Header>
             <div className="contact-table">
                 <table>
                     <thead>

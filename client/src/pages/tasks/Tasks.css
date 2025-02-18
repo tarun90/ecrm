@@ -73,7 +73,6 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
-  padding-top: 2rem;
   height: 100%;
   max-height: calc(100svh - 4.625rem);
   width: 100%;

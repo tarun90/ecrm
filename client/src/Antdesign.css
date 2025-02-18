@@ -21,7 +21,10 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     padding: 1rem 2rem;
     z-index: 100;
+    height: auto;
+    min-height: 64px;
     line-height: normal;
+    margin-bottom: 20px;
 }
 
 .ant-layout-content::-webkit-scrollbar-track {

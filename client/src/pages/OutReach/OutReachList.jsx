@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { message, Popconfirm, Button, Input, Modal, Select, Checkbox, Upload } from 'antd';
+import { message, Popconfirm, Button, Input, Modal, Select, Checkbox, Upload, Form } from 'antd';
 import { UploadOutlined, FileExcelOutlined, BarChartOutlined, InboxOutlined } from '@ant-design/icons';
-import { getUsers } from '../Users/userService';  // Add this import
+import { getUsers } from '../Users/userService';
 import { getCampaigns } from '../Campaigns/campaignService';
 import { getRegions } from '../Regions/RegionsService';
 import './outreach.css';
@@ -14,11 +14,12 @@ import {
     importCSV,
     assignOutreach
 } from './outreachService';
+import { Header } from 'antd/es/layout/layout';
+
 const { Dragger } = Upload;
 
 const OutReachList = () => {
     const [outreach, setOutreach] = useState([]);
-    const [fileList, setFileList] = useState([]);
     const [campaigns, setCampaigns] = useState([]);
     const [categories, setCategories] = useState([]);
     const [regions, setRegions] = useState([]);
@@ -30,6 +31,7 @@ const OutReachList = () => {
     const [editMode, setEditMode] = useState(false);
     const [editId, setEditId] = useState(null);
     const [users, setUsers] = useState([]);
+    const [form] = Form.useForm();
 
     const [importData, setImportData] = useState({
         campaign: undefined,
@@ -110,7 +112,6 @@ const OutReachList = () => {
             category: undefined,
             file: null
         });
-        setFileList([]);
         setImportModalVisible(true);
     };
 
@@ -152,7 +153,6 @@ const OutReachList = () => {
         accept: '.csv',
         beforeUpload: (file) => {
             setImportData(prev => ({ ...prev, file }));
-            setFileList([file]);
             return false; // Prevent automatic upload
         },
         // onChange: ({ file }) => {
@@ -180,27 +180,18 @@ const OutReachList = () => {
         value: region._id,
         label: region?.regionName
     }));
+
     const handleAddOutreach = () => {
         setEditMode(false);
         setEditId(null);
-        setFormData({
-            name: '',
-            email: '',
-            phone: '',
-            website: '',
-            linkedin: '',
-            country: '',
-            region: '',
-            campaign: '',
-            category: '',
-        });
+        form.resetFields();
         setModalVisible(true);
     };
 
     const handleEditOutreach = (id) => {
         const outreachItem = outreach.find(item => item._id === id);
         if (outreachItem) {
-            setFormData({
+            form.setFieldsValue({
                 name: outreachItem.name,
                 email: outreachItem.email,
                 phone: outreachItem.phone,
@@ -214,6 +205,25 @@ const OutReachList = () => {
             setEditMode(true);
             setEditId(id);
             setModalVisible(true);
+        }
+    };
+
+    const handleSubmit = async (values) => {
+        try {
+            setLoading(true);
+            if (editMode) {
+                await updateOutreach(editId, values);
+                message.success('Outreach updated successfully');
+            } else {
+                await createOutreach(values);
+                message.success('Outreach created successfully');
+            }
+            setModalVisible(false);
+            fetchOutreach();
+        } catch (error) {
+            message.error(editMode ? 'Failed to update outreach' : 'Failed to create outreach');
+        } finally {
+            setLoading(false);
         }
     };
     const handleDelete = async (id) => {
@@ -246,24 +256,6 @@ const OutReachList = () => {
         }
     };
 
-    const handleSubmit = async () => {
-        try {
-            setLoading(true);
-            if (editMode) {
-                await updateOutreach(editId, formData);
-                message.success('Outreach updated successfully');
-            } else {
-                await createOutreach(formData);
-                message.success('Outreach created successfully');
-            }
-            setModalVisible(false);
-            fetchOutreach();
-        } catch (error) {
-            message.error(editMode ? 'Failed to update outreach' : 'Failed to create outreach');
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const handleAssignOutreach = async (userId) => {
         if (selectedOutreach.length === 0) {
@@ -291,15 +283,51 @@ const OutReachList = () => {
 
     return (
         <div className="outreach-container">
-            <div className="outreach-header">
-                <div className="search-container">
-                    <Input
-                        type="text"
-                        placeholder="Search Outreach..."
-                        value={ searchTerm }
-                        onChange={ (e) => setSearchTerm(e.target.value) }
-                        className="search-input"
-                    />
+            <Header className="outreach-header">
+                <div className="outreach-header-wrapper">
+                    <div className="search-container">
+                        <Input
+                            type="text"
+                            placeholder="Search Outreach..."
+                            value={ searchTerm }
+                            onChange={ (e) => setSearchTerm(e.target.value) }
+                            className="search-input"
+                        />
+                    </div>
+                    { selectedOutreach.length > 0 && (
+                        <div className="assignment-section">
+                            <span style={ { fontWeight: 500, marginRight: "10px" } }>
+                                Assign Outreach To : &nbsp; { selectedOutreach.length }
+                            </span>
+                            <Select
+                                style={ { width: 200 } }
+                                showSearch
+                                placeholder="Assign to user"
+                                onChange={ handleAssignOutreach }
+                                allowClear
+                                filterOption={ (input, option) =>
+                                    (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                                }
+                                optionFilterProp="children"
+                            >
+                                { users.map(user => (
+                                    <Select.Option key={ user._id } value={ user._id }>
+                                        { user.name }
+                                    </Select.Option>
+                                )) }
+                            </Select>
+                            <span style={ { fontWeight: 500, marginLeft: "10px" } }>
+                                { selectedOutreach.length } outreach selected
+                            </span>
+
+                            {/* <Button 
+            onClick={() => setSelectedOutreach([])}
+            size="small"
+        >
+            Clear Selection
+        </Button> */}
+                        </div>
+                    ) }
                 </div>
                 <div className="action-buttons">
                     <Button
@@ -324,46 +352,10 @@ const OutReachList = () => {
                         Reports
                     </Button>
                 </div>
-            </div>
-            { selectedOutreach.length > 0 && (
-                <div className="assignment-section" style={ {
-                    padding: '16px',
-                    background: '#f5f5f5',
-                    marginBottom: '16px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    borderRadius: '4px'
-                } }>
-                    <span style={ { fontWeight: 500 } }>
-                        { selectedOutreach.length } items selected
-                    </span>
-                    <Select
-                        style={ { width: 200 } }
-                        showSearch
-                        placeholder="Assign to user"
-                        onChange={ handleAssignOutreach }
-                        allowClear
-                        filterOption={ (input, option) =>
-                            (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-                        }
-                        optionFilterProp="children"
-                    >
-                        { users.map(user => (
-                            <Select.Option key={ user._id } value={ user._id }>
-                                { user.name }
-                            </Select.Option>
-                        )) }
-                    </Select>
-                    {/* <Button 
-            onClick={() => setSelectedOutreach([])}
-            size="small"
-        >
-            Clear Selection
-        </Button> */}
-                </div>
-            ) }
-            <div className="outreach-table">
+
+            </Header>
+
+            <div className="contact-table">
                 <table>
                     <thead>
                         <tr>
@@ -429,86 +421,122 @@ const OutReachList = () => {
 
             {/* Add/Edit Outreach Modal */ }
             <Modal
-                title="Add Outreach"
+                title={ editMode ? "Edit Outreach" : "Add Outreach" }
                 open={ modalVisible }
                 onCancel={ () => setModalVisible(false) }
-                onOk={ handleSubmit }
+                footer={ null }  // We'll use Ant Design's Form submission
                 width={ 600 }
+                maskClosable={ false }
             >
-                <div className="outreach-form">
-                    <Input
-                        value={ formData.name }
-                        onChange={ (e) => setFormData({ ...formData, name: e.target.value }) }
-                        placeholder="Name"
-                        className="form-input"
-                    />
-                    <Input
-                        value={ formData.email }
-                        onChange={ (e) => setFormData({ ...formData, email: e.target.value }) }
-                        placeholder="Email"
-                        className="form-input"
-                    />
-                    <Input
-                        value={ formData.phone }
-                        onChange={ (e) => setFormData({ ...formData, phone: e.target.value }) }
-                        placeholder="Phone"
-                        className="form-input"
-                    />
-                    <Input
-                        value={ formData.website }
-                        onChange={ (e) => setFormData({ ...formData, website: e.target.value }) }
-                        placeholder="Website"
-                        className="form-input"
-                    />
-                    <Input
-                        value={ formData.linkedin }
-                        onChange={ (e) => setFormData({ ...formData, linkedin: e.target.value }) }
-                        placeholder="LinkedIn"
-                        className="form-input"
-                    />
-                    <Input
-                        value={ formData.country }
-                        onChange={ (e) => setFormData({ ...formData, country: e.target.value }) }
-                        placeholder="Country"
-                        className="form-input"
-                    />
-
-                    <Select
-                        value={ formData.region }
-                        onChange={ (value) => setFormData({ ...formData, region: value }) }
-                        placeholder="Region"
-                        // className="form-input"
-                        options={ regionOptions }
-                    />
-                    <Select
-                        value={ formData.campaign }
-                        onChange={ (value) => setFormData({ ...formData, campaign: value }) }
-                        placeholder="Campaign"
-                    // className="form-input"
+                <Form
+                    form={ form }
+                    onFinish={ handleSubmit }
+                    layout="vertical"
+                    initialValues={ {
+                        name: '',
+                        email: '',
+                        phone: '',
+                        website: '',
+                        linkedin: '',
+                        country: '',
+                        region: '',
+                        campaign: '',
+                        category: '',
+                    } }
+                >
+                    <Form.Item
+                        label="Name"
+                        name="name"
+                        rules={ [{ required: true, message: 'Please input the name!' }] }
                     >
-                        { campaigns.map(campaign => (
-                            <Select.Option key={ campaign._id } value={ campaign._id }>
-                                { campaign.campaignName }
-                            </Select.Option>
-                        )) }
-                    </Select>
+                        <Input />
+                    </Form.Item>
 
-                    <Select
-                        value={ formData.category }
-                        onChange={ (value) => setFormData({ ...formData, category: value }) }
-                        placeholder="Category"
-                    // className="form-input"
+                    <Form.Item
+                        label="Email"
+                        name="email"
+                        rules={ [{ required: true, type: 'email', message: 'Please input a valid email!' }] }
                     >
-                        { categories.map(category => (
-                            <Select.Option key={ category._id } value={ category._id }>
-                                { category.categoryName }
-                            </Select.Option>
-                        )) }
-                    </Select>
-                </div>
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Phone"
+                        name="phone"
+                        rules={ [{ required: true, message: 'Please input the phone number!' }] }
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Website"
+                        name="website"
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="LinkedIn"
+                        name="linkedin"
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Country"
+                        name="country"
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Region"
+                        name="region"
+                        rules={ [{ required: true, message: 'Please select the region!' }] }
+                    >
+                        <Select options={ regionOptions } />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Campaign"
+                        name="campaign"
+                        rules={ [{ required: true, message: 'Please select a campaign!' }] }
+                    >
+                        <Select>
+                            { campaigns.map(campaign => (
+                                <Select.Option key={ campaign._id } value={ campaign._id }>
+                                    { campaign.campaignName }
+                                </Select.Option>
+                            )) }
+                        </Select>
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Category"
+                        name="category"
+                        rules={ [{ required: true, message: 'Please select a category!' }] }
+                    >
+                        <Select>
+                            { categories.map(category => (
+                                <Select.Option key={ category._id } value={ category._id }>
+                                    { category.categoryName }
+                                </Select.Option>
+                            )) }
+                        </Select>
+                    </Form.Item>
+
+                    <Form.Item>
+                        <Button onClick={ () => setModalVisible(false) } className='text-btn '>
+                            Cancel
+                        </Button>
+                        <Button type="primary" htmlType="submit" loading={ loading } style={ { width: '100%' } }>
+                            { editMode ? "Update" : "Create" } Outreach
+                        </Button>
+                    </Form.Item>
+                </Form>
             </Modal>
 
-            {/* Import CSV Modal */ }
+
             <Modal
                 destroyOnClose={ true }
                 title="Import CSV"
@@ -519,7 +547,7 @@ const OutReachList = () => {
                         campaign: undefined,
                         region: '',
                         file: null,
-                        category: undefined
+                        category: undefined,
                     });
                     // Clear the file from Dragger
                     if (uploadProps.onChange) {
@@ -530,52 +558,59 @@ const OutReachList = () => {
                 width={ 500 }
             >
                 <div className="import-form">
+                    {/* Campaign Select */ }
                     <Select
-                        className="form-input"
                         placeholder="Select Campaign"
                         value={ importData.campaign }
-                        onChange={ (value) => setImportData(prev => ({ ...prev, campaign: value })) }
+                        onChange={ (value) => setImportData((prev) => ({ ...prev, campaign: value })) }
+                        style={ { width: '100%', marginBottom: 16 } }
                     >
-                        { campaigns.map(campaign => (
+                        { campaigns.map((campaign) => (
                             <Select.Option key={ campaign._id } value={ campaign._id }>
                                 { campaign.campaignName }
                             </Select.Option>
                         )) }
                     </Select>
 
-
+                    {/* Category Select */ }
                     <Select
                         value={ importData.category }
-                        onChange={ (value) => setImportData(prev => ({ ...prev, category: value })) }
+                        onChange={ (value) => setImportData((prev) => ({ ...prev, category: value })) }
                         placeholder="Select Category"
-                        className="form-input"
+                        style={ { width: '100%', marginBottom: 16 } }
                     >
-                        { categories.map(category => (
+                        { categories.map((category) => (
                             <Select.Option key={ category._id } value={ category._id }>
                                 { category.categoryName }
                             </Select.Option>
                         )) }
                     </Select>
 
+                    {/* Region Select */ }
                     <Select
-                        className="form-input"
                         placeholder="Select Region"
                         value={ importData.region }
-                        onChange={ (value) => setImportData(prev => ({ ...prev, region: value })) }
+                        onChange={ (value) => setImportData((prev) => ({ ...prev, region: value })) }
                         options={ regionOptions }
+                        style={ { width: '100%', marginBottom: 16 } }
                     />
 
-                    <Dragger { ...uploadProps } className="csv-uploader" key={ importModalVisible.toString() }>
+                    {/* CSV Dragger Upload */ }
+                    <Dragger
+                        { ...uploadProps }
+                        className="csv-uploader"
+                        key={ importModalVisible.toString() }
+                        style={ { marginBottom: 16 } }
+                    >
                         <p className="ant-upload-drag-icon">
                             <InboxOutlined />
                         </p>
                         <p className="ant-upload-text">Click or drag CSV file to this area to upload</p>
-                        <p className="ant-upload-hint">
-                            Support for single CSV file upload
-                        </p>
+                        <p className="ant-upload-hint">Support for single CSV file upload</p>
                     </Dragger>
                 </div>
             </Modal>
+
         </div>
     );
 };

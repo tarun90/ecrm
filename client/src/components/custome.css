@@ -400,7 +400,7 @@ button {
 
 .modal-content {
   background-color: white;
-  padding: 20px;
+  padding: 0 10px;
   border-radius: 5px;
   max-width: 600px;
   width: 100%;
@@ -777,8 +777,9 @@ textarea {
   margin-top: 1rem;
 }
 
-:where(.css-dev-only-do-not-override-1pjlhih).ant-menu-dark.ant-menu-inline .ant-menu-sub.ant-menu-inline, :where(.css-dev-only-do-not-override-1pjlhih).ant-menu-dark>.ant-menu.ant-menu-inline .ant-menu-sub.ant-menu-inline {
-  background:#0c3a5b !important;
+:where(.css-dev-only-do-not-override-1pjlhih).ant-menu-dark.ant-menu-inline .ant-menu-sub.ant-menu-inline,
+:where(.css-dev-only-do-not-override-1pjlhih).ant-menu-dark>.ant-menu.ant-menu-inline .ant-menu-sub.ant-menu-inline {
+  background: #0c3a5b !important;
 }
 
 

@@ -92,13 +92,14 @@
 .kanbanBoard {
   display: flex;
   gap: 10px;
-  padding: 16px;
+  width: 100%;
   overflow-x: auto;
   min-height: calc(100vh - 150px);
 }
 
 .kanbanColumn {
-  min-width: 300px;
+  min-width: 270px;
+  width: 100%;
   background: #fff;
   border-radius: 8px;
   padding: 16px;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Button, Input, Select, DatePicker, Modal, message, Form } from "antd";
+import { Button, Input, Select, DatePicker, Modal, message, Form, Divider } from "antd";
 import {
   PlusOutlined,
   FilterOutlined,
@@ -14,6 +14,7 @@ import {
 import "./Tasks.css";
 import dayjs from "dayjs";
 import MainLayout from "../../components/MainLayout";
+import { Header } from "antd/es/layout/layout";
 
 function Tasks() {
   const [form] = Form.useForm();
@@ -133,7 +134,7 @@ function Tasks() {
   return (
     <>
       <div className="app-container add-task-dashboard">
-        <div className="top-nav">
+        <Header className="top-nav">
           <div className="nav-content">
 
             { showFilters && (
@@ -194,7 +195,7 @@ function Tasks() {
               </Button>
             </div>
           </div>
-        </div>
+        </Header>
 
 
 
@@ -370,6 +371,7 @@ function Tasks() {
             form.resetFields();
           } }
           footer={ [
+            <Divider />,
             <Button
               key="cancel"
               className="text-btn"
@@ -393,6 +395,7 @@ function Tasks() {
           ] }
           width={ 600 }
         >
+          <Divider />
           <Form layout="vertical" form={ form } onFinish={ handleAddTask }>
             <Form.Item
               name="name"
@@ -471,6 +474,7 @@ function Tasks() {
             editForm.resetFields();
           } }
           footer={ [
+            <Divider />,
             <Button
               key="cancel"
               className="text-btn"
@@ -492,6 +496,7 @@ function Tasks() {
           ] }
           width={ 600 }
         >
+          <Divider />
           <Form
             layout="vertical"
             form={ editForm }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Layout, Menu, Button, Avatar, Dropdown, Modal, Form, Input, Select, DatePicker, InputNumber, message, Popconfirm, Upload } from 'antd';
+import { Layout, Menu, Button, Avatar, Dropdown, Modal, Form, Input, Select, DatePicker, InputNumber, message, Popconfirm, Upload, Divider } from 'antd';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { getCompaniesNames } from '../Company/APIServices';
 
@@ -286,7 +286,7 @@ function Deals() {
 
   const openEditModal = (deal) => {
     setSelectedDeal(deal);
-    console.log(deal,"deal")
+    console.log(deal, "deal")
     editForm.setFieldsValue({
       ...deal,
       contact: deal?.contact?._id,
@@ -307,14 +307,14 @@ function Deals() {
       {/* <Menu.Item key="profile" icon={<UserOutlined />}>
         Profile
       </Menu.Item> */}
-      <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={logoutFunctionality}>
+      <Menu.Item key="logout" icon={ <LogoutOutlined /> } onClick={ logoutFunctionality }>
         Logout
       </Menu.Item>
     </Menu>
   );
   const handleView = (id) => {
     navigate(`/deals/view/${id}`);
-};
+  };
   const uploadProps = {
     name: 'file',
     multiple: false,
@@ -349,25 +349,25 @@ function Deals() {
     // </Sider>
     <Layout className='main-content-wrapper'>
       <Header className="content-header">
-        <div className={styles.headerContent}>
-          <div className={styles.headerActions}>
+        <div className={ styles.headerContent }>
+          <div className={ styles.headerActions }>
             <Search
               placeholder="Search deals by name or company..."
               allowClear
-              onChange={(e) => handleSearch(e.target.value)}
-              className={styles.searchBar}
+              onChange={ (e) => handleSearch(e.target.value) }
+              className={ styles.searchBar }
             />
             <Button
               type="primary"
-              icon={<PlusOutlined />}
-              onClick={() => setIsModalVisible(true)}
-              style={{ marginLeft: 'auto' }}
+              icon={ <PlusOutlined /> }
+              onClick={ () => setIsModalVisible(true) }
+              style={ { marginLeft: 'auto' } }
             >
-              {/* karan final save */}
+              {/* karan final save */ }
               Create Deal
             </Button>
             <Dropdown
-              menu={{
+              menu={ {
                 items: [
                   {
                     key: 'deals',
@@ -382,148 +382,151 @@ function Deals() {
                   //   onClick: () => showImportModal('contacts')
                   // }
                 ]
-              }}
+              } }
             >
-              <Button icon={<UploadOutlined />} className="text-btn ">Import</Button>
+              <Button icon={ <UploadOutlined /> } className="text-btn ">Import</Button>
             </Dropdown>
           </div>
 
         </div>
       </Header>
       <Content className="content-warpper">
-        <DragDropContext onDragEnd={onDragEnd}>
-          <div className={styles.kanbanBoard}>
-            {stages.map((stage) => {
+        <DragDropContext onDragEnd={ onDragEnd }>
+          <div className={ styles.kanbanBoard }>
+            { stages.map((stage) => {
               const stageDeals = getDealsInStage(stage);
               return (
-                <div key={stage} className={styles.kanbanColumn}>
+                <div key={ stage } className={ styles.kanbanColumn }>
                   <h3>
-                    {stage}
-                    <span className={styles.columnCount}>{stageDeals.length}</span>
+                    { stage }
+                    <span className={ styles.columnCount }>{ stageDeals.length }</span>
                   </h3>
-                  <Droppable droppableId={stage}>
-                    {(provided, snapshot) => (
+                  <Droppable droppableId={ stage }>
+                    { (provided, snapshot) => (
                       <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        className={`${styles.dealList} ${snapshot.isDraggingOver ? styles.isDraggingOver : 'scroll'}`}
+                        ref={ provided.innerRef }
+                        { ...provided.droppableProps }
+                        className={ `${styles.dealList} ${snapshot.isDraggingOver ? styles.isDraggingOver : 'scroll'}` }
                       >
-                        {stageDeals.map((deal, index) => (
+                        { stageDeals.map((deal, index) => (
                           <Draggable
-                            key={deal._id}
-                            draggableId={String(deal._id)}
-                            index={index}
+                            key={ deal._id }
+                            draggableId={ String(deal._id) }
+                            index={ index }
                           >
-                            {(provided, snapshot) => (
+                            { (provided, snapshot) => (
                               <div
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                className={`${styles.dealCard} ${snapshot.isDragging ? styles.isDragging : ''}`}
-                                onClick={() => openViewModal(deal)}
+                                ref={ provided.innerRef }
+                                { ...provided.draggableProps }
+                                { ...provided.dragHandleProps }
+                                className={ `${styles.dealCard} ${snapshot.isDragging ? styles.isDragging : ''}` }
+                                onClick={ () => openViewModal(deal) }
                               >
-                                <div className={styles.dealHeader}>
-                                  <h4>{deal.name}</h4>
-                                  <div className={styles.dealActions}>
+                                <div className={ styles.dealHeader }>
+                                  <h4>{ deal.name }</h4>
+                                  <div className={ styles.dealActions }>
                                     <Button
                                       type="text"
-                                      icon={<EyeOutlined />}
-                                      onClick={(e) => {
+                                      icon={ <EyeOutlined /> }
+                                      onClick={ (e) => {
                                         e.stopPropagation();
                                         openViewModal(deal);
-                                      }}
+                                      } }
                                     />
                                     <Button
                                       type="text"
-                                      icon={<EditOutlined />}
-                                      onClick={(e) => {
+                                      icon={ <EditOutlined /> }
+                                      onClick={ (e) => {
                                         e.stopPropagation();
                                         openEditModal(deal);
-                                      }}
+                                      } }
                                     />
                                     <Popconfirm
                                       title="Delete deal"
                                       description="Are you sure you want to delete this deal?"
-                                      onConfirm={(e) => {
+                                      onConfirm={ (e) => {
                                         e.stopPropagation();
                                         handleDeleteDeal(deal._id);
-                                      }}
+                                      } }
                                       okText="Yes"
                                       cancelText="No"
                                     >
                                       <Button
                                         type="text"
                                         danger
-                                        icon={<DeleteOutlined />}
-                                        onClick={(e) => e.stopPropagation()}
+                                        icon={ <DeleteOutlined /> }
+                                        onClick={ (e) => e.stopPropagation() }
                                       />
                                     </Popconfirm>
                                   </div>
                                 </div>
-                                <p className={styles.dealCompany}>{deal.company?.companyName}</p>
-                                <div className={styles.dealInfo}>
-                                  <span className={`${styles.dealAmount} ${deal.amount < 0 ? styles.negative : ''}`}>
-                                    ${deal.amount.toLocaleString()}
+                                <p className={ styles.dealCompany }>{ deal.company?.companyName }</p>
+                                <div className={ styles.dealInfo }>
+                                  <span className={ `${styles.dealAmount} ${deal.amount < 0 ? styles.negative : ''}` }>
+                                    ${ deal.amount.toLocaleString() }
                                   </span>
                                   <span>•</span>
                                   <span>
-                                    <ClockCircleOutlined /> {new Date(deal.closeDate).toLocaleDateString()}
+                                    <ClockCircleOutlined /> { new Date(deal.closeDate).toLocaleDateString() }
                                   </span>
                                 </div>
                               </div>
-                            )}
+                            ) }
                           </Draggable>
-                        ))}
-                        {provided.placeholder}
+                        )) }
+                        { provided.placeholder }
                       </div>
-                    )}
+                    ) }
                   </Droppable>
                 </div>
               );
-            })}
+            }) }
           </div>
         </DragDropContext>
       </Content>
 
-      {/* Create Deal Modal */}
+      {/* Create Deal Modal */ }
       <Modal
         title="Create Deal"
-        open={isModalVisible}
-        onCancel={() => {
+        open={ isModalVisible }
+        onCancel={ () => {
           setIsModalVisible(false);
           form.resetFields();
-        }}
-        footer={[
+        } }
+
+        footer={ [
+          <Divider />,
           <Button
             key="cancel"
             className='text-btn'
-            onClick={() => {
+            onClick={ () => {
               setIsModalVisible(false);
               form.resetFields();
-            }}
+            } }
           >
             Cancel
           </Button>,
           <Button
             key="create"
             type="primary"
-            onClick={() => form.submit()}
-            loading={loading}
+            onClick={ () => form.submit() }
+            loading={ loading }
           >
             Create
           </Button>
-        ]}
-        width={600}
+        ] }
+        width={ 600 }
       >
+        <Divider />
         <Form
-          form={form}
+          form={ form }
           layout="vertical"
-          onFinish={handleCreateDeal}
+          onFinish={ handleCreateDeal }
         >
           <Form.Item
             name="name"
             label="Deal name"
-            rules={[{ required: true, message: 'Please enter deal name' }]}
+            rules={ [{ required: true, message: 'Please enter deal name' }] }
           >
             <Input placeholder="Enter deal name" />
           </Form.Item>
@@ -543,24 +546,24 @@ function Deals() {
             name="stage"
             label="Deal stage"
             initialValue="New Leads"
-            rules={[{ required: true, message: 'Please select deal stage' }]}
+            rules={ [{ required: true, message: 'Please select deal stage' }] }
           >
             <Select placeholder="Select stage">
-              {stages.map(stage => (
-                <Option key={stage} value={stage}>{stage}</Option>
-              ))}
+              { stages.map(stage => (
+                <Option key={ stage } value={ stage }>{ stage }</Option>
+              )) }
             </Select>
           </Form.Item>
 
           <Form.Item
             name="amount"
             label="Amount"
-            rules={[{ required: true, message: 'Please enter amount' }]}
+            rules={ [{ required: true, message: 'Please enter amount' }] }
           >
             <InputNumber
-              style={{ width: '100%' }}
-              formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-              parser={value => value.replace(/\$\s?|(,*)/g, '')}
+              style={ { width: '100%' } }
+              formatter={ value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }
+              parser={ value => value.replace(/\$\s?|(,*)/g, '') }
               placeholder="0.00"
             />
           </Form.Item>
@@ -568,15 +571,15 @@ function Deals() {
           <Form.Item
             name="closeDate"
             label="Close date"
-            rules={[{ required: true, message: 'Please select close date' }]}
+            rules={ [{ required: true, message: 'Please select close date' }] }
           >
-            <DatePicker style={{ width: '100%' }} />
+            <DatePicker style={ { width: '100%' } } />
           </Form.Item>
 
           <Form.Item
             name="type"
             label="Deal type"
-            rules={[{ required: true, message: 'Please select deal type' }]}
+            rules={ [{ required: true, message: 'Please select deal type' }] }
           >
             <Select placeholder="Select type">
               <Option value="new">New Business</Option>
@@ -587,15 +590,15 @@ function Deals() {
           <Form.Item
             name="contact"
             label="Contact"
-            rules={[{ required: true, message: 'Please select contact' }]}
+            rules={ [{ required: true, message: 'Please select contact' }] }
           >
             <Select
               showSearch
               placeholder="Search contacts"
-              filterOption={(input, option) =>
+              filterOption={ (input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
-              onChange={(value) => {
+              onChange={ (value) => {
                 // Find the selected contact
                 const selectedContact = contactsList.find(contact => contact._id === value);
                 if (selectedContact) {
@@ -604,81 +607,86 @@ function Deals() {
                     company: selectedContact.company // Assuming this is the company ID
                   });
                 }
-              }}
+              } }
             >
-              {contactsList.map(contact => (
-                <Option key={contact._id} value={contact._id}>
-                  {contact.firstName + " " + contact.lastName}
+              { contactsList.map(contact => (
+                <Option key={ contact._id } value={ contact._id }>
+                  { contact.firstName + " " + contact.lastName }
                 </Option>
-              ))}
+              )) }
             </Select>
           </Form.Item>
 
           <Form.Item
             name="company"
             label="Company"
-            rules={[{ required: true, message: 'Please enter company name' }]}
+            rules={ [{ required: true, message: 'Please enter company name' }] }
           >
             <Select
               showSearch
               disabled
               placeholder="Search Company"
-              filterOption={(input, option) =>
+              filterOption={ (input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
             >
-              {companies.map(company => (
-                <Option key={company._id} value={company._id}>
-                  {company?.companyName}
+              { companies.map(company => (
+                <Option key={ company._id } value={ company._id }>
+                  { company?.companyName }
                 </Option>
-              ))}
+              )) }
             </Select>
           </Form.Item>
         </Form>
       </Modal>
 
-      {/* Edit Deal Modal */}
+      {/* Edit Deal Modal */ }
+
       <Modal
         title="Edit Deal"
-        open={isEditModalVisible}
-        onCancel={() => {
+        open={ isEditModalVisible }
+        onCancel={ () => {
           setIsEditModalVisible(false);
           setSelectedDeal(null);
           editForm.resetFields();
-        }}
-        footer={[
-          <Button
-            key="cancel"
-            className='text-btn'
+        } }
 
-            onClick={() => {
-              setIsEditModalVisible(false);
-              setSelectedDeal(null);
-              editForm.resetFields();
-            }}
-          >
-            Cancel
-          </Button>,
-          <Button
-            key="update"
-            type="primary"
-            onClick={() => editForm.submit()}
-            loading={loading}
-          >
-            Update
-          </Button>
-        ]}
-        width={600}
+        footer={
+          [
+            <Divider />,
+            <Button
+              key="cancel"
+              className='text-btn'
+
+              onClick={ () => {
+                setIsEditModalVisible(false);
+                setSelectedDeal(null);
+                editForm.resetFields();
+              } }
+            >
+              Cancel
+            </Button>,
+            <Button
+              key="update"
+              type="primary"
+              onClick={ () => editForm.submit() }
+              loading={ loading }
+            >
+              Update
+            </Button>
+          ] }
+        width={ 600 }
       >
+        <Divider />
         <Form
-          form={editForm}
+          form={ editForm }
           layout="vertical"
-          onFinish={handleEditDeal}
+          onFinish={ handleEditDeal }
         >
           <Form.Item
             name="name"
             label="Deal name"
-            rules={[{ required: true, message: 'Please enter deal name' }]}
+            rules={ [{ required: true, message: 'Please enter deal name' }] }
           >
             <Input placeholder="Enter deal name" />
           </Form.Item>
@@ -686,24 +694,24 @@ function Deals() {
           <Form.Item
             name="stage"
             label="Deal stage"
-            rules={[{ required: true, message: 'Please select deal stage' }]}
+            rules={ [{ required: true, message: 'Please select deal stage' }] }
           >
             <Select placeholder="Select stage">
-              {stages.map(stage => (
-                <Option key={stage} value={stage}>{stage}</Option>
-              ))}
+              { stages.map(stage => (
+                <Option key={ stage } value={ stage }>{ stage }</Option>
+              )) }
             </Select>
           </Form.Item>
 
           <Form.Item
             name="amount"
             label="Amount"
-            rules={[{ required: true, message: 'Please enter amount' }]}
+            rules={ [{ required: true, message: 'Please enter amount' }] }
           >
             <InputNumber
-              style={{ width: '100%' }}
-              formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-              parser={value => value.replace(/\$\s?|(,*)/g, '')}
+              style={ { width: '100%' } }
+              formatter={ value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }
+              parser={ value => value.replace(/\$\s?|(,*)/g, '') }
               placeholder="0.00"
             />
           </Form.Item>
@@ -711,15 +719,15 @@ function Deals() {
           <Form.Item
             name="closeDate"
             label="Close date"
-            rules={[{ required: true, message: 'Please select close date' }]}
+            rules={ [{ required: true, message: 'Please select close date' }] }
           >
-            <DatePicker style={{ width: '100%' }} />
+            <DatePicker style={ { width: '100%' } } />
           </Form.Item>
 
           <Form.Item
             name="type"
             label="Deal type"
-            rules={[{ required: true, message: 'Please select deal type' }]}
+            rules={ [{ required: true, message: 'Please select deal type' }] }
           >
             <Select placeholder="Select type">
               <Option value="new">New Business</Option>
@@ -730,15 +738,15 @@ function Deals() {
           <Form.Item
             name="contact"
             label="Contact"
-            rules={[{ required: true, message: 'Please select contact' }]}
+            rules={ [{ required: true, message: 'Please select contact' }] }
           >
             <Select
               showSearch
               placeholder="Search contacts"
-              filterOption={(input, option) =>
+              filterOption={ (input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
-              onChange={(value) => {
+              onChange={ (value) => {
                 // Find the selected contact
                 const selectedContact = contactsList.find(contact => contact._id === value);
                 if (selectedContact) {
@@ -747,120 +755,121 @@ function Deals() {
                     company: selectedContact.company // Assuming this is the company ID
                   });
                 }
-              }}
+              } }
             >
-              {contactsList.map(contact => (
-                <Option key={contact._id} value={contact._id}>
-                  {contact.firstName + " " + contact.lastName}
+              { contactsList.map(contact => (
+                <Option key={ contact._id } value={ contact._id }>
+                  { contact.firstName + " " + contact.lastName }
                 </Option>
-              ))}
+              )) }
             </Select>
           </Form.Item>
 
           <Form.Item
             name="company"
             label="Company"
-            rules={[{ required: true, message: 'Please enter company name' }]}
+            rules={ [{ required: true, message: 'Please enter company name' }] }
           >
             <Select
               showSearch
               disabled
               placeholder="Search Company"
-              filterOption={(input, option) =>
+              filterOption={ (input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
             >
-              {companies.map(company => (
-                <Option key={company._id} value={company._id}>
-                  {company?.companyName}
+              { companies.map(company => (
+                <Option key={ company._id } value={ company._id }>
+                  { company?.companyName }
                 </Option>
-              ))}
+              )) }
             </Select>
           </Form.Item>
         </Form>
       </Modal>
 
-      {/* View Deal Modal */}
+      {/* View Deal Modal */ }
       <Modal
         title="View Deal"
-        open={isViewModalVisible}
-        onCancel={() => {
+        open={ isViewModalVisible }
+        onCancel={ () => {
           setIsViewModalVisible(false);
           setSelectedDeal(null);
-        }}
-        footer={[
+        } }
+        footer={ [
           <Button
             className='text-btn'
             key="close"
-            onClick={() => {
+            onClick={ () => {
               setIsViewModalVisible(false);
               setSelectedDeal(null);
-            }}
+            } }
           >
             Cancel
           </Button>,
           <Button
             key="edit"
             type="primary"
-            onClick={() => {
+            onClick={ () => {
               setIsViewModalVisible(false);
               openEditModal(selectedDeal);
-            }}
+            } }
           >
             Edit Deal
           </Button>
-        ]}
-        width={600}
+        ] }
+        width={ 600 }
       >
-        {console.log(selectedDeal,"selectedDeal")}
-        {selectedDeal && (
-          <div className={styles.viewDealContent}>
-            <div className={styles.viewDealItem}>
+        <Divider />
+        { console.log(selectedDeal, "selectedDeal") }
+        { selectedDeal && (
+          <div className={ styles.viewDealContent }>
+            <div className={ styles.viewDealItem }>
               <strong>Deal Name:</strong>
-              <span>{selectedDeal?.name}</span>
+              <span>{ selectedDeal?.name }</span>
             </div>
-            <div className={styles.viewDealItem}>
+            <div className={ styles.viewDealItem }>
               <strong>Company:</strong>
-              <span>{selectedDeal?.company?.companyName}</span>
+              <span>{ selectedDeal?.company?.companyName }</span>
             </div>
-            <div className={styles.viewDealItem}>
+            <div className={ styles.viewDealItem }>
               <strong>Stage:</strong>
-              <span>{selectedDeal?.stage}</span>
+              <span>{ selectedDeal?.stage }</span>
             </div>
-            <div className={styles.viewDealItem}>
+            <div className={ styles.viewDealItem }>
               <strong>Amount:</strong>
-              <span>${selectedDeal?.amount.toLocaleString()}</span>
+              <span>${ selectedDeal?.amount.toLocaleString() }</span>
             </div>
-            <div className={styles.viewDealItem}>
+            <div className={ styles.viewDealItem }>
               <strong>Close Date:</strong>
-              <span>{new Date(selectedDeal?.closeDate).toLocaleDateString()}</span>
+              <span>{ new Date(selectedDeal?.closeDate).toLocaleDateString() }</span>
             </div>
-            <div className={styles.viewDealItem}>
+            <div className={ styles.viewDealItem }>
               <strong>Deal Type:</strong>
-              <span>{selectedDeal?.type === 'new' ? 'New Business' : 'Existing Business'}</span>
+              <span>{ selectedDeal?.type === 'new' ? 'New Business' : 'Existing Business' }</span>
             </div>
-            {selectedDeal.notes && (
-              <div className={styles.viewDealItem}>
+            { selectedDeal.notes && (
+              <div className={ styles.viewDealItem }>
                 <strong>Notes:</strong>
-                <span>{selectedDeal?.notes}</span>
+                <span>{ selectedDeal?.notes }</span>
               </div>
-            )}
+            ) }
           </div>
-        )}
+        ) }
       </Modal>
 
-      {/* Import Modal */}
+      {/* Import Modal */ }
       <Modal
 
-        title={`Import ${importType === 'deals' ? 'Deals' : 'Contacts'}`}
-        open={isImportModalVisible}
-        onCancel={() => setIsImportModalVisible(false)}
-        footer={null}
+        title={ `Import ${importType === 'deals' ? 'Deals' : 'Contacts'}` }
+        open={ isImportModalVisible }
+        onCancel={ () => setIsImportModalVisible(false) }
+        footer={ null }
       >
-        <div className={styles.importInstructions}>
+        <div className={ styles.importInstructions }>
           <h4>Instructions:</h4>
           <p>1. Prepare your CSV file with the following columns:</p>
-          {importType === 'deals' ? (
+          { importType === 'deals' ? (
             <ul>
               <li>name (required)</li>
               <li>amount (required)</li>
@@ -882,11 +891,11 @@ function Deals() {
               <li>serviceCategory</li>
               <li>tags (comma-separated)</li>
             </ul>
-          )}
+          ) }
           <p>2. Make sure your CSV file uses comma (,) as the delimiter</p>
           <p>3. Upload your file using the area below</p>
         </div>
-        <Dragger {...uploadProps} className={styles.importUploader}>
+        <Dragger { ...uploadProps } className={ styles.importUploader }>
           <p className="ant-upload-drag-icon">
             <UploadOutlined />
           </p>

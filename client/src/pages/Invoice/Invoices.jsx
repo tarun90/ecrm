@@ -15,8 +15,10 @@ import {
   Select,
   DatePicker,
   InputNumber,
+  Divider,
 } from "antd";
 import { DeleteOutlined, DownloadOutlined, PlusOutlined } from "@ant-design/icons";
+import { Header } from "antd/es/layout/layout";
 function Invoices() {
   const [invoices, setInvoices] = useState([]);
   const [contacts, setContacts] = useState([]);
@@ -533,7 +535,7 @@ function Invoices() {
 
   return (
     <Layout className="main-content-wrapper">
-      <div className="invoice-header">
+      <Header className="invoice-header">
         <div className="search-container">
           <Search className="search-icon" />
           <input
@@ -575,7 +577,7 @@ function Invoices() {
             New Invoice
           </Button>
         </div>
-      </div>
+      </Header>
 
       { error && (
         <div className="error-message">
@@ -713,6 +715,7 @@ const InvoiceForm = ({
       onCancel={ () => setIsModalOpen(false) }
       footer={ null }
     >
+      <Divider />
       <Form layout="vertical" onFinish={ handleSubmit } initialValues={ formData }>
         <div className="modal-content scroll">
           <Form.Item
@@ -902,6 +905,7 @@ const InvoiceForm = ({
             />
           </Form.Item>
         </div>
+        <Divider />
         <div className="modal-footer">
           <Form.Item>
             <Button className="text-btn" onClick={ () => setIsModalOpen(false) }>
