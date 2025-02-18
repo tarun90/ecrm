@@ -63,7 +63,7 @@ const Sidebar = () => {
             <h2 className="deal-title">
               Nicksbuilding.com - New Deal
             </h2>
-            <button className="edit-button">
+            <button className="edit-btn">
               <Edit />
             </button>
           </div>

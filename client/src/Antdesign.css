@@ -177,9 +177,9 @@
     box-shadow: none;
 }
 
-.ant-btn-primary :not(:disabled):hover {
+/* .ant-btn-primary :not(:disabled):hover {
     background: #185d87;
-}
+} */
 
 .ant-input-outlined:focus,
 .ant-input-outlined:hover,
@@ -217,4 +217,16 @@
 
 .ant-btn-variant-text:disabled .ant-btn-icon svg {
     color: rgba(0, 0, 0, 0.25);
+}
+
+.ant-modal .ant-modal-header {
+    margin-bottom: 20px;
+}
+
+.modal-footer .ant-form-item-control-input-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: end;
+    gap: 10px;
+    margin-top: 10px;
 }

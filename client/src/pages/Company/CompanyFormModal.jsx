@@ -124,28 +124,28 @@ const CompanyFormModal = ({ visible, onCancel, editId = null, fetchCompanies }) 
 
   return (
     <Modal
-      title={editId ? "Edit Company" : "Add Company"}
-      open={visible}
-      onCancel={onCancel}
-      width={800}
-      footer={null}
+      title={ editId ? "Edit Company" : "Add Company" }
+      open={ visible }
+      onCancel={ onCancel }
+      width={ 800 }
+      footer={ null }
     >
       <Form
-        form={form}
+        form={ form }
         layout="vertical"
-        onFinish={handleSubmit}
-        initialValues={{
+        onFinish={ handleSubmit }
+        initialValues={ {
           industry: '',
           type: '',
           country: '',
           webTechnologies: []
-        }}
+        } }
       >
-        <div className="form-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+        <div className="form-grid" style={ { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' } }>
           <Form.Item
             label="Company Name"
             name="companyName"
-            rules={[{ required: true, message: 'Please input company name!' }]}
+            rules={ [{ required: true, message: 'Please input company name!' }] }
           >
             <Input />
           </Form.Item>
@@ -153,7 +153,7 @@ const CompanyFormModal = ({ visible, onCancel, editId = null, fetchCompanies }) 
           <Form.Item
             label="Company Owner"
             name="companyOwner"
-            rules={[{ required: true, message: 'Please input company owner!' }]}
+            rules={ [{ required: true, message: 'Please input company owner!' }] }
           >
             <Input />
           </Form.Item>
@@ -161,9 +161,9 @@ const CompanyFormModal = ({ visible, onCancel, editId = null, fetchCompanies }) 
           <Form.Item
             label="Email"
             name="email"
-            rules={[
+            rules={ [
               { type: 'email', message: 'Please enter a valid email address!' }
-            ]}
+            ] }
           >
             <Input />
           </Form.Item>
@@ -171,9 +171,9 @@ const CompanyFormModal = ({ visible, onCancel, editId = null, fetchCompanies }) 
           <Form.Item
             label="Phone Number"
             name="phoneNumber"
-            rules={[
+            rules={ [
               { pattern: /^[0-9+-]+$/, message: 'Please enter a valid phone number!' }
-            ]}
+            ] }
           >
             <Input />
           </Form.Item>
@@ -181,38 +181,38 @@ const CompanyFormModal = ({ visible, onCancel, editId = null, fetchCompanies }) 
           <Form.Item
             label="Industry"
             name="industry"
-            rules={[{ required: true, message: 'Please select an industry!' }]}
+            rules={ [{ required: true, message: 'Please select an industry!' }] }
           >
             <Select placeholder="Select Industry">
-              {industries.map(industry => (
-                <Select.Option key={industry} value={industry}>
-                  {industry}
+              { industries.map(industry => (
+                <Select.Option key={ industry } value={ industry }>
+                  { industry }
                 </Select.Option>
-              ))}
+              )) }
             </Select>
           </Form.Item>
 
           <Form.Item
             label="Type"
             name="type"
-            rules={[{ required: true, message: 'Please select company type!' }]}
+            rules={ [{ required: true, message: 'Please select company type!' }] }
           >
             <Select placeholder="Select Type">
-              {companyTypes.map(type => (
-                <Select.Option key={type} value={type}>
-                  {type}
+              { companyTypes.map(type => (
+                <Select.Option key={ type } value={ type }>
+                  { type }
                 </Select.Option>
-              ))}
+              )) }
             </Select>
           </Form.Item>
 
           <Form.Item
             label="Website URL"
             name="websiteUrl"
-            rules={[
+            rules={ [
               { required: true, message: 'Please input website URL!' },
               { type: 'url', message: 'Please enter a valid URL!' }
-            ]}
+            ] }
           >
             <Input />
           </Form.Item>
@@ -220,7 +220,7 @@ const CompanyFormModal = ({ visible, onCancel, editId = null, fetchCompanies }) 
           <Form.Item
             label="Time Zone"
             name="timeZone"
-            rules={[{ required: true, message: 'Please input time zone!' }]}
+            rules={ [{ required: true, message: 'Please input time zone!' }] }
           >
             <Input placeholder="e.g., GMT+5:30, EST, PST" />
           </Form.Item>
@@ -244,20 +244,20 @@ const CompanyFormModal = ({ visible, onCancel, editId = null, fetchCompanies }) 
             name="country"
           >
             <Select placeholder="Select Country">
-              {countries.map(country => (
-                <Select.Option key={country} value={country}>
-                  {country}
+              { countries.map(country => (
+                <Select.Option key={ country } value={ country }>
+                  { country }
                 </Select.Option>
-              ))}
+              )) }
             </Select>
           </Form.Item>
 
           <Form.Item
             label="Postal Code"
             name="postalCode"
-            rules={[
+            rules={ [
               { pattern: /^[0-9]+$/, message: 'Please enter numbers only!' }
-            ]}
+            ] }
           >
             <Input />
           </Form.Item>
@@ -265,9 +265,9 @@ const CompanyFormModal = ({ visible, onCancel, editId = null, fetchCompanies }) 
           <Form.Item
             label="Number of Employees"
             name="numberOfEmployees"
-            rules={[
+            rules={ [
               { pattern: /^[0-9]+$/, message: 'Please enter numbers only!' }
-            ]}
+            ] }
           >
             <Input />
           </Form.Item>
@@ -275,9 +275,9 @@ const CompanyFormModal = ({ visible, onCancel, editId = null, fetchCompanies }) 
           <Form.Item
             label="Annual Revenue"
             name="annualRevenue"
-            rules={[
+            rules={ [
               { pattern: /^[0-9]+$/, message: 'Please enter numbers only!' }
-            ]}
+            ] }
           >
             <Input />
           </Form.Item>
@@ -290,20 +290,20 @@ const CompanyFormModal = ({ visible, onCancel, editId = null, fetchCompanies }) 
               mode="multiple"
               placeholder="Select Web Technologies"
             >
-              {webTechnologies.map(tech => (
-                <Select.Option key={tech} value={tech}>
-                  {tech}
+              { webTechnologies.map(tech => (
+                <Select.Option key={ tech } value={ tech }>
+                  { tech }
                 </Select.Option>
-              ))}
+              )) }
             </Select>
           </Form.Item>
 
           <Form.Item
             label="LinkedIn Company Page"
             name="linkedinPage"
-            rules={[
+            rules={ [
               { type: 'url', message: 'Please enter a valid LinkedIn URL!' }
-            ]}
+            ] }
           >
             <Input />
           </Form.Item>
@@ -311,22 +311,22 @@ const CompanyFormModal = ({ visible, onCancel, editId = null, fetchCompanies }) 
           <Form.Item
             label="Currency"
             name="Currency"
-            rules={[{ required: true, message: 'Please select a currency!' }]}
+            rules={ [{ required: true, message: 'Please select a currency!' }] }
           >
             <Select
               showSearch
               placeholder="Select Currency"
-              style={{ width: '100%' }}
+              style={ { width: '100%' } }
             >
-              {currenciesData.map(currency => (
+              { currenciesData.map(currency => (
                 <Select.Option
-                  key={currency.code}
-                  value={currency.code}
+                  key={ currency.code }
+                  value={ currency.code }
                 >
-                  <span style={{ fontWeight: 500 }}>{currency.code}</span>
-                  <span style={{ color: '#666', marginLeft: 8 }}>{currency.name}</span>
+                  <span style={ { fontWeight: 500 } }>{ currency.code }</span>
+                  <span style={ { color: '#666', marginLeft: 8 } }>{ currency.name }</span>
                 </Select.Option>
-              ))}
+              )) }
             </Select>
           </Form.Item>
 
@@ -334,20 +334,20 @@ const CompanyFormModal = ({ visible, onCancel, editId = null, fetchCompanies }) 
             label="Description"
             name="description"
             className="full-width"
-            style={{ gridColumn: '1 / -1' }}
+            style={ { gridColumn: '1 / -1' } }
           >
-            <TextArea rows={4} />
+            <TextArea rows={ 4 } />
           </Form.Item>
         </div>
 
         <Divider />
 
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
-          <Button onClick={onCancel}>
+        <div style={ { display: 'flex', justifyContent: 'flex-end', gap: '8px' } }>
+          <Button onClick={ onCancel } className='text-btn '>
             Cancel
           </Button>
-          <Button type="primary" htmlType="submit" loading={loading}>
-            {editId ? "Update Company" : "Save Company"}
+          <Button type="primary" htmlType="submit" loading={ loading }>
+            { editId ? "Update Company" : "Save Company" }
           </Button>
         </div>
       </Form>

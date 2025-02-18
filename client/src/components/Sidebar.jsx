@@ -118,15 +118,15 @@ const Sidebar = ({ collapsed, onCollapse }) => {
   ];
 
   return (
-    <Sider collapsible collapsed={collapsed} onCollapse={onCollapse} className="Sidebar">
+    <Sider collapsible collapsed={ collapsed } onCollapse={ onCollapse } className="Sidebar">
       <div className="sidebar-logo">
         <HeaderLogo />
       </div>
       <Menu
         theme="dark"
         mode="inline"
-        defaultSelectedKeys={[getDefaultSelectedKey()]}
-        items={menuItems}
+        defaultSelectedKeys={ [getDefaultSelectedKey()] }
+        items={ menuItems }
       />
     </Sider>
   );

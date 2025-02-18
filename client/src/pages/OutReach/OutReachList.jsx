@@ -5,13 +5,13 @@ import { getCampaigns } from '../Campaigns/campaignService';
 import { getRegions } from '../Regions/RegionsService';
 import './outreach.css';
 import { getCategories } from '../Categories/categoryService';
-import { 
-    getOutreach, 
-    createOutreach, 
-    updateOutreach, 
-    deleteOutreach, 
+import {
+    getOutreach,
+    createOutreach,
+    updateOutreach,
+    deleteOutreach,
     importCSV,
-    assignOutreach 
+    assignOutreach
 } from './outreachService';
 const { Dragger } = Upload;
 
@@ -91,7 +91,7 @@ const OutReachList = () => {
 
     const handleImportSubmit = async () => {
         try {
-            console.log(importData,"ketul")
+            console.log(importData, "ketul")
             if (!importData.campaign || !importData.region || !importData.category || !importData.file) {
                 message.error('Please fill in all required fields');
                 return;
@@ -108,7 +108,7 @@ const OutReachList = () => {
             message.success('CSV imported successfully');
             setImportModalVisible(false);
             fetchOutreach(); // Refresh the list
-            
+
             // Reset import form
             setImportData({
                 campaign: undefined,
@@ -265,30 +265,30 @@ const OutReachList = () => {
                     <Input
                         type="text"
                         placeholder="Search Outreach..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        value={ searchTerm }
+                        onChange={ (e) => setSearchTerm(e.target.value) }
                         className="search-input"
                     />
                 </div>
                 <div className="action-buttons">
-                    <Button 
-                        onClick={handleImportCSV}
-                        icon={<UploadOutlined />}
+                    <Button
+                        onClick={ handleImportCSV }
+                        icon={ <UploadOutlined /> }
                         className="import-btn"
                     >
                         Import CSV
                     </Button>
-                    <Button 
+                    <Button
                         type="primary"
-                        onClick={handleAddOutreach}
+                        onClick={ handleAddOutreach }
                         className="add-outreach-btn"
                     >
                         Add Outreach
                     </Button>
-                    <Button 
-                        onClick={handleViewReports}
-                        icon={<BarChartOutlined />}
-                        className="reports-btn"
+                    <Button
+                        onClick={ handleViewReports }
+                        icon={ <BarChartOutlined /> }
+                        className="reports-btn filter-btn"
                     >
                         Reports
                     </Button>
@@ -301,8 +301,8 @@ const OutReachList = () => {
                         <tr>
                             <th>
                                 <Checkbox
-                                    onChange={(e) => handleSelectAll(e.target.checked)}
-                                    checked={selectedOutreach.length === outreach.length}
+                                    onChange={ (e) => handleSelectAll(e.target.checked) }
+                                    checked={ selectedOutreach.length === outreach.length }
                                 />
                             </th>
                             <th>Name</th>
@@ -320,93 +320,93 @@ const OutReachList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {outreach.map(item => (
-                            <tr key={item._id}>
+                        { outreach.map(item => (
+                            <tr key={ item._id }>
                                 <td>
                                     <Checkbox
-                                        checked={selectedOutreach.includes(item._id)}
-                                        onChange={() => handleCheckboxChange(item._id)}
+                                        checked={ selectedOutreach.includes(item._id) }
+                                        onChange={ () => handleCheckboxChange(item._id) }
                                     />
                                 </td>
-                                <td>{item.name}</td>
-                                <td>{item.email}</td>
-                                <td>{item.phone}</td>
-                                <td>{item.website}</td>
-                                <td>{item.linkedin}</td>
-                                <td>{item.country}</td>
-                                <td>{item.status}</td>
-                                <td>{item.region.regionName}</td>
-                                <td>{item.campaign.campaignName}</td>
-                                <td>{item.category.categoryName}</td>
-                                <td>{item.createdBy.name}</td>
+                                <td>{ item.name }</td>
+                                <td>{ item.email }</td>
+                                <td>{ item.phone }</td>
+                                <td>{ item.website }</td>
+                                <td>{ item.linkedin }</td>
+                                <td>{ item.country }</td>
+                                <td>{ item.status }</td>
+                                <td>{ item.region.regionName }</td>
+                                <td>{ item.campaign.campaignName }</td>
+                                <td>{ item.category.categoryName }</td>
+                                <td>{ item.createdBy.name }</td>
                                 <td>
-                                    <Button onClick={() => handleEditOutreach(item._id)}>Edit</Button>
+                                    <Button className='edit-btn' onClick={ () => handleEditOutreach(item._id) }>Edit</Button>
                                     <Popconfirm
                                         title="Delete Outreach"
                                         description="Are you sure you want to delete this outreach?"
-                                        onConfirm={() => handleDelete(item._id)}
+                                        onConfirm={ () => handleDelete(item._id) }
                                         okText="Yes"
                                         cancelText="No"
                                     >
-                                        <Button danger>Delete</Button>
+                                        <Button className='delete-btn'>Delete</Button>
                                     </Popconfirm>
                                 </td>
                             </tr>
-                        ))}
+                        )) }
                     </tbody>
                 </table>
             </div>
 
-            {/* Add/Edit Outreach Modal */}
+            {/* Add/Edit Outreach Modal */ }
             <Modal
                 title="Add Outreach"
-                open={modalVisible}
-                onCancel={() => setModalVisible(false)}
-                onOk={handleSubmit}
-                width={600}
+                open={ modalVisible }
+                onCancel={ () => setModalVisible(false) }
+                onOk={ handleSubmit }
+                width={ 600 }
             >
                 <div className="outreach-form">
                     <Input
-                        value={formData.name}
-                        onChange={(e) => setFormData({...formData, name: e.target.value})}
+                        value={ formData.name }
+                        onChange={ (e) => setFormData({ ...formData, name: e.target.value }) }
                         placeholder="Name"
                         className="form-input"
                     />
                     <Input
-                        value={formData.email}
-                        onChange={(e) => setFormData({...formData, email: e.target.value})}
+                        value={ formData.email }
+                        onChange={ (e) => setFormData({ ...formData, email: e.target.value }) }
                         placeholder="Email"
                         className="form-input"
                     />
                     <Input
-                        value={formData.phone}
-                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                        value={ formData.phone }
+                        onChange={ (e) => setFormData({ ...formData, phone: e.target.value }) }
                         placeholder="Phone"
                         className="form-input"
                     />
                     <Input
-                        value={formData.website}
-                        onChange={(e) => setFormData({...formData, website: e.target.value})}
+                        value={ formData.website }
+                        onChange={ (e) => setFormData({ ...formData, website: e.target.value }) }
                         placeholder="Website"
                         className="form-input"
                     />
                     <Input
-                        value={formData.linkedin}
-                        onChange={(e) => setFormData({...formData, linkedin: e.target.value})}
+                        value={ formData.linkedin }
+                        onChange={ (e) => setFormData({ ...formData, linkedin: e.target.value }) }
                         placeholder="LinkedIn"
                         className="form-input"
                     />
                     <Input
-                        value={formData.country}
-                        onChange={(e) => setFormData({...formData, country: e.target.value})}
+                        value={ formData.country }
+                        onChange={ (e) => setFormData({ ...formData, country: e.target.value }) }
                         placeholder="Country"
                         className="form-input"
                     />
                     <Select
-                        value={formData.status}
-                        onChange={(value) => setFormData({...formData, status: value})}
+                        value={ formData.status }
+                        onChange={ (value) => setFormData({ ...formData, status: value }) }
                         placeholder="Status"
-                        className="form-input"
+                    // className="form-input"
                     >
                         <Select.Option value="New">New</Select.Option>
                         <Select.Option value="In Progress">In Progress</Select.Option>
@@ -415,93 +415,93 @@ const OutReachList = () => {
                         <Select.Option value="Not Interested">Not Interested</Select.Option>
                     </Select>
                     <Select
-                        value={formData.region}
-                        onChange={(value) => setFormData({...formData, region: value})}
+                        value={ formData.region }
+                        onChange={ (value) => setFormData({ ...formData, region: value }) }
                         placeholder="Region"
-                        className="form-input"
-                        options={regionOptions}
+                        // className="form-input"
+                        options={ regionOptions }
                     />
                     <Select
-                        value={formData.campaign}
-                        onChange={(value) => setFormData({...formData, campaign: value})}
+                        value={ formData.campaign }
+                        onChange={ (value) => setFormData({ ...formData, campaign: value }) }
                         placeholder="Campaign"
-                        className="form-input"
+                    // className="form-input"
                     >
-                        {campaigns.map(campaign => (
-                            <Select.Option key={campaign._id} value={campaign._id}>
-                                {campaign.campaignName}
+                        { campaigns.map(campaign => (
+                            <Select.Option key={ campaign._id } value={ campaign._id }>
+                                { campaign.campaignName }
                             </Select.Option>
-                        ))}
+                        )) }
                     </Select>
 
                     <Select
-                        value={formData.category}
-                        onChange={(value) => setFormData({...formData, category: value})}
+                        value={ formData.category }
+                        onChange={ (value) => setFormData({ ...formData, category: value }) }
                         placeholder="Category"
-                        className="form-input"
+                    // className="form-input"
                     >
-                        {categories.map(category => (
-                            <Select.Option key={category._id} value={category._id}>
-                                {category.categoryName}
+                        { categories.map(category => (
+                            <Select.Option key={ category._id } value={ category._id }>
+                                { category.categoryName }
                             </Select.Option>
-                        ))}
+                        )) }
                     </Select>
                 </div>
             </Modal>
 
-            {/* Import CSV Modal */}
+            {/* Import CSV Modal */ }
             <Modal
                 title="Import CSV"
-                open={importModalVisible}
-                onCancel={() => {
+                open={ importModalVisible }
+                onCancel={ () => {
                     setImportModalVisible(false);
                     setImportData({
                         campaign: undefined,
                         region: '',
                         file: null,
-                        category:undefined
+                        category: undefined
                     });
-                }}
-                onOk={handleImportSubmit}
-                width={500}
+                } }
+                onOk={ handleImportSubmit }
+                width={ 500 }
             >
                 <div className="import-form">
                     <Select
                         className="form-input"
                         placeholder="Select Campaign"
-                        value={importData.campaign}
-                        onChange={(value) => setImportData(prev => ({ ...prev, campaign: value }))}
+                        value={ importData.campaign }
+                        onChange={ (value) => setImportData(prev => ({ ...prev, campaign: value })) }
                     >
-                        {campaigns.map(campaign => (
-                            <Select.Option key={campaign._id} value={campaign._id}>
-                                {campaign.campaignName}
+                        { campaigns.map(campaign => (
+                            <Select.Option key={ campaign._id } value={ campaign._id }>
+                                { campaign.campaignName }
                             </Select.Option>
-                        ))}
+                        )) }
                     </Select>
 
-                    
+
                     <Select
-                        value={importData.category}
-                        onChange={(value) => setImportData({...formData, category: value})}
+                        value={ importData.category }
+                        onChange={ (value) => setImportData({ ...formData, category: value }) }
                         placeholder="Select Category"
                         className="form-input"
                     >
-                        {categories.map(category => (
-                            <Select.Option key={category._id} value={category._id}>
-                                {category.categoryName}
+                        { categories.map(category => (
+                            <Select.Option key={ category._id } value={ category._id }>
+                                { category.categoryName }
                             </Select.Option>
-                        ))}
+                        )) }
                     </Select>
-                    
+
                     <Select
                         className="form-input"
                         placeholder="Select Region"
-                        value={importData.region}
-                        onChange={(value) => setImportData(prev => ({ ...prev, region: value }))}
-                        options={regionOptions}
+                        value={ importData.region }
+                        onChange={ (value) => setImportData(prev => ({ ...prev, region: value })) }
+                        options={ regionOptions }
                     />
-                    
-                    <Dragger {...uploadProps} className="csv-uploader">
+
+                    <Dragger { ...uploadProps } className="csv-uploader">
                         <p className="ant-upload-drag-icon">
                             <InboxOutlined />
                         </p>
