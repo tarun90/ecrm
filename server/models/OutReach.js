@@ -31,7 +31,7 @@ const outReachSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['Unassigned', 'New', 'Contacted', 'Qualified', 'Not Interested'],
+        enum: ['Unassigned', 'Not Contacted', 'Contacted', 'Followup', 'Converted to Deal'],
         default: 'Unassigned'
     },
     campaign: {

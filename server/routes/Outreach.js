@@ -145,7 +145,7 @@ router.post('/assign', async (req, res) => {
   try {
     await Outreach.updateMany(
       { _id: { $in: outreachIds } },
-      { $set: { assignedTo: userId } }
+      { $set: { assignedTo: userId, status: "Not Contacted" } }
     );
     res.status(200).send({ message: 'Outreaches assigned successfully' });
   } catch (error) {
