@@ -80,6 +80,10 @@ const OutReachList = () => {
         fetchOutreach();
 
     }, []);
+    useEffect(() => {
+        fetchOutreach();
+
+    }, [searchTerm]);
 
     const fetchUsers = async () => {
         try {
@@ -114,7 +118,7 @@ const OutReachList = () => {
     const fetchOutreach = async () => {
         try {
             setLoading(true);
-            const data = await getOutreach();
+            const data = await getOutreach(searchTerm);
             setOutreach(data);
         } catch (error) {
             // message.error('Failed to fetch outreach data');

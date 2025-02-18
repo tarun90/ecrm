@@ -30,44 +30,65 @@ router.post('/', auth, async (req, res) => {
 });
 
 // Get All Outreaches
-router.get('/',auth, async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
-    // Get the user from request (assuming you have user data in req.user after authentication)
     const user = req?.user?.user;
+    
+    // Get search string from query
+    const { search } = req.query;
 
     // Base query
     let query = {};
 
     // Get user's department details
     const userWithDept = await User.findById(user._id).populate('department');
-    
-    // if (!userWithDept.department) {
-    //   return res.status(403).send({ message: 'User department not assigned' });
-    // }
 
-    // Lead Generation department - see only their created outreaches
+    // Department-based filtering
     if (userWithDept?.department?.name.toLowerCase() === 'lead generation') {
       query.createdBy = user._id;
-    }
-    
-    // Region Head - see all outreaches in their region
-    else if (user.isRegionHead) {
-      // Assuming user has a region field or some way to identify their region
+    } else if (user.isRegionHead) {
       query.region = user.regionId;
-    }
-    
-    // Outreach team - see only assigned outreaches
-    else if (userWithDept.department.name.toLowerCase() === 'outreach team') {
+    } else if (userWithDept.department.name.toLowerCase() === 'outreach team') {
       query.assignedTo = user._id;
     }
 
-    // Fetch outreaches based on the constructed query
+    // Add search filter if search string is provided
+    if (search) {
+      const searchRegex = new RegExp(search, 'i');
+      
+      // Populate the relations first to search in their fields
+      const outreaches = await Outreach.find(query)
+        .populate('campaign', 'campaignName')
+        .populate('region', 'regionName')
+        .populate('createdBy', 'name email')
+        .populate('category', 'categoryName')
+        .populate('assignedTo', 'name');
+
+      // Filter the populated results
+      const filteredOutreaches = outreaches.filter(outreach => {
+        return (
+          outreach.campaign?.campaignName?.match(searchRegex) ||
+          outreach.region?.regionName?.match(searchRegex) ||
+          outreach.category?.categoryName?.match(searchRegex) ||
+          outreach.createdBy?.name?.match(searchRegex) ||
+          outreach.createdBy?.email?.match(searchRegex) ||
+          outreach.assignedTo?.name?.match(searchRegex) ||
+          outreach.status?.match(searchRegex) ||
+          outreach.notes?.match(searchRegex)
+        );
+      });
+
+      return res.status(200).send(filteredOutreaches);
+    }
+
+    // If no search string, return all results based on department access
     const outreaches = await Outreach.find(query)
       .populate('campaign', 'campaignName')
       .populate('region', 'regionName')
       .populate('createdBy', 'name email')
       .populate('category', 'categoryName')
-      .populate('assignedTo', 'name');
+      .populate('assignedTo', 'name')
+      .sort({ createdAt: -1 });
 
     res.status(200).send(outreaches);
 
@@ -76,7 +97,6 @@ router.get('/',auth, async (req, res) => {
     res.status(500).send({ message: 'Internal Server Error', error });
   }
 });
-
 //Get Data by id
 router.get('/outreacbyid/:id', async (req, res) => {
   try {
