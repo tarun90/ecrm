@@ -8,6 +8,8 @@ import axios from 'axios';
 
 import { contactService } from '../../services/api';
 import { getCompaniesNames } from '../Company/APIServices';
+
+import CompanyFormModal from '../Company/CompanyFormModal';
 import './ContactListAndAdd.css';
 import { Header } from 'antd/es/layout/layout';
 import { Delete, Edit } from 'lucide-react';
@@ -16,6 +18,21 @@ const ContactListAndAdd = () => {
     const navigate = useNavigate();
     const [form] = Form.useForm();
     const [contacts, setContacts] = useState([]);
+        const [modalVisible, setModalVisible] = useState(false);
+            const [editId, setEditId] = useState(null);
+        
+        const [searchText, setSearchText] = useState("");
+    const [contact, setContact] = useState({
+        email: '',
+        firstName: '',
+        lastName: '',
+        jobTitle: '',
+        phoneNumber: '',
+        lifecycleStage: 'Lead',
+        leadStatus: '',
+        contactOwner: '',
+        company: '',
+    });
     const [companies, setCompanies] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -45,12 +62,12 @@ const ContactListAndAdd = () => {
         try {
             const data = await getCompaniesNames();
             setCompanies(data);
-        } catch (error) {
-            message.error('Failed to fetch companies');
-            console.error('Error fetching companies:', error);
+        } 
+        catch (error) {
+            console.log(error);
         }
-    };
-
+    }
+    
     const fetchContacts = async (search = '') => {
         setIsSearching(true);
         try {
@@ -158,6 +175,33 @@ const ContactListAndAdd = () => {
         setEditingId(null);
     };
 
+
+    const handleAddCompany = () => {
+        setEditId(null);
+        setModalVisible(true);
+      };
+
+      const afterModalCloseSaveData = async (companyName) => {
+        try {
+            let data = await getCompaniesNames(); 
+            setCompanies(data);
+    
+            setModalVisible(false); 
+                let matchedCompany = data.find((cvl) => cvl.companyName === companyName);
+    
+            if (matchedCompany) {
+                setContact({
+                    company:matchedCompany._id
+                })
+            } else {
+                console.log("No matching company found.");
+            }
+        } catch (error) {
+            console.error("Error in afterModalCloseSaveData:", error);
+        }
+    };
+    
+    
     return (
         <div className="contact-container">
             <Header className="contact-header">
@@ -305,14 +349,39 @@ const ContactListAndAdd = () => {
                             </Form.Item>
 
                             <Form.Item label="Company" name="company">
-                                <Select placeholder="Select Company">
-                                    <Select.Option value="">Select Company</Select.Option>
-                                    { companies?.map((company) => (
-                                        <Select.Option key={ company._id } value={ company._id }>
-                                            { company.companyName }
-                                        </Select.Option>
-                                    )) }
-                                </Select>
+                            <Select
+                                showSearch
+                                placeholder="Select Company"
+                                name="company"
+                                allowClear
+                                value={contact.company || undefined}
+                                // onChange={handleChange}
+                                onSearch={(value) => setSearchText(value)}
+                              
+                                notFoundContent={
+                                    <>
+                                        <Button
+                                            style={{
+                                                backgroundColor: "#e0f2fe",
+                                                width: "100%",
+                                                color: "#0369a1",
+                                                border: "none", 
+                                                boxShadow: "none", 
+                                            }}
+                                          
+                                            onClick={() => handleAddCompany()}
+                                        >
+                                            + Add Company
+                                        </Button>
+</>
+                                }
+                            >
+                                {companies?.map((company) => (
+                                    <Option key={company._id} value={company._id}>
+                                        {company.companyName}
+                                    </Option>
+                                ))}
+                            </Select>
                             </Form.Item>
                         </Col>
                     </Row>

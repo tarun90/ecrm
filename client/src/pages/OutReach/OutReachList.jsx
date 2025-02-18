@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { message, Popconfirm, Button, Input, Modal, Select, Checkbox, Upload, Form, Row, Col, Divider } from 'antd';
 import { UploadOutlined, FileExcelOutlined, BarChartOutlined, InboxOutlined, DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
-import { getUsers } from '../Users/userService';
+import { getUsers } from '../Users/userService';  // Add this import
 import { getCampaigns } from '../Campaigns/campaignService';
 import { getRegions } from '../Regions/RegionsService';
 import './outreach.css';
@@ -15,12 +15,16 @@ import {
     assignOutreach
 } from './outreachService';
 import { Header } from 'antd/es/layout/layout';
-
+import { Link } from 'react-router-dom';
+import { Getcountry } from '../Company/APIServices';
+import axios from 'axios';
 const { Dragger } = Upload;
+const API_URL = import.meta.env.VITE_TM_API_URL;
 
 const OutReachList = () => {
     let userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : {}
     const [outreach, setOutreach] = useState([]);
+    const [fileList, setFileList] = useState([]);
     const [campaigns, setCampaigns] = useState([]);
     const [categories, setCategories] = useState([]);
     const [regions, setRegions] = useState([]);
@@ -32,8 +36,19 @@ const OutReachList = () => {
     const [editMode, setEditMode] = useState(false);
     const [editId, setEditId] = useState(null);
     const [users, setUsers] = useState([]);
+    const [dropdownData, setDropdownData] = useState({
+        countries: [],
+        statuses: [],
+        regions: [],
+        campaigns: [],
+        categories: [],
+        assignToUsers: [],
+    });
     const [form] = Form.useForm();
-
+    const [country, setCountry] = useState([])
+    const [filterModal, setfilterModal] = useState(false)
+    const [UserData, setUserData] = useState([])
+    const [filterData, setFilteredData] = useState([])
     const [importData, setImportData] = useState({
         campaign: undefined,
         region: '',
@@ -115,6 +130,7 @@ const OutReachList = () => {
             category: undefined,
             file: null
         });
+        setFileList([]);
         setImportModalVisible(true);
     };
 
@@ -137,6 +153,7 @@ const OutReachList = () => {
             message.success('CSV imported successfully');
             setImportModalVisible(false);
             fetchOutreach(); // Refresh the list
+
             // Reset import form
             setImportData({
                 campaign: undefined,
@@ -156,6 +173,7 @@ const OutReachList = () => {
         accept: '.csv',
         beforeUpload: (file) => {
             setImportData(prev => ({ ...prev, file }));
+            setFileList([file]);
             return false; // Prevent automatic upload
         },
         // onChange: ({ file }) => {
@@ -183,7 +201,6 @@ const OutReachList = () => {
         value: region._id,
         label: region?.regionName
     }));
-
     const handleAddOutreach = () => {
         setEditMode(false);
         setEditId(null);
@@ -208,25 +225,6 @@ const OutReachList = () => {
             setEditMode(true);
             setEditId(id);
             setModalVisible(true);
-        }
-    };
-
-    const handleSubmit = async (values) => {
-        try {
-            setLoading(true);
-            if (editMode) {
-                await updateOutreach(editId, values);
-                message.success('Outreach updated successfully');
-            } else {
-                await createOutreach(values);
-                message.success('Outreach created successfully');
-            }
-            setModalVisible(false);
-            fetchOutreach();
-        } catch (error) {
-            message.error(editMode ? 'Failed to update outreach' : 'Failed to create outreach');
-        } finally {
-            setLoading(false);
         }
     };
     const handleDelete = async (id) => {
@@ -259,6 +257,24 @@ const OutReachList = () => {
         }
     };
 
+    const handleSubmit = async (values) => {
+        try {
+            setLoading(true);
+            if (editMode) {
+                await updateOutreach(editId, values);
+                message.success('Outreach updated successfully');
+            } else {
+                await createOutreach(values);
+                message.success('Outreach created successfully');
+            }
+            setModalVisible(false);
+            fetchOutreach();
+        } catch (error) {
+            message.error(editMode ? 'Failed to update outreach' : 'Failed to create outreach');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleAssignOutreach = async (userId) => {
         if (selectedOutreach.length === 0) {
@@ -283,7 +299,67 @@ const OutReachList = () => {
         // TODO: Implement reports view
         message.info('Reports feature coming soon');
     };
+    //country data fetch
+    const fetchCountry = async () => {
+        try {
+            let data = await Getcountry();
+            setCountry(data.data);
+        } catch (error) {
+            console.log(error);
 
+        }
+    }
+
+    const handleFilterSubmit = async () => {
+        try {
+            setLoading(true);
+            const values = await form.validateFields(); // Get form values
+
+            // ✅ API request
+            const response = await axios.post(
+                `${API_URL}/api/outreach/filter`,
+                values,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("token")}`, // Auth token
+                    },
+                }
+            );
+
+            // ✅ Update filtered data
+            setFilteredData(response.data);
+            setOutreach(response?.data)
+
+            console.log(response.data, 'response.data');
+            message.success("Filters applied successfully!");
+            setfilterModal(false)
+            form.resetFields()
+        } catch (error) {
+            console.error("Error filtering outreach:", error);
+            message.error("Failed to apply filters.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    console.log(filterData, 'filterData');
+    const getUsersData = async () => {
+        try {
+            let userdata = await getUsers()
+            console.log(userdata);
+
+            setUserData(userdata.users)
+
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
+    useEffect(() => {
+        fetchCountry()
+        getUsersData()
+    }, [])
     return (
         <div className="outreach-container">
             <Header className="outreach-header">
@@ -297,10 +373,19 @@ const OutReachList = () => {
                             className="search-input"
                         />
                     </div>
+                    <Button type='primary' onClick={ () => { setfilterModal(true) } }>Filter</Button>
+                    {/* <Button disabled={filterData==[]} type='primary' onClick={()=>{fetchOutreach()}}>Reset Filter</Button> */ }
+                    <Button
+                        disabled={ !filterData } // Disable if no filtered data
+                        type="primary"
+                        onClick={ () => { fetchOutreach(); setFilteredData() } }
+                    >
+                        Reset Filter
+                    </Button>
                     { selectedOutreach.length > 0 && (
                         <div className="assignment-section">
                             <span style={ { fontWeight: 500, marginRight: "10px" } }>
-                                Assign Outreach To : &nbsp; { selectedOutreach.length }
+                                Assign Outreach To : &nbsp;
                             </span>
                             <Select
                                 style={ { width: 200 } }
@@ -323,14 +408,10 @@ const OutReachList = () => {
                                 { selectedOutreach.length } outreach selected
                             </span>
 
-                            {/* <Button 
-            onClick={() => setSelectedOutreach([])}
-            size="small"
-        >
-            Clear Selection
-        </Button> */}
+
                         </div>
                     ) }
+
                 </div>
                 <div className="action-buttons">
                     { userData?.department?.name == "Lead Generation" && <>
@@ -346,7 +427,6 @@ const OutReachList = () => {
                             onClick={ handleAddOutreach }
                             className="add-outreach-btn"
                         >
-                            <PlusOutlined />
                             Add Outreach
                         </Button> </> }
                     {/* <Button 
@@ -359,7 +439,6 @@ const OutReachList = () => {
                 </div>
 
             </Header>
-
             <div className="contact-table">
                 <table>
                     <thead>
@@ -388,6 +467,7 @@ const OutReachList = () => {
                         </tr>
                     </thead>
                     <tbody>
+
                         { outreach.map(item => (
                             <tr key={ item._id }>
                                 { userData?.isRegionHead &&
@@ -398,7 +478,8 @@ const OutReachList = () => {
                                         />
                                     </td>
                                 }
-                                <td>{ item?.name }</td>
+                                <td><Link to={ `/ViewOutReach/${item._id}` }>
+                                    { item.name }</Link></td>
                                 <td>{ item?.email }</td>
                                 <td>{ item?.phone }</td>
                                 <td>{ item?.website }</td>
@@ -561,8 +642,7 @@ const OutReachList = () => {
                 </Form>
             </Modal>
 
-
-
+            {/* Import CSV Modal */ }
             <Modal
                 destroyOnClose={ true }
                 title="Import CSV"
@@ -586,7 +666,6 @@ const OutReachList = () => {
                 <Divider />
                 <div className="import-form">
                     <Row gutter={ 16 }>
-                        {/* Campaign Select */ }
                         <Col span={ 12 }>
                             <Form.Item label="Campaign" style={ { marginBottom: 16 } }>
                                 <Select
@@ -604,7 +683,6 @@ const OutReachList = () => {
                             </Form.Item>
                         </Col>
 
-                        {/* Category Select */ }
                         <Col span={ 12 }>
                             <Form.Item label="Category" style={ { marginBottom: 16 } }>
                                 <Select
@@ -624,7 +702,6 @@ const OutReachList = () => {
                     </Row>
 
                     <Row gutter={ 16 }>
-                        {/* Region Select */ }
                         <Col span={ 12 }>
                             <Form.Item label="Region" style={ { marginBottom: 16 } }>
                                 <Select
@@ -637,7 +714,6 @@ const OutReachList = () => {
                             </Form.Item>
                         </Col>
 
-                        {/* CSV Dragger Upload */ }
                         <Col span={ 12 }>
                             <Form.Item label="CSV Upload" style={ { marginBottom: 16 } }>
                                 <Dragger
@@ -661,7 +737,146 @@ const OutReachList = () => {
             </Modal>
 
 
-        </div>
+            {/* //Filter Modal */ }
+            <Modal
+                title="Outreach Filter"
+                open={ filterModal }
+                onCancel={ () => { setfilterModal(false) } }
+                footer={ null }
+                width={ 600 }
+                destroyOnClose
+            >
+                <Divider />
+                <Form form={ form } layout="vertical"
+                //    onFinish={setApiData}
+                >
+                    {/* Country Dropdown */ }
+                    <Form.Item
+                        label="Country"
+                        name="country"
+                    // rules={[{ required: true, message: "Please select a country!" }]}
+                    >
+                        <Select
+                            placeholder="Select Country"
+                            showSearch
+                            allowClear
+                            onSelect={ (value) => setFormData({ ...formData, country: value }) } // ✅ Fixed onSelect
+                            filterOption={ (input, option) =>
+                                option?.children.toLowerCase().includes(input.toLowerCase())
+                            } // ✅ Enables search filtering
+                        >
+                            { country?.map((item) => (
+                                <Option key={ item.id || item.name } value={ item.name } style={ { textTransform: "capitalize" } }>
+                                    { item.name }
+                                </Option>
+                            )) }
+                        </Select>
+                    </Form.Item>
+
+                    {/* Status Dropdown */ }
+                    {/* <Form.Item
+                        label="Status"
+                        name="status"
+                        rules={[{ required: true, message: "Please select a status!" }]}
+                    >
+                        <Select placeholder="Select Status">
+                            {dropdownData?.statuses.map((item) => (
+                                <Option key={item.id} value={item.name}>
+                                    {item.name}
+                                </Option>
+                            ))}
+                        </Select>
+                    </Form.Item> */}
+
+                    {/* Region Dropdown */ }
+                    <Form.Item
+                        label="Region"
+                        name="region"
+                    // rules={[{ required: true, message: "Please select a region!" }]}
+                    >
+                        <Select
+                            value={ formData.region }
+                            onChange={ (value) => setFormData({ ...formData, region: value }) }
+                            placeholder="Region"
+                            // className="form-input"
+                            options={ regionOptions }
+                        />
+                    </Form.Item>
+
+                    {/* Campaigns Dropdown */ }
+                    <Form.Item
+                        label="Campaigns"
+                        name="campaign"
+                    // rules={[{ required: true, message: "Please select a campaign!" }]}
+                    >
+                        <Select
+                            // value={formData.campaign}
+                            onChange={ (value) => setFormData({ ...formData, campaign: value }) }
+                            placeholder="Campaign"
+                        // className="form-input"
+                        >
+                            { campaigns.map(campaign => (
+                                <Select.Option key={ campaign._id } value={ campaign._id }>
+                                    { campaign.campaignName }
+                                </Select.Option>
+                            )) }
+                        </Select>
+                    </Form.Item>
+
+                    {/* Category Dropdown */ }
+                    <Form.Item
+                        label="Category"
+                        name="category"
+                    // rules={[{ required: true, message: "Please select a category!" }]}
+                    >
+                        <Select
+                            // value={formData.category}
+                            onChange={ (value) => setFormData({ ...formData, category: value }) }
+                            placeholder="Category"
+                        // className="form-input"
+                        >
+                            { categories.map(category => (
+                                <Select.Option key={ category._id } value={ category._id }>
+                                    { category.categoryName }
+                                </Select.Option>
+                            )) }
+                        </Select>
+                    </Form.Item>
+
+                    {/* Assign To Dropdown */ }
+                    <Form.Item
+                        label="Assign To"
+                        name="assignTo"
+                        onChange={ (value) => setFormData({ ...formData, assignTo: value?._id }) }
+
+                    // rules={[{ required: true, message: "Please assign a user!" }]}
+                    >
+                        <Select placeholder="Assign To">
+                            { UserData?.map((item) => (
+                                <Option key={ item._id } value={ item._id }>
+                                    { item.name }
+                                </Option>
+                            )) }
+                        </Select>
+                    </Form.Item>
+
+                    <Divider />
+
+                    {/* Modal Footer (Buttons) */ }
+                    <div style={ { textAlign: "right" } }>
+                        <Button
+                            onClick={ () => { setfilterModal(false) } }
+                            style={ { marginRight: 10 } }>
+                            Cancel
+                        </Button>
+                        <Button type="primary" onClick={ handleFilterSubmit } htmlType="submit" loading={ loading }>
+                            Save
+                        </Button>
+                    </div>
+                </Form>
+            </Modal>
+
+        </div >
     );
 };
 

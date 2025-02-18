@@ -1,5 +1,5 @@
 import express from 'express';
-import Outreach from '../models/OutReach.js';
+import Outreach from '../models/Outreach.js';
 import multer from 'multer';
 import csv from 'csv-parser';
 import fs from 'fs';
@@ -77,6 +77,79 @@ router.get('/',auth, async (req, res) => {
   }
 });
 
+//Get Data by id
+router.get('/outreacbyid/:id', async (req, res) => {
+  try {
+
+    const outreaches = await Outreach.findById({_id:req.params.id})
+      .populate('campaign', 'campaignName') // Populate campaign and retrieve only the name field
+      .populate('region', 'regionName')   // Populate region and retrieve only the name field
+      .populate('createdBy', 'name email') // Populate createdBy and retrieve name and email
+      .populate('category', 'categoryName')
+      
+    res.status(200).json(outreaches);
+    
+  } catch (error) {
+    res.status(500).send({ message: 'Internal Server Error', error });
+  }
+});
+
+//filter api
+
+
+// ✅ GET /api/outreach/filter - Filtered Outreach API
+
+
+// ✅ POST /api/outreach/filter - Outreach Filtering API
+router.post("/filter", auth, async (req, res) => {
+  try {
+    const user = req?.user?.user;
+
+    let query = {};
+
+    // ✅ Get user's department details
+    const userWithDept = await User.findById(user._id).populate("department");
+
+    // ✅ Apply department-based filters
+    if (userWithDept?.department?.name.toLowerCase() === "lead generation") {
+      query.createdBy = user._id;
+    } else if (user.isRegionHead) {
+      query.region = user.regionId;
+    } else if (userWithDept.department.name.toLowerCase() === "outreach team") {
+      query.assignedTo = user._id;
+    }
+
+    // ✅ Extract filters from request body
+    const { country, status, region, campaign, category, assignTo } = req.body;
+
+    if (country) query.country = country;
+    if (status) query.status = status;
+    if (region) query.region = region;
+    if (campaign) query.campaign = campaign;
+    if (category) query.category = category;
+    if (assignTo) query.assignedTo = assignTo;
+
+    // ✅ Fetch filtered outreaches
+    const outreaches = await Outreach.find(query)
+      .populate("campaign", "campaignName")
+      .populate("region", "regionName")
+      .populate("createdBy", "name email")
+      .populate("category", "categoryName")
+      .populate("assignedTo", "name");
+
+    res.status(200).json(outreaches);
+  } catch (error) {
+    console.error("Error filtering outreaches:", error);
+    res.status(500).json({ message: "Internal Server Error", error });
+  }
+});
+
+
+
+
+
+
+
 // Update Outreach
 router.put('/:id', async (req, res) => {
   try {
@@ -130,7 +203,7 @@ router.post('/assign', async (req, res) => {
   try {
     await Outreach.updateMany(
       { _id: { $in: outreachIds } },
-      { $set: { assignedTo: userId } }
+      { $set: { assignedTo: userId, status: "Not Contacted" } }
     );
     res.status(200).send({ message: 'Outreaches assigned successfully' });
   } catch (error) {

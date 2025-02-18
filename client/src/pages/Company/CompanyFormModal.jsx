@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Form,
   Input,
@@ -9,14 +9,16 @@ import {
   Divider,
   message
 } from 'antd';
-import { createCompany, getCompanyById, updateCompany } from './APIServices';
+import { createCompany, getCompanyById, Getcountry, updateCompany } from './APIServices';
 import currenciesData from './currency';
+import { useEffect } from 'react';
 
 const { TextArea } = Input;
 
-const CompanyFormModal = ({ visible, onCancel, editId = null, fetchCompanies }) => {
+const CompanyFormModal = ({ visible, onCancel, editId = null, fetchCompanies, contectListComnyName = null }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = React.useState(false);
+  const [country, setCountry] = useState([])
 
   const fetchCompanyById = async (id) => {
     try {
@@ -50,12 +52,17 @@ const CompanyFormModal = ({ visible, onCancel, editId = null, fetchCompanies }) 
     if (visible && editId) {
       fetchCompanyById(editId);
     }
+
   }, [visible, editId]);
 
   React.useEffect(() => {
     if (!visible) {
       form.resetFields();
     }
+    form.setFieldsValue({
+      companyName: contectListComnyName,
+    })
+
   }, [visible]);
 
   const industries = [
@@ -102,6 +109,21 @@ const CompanyFormModal = ({ visible, onCancel, editId = null, fetchCompanies }) 
     'Other'
   ];
 
+
+  //country data fetch
+  const fetchCountry = async () => {
+    try {
+      let data = await Getcountry();
+      setCountry(data.data);
+    } catch (error) {
+      console.log(error);
+
+    }
+  }
+  useEffect(() => {
+    fetchCountry()
+  }, [])
+
   const handleSubmit = async (values) => {
     try {
       setLoading(true);
@@ -114,7 +136,9 @@ const CompanyFormModal = ({ visible, onCancel, editId = null, fetchCompanies }) 
         fetchCompanies();
         message.success('Company created successfully');
       }
-      onCancel();
+      let letcompanyName = form.getFieldsValue('companyName')
+
+      onCancel(letcompanyName.companyName);
     } catch (error) {
       message.error(error.message || 'Error saving company');
     } finally {
@@ -245,11 +269,20 @@ const CompanyFormModal = ({ visible, onCancel, editId = null, fetchCompanies }) 
               label="Country"
               name="country"
             >
-              <Select placeholder="Select Country">
-                { countries.map(country => (
-                  <Select.Option key={ country } value={ country }>
-                    { country }
-                  </Select.Option>
+              <Select
+                placeholder="Select Country"
+                showSearch
+                allowClear
+              >
+
+                { country?.map((item, index) => (
+                  <Option
+                    key={ index }
+                    value={ item?.name }
+                    style={ { textTransform: "capitalize" } }
+                  >
+                    { item?.name }
+                  </Option>
                 )) }
               </Select>
             </Form.Item>
