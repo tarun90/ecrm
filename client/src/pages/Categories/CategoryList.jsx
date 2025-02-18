@@ -145,26 +145,34 @@ const CategoryList = () => {
             <Modal
                 title={ editId ? "Edit Category" : "Add Category" }
                 open={ modalVisible }
-                // onCancel={ () => setModalVisible(false) }
-                // onOk={ handleSubmit }
-                width={ 400 }
-                footer={ false }
+                onCancel={ () => setModalVisible(false) }
+                footer={ null } // Let Form handle submission
             >
                 <Form
                     form={ form }
                     layout="vertical"
-                    onFinish={ handleSubmit } // Called when the form is submitted
-                >                    <Input
-                        value={ categoryName }
-                        onChange={ (e) => setCategoryName(e.target.value) }
-                        placeholder="Enter Category Name"
-                        className="form-input"
-                    />
+                    onFinish={ handleSubmit } // Submits when user clicks "OK"
+                >
+                    <Form.Item
+                        label="Category Name"
+                        // name="categoryName"
+                        rules={ [{ required: true, message: "Please enter category name" }] }
+                    >
+                        <Input placeholder="Enter Category Name"
+                            value={ categoryName }
+                            onChange={ (e) => setCategoryName(e.target.value) } />
+                    </Form.Item>
+
+                    {/* Buttons inside the form to align properly */ }
+                    <div className="modal-footer" style={ { marginTop: "16px", textAlign: "right" } }>
+                        <Button onClick={ () => setModalVisible(false) } className="text-btn">
+                            Cancel
+                        </Button>
+                        <Button type="primary" htmlType="submit" style={ { marginLeft: "8px" } }>
+                            OK
+                        </Button>
+                    </div>
                 </Form>
-                <div className='modal-footer'>
-                    <Button onClick={ () => setModalVisible(false) } className='text-btn'>Cancel</Button>
-                    <Button type="primary" onClick={ () => handleSubmit() }> Ok </Button>
-                </div>
             </Modal>
         </div>
     );

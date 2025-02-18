@@ -381,7 +381,7 @@ const OutReachList = () => {
                     {/* <Button disabled={filterData==[]} type='primary' onClick={()=>{fetchOutreach()}}>Reset Filter</Button> */ }
                     <Button
                         disabled={ !filterData } // Disable if no filtered data
-                    className='delete-btn btn'
+                        className='delete-btn btn'
                         onClick={ () => { fetchOutreach(); setFilteredData() } }
                     >
                         Reset Filter
@@ -703,9 +703,7 @@ const OutReachList = () => {
                                 </Select>
                             </Form.Item>
                         </Col>
-                    </Row>
 
-                    <Row gutter={ 16 }>
                         <Col span={ 12 }>
                             <Form.Item label="Region" style={ { marginBottom: 16 } }>
                                 <Select
@@ -718,7 +716,10 @@ const OutReachList = () => {
                             </Form.Item>
                         </Col>
 
-                        <Col span={ 12 }>
+
+                    </Row>
+                    <Row >
+                        <Col >
                             <Form.Item label="CSV Upload" style={ { marginBottom: 16 } }>
                                 <Dragger
                                     { ...uploadProps }
@@ -740,6 +741,88 @@ const OutReachList = () => {
                 </div>
             </Modal>
 
+            {/* <Modal
+                destroyOnClose
+                title="Import CSV"
+                open={ importModalVisible }
+                onCancel={ () => {
+                    setImportModalVisible(false);
+                    form.resetFields(); // Reset form on close
+                } }
+                onOk={ () => form.submit() } // Submits the form on OK click
+                width={ 600 }
+            >
+                <Divider />
+                <Form
+                    form={ form }
+                    layout="vertical"
+                    onFinish={ handleImportSubmit } // Handles form submission
+                >
+                    <Row gutter={ 16 }>
+                        <Col span={ 12 }>
+                            <Form.Item
+                                label="Campaign"
+                                name="campaign"
+                            // rules={ [{ required: true, message: "Please select a campaign" }] }
+                            >
+                                <Select placeholder="Select Campaign" style={ { width: "100%" } }>
+                                    { campaigns.map((campaign) => (
+                                        <Select.Option key={ campaign._id } value={ campaign._id }>
+                                            { campaign.campaignName }
+                                        </Select.Option>
+                                    )) }
+                                </Select>
+                            </Form.Item>
+                        </Col>
+
+                        <Col span={ 12 }>
+                            <Form.Item
+                                label="Category"
+                                name="category"
+                            // rules={ [{ required: true, message: "Please select a category" }] }
+                            >
+                                <Select placeholder="Select Category" style={ { width: "100%" } }>
+                                    { categories.map((category) => (
+                                        <Select.Option key={ category._id } value={ category._id }>
+                                            { category.categoryName }
+                                        </Select.Option>
+                                    )) }
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+
+                    <Row gutter={ 16 }>
+                        <Col span={ 12 }>
+                            <Form.Item
+                                label="Region"
+                                name="region"
+                            // rules={ [{ required: true, message: "Please select a region" }] }
+                            >
+                                <Select placeholder="Select Region" options={ regionOptions } style={ { width: "100%" } } />
+                            </Form.Item>
+                        </Col>
+
+                        <Col span={ 12 }>
+                            <Form.Item
+                                label="CSV Upload"
+                                name="file"
+                                valuePropName="fileList"
+                                getValueFromEvent={ (e) => (Array.isArray(e) ? e : e?.fileList) }
+                            // rules={ [{ required: true, message: "Please upload a CSV file" }] }
+                            >
+                                <Dragger { ...uploadProps } className="csv-uploader">
+                                    <p className="ant-upload-drag-icon">
+                                        <InboxOutlined />
+                                    </p>
+                                    <p className="ant-upload-text">Click or drag CSV file to this area to upload</p>
+                                    <p className="ant-upload-hint">Support for single CSV file upload</p>
+                                </Dragger>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                </Form>
+            </Modal> */}
 
             {/* //Filter Modal */ }
             <Modal
@@ -869,7 +952,7 @@ const OutReachList = () => {
                     {/* Modal Footer (Buttons) */ }
                     <div style={ { textAlign: "right" } }>
                         <Button
-                        className='text-btn'
+                            className='text-btn'
                             onClick={ () => { setfilterModal(false) } }
                             style={ { marginRight: 10 } }>
                             Cancel
