@@ -38,6 +38,8 @@ const Sidebar = ({ collapsed, onCollapse }) => {
     return '1';
   };
 
+  const isAdmin = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData'))
+.isAdmin : {}
   const menuItems = [
     {
       key: '1',
@@ -98,12 +100,12 @@ const Sidebar = ({ collapsed, onCollapse }) => {
       icon: <FolderOutlined />,
       label: 'Out-reach',
       children: [
-        {
+        isAdmin && {
           key: '10-1',
           label: 'Campaigns',
           onClick: () => navigate('/outreach/campaign'),
         },
-        {
+        isAdmin && {
           key: '10-2',
           label: 'Categories',
           onClick: () => navigate('/outreach/categories'),
@@ -113,7 +115,7 @@ const Sidebar = ({ collapsed, onCollapse }) => {
           label: 'Out-reach',
           onClick: () => navigate('/outreach/list'),
         },
-      ],
+      ].filter(Boolean),
     },
   ];
 

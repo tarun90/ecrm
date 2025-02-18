@@ -1,5 +1,5 @@
 import express from 'express';
-import Outreach from '../models/Outreach.js';
+import Outreach from '../models/OutReach.js';
 import multer from 'multer';
 import csv from 'csv-parser';
 import fs from 'fs';
