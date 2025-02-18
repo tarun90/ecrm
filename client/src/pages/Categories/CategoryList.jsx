@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { message, Popconfirm, Button, Input, Modal } from 'antd';
+import { message, Popconfirm, Button, Input, Modal, Form } from 'antd';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { getCategories, createCategory, updateCategory, deleteCategory } from './categoryService';
 import './categories.css';
@@ -12,6 +12,7 @@ const CategoryList = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [editId, setEditId] = useState(null);
     const [categoryName, setCategoryName] = useState('');
+    const [form] = Form.useForm();
 
     useEffect(() => {
         fetchCategories();
@@ -144,17 +145,25 @@ const CategoryList = () => {
             <Modal
                 title={ editId ? "Edit Category" : "Add Category" }
                 open={ modalVisible }
-                onCancel={ () => setModalVisible(false) }
-                onOk={ handleSubmit }
+                // onCancel={ () => setModalVisible(false) }
+                // onOk={ handleSubmit }
                 width={ 400 }
+                footer={ false }
             >
-                <div className="category-form">
-                    <Input
+                <Form
+                    form={ form }
+                    layout="vertical"
+                    onFinish={ handleSubmit } // Called when the form is submitted
+                >                    <Input
                         value={ categoryName }
                         onChange={ (e) => setCategoryName(e.target.value) }
                         placeholder="Enter Category Name"
                         className="form-input"
                     />
+                </Form>
+                <div className='modal-footer'>
+                    <Button onClick={ () => setModalVisible(false) } className='text-btn'>Cancel</Button>
+                    <Button type="primary" onClick={ () => handleSubmit() }> Ok </Button>
                 </div>
             </Modal>
         </div>
