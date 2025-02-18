@@ -1,5 +1,5 @@
 import express from 'express';
-import Outreach from '../models/Outreach.js';
+import Outreach from '../models/OutReach.js';
 import multer from 'multer';
 import csv from 'csv-parser';
 import fs from 'fs';
@@ -36,6 +36,7 @@ router.get('/', async (req, res) => {
       .populate('region', 'regionName')   // Populate region and retrieve only the name field
       .populate('createdBy', 'name email') // Populate createdBy and retrieve name and email
       .populate('category', 'categoryName')
+      .populate('assignedTo', 'name')
     res.status(200).send(outreaches);
   } catch (error) {
     res.status(500).send({ message: 'Internal Server Error', error });
