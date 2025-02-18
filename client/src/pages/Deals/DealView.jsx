@@ -1,5 +1,6 @@
 import React from 'react';
 import { Settings, Plus, ArrowLeft, Edit, Mail, Phone, Calendar, MoreHorizontal, Copy } from 'lucide-react';
+import './DealView.css';
 import { Button } from 'antd';
 import { CaretDownOutlined } from '@ant-design/icons';
 const ActionButton = ({ icon, label }) => {
@@ -52,7 +53,7 @@ const Sidebar = () => {
     <div className="sidebar">
       <div className="sidebar-header">
         <ArrowLeft className="back-icon" />
-        <span> Company </span>
+        <span>Deal</span>
         <Button icon={ <CaretDownOutlined /> }>Actions </Button>
       </div>
 

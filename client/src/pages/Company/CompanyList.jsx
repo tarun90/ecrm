@@ -4,7 +4,9 @@ import moment from 'moment';
 import axios from 'axios';
 import { getCompanies, deleteCompany } from './APIServices';
 import { useNavigate } from 'react-router-dom';
-import { Button, message } from 'antd';
+import { message, Popconfirm, Button } from 'antd';
+import CompanyFormModal from './CompanyFormModal';
+// import { Button, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 const CompanyList = () => {
     const navigate = useNavigate();
@@ -21,6 +23,8 @@ const CompanyList = () => {
         leadStatus: '',
         contactOwner: ''
     });
+    const [modalVisible, setModalVisible] = useState(false);
+    const [editId, setEditId] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editingId, setEditingId] = useState(null);
@@ -43,6 +47,15 @@ const CompanyList = () => {
         }
     }, [searchTerm]);
 
+    const handleAddCompany = () => {
+        setEditId(null);
+        setModalVisible(true);
+    };
+
+    const handleEditCompany = (id) => {
+        setEditId(id);
+        setModalVisible(true);
+    };
 
     const fetchCompanies = async (searchTerm = "") => {
         const data = await getCompanies(searchTerm);
@@ -66,18 +79,17 @@ const CompanyList = () => {
             await contactService.createContact(contact);
         }
         closeModal();
-    };
 
-    const handleEdit = (company) => {
-        navigate(`/company/edit/${company._id}`);
     };
 
     const handleDelete = async (id) => {
-        if (window.confirm('Are you sure you want to delete this company?')) {
-            await deleteCompany(id);
-            message.success('Company deleted successfully.')
-            fetchCompanies()
+        const deleteResponse = await deleteCompany(id);
+        if (deleteResponse?.status != 200) {
+            message.error(deleteResponse?.message)
+        } else {
+            message.success("Company deleted successfully")
         }
+        fetchCompanies()
     };
 
     // Update your handleImport function:
@@ -175,53 +187,58 @@ const CompanyList = () => {
                         <button className="export-btn" onClick={ handleExport }>
                             Export CSV
                         </button> */}
-                    <Button className="add-contact-btn" icon={ <PlusOutlined /> } onClick={ openAddModal }>
+                    <button className="add-contact-btn" onClick={ handleAddCompany }>
                         Add Company
-                    </Button>
+                    </button>
                 </div>
             </div>
-
             <div className="contact-table">
                 <table>
                     <thead>
                         <tr>
                             <th>Company Name</th>
+                            <th>Company Owner</th>
+                            <th>Phone</th>
                             <th>Email</th>
-                            <th>Phone Number</th>
-                            <th>Owner</th>
+                            <th>City</th>
+                            <th>Country</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         { companies.map(company => (
                             <tr key={ company?._id }>
-                                <td>{ company?.companyName }</td>
-                                <td>{ company?.email }</td>
-                                <td>{ company?.phone }</td>
-                                <td>{ company?.companyOwner }</td>
-
+                                <td onClick={ () => handleView(company._id) }> <a href='#'> { company?.companyName || '-' } </a> </td>
+                                <td>{ company?.companyOwner || '-' }</td>
+                                <td>{ company?.phoneNumber || '-' }</td>
+                                <td>{ company?.email || '-' }</td>
+                                <td>{ company?.city || '-' }</td>
+                                <td>{ company?.country || '-' }</td>
                                 <td>
-                                    <button className="edit-btn" onClick={ () => handleView(company._id) }>
-                                        View
-                                    </button>
-                                    <button
-                                        className="edit-btn"
-                                        onClick={ () => handleEdit(company) }
-                                    >
+                                    <button className="edit-btn" onClick={ () => handleEditCompany(company._id) }>
                                         Edit
                                     </button>
-                                    <button
-                                        className="delete-btn"
-                                        onClick={ () => handleDelete(company._id) }
+                                    <Popconfirm
+                                        title="Delete Company"
+                                        description="Are you sure you want to delete this company?"
+                                        onConfirm={ (e) => {
+                                            e.stopPropagation();
+                                            handleDelete(company._id);
+                                        } }
+                                        okText="Yes"
+                                        cancelText="No"
                                     >
-                                        Delete
-                                    </button>
+                                        <button className="delete-btn" onClick={ (e) => e.stopPropagation() }>
+                                            Delete
+                                        </button>
+                                    </Popconfirm>
                                 </td>
                             </tr>
                         )) }
                     </tbody>
                 </table>
             </div>
+
 
             {/* Modal for Adding/Editing Contact */ }
             { isModalOpen && (
@@ -291,6 +308,12 @@ const CompanyList = () => {
                     </div>
                 </div>
             ) }
+            <CompanyFormModal
+                visible={ modalVisible }
+                onCancel={ () => setModalVisible(false) }
+                editId={ editId }
+                fetchCompanies={ fetchCompanies }
+            />
         </div>
     );
 };

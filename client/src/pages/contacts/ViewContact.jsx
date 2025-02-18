@@ -1,5 +1,6 @@
 import React from 'react';
-import { Settings, Plus, ArrowLeft, Edit, Mail, Phone, Calendar, MoreHorizontal, Copy } from 'lucide-react';
+import { Settings, Plus, ArrowLeft, Edit, Mail, Phone, Calendar, MoreHorizontal } from 'lucide-react';
+import './ViewContact.css';
 import { Button } from 'antd';
 import { CaretDownOutlined } from '@ant-design/icons';
 const ActionButton = ({ icon, label }) => {
@@ -52,21 +53,47 @@ const Sidebar = () => {
     <div className="sidebar">
       <div className="sidebar-header">
         <ArrowLeft className="back-icon" />
-        <span> Company </span>
+        <span>Contacts</span>
         <Button icon={ <CaretDownOutlined /> }>Actions </Button>
       </div>
 
       <div className="contact-card scroll">
-        <div className="contact-info">
-          <div className="avatar">DB</div>
-          <div className="contact-details">
-            <h2>Derrick</h2>
-            <h3>Blanden</h3>
-            <Button className="email">
-              <a href='#'>info.dbderrick2@aol.com</a>
-              <Copy />
-            </Button>
+        <div className="deal-card">
+          <div className="deal-header">
+            <h2 className="deal-title">
+              Nicksbuilding.com - New Deal
+            </h2>
+            <button className="edit-button">
+              <Edit />
+            </button>
+          </div>
 
+          <div className="deal-content">
+            <div className="field-group">
+              <p className="field-label">Amount:</p>
+              <p className="field-value">$50,000</p>
+            </div>
+
+            <div className="field-group">
+              <p className="field-label">Close Date:</p>
+              <div className="date-field export-btn">
+                <Calendar className="calendar-icon" />
+                <span className="field-value">02/01/2025</span>
+              </div>
+            </div>
+
+            <div className="field-group">
+              <p className="field-label">Stage:</p>
+              <Button icon={ <CaretDownOutlined /> } className="stage-button">
+                Appointment Scheduled
+
+              </Button>
+            </div>
+
+            <div className="field-group">
+              <p className="field-label">Pipeline:</p>
+              <p className="pipeline-value">Xumulus Pipeline</p>
+            </div>
           </div>
         </div>
 
@@ -81,6 +108,7 @@ const Sidebar = () => {
             <h3>About this ...</h3>
             <div className="about-actions">
               <Button icon={ <CaretDownOutlined /> }>Actions </Button>
+
               <Settings />
             </div>
           </div>
@@ -88,10 +116,7 @@ const Sidebar = () => {
           <div className="contact-fields">
             <div className="field">
               <p className="label">Email</p>
-              <div className="email">
-                <a href='#'>info.dbderrick2@aol.com</a>
-
-              </div>
+              <p className="value">info.dbderrick2@aol.com</p>
             </div>
             <div className="field">
               <p className="label">Phone number</p>

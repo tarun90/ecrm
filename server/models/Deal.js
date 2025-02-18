@@ -22,11 +22,13 @@ const dealSchema = new mongoose.Schema({
   contact: {
     // type: mongoose.Schema.Types.ObjectId,
     // ref: 'Contact',
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Contact',
     required: true,
   },
   company: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Company',
     required: true,
   },
   closeDate: {

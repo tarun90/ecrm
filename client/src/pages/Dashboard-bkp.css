@@ -134,7 +134,7 @@
   border-radius: 4px;
 }
 
-.dealCard {
+.dealList .dealCard {
   background: linear-gradient(285deg, #187cb70f 25.9%, #36a0df24 94.4%);
   border-radius: 8px;
   padding: 16px;
@@ -144,7 +144,7 @@
   cursor: pointer;
 }
 
-.dealCard:hover {
+.dealList .dealCard:hover {
   transform: translateY(-2px);
   box-shadow: 1px 4px 6px -1px rgb(0 0 0 / 13%);
 }

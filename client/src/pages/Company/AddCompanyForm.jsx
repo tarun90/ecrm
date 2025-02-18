@@ -14,7 +14,7 @@ import { ArrowLeftOutlined } from '@ant-design/icons';
 import { createCompany, getCompanyById, updateCompany } from './APIServices';
 import { useParams, useNavigate } from 'react-router-dom';
 import './AddCompanyForm.css';
-
+import currenciesData from './currency';
 const { Title } = Typography;
 
 const AddCompanyForm = () => {
@@ -160,10 +160,18 @@ const AddCompanyForm = () => {
                 label="Currency"
                 name="currency"
               >
-                <Select placeholder="Select Currency">
-                  { currencies.map(currency => (
-                    <Select.Option key={ currency } value={ currency }>
-                      { currency }
+                <Select
+                  showSearch
+                  placeholder="Select Currency"
+                  style={ { width: '100%' } }
+                >
+                  { currenciesData.map(currency => (
+                    <Select.Option
+                      key={ currency.code }
+                      value={ currency.code }
+                    >
+                      <span style={ { fontWeight: 500 } }>{ currency.code }</span>
+                      <span style={ { color: '#666', marginLeft: 8 } }>{ currency.name }</span>
                     </Select.Option>
                   )) }
                 </Select>

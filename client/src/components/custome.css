@@ -780,6 +780,10 @@ textarea {
   margin-top: 1rem;
 }
 
+:where(.css-dev-only-do-not-override-1pjlhih).ant-menu-dark.ant-menu-inline .ant-menu-sub.ant-menu-inline, :where(.css-dev-only-do-not-override-1pjlhih).ant-menu-dark>.ant-menu.ant-menu-inline .ant-menu-sub.ant-menu-inline {
+  background:#0c3a5b !important;
+}
+
 
 @media (min-width:992px) and (max-width: 1440px) {
   .products-grid {

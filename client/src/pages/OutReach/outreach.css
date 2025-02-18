@@ -1,0 +1,117 @@
+.outreach-container {
+    padding: 20px;
+    background: #fff;
+}
+
+.outreach-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.search-container {
+    flex: 1;
+    max-width: 300px;
+}
+
+.search-input {
+    width: 100%;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.import-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.outreach-table {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+th {
+    background: #fafafa;
+    font-weight: 500;
+}
+
+tr:hover {
+    background: #fafafa;
+}
+
+.outreach-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.import-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-input {
+    width: 100%;
+}
+
+.csv-uploader {
+    margin-top: 8px;
+}
+
+.csv-uploader .ant-upload-drag {
+    padding: 16px;
+}
+
+.ant-upload-text {
+    margin: 8px 0;
+}
+
+.ant-upload-hint {
+    color: #888;
+}
+
+.assignment-section {
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.assignment-section:hover {
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .outreach-header {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .search-container {
+        max-width: 100%;
+    }
+
+    .action-buttons {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}

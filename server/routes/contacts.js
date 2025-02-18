@@ -35,7 +35,49 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
-// Add these new routes to your existing router file
+router.get('/view/:id', auth, async (req, res) => {
+  try {
+    const contact = await Contact.findOne({
+      _id: req.params.id,
+      contactOwner: req.user.user._id
+    }).populate('contactOwner company');
+
+    if (!contact) {
+      return res.status(404).json({ message: 'Contact not found' });
+    }
+
+    res.json(contact);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching contact' });
+  }
+});
+
+
+router.get('/contactList', auth, async (req, res) => {
+  try {
+    const { search } = req.query;
+    let query = { contactOwner: req.user.user._id };
+
+    if (search) {
+      query = {
+        ...query,
+        $or: [
+          { firstName: { $regex: search, $options: 'i' } },
+          { lastName: { $regex: search, $options: 'i' } },
+          { email: { $regex: search, $options: 'i' } },
+          { phoneNumber: { $regex: search, $options: 'i' } }
+        ]
+      };
+    }
+
+    const contacts = await Contact.find(query).select("firstName lastName _id company");;
+    res.json(contacts);
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'Error fetching contacts' });
+  }
+});
 
 // Delete contact
 router.delete('/:id', auth, async (req, res) => {

@@ -6,10 +6,12 @@ import axios from 'axios';
 import MainLayout from '../../components/MainLayout';
 import { getCompaniesNames } from '../Company/APIServices';
 import Search from 'antd/es/transfer/search';
+import { useNavigate } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 
 const ContactListAndAdd = () => {
+    const navigate = useNavigate();
     const [contacts, setContacts] = useState([]);
     const [contact, setContact] = useState({
         email: '',
@@ -140,6 +142,10 @@ const ContactListAndAdd = () => {
         setIsModalOpen(true);
     };
 
+    const handleView = (contact) => {
+        navigate(`/contact/view/${contact._id}`);
+    }
+
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this contact?')) {
             await contactService.deleteContact(id);
@@ -266,7 +272,7 @@ const ContactListAndAdd = () => {
                     <tbody>
                         { contacts.map(contact => (
                             <tr key={ contact?._id }>
-                                <td>{ contact?.firstName } { contact?.lastName }</td>
+                                <td onClick={ () => handleView(contact) }> <a href='#'> { contact?.firstName } { contact?.lastName }</a></td>
                                 <td>{ contact?.email }</td>
                                 <td>{ contact?.phoneNumber }</td>
                                 <td>{ contact?.contactOwner?.name }</td>
@@ -274,6 +280,12 @@ const ContactListAndAdd = () => {
                                 <td>{ contact?.leadStatus }</td>
                                 <td>{ moment(contact?.createdAt).format('DD-MM-YYYY HH:mm') }</td>
                                 <td>
+                                    {/* <button
+                                        className="edit-btn"
+                                       
+                                    >
+                                        View
+                                    </button> */}
                                     <button
                                         className="edit-btn"
                                         onClick={ () => handleEdit(contact) }
