@@ -112,7 +112,7 @@ const Sidebar = ({ collapsed, onCollapse }) => {
         },
         {
           key: '10-3',
-          label: 'Out-reach',
+          label: 'Outreach',
           onClick: () => navigate('/outreach/list'),
         },
       ].filter(Boolean),
