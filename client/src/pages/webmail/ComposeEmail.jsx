@@ -5,6 +5,7 @@ import './ComposeEmail.css';
 import EmailSuggestions from './EmailSuggestions';
 import { useAuth } from '../../contexts/AuthContext';
 import { Button } from 'antd';
+import { ArrowsAltOutlined, CloseOutlined, MinusOutlined } from '@ant-design/icons';
 const ComposeEmail = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -162,6 +163,7 @@ const ComposeEmail = () => {
             onClick={ () => setMinimized(!minimized) }
             title={ minimized ? 'Maximize' : 'Minimize' }
           >
+          <MinusOutlined />
             <i className={ `fas fa-${minimized ? 'expand' : 'minus'}` }></i>
           </button>
           <button
@@ -169,6 +171,7 @@ const ComposeEmail = () => {
             onClick={ () => setFullscreen(!fullscreen) }
             title={ fullscreen ? 'Exit full screen' : 'Full screen' }
           >
+             <ArrowsAltOutlined/>
             <i className={ `fas fa-${fullscreen ? 'compress' : 'expand-arrows-alt'}` }></i>
           </button>
           <button
@@ -176,7 +179,7 @@ const ComposeEmail = () => {
             onClick={ handleClose }
             title="Close"
           >
-            <i className="fas fa-times"></i>
+         <CloseOutlined />
           </button>
         </div>
       </div>
@@ -203,7 +206,7 @@ const ComposeEmail = () => {
           </div>
         </div>
         <div className="compose-field">
-          <label>Subject:</label>
+          {/* <label>Subject:</label> */}
           <input
             type="text"
             value={ subject }
