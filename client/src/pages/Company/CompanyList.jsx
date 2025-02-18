@@ -4,7 +4,7 @@ import moment from 'moment';
 import axios from 'axios';
 import { getCompanies, deleteCompany } from './APIServices';
 import { useNavigate } from 'react-router-dom';
-import { message, Popconfirm, Button } from 'antd';
+import { message, Popconfirm, Button, Pagination } from 'antd';
 import CompanyFormModal from './CompanyFormModal';
 // import { Button, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -34,18 +34,21 @@ const CompanyList = () => {
     const [importMessage, setImportMessage] = useState('');
     const [importStatus, setImportStatus] = useState('');
     const API_URL = import.meta.env.VITE_TM_API_URL;
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(2);
+    const [total, setTotal] = useState(0);
 
     useEffect(() => {
         if (searchTerm) {
             const delayDebounceFn = setTimeout(() => {
-                fetchCompanies(searchTerm);
+                fetchCompanies(searchTerm, currentPage, pageSize);
             }, 500);
 
             return () => clearTimeout(delayDebounceFn);
         } else {
-            fetchCompanies();
+            fetchCompanies("", currentPage, pageSize);
         }
-    }, [searchTerm]);
+    }, [searchTerm, currentPage, pageSize]);
 
     const handleAddCompany = () => {
         setEditId(null);
@@ -57,10 +60,42 @@ const CompanyList = () => {
         setModalVisible(true);
     };
 
-    const fetchCompanies = async (searchTerm = "") => {
-        const data = await getCompanies(searchTerm);
-        setCompanies(data);
+    const fetchCompanies = async (searchTerm = "", page = 1, pageSize = 10) => {
+        try {
+            const response = await getCompanies(searchTerm, page, pageSize);
+            console.log('Page:', page, 'PageSize:', pageSize); // Debug log
+            console.log('API Response:', response);
+            
+            if (response && typeof response === 'object') {
+                // For testing with dummy data
+                const dummyData = [
+                    { _id: 1, companyName: 'Company A', companyOwner: 'Owner 1', phoneNumber: '123', email: 'a@test.com', city: 'City A', country: 'Country A' },
+                    { _id: 2, companyName: 'Company B', companyOwner: 'Owner 2', phoneNumber: '456', email: 'b@test.com', city: 'City B', country: 'Country B' },
+                    { _id: 3, companyName: 'Company C', companyOwner: 'Owner 3', phoneNumber: '789', email: 'c@test.com', city: 'City C', country: 'Country C' }
+                ];
 
+                // Calculate start and end indices for pagination
+                const startIndex = (page - 1) * pageSize;
+                const endIndex = startIndex + pageSize;
+                
+                // Slice the data according to pagination
+                const paginatedData = dummyData.slice(startIndex, endIndex);
+                
+                setCompanies(paginatedData);
+                setTotal(dummyData.length); // Set total to full dataset length
+                
+                console.log('Current page data:', paginatedData); // Debug log
+            } else {
+                setCompanies([]);
+                setTotal(0);
+                message.error('Invalid data format received from server');
+            }
+        } catch (error) {
+            console.error('Error fetching companies:', error);
+            message.error('Failed to fetch companies');
+            setCompanies([]);
+            setTotal(0);
+        }
     }
 
     const handleChange = (e) => {
@@ -160,6 +195,13 @@ const CompanyList = () => {
         // setIsModalOpen(true);
     };
 
+    const handlePageChange = (page, size) => {
+        setCurrentPage(page);
+        setPageSize(size);
+        // Fetch companies with new pagination parameters
+        fetchCompanies(searchTerm, page, size);
+    };
+
     return (
         <div className="contact-container">
             <div className="contact-header">
@@ -239,6 +281,18 @@ const CompanyList = () => {
                 </table>
             </div>
 
+            <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end' }}>
+                <Pagination
+                    current={currentPage}
+                    pageSize={pageSize}
+                    total={total}
+                    onChange={handlePageChange}
+                    showSizeChanger
+                    showQuickJumper
+                    showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+                    pageSizeOptions={['2', '3', '5', '10']}
+                />
+            </div>
 
             {/* Modal for Adding/Editing Contact */ }
             { isModalOpen && (

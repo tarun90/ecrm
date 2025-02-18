@@ -12,12 +12,16 @@ export const createCompany = async (companyData) => {
   }
 };
 
-export const getCompanies = async (searchTerm = "") => {
+export const getCompanies = async (searchTerm = "", page = 1, pageSize = 10) => {
   try {
-    console.log(searchTerm)
     const response = await axios.get(API_URL, {
-      params: searchTerm ? { searchTerm } : {},
+      params: {
+        ...(searchTerm ? { searchTerm } : {}),
+        page,
+        pageSize
+      },
     });
+    
     return response.data;
   } catch (error) {
     throw error.response?.data || error.message;
