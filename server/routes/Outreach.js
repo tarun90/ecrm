@@ -1,5 +1,5 @@
 import express from 'express';
-import Outreach from '../models/OutReach.js';
+import Outreach from '../models/Outreach.js';
 import multer from 'multer';
 import csv from 'csv-parser';
 import fs from 'fs';
@@ -201,7 +201,7 @@ router.post('/assign', async (req, res) => {
   try {
     await Outreach.updateMany(
       { _id: { $in: outreachIds } },
-      { $set: { assignedTo: userId } }
+      { $set: { assignedTo: userId, status: "Not Contacted" } }
     );
     res.status(200).send({ message: 'Outreaches assigned successfully' });
   } catch (error) {

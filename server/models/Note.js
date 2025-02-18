@@ -1,0 +1,38 @@
+import mongoose from 'mongoose';
+
+const noteSchema = new mongoose.Schema({
+  outreachId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Outreach',
+    required: true
+  },
+  contactMethod: [{
+    type: String,
+    enum: ['Email', 'Phone', 'IM', 'LinkedIn'],
+    required: true
+  }],
+  message: {
+    type: String,
+    required: true
+  },
+  reminderDate: {
+    type: Date,
+    required: true
+  },
+  attachment: {
+    filename: String,
+    path: String,
+    mimetype: String
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  }
+}, {
+  timestamps: true
+});
+
+const Note = mongoose.model('Note', noteSchema);
+
+export default Note;
