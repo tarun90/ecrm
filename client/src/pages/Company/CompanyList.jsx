@@ -219,23 +219,25 @@ const CompanyList = () => {
                                 <td>{ company?.city || '-' }</td>
                                 <td>{ company?.country || '-' }</td>
                                 <td>
-                                    <button className="edit-btn" onClick={ () => handleEditCompany(company._id) }>
-                                        <EditOutlined />
-                                    </button>
-                                    <Popconfirm
-                                        title="Delete Company"
-                                        description="Are you sure you want to delete this company?"
-                                        onConfirm={ (e) => {
-                                            e.stopPropagation();
-                                            handleDelete(company._id);
-                                        } }
-                                        okText="Yes"
-                                        cancelText="No"
-                                    >
-                                        <Button className="delete-btn" onClick={ (e) => e.stopPropagation() }>
-                                            <DeleteOutlined />
+                                    <div className='action-buttons'>
+                                        <Button className="edit-btn" onClick={ () => handleEditCompany(company._id) }>
+                                            <EditOutlined />
                                         </Button>
-                                    </Popconfirm>
+                                        <Popconfirm
+                                            title="Delete Company"
+                                            description="Are you sure you want to delete this company?"
+                                            onConfirm={ (e) => {
+                                                e.stopPropagation();
+                                                handleDelete(company._id);
+                                            } }
+                                            okText="Yes"
+                                            cancelText="No"
+                                        >
+                                            <Button className="delete-btn" onClick={ (e) => e.stopPropagation() }>
+                                                <DeleteOutlined />
+                                            </Button>
+                                        </Popconfirm>
+                                    </div>
                                 </td>
                             </tr>
                         )) }

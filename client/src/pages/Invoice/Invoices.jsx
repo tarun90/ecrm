@@ -820,59 +820,51 @@ function Invoices() {
               </tr>
             </thead>
             <tbody>
-              { sortedInvoices.length > 0 ? (
-                sortedInvoices.map((invoice) => (
-                  <tr key={ invoice._id }>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={ selectedInvoices.includes(invoice._id) }
-                        onChange={ () => {
-                          setSelectedInvoices((prev) =>
-                            prev.includes(invoice._id)
-                              ? prev.filter((id) => id !== invoice._id)
-                              : [...prev, invoice._id]
-                          );
-                        } }
-                        className="checkbox-select"
-                      />
-                    </td>
-                    <td>{ invoice.invoice_number }</td>
-                    <td>
-                      { invoice.contact
-                        ? `${invoice.contact.firstName} ${invoice.contact.lastName}`
-                        : "Unknown Customer" }
-                    </td>
-                    <td>{ new Date(invoice.due_date).toLocaleDateString() }</td>
-                    <td className={ `status ${invoice.payment_status}` }>
-                      { invoice.payment_status }
-                    </td>
-                    <td>
-                      { invoice.currency } { invoice.grand_total }
-                    </td>
-                    <td>
-                      <button
-                        onClick={ () => handleEdit(invoice) }
-                        className="edit-btn"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={ () => deleteInvoice(invoice._id) }
-                        className="delete-btn"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="7" style={ { textAlign: "center" } }>
-                    No invoices found
+              { invoices.map((invoice) => (
+                <tr key={ invoice._id }>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={ selectedInvoices.includes(invoice._id) }
+                      onChange={ () => {
+                        setSelectedInvoices((prev) =>
+                          prev.includes(invoice._id)
+                            ? prev.filter((id) => id !== invoice._id)
+                            : [...prev, invoice._id]
+                        );
+                      } }
+                      className="checkbox-select"
+                    />
+                  </td>
+                  <td>{ invoice.invoice_number }</td>
+                  <td>
+                    { invoice.contact
+                      ? `${invoice.contact.firstName} ${invoice.contact.lastName}`
+                      : "Unknown Customer" }
+                  </td>
+                  <td>{ new Date(invoice.due_date).toLocaleDateString() }</td>
+                  <td className={ `status ${invoice.payment_status}` }>
+                    { invoice.payment_status }
+                  </td>
+                  <td>
+                    { invoice.currency } { invoice.grand_total }
+                  </td>
+                  <td>
+                    <button
+                      onClick={ () => handleEdit(invoice) }
+                      className="edit-btn"
+                    >
+                      <EditOutlined />
+                    </button>
+                    <button
+                      onClick={ () => deleteInvoice(invoice._id) }
+                      className="delete-btn"
+                    >
+                      <DeleteOutlined />
+                    </button>
                   </td>
                 </tr>
-              ) }
+              )) }
             </tbody>
           </table>
         </div>
@@ -922,6 +914,7 @@ const InvoiceForm = ({
     <Modal
       title={ isEditing ? "Edit Invoice" : "Create New Invoice" }
       open={ isModalOpen }
+      width={ 600 }
       onCancel={ () => setIsModalOpen(false) }
       footer={ null }
     >

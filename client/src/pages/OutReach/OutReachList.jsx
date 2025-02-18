@@ -413,7 +413,7 @@ const OutReachList = () => {
                                 { userData?.department?.name == "Lead Generation" &&
                                     <td>
                                         <div className='action-buttons'>
-                                            <Button className='edit-btn' onClick={ () => handleEditOutreach(item._id) }><EditOutlined /></Button>
+                                            <button className='edit-btn' onClick={ () => handleEditOutreach(item._id) }><EditOutlined /></button>
                                             <Popconfirm
                                                 title="Delete Outreach"
                                                 description="Are you sure you want to delete this outreach?"
@@ -421,7 +421,7 @@ const OutReachList = () => {
                                                 okText="Yes"
                                                 cancelText="No"
                                             >
-                                                <Button className='delete-btn'><DeleteOutlined /></Button>
+                                                <button className='delete-btn'><DeleteOutlined /></button>
                                             </Popconfirm>
                                         </div>
                                     </td>

@@ -114,24 +114,26 @@ const CategoryList = () => {
                             <tr key={ category._id }>
                                 <td>{ category.categoryName }</td>
                                 <td>
-                                    <Button
-                                        type="primary"
-                                        onClick={ () => handleEditCategory(category) }
-                                        className="edit-btn"
-                                    >
-                                        <EditOutlined />
-                                    </Button>
-                                    <Popconfirm
-                                        title="Delete Category"
-                                        description="Are you sure you want to delete this category?"
-                                        onConfirm={ () => handleDelete(category._id) }
-                                        okText="Yes"
-                                        cancelText="No"
-                                    >
-                                        <Button danger className="delete-btn">
-                                            <DeleteOutlined />
-                                        </Button>
-                                    </Popconfirm>
+                                    <div className="action-buttons">
+                                        <button
+                                            type="primary"
+                                            onClick={ () => handleEditCategory(category) }
+                                            className="edit-btn"
+                                        >
+                                            <EditOutlined />
+                                        </button>
+                                        <Popconfirm
+                                            title="Delete Category"
+                                            description="Are you sure you want to delete this category?"
+                                            onConfirm={ () => handleDelete(category._id) }
+                                            okText="Yes"
+                                            cancelText="No"
+                                        >
+                                            <button danger className="delete-btn">
+                                                <DeleteOutlined />
+                                            </button>
+                                        </Popconfirm>
+                                    </div>
                                 </td>
                             </tr>
                         )) }
