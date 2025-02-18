@@ -196,30 +196,30 @@ function EventManager() {
     );
   }
 
-  if (!isAuthenticated) {
-    return (
-      <div className="auth-container">
-        <div className="auth-card">
-          <div className="auth-icon-container">
-            <CalendarIcon className="auth-icon" />
-          </div>
-          <h1 className="auth-title">Calendar Event Manager</h1>
-          <p className="auth-description">Connect with Google Calendar to manage your events</p>
-          <button
-            onClick={ handleAuth }
-            className="auth-button"
-          >
-            <LogIn className="button-icon" />
-            Connect with Google Calendar
-          </button>
-        </div>
-      </div>
-    );
-  }
+  // if (!isAuthenticated) {
+  //   return (
+  //     <div className="auth-container">
+  //       <div className="auth-card">
+  //         <div className="auth-icon-container">
+  //           <CalendarIcon className="auth-icon" />
+  //         </div>
+  //         <h1 className="auth-title">Calendar Event Manager</h1>
+  //         <p className="auth-description">Connect with Google Calendar to manage your events</p>
+  //         <button
+  //           onClick={ handleAuth }
+  //           className="auth-button"
+  //         >
+  //           <LogIn className="button-icon" />
+  //           Connect with Google Calendar
+  //         </button>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
-    <Layout className='main-content-wrapper'>
-      <Header className="content-header">
+    <Layout className='main-content-wrapper evant-wrapper '>
+      <Header className="content-header evant-header">
         <div className="header-content">
           <h1 className="header-title">Event Planner</h1>
           <div className="view-toggle">
@@ -241,7 +241,7 @@ function EventManager() {
         </div>
       </Header>
 
-      <Content className="content-warpper">
+      <Content className="content-warpper evant-warpper">
         <div className="calendar-container">
           <FullCalendar
             plugins={ [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin] }

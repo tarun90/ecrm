@@ -12,8 +12,10 @@ const router = express.Router();
 const upload = multer({ dest: 'uploads/' });
 
 // Create Outreach
-router.post('/',auth, async (req, res) => {
+router.post('/', auth, async (req, res) => {
   try {
+    console.log('hello');
+
     let createdBy = req?.user?.user?._id;
     let data = {
       ...req?.body,
@@ -169,14 +171,14 @@ router.delete('/:id', async (req, res) => {
 });
 
 // Import CSV to Create Outreaches
-router.post('/import',auth, upload.single('file'), (req, res) => {
+router.post('/import', auth, upload.single('file'), (req, res) => {
   let results = [];
   fs.createReadStream(req.file.path)
     .pipe(csv())
     .on('data', (data) => results.push(data))
     .on('end', async () => {
       try {
-       
+
         const updatedResults = results.map(ele => ({
           ...ele,
           createdBy: req?.user?.user?._id, // Ensure safe access to nested properties

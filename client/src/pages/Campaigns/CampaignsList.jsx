@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { message, Popconfirm, Button, Input, Modal } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { getCampaigns, createCampaign, updateCampaign, deleteCampaign } from './campaignService';
 import './campaigns.css';
+import { Header } from 'antd/es/layout/layout';
+import { Delete, Edit } from 'lucide-react';
 
 const CampaignList = () => {
     const [campaigns, setCampaigns] = useState([]);
@@ -47,7 +49,7 @@ const CampaignList = () => {
             message.error('Campaign name cannot be empty');
             return;
         }
-        
+
         if (editId) {
             await updateCampaign(editId, { campaignName });
             message.success('Campaign updated successfully');
@@ -62,16 +64,16 @@ const CampaignList = () => {
 
     return (
         <div className="campaign-container">
-         <div className="contact-header">
+            <Header className="contact-header">
                 <div className="search-container">
                     <input
                         type="text"
                         placeholder="Search Campaign..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        value={ searchTerm }
+                        onChange={ (e) => setSearchTerm(e.target.value) }
                         className="search-input"
                     />
-                    {/* { isSearching && <span className="searching-indicator">Searching...</span> } */}
+                    {/* { isSearching && <span className="searching-indicator">Searching...</span> } */ }
                 </div>
                 <div className="action-buttons">
                     {/* <input
@@ -87,11 +89,12 @@ const CampaignList = () => {
                         <button className="export-btn" onClick={ handleExport }>
                             Export CSV
                         </button> */}
-                    <button className="add-contact-btn"  onClick={handleAddCampaign}>
+                    <button className="add-contact-btn" onClick={ handleAddCampaign }>
+                        <PlusOutlined />
                         Add Campaign
                     </button>
                 </div>
-            </div>
+            </Header>
             <div className="contact-table">
                 <table>
                     <thead>
@@ -101,35 +104,37 @@ const CampaignList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {campaigns.map(campaign => (
-                            <tr key={campaign._id}>
-                                <td>{campaign.campaignName}</td>
+                        { campaigns.map(campaign => (
+                            <tr key={ campaign._id }>
+                                <td>{ campaign.campaignName }</td>
                                 <td>
-                                    <Button onClick={() => handleEditCampaign(campaign._id, campaign.campaignName)}>Edit</Button>
-                                    <Popconfirm
-                                        title="Delete Campaign"
-                                        description="Are you sure you want to delete this campaign?"
-                                        onConfirm={() => handleDelete(campaign._id)}
-                                        okText="Yes"
-                                        cancelText="No"
-                                    >
-                                        <Button danger>Delete</Button>
-                                    </Popconfirm>
+                                    <div className='action-buttons'>
+                                        <button className='edit-btn' onClick={ () => handleEditCampaign(campaign._id, campaign.campaignName) } ><EditOutlined /></button>
+                                        <Popconfirm
+                                            title="Delete Campaign"
+                                            description="Are you sure you want to delete this campaign?"
+                                            onConfirm={ () => handleDelete(campaign._id) }
+                                            okText="Yes"
+                                            cancelText="No"
+                                        >
+                                            <Button className='delete-btn'><DeleteOutlined /></Button>
+                                        </Popconfirm>
+                                    </div>
                                 </td>
                             </tr>
-                        ))}
+                        )) }
                     </tbody>
                 </table>
             </div>
             <Modal
-                title={editId ? "Edit Campaign" : "Add Campaign"}
-                open={modalVisible}
-                onCancel={() => setModalVisible(false)}
-                onOk={handleSubmit}
+                title={ editId ? "Edit Campaign" : "Add Campaign" }
+                open={ modalVisible }
+                onCancel={ () => setModalVisible(false) }
+                onOk={ handleSubmit }
             >
                 <Input
-                    value={campaignName}
-                    onChange={(e) => setCampaignName(e.target.value)}
+                    value={ campaignName }
+                    onChange={ (e) => setCampaignName(e.target.value) }
                     placeholder="Enter Campaign Name"
                 />
             </Modal>

@@ -39,7 +39,7 @@ const Sidebar = ({ collapsed, onCollapse }) => {
   };
 
   const isAdmin = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData'))
-.isAdmin : {}
+    .isAdmin : {}
   const menuItems = [
     {
       key: '1',
@@ -99,6 +99,8 @@ const Sidebar = ({ collapsed, onCollapse }) => {
       key: '10',
       icon: <FolderOutlined />,
       label: 'Out-reach',
+      className: 'menu-item-outreach',
+
       children: [
         isAdmin && {
           key: '10-1',
@@ -120,15 +122,15 @@ const Sidebar = ({ collapsed, onCollapse }) => {
   ];
 
   return (
-    <Sider collapsible collapsed={collapsed} onCollapse={onCollapse} className="Sidebar">
+    <Sider collapsible collapsed={ collapsed } onCollapse={ onCollapse } className="Sidebar">
       <div className="sidebar-logo">
         <HeaderLogo />
       </div>
       <Menu
         theme="dark"
         mode="inline"
-        defaultSelectedKeys={[getDefaultSelectedKey()]}
-        items={menuItems}
+        defaultSelectedKeys={ [getDefaultSelectedKey()] }
+        items={ menuItems }
       />
     </Sider>
   );
