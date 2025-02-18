@@ -2,9 +2,9 @@
 import axios from 'axios';
 
 const API_URL = `${import.meta.env.VITE_TM_API_URL}/api/outreach`;
-export const getOutreach = async () => {
+export const getOutreach = async (searchString = '') => {
   try {
-    const response = await axios.get(API_URL);
+    const response = await axios.get(`${API_URL}?search=${encodeURIComponent(searchString)}`);
     return response.data;
   } catch (error) {
     throw error;
