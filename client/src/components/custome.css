@@ -25,7 +25,10 @@ div.buisness-manage-container {
   transition: 0.2s all;
 }
 
-
+.search-container-wrapper{
+  order: 1;
+  width: 100%;
+}
 
 .buisness-manage-container .nav-bar-items button.invoice-btn:hover {
   color: #fff;

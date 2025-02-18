@@ -34,7 +34,8 @@
 
 .ant-menu-dark>.ant-menu .ant-menu-item-selected,
 .Sidebar .ant-layout-sider-children .ant-menu .ant-menu-submenu-active .ant-menu-submenu-title,
-.Sidebar .ant-layout-sider-children .ant-menu .ant-menu-item.ant-menu-item-selected {
+.Sidebar .ant-layout-sider-children .ant-menu .ant-menu-item.ant-menu-item-selected,
+.Sidebar .ant-layout-sider-children .ant-menu .ant-menu-submenu.ant-menu-submenu-selected .ant-menu-submenu-title {
     background: #fdfdfd17;
     border-left: 2px solid #fff;
 }
@@ -47,7 +48,8 @@
 }
 
 .ant-menu-title-content,
-.Sidebar .ant-layout-sider-children .ant-menu .ant-menu-item span {
+.Sidebar .ant-layout-sider-children .ant-menu .ant-menu-item span,
+.Sidebar .ant-layout-sider-children .ant-menu .ant-menu-submenu svg {
     color: #fff;
 }
 

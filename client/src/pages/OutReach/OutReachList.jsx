@@ -373,11 +373,11 @@ const OutReachList = () => {
                             className="search-input"
                         />
                     </div>
-                    <Button type='primary' onClick={ () => { setfilterModal(true) } }>Filter</Button>
+                    <Button className='filter-btn btn' onClick={ () => { setfilterModal(true) } }>Filter</Button>
                     {/* <Button disabled={filterData==[]} type='primary' onClick={()=>{fetchOutreach()}}>Reset Filter</Button> */ }
                     <Button
                         disabled={ !filterData } // Disable if no filtered data
-                        type="primary"
+                    className='delete-btn btn'
                         onClick={ () => { fetchOutreach(); setFilteredData() } }
                     >
                         Reset Filter
@@ -479,7 +479,7 @@ const OutReachList = () => {
                                     </td>
                                 }
                                 <td><Link to={ `/ViewOutReach/${item._id}` }>
-                                    { item.name }</Link></td>
+                                    <span className='user-name'>{ item.name }</span></Link></td>
                                 <td>{ item?.email }</td>
                                 <td>{ item?.phone }</td>
                                 <td>{ item?.website }</td>
@@ -865,6 +865,7 @@ const OutReachList = () => {
                     {/* Modal Footer (Buttons) */ }
                     <div style={ { textAlign: "right" } }>
                         <Button
+                        className='text-btn'
                             onClick={ () => { setfilterModal(false) } }
                             style={ { marginRight: 10 } }>
                             Cancel
@@ -876,7 +877,7 @@ const OutReachList = () => {
                 </Form>
             </Modal>
 
-        </div >
+        </div>
     );
 };
 

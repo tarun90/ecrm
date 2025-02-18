@@ -664,7 +664,7 @@ function Invoices() {
   return (
     <Layout className="main-content-wrapper">
       <Header className="invoice-header">
-        <div className="search-container">
+        <div className="search-container-wrapper">
           <div className="filter-container">
             <div className="filter-group">
               <div className="search-bar">
