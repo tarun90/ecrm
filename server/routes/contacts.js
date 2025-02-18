@@ -2,6 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import { parse } from 'csv-parse';
 import Contact from '../models/Contact.js';
+import Deal from '../models/Deal.js';
 import auth from '../middleware/auth.js';
 import { Parser } from 'json2csv';
 
@@ -47,6 +48,24 @@ router.get('/view/:id', auth, async (req, res) => {
     }
 
     res.json(contact);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching contact' });
+  }
+});
+
+router.get('/deals/:id/:companyId', auth, async (req, res) => {
+  try {
+    const deals = await Deal.find({
+      contact: req.params.id,
+      company: req.params.companyId
+    }).populate('contact');
+    
+    if (!deals) {
+      return res.status(404).json({ message: 'Deals not found' });
+    }
+
+    res.json(deals);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error fetching contact' });
