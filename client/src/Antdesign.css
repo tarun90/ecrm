@@ -159,6 +159,7 @@
 .ant-layout-sider-collapsed .ant-menu-vertical .ant-menu-submenu .anticon,
 .ant-layout-sider-collapsed .ant-menu-vertical .ant-menu-item .anticon {
     font-size: 18px;
+    color: #fff;
 }
 
 .ant-menu-title-content {

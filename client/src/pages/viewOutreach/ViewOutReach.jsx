@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Settings, Plus, ArrowLeft, Edit, Mail, Phone, Calendar, MoreHorizontal, Copy, Paperclip  } from 'lucide-react';
+import { Settings, Plus, ArrowLeft, Edit, Mail, Phone, Calendar, MoreHorizontal, Copy, Paperclip, Trash2  } from 'lucide-react';
 import './ViewOutReach.css';
 import { Button, Checkbox, DatePicker, Divider, Form, Input, message, Modal, Upload,Card, Empty, List, Popconfirm, Space, Typography, Tooltip } from 'antd';
 import { CaretDownOutlined, UploadOutlined,  DeleteOutlined, 
@@ -8,7 +8,7 @@ import { CaretDownOutlined, UploadOutlined,  DeleteOutlined,
 import axios from 'axios';
 import { getOutreachDataById } from '../OutReach/outreachService';
 import { useNavigate, useParams } from 'react-router-dom';
-import { createNote, getNotesByOutreach, updateNote  } from './noteService';
+import { createNote, getNotesByOutreach, updateNote, deleteNote  } from './noteService';
 import moment from 'moment';
 const ActionButton = ({ icon, label, onClick }) => {
   return (
@@ -44,6 +44,15 @@ const MainContent = ({ form, outReachData,modalOpen, modalOpenForNote,modalClose
       fetchNotes();
     }
   }, [outReachData._id]);
+  const handleDelete = async (noteId) => {
+    try {
+      await deleteNote(noteId);
+      message.success('Note deleted successfully!');
+      fetchNotes();
+    } catch (error) {
+      message.error('Failed to delete note: ' + (error.message || 'Unknown error'));
+    }
+  };
   const handleSubmit = async (values) => {
     try {
       if (editingNote) {
@@ -145,7 +154,20 @@ const MainContent = ({ form, outReachData,modalOpen, modalOpenForNote,modalClose
                         type="link" 
                         icon={<Edit />} 
                         onClick={() => handleEdit(item)}
-                      /></td> 
+                      />
+                       <Popconfirm
+                          title="Delete Note"
+                          description="Are you sure you want to delete this note?"
+                          onConfirm={() => handleDelete(item._id)}
+                          okText="Yes"
+                          cancelText="No"
+                        >
+                          <Button
+                            type="link"
+                            danger
+                            icon={<Trash2 />}
+                          />
+                        </Popconfirm>                      </td> 
                                                 {/* } */}
                                                 
                                             </tr>
