@@ -113,8 +113,12 @@
   border-radius: 8px;
   border: none;
   width: 100%;
+<<<<<<< HEAD
   height: 50px;
   max-width: 500px;
+=======
+  max-width: 100%;
+>>>>>>> fd22e68 (naresh design changes)
   box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3);
 }
 
