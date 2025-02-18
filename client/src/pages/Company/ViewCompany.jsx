@@ -1,149 +1,120 @@
-import React, { useState, useEffect } from 'react';
-import { Card, Typography, Button, Space, Divider, message } from 'antd';
-import { ArrowLeftOutlined } from '@ant-design/icons';
-import { getCompanyById } from './APIServices';
-import { useParams, useNavigate } from 'react-router-dom';
-import './ViewCompany.css';
+import React from 'react';
+import { Settings, Plus, ArrowLeft, Edit, Mail, Phone, Calendar, MoreHorizontal, Copy } from 'lucide-react';
+import { Button } from 'antd';
+import { CaretDownOutlined } from '@ant-design/icons';
+const ActionButton = ({ icon, label }) => {
+  return (
+    <div className="action-button">
+      <button className="icon-button">{ icon }</button>
+      <span className="button-label">{ label }</span>
+    </div>
+  );
+};
 
-const { Title, Text } = Typography;
-
-const ViewCompany = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const [company, setCompany] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchCompanyById(id);
-  }, [id]);
-
-  const fetchCompanyById = async (id) => {
-    try {
-      const data = await getCompanyById(id);
-      setCompany(data);
-    } catch (error) {
-      message.error('Failed to fetch company details');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) {
-    return <div className="view-company-loading">Loading...</div>;
-  }
-
-  if (!company) {
-    return <div className="view-company-error">Company not found.</div>;
-  }
+const MainContent = () => {
+  const sections = ['Contacts', 'Companies', 'Deals'];
 
   return (
-    <div className="view-company-container">
-      <div className="view-company-wrapper">
-        <Button
-          icon={ <ArrowLeftOutlined /> }
-          type="link"
-          onClick={ () => navigate('/company') }
-          className="back-button text-btn"
-        >
-          Back to Companies
-        </Button>
-
-        <Card className="company-details-card">
-          <section className="company-section">
-            <Title level={ 4 }>Company Information</Title>
-            <Divider />
-
-            <div className="info-grid">
-              <div className="info-item">
-                <Text strong>Company Owner</Text>
-                <div className="info-value">{ company.companyOwner || '-' }</div>
-              </div>
-              <div className="info-item">
-                <Text strong>Company Name</Text>
-                <div className="info-value">{ company.companyName || '-' }</div>
-              </div>
-              <div className="info-item">
-                <Text strong>Email</Text>
-                <div className="info-value">{ company.email || '-' }</div>
-              </div>
-              <div className="info-item">
-                <Text strong>Phone</Text>
-                <div className="info-value">{ company.phone || '-' }</div>
-              </div>
-              <div className="info-item">
-                <Text strong>Mobile</Text>
-                <div className="info-value">{ company.mobile || '-' }</div>
-              </div>
-              <div className="info-item">
-                <Text strong>Website</Text>
-                <div className="info-value">
-                  { company.website ? (
-                    <a href={ company.website } target="_blank" rel="noopener noreferrer">
-                      { company.website }
-                    </a>
-                  ) : (
-                    '-'
-                  ) }
-                </div>
-              </div>
-              <div className="info-item">
-                <Text strong>Industry</Text>
-                <div className="info-value">{ company.industry || '-' }</div>
-              </div>
-              <div className="info-item">
-                <Text strong>Currency</Text>
-                <div className="info-value">{ company.currency || '-' }</div>
-              </div>
-              <div className="info-item">
-                <Text strong>GSTIN</Text>
-                <div className="info-value">{ company.gstin || '-' }</div>
-              </div>
+    <div className="main-content">
+      { sections.map((section) => (
+        <div key={ section } className="content-section">
+          <div className="section-header">
+            <h2>{ section }</h2>
+            <div className="header-actions">
+              <button className="add-button add-contact-btn">
+                <Plus />
+                add
+              </button>
+              <Settings />
             </div>
-          </section>
-
-          <section className="address-section">
-            <Title level={ 4 }>Address Information</Title>
-            <Divider />
-
-            <div className="info-grid">
-              <div className="info-item full-width">
-                <Text strong>Street</Text>
-                <div className="info-value">{ company.address?.street || '-' }</div>
-              </div>
-              <div className="info-item">
-                <Text strong>City</Text>
-                <div className="info-value">{ company.address?.city || '-' }</div>
-              </div>
-              <div className="info-item">
-                <Text strong>State</Text>
-                <div className="info-value">{ company.address?.state || '-' }</div>
-              </div>
-              <div className="info-item">
-                <Text strong>Country</Text>
-                <div className="info-value">{ company.address?.country || '-' }</div>
-              </div>
-              <div className="info-item">
-                <Text strong>Region</Text>
-                <div className="info-value">{ company.address?.region || '-' }</div>
-              </div>
-            </div>
-          </section>
-
-          <Divider />
-          <div className="action-buttons">
-            <Space>
-              <Button className='text-btn' onClick={ () => navigate('/company') }>
-                Back
-              </Button>
-              <Button type="primary" onClick={ () => navigate(`/company/edit/${id}`) }>
-                Edit Company
-              </Button>
-            </Space>
           </div>
-        </Card>
+          <div className="section-content">
+            <p>No associated objects of this type exist or you don't have permission to view them.</p>
+          </div>
+        </div>
+      )) }
+    </div>
+  );
+};
+
+// Sidebar Component
+const Sidebar = () => {
+  const actions = [
+    { icon: <Edit />, label: 'Note' },
+    { icon: <Mail />, label: 'Email' },
+    { icon: <Phone />, label: 'Call' },
+    { icon: <Edit />, label: 'Task' },
+    { icon: <Calendar />, label: 'Meeting' },
+    { icon: <MoreHorizontal />, label: 'More' }
+  ];
+
+  return (
+    <div className="sidebar">
+      <div className="sidebar-header">
+        <ArrowLeft className="back-icon" />
+        <span> Company </span>
+        <Button icon={ <CaretDownOutlined /> }>Actions </Button>
+      </div>
+
+      <div className="contact-card scroll">
+        <div className="contact-info">
+          <div className="avatar">DB</div>
+          <div className="contact-details">
+            <h2>Derrick</h2>
+            <h3>Blanden</h3>
+            <Button className="email">
+              <a href='#'>info.dbderrick2@aol.com</a>
+              <Copy />
+            </Button>
+
+          </div>
+        </div>
+
+        <div className="action-buttons">
+          { actions.map((action, index) => (
+            <ActionButton key={ index } icon={ action.icon } label={ action.label } />
+          )) }
+        </div>
+
+        <div className="about-section">
+          <div className="about-header">
+            <h3>About this ...</h3>
+            <div className="about-actions">
+              <Button icon={ <CaretDownOutlined /> }>Actions </Button>
+              <Settings />
+            </div>
+          </div>
+
+          <div className="contact-fields">
+            <div className="field">
+              <p className="label">Email</p>
+              <div className="email">
+                <a href='#'>info.dbderrick2@aol.com</a>
+
+              </div>
+            </div>
+            <div className="field">
+              <p className="label">Phone number</p>
+            </div>
+            <div className="field">
+              <p className="label">Contact owner</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
-export default ViewCompany;
+const DealView = () => {
+  return (
+    <div className="contact-management">
+      <Sidebar />
+      <MainContent />
+    </div>
+  );
+};
+
+
+
+export default DealView; 

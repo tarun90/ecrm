@@ -1,82 +1,64 @@
 import mongoose from 'mongoose';
 
 const companySchema = new mongoose.Schema({
-  companyOwner: {
-    type: String,
-    required: true,
-    trim: true
-  },
   companyName: {
     type: String,
-    required: true,
-    trim: true
+    required: true
   },
-  email: {
+  companyOwner: {
     type: String,
-    required: true,
-    trim: true,
-    lowercase: true,
-    validate(value) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(value)) {
-        throw new Error('Email is invalid');
-      }
-    }
-  },
-  phone: {
-    type: String,
-    trim: true
-  },
-  mobile: {
-    type: String,
-    trim: true
-  },
-  website: {
-    type: String,
-    trim: true
+    required: true
   },
   industry: {
     type: String,
-    enum: ['Technology', 'Manufacturing', 'Healthcare', 'Retail', 
-           'Financial Services', 'Education', 'Other']
+    required: true
   },
-  currency: {
+  type: {
     type: String,
-    enum: ['USD', 'EUR', 'INR', 'GBP', 'AUD', 'CAD']
+    required: true,
+    enum: ['Prospect', 'Partner', 'Reseller', 'Vendor', 'Other']
   },
-  gstin: {
+  websiteUrl: {
     type: String,
-    trim: true
+    required: true
   },
-  address: {
-    street: {
-      type: String,
-      trim: true
-    },
-    city: {
-      type: String,
-      trim: true
-    },
-    state: {
-      type: String,
-      trim: true
-    },
-    country: {
-      type: String,
-      trim: true
-    },
-    region: {
-      type: String,
-      trim: true
-    }
+  timeZone: {
+    type: String,
+    required: true
   },
+  city: String,
+  stateRegion: String,
+  country: String,
+  postalCode: String,
+  numberOfEmployees: Number,
+  annualRevenue: String,
+  description: String,
+  linkedinPage: String,
+  phoneNumber: String,
+  email:String,
+  Currency:String,
+  webTechnologies: [{
+    type: String
+  }],
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'User'
+    ref: 'User',
+    required: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
   }
-}, {
-  timestamps: true
+});
+
+// Update the updatedAt timestamp before saving
+companySchema.pre('save', function(next) {
+  this.updatedAt = new Date();
+  next();
 });
 
 const Company = mongoose.model('Company', companySchema);

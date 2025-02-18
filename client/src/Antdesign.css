@@ -21,6 +21,10 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     padding: 1rem 2rem;
     z-index: 100;
+    height: auto;
+    min-height: 64px;
+    line-height: normal;
+    margin-bottom: 20px;
 }
 
 .ant-layout-content::-webkit-scrollbar-track {
@@ -176,9 +180,9 @@
     box-shadow: none;
 }
 
-.ant-btn-primary :not(:disabled):hover {
+/* .ant-btn-primary :not(:disabled):hover {
     background: #185d87;
-}
+} */
 
 .ant-input-outlined:focus,
 .ant-input-outlined:hover,
@@ -216,4 +220,35 @@
 
 .ant-btn-variant-text:disabled .ant-btn-icon svg {
     color: rgba(0, 0, 0, 0.25);
+}
+
+.ant-modal .ant-modal-header {
+    margin-bottom: 20px;
+}
+
+.modal-footer .ant-form-item-control-input-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: end;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.ant-menu-dark.ant-menu-submenu-popup>.ant-menu {
+    padding: 5px;
+    background-color: var(--bg-sidebar);
+}
+
+.ant-menu-dark>.ant-menu .ant-menu-item {
+    color: #fff;
+
+
+}
+
+.ant-menu-dark>.ant-menu .ant-menu-item-selected {
+    border-left: 2px solid #fff;
+}
+
+.ant-menu-dark.ant-menu-inline .ant-menu-sub.ant-menu-inline {
+    background-color: transparent !important;
 }

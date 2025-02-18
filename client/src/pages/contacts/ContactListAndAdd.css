@@ -70,6 +70,8 @@
 
 .filter-btn,
 .export-btn {
+  height: auto;
+  padding: 0.5rem 1rem;
   background-color: #e0f2fe;
   color: #0369a1;
   border: 1px solid #bae6fd;
@@ -91,9 +93,12 @@
   background-color: #e5e7eb;
 }
 
+.ant-btn-variant-outlined.ant-btn-default.filter-btn:hover,
 .filter-btn:hover,
 .export-btn:hover {
   background-color: #bae6fd;
+  color: #185d87;
+  border-color: #185d87;
 }
 
 .add-contact-btn:hover {
@@ -113,6 +118,7 @@ table {
 }
 
 .contact-table th {
+  white-space: nowrap;
   background-color: #e0f2fe;
   color: #0369a1;
   font-weight: 600;
@@ -164,6 +170,7 @@ table {
   border: 1px solid #fee2e2;
 }
 
+.ant-btn.ant-btn-color-primary.ant-btn-variant-link.edit-btn:hover,
 .edit-btn:hover {
   background-color: #e0e7ff;
 }
@@ -231,6 +238,10 @@ table {
   outline: none;
   border-color: #3b82f6;
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.ant-checkbox .ant-checkbox-inner {
+  background-color: #fff;
 }
 
 /* Responsive Design */

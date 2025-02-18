@@ -4,10 +4,15 @@ import moment from 'moment';
 import axios from 'axios';
 import { getCompanies, deleteCompany } from './APIServices';
 import { useNavigate } from 'react-router-dom';
-import { Button, message } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { message, Popconfirm, Button, Divider, Modal, Form, Input, Select, Col, Row } from 'antd';
+import CompanyFormModal from './CompanyFormModal';
+// import { Button, message } from 'antd';
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { Header } from 'antd/es/layout/layout';
+import { Delete, Edit } from 'lucide-react';
 const CompanyList = () => {
     const navigate = useNavigate();
+    const [form] = Form.useForm();
 
     const [contacts, setContacts] = useState([]);
     const [companies, setCompanies] = useState([]);
@@ -21,6 +26,8 @@ const CompanyList = () => {
         leadStatus: '',
         contactOwner: ''
     });
+    const [modalVisible, setModalVisible] = useState(false);
+    const [editId, setEditId] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editingId, setEditingId] = useState(null);
@@ -43,6 +50,15 @@ const CompanyList = () => {
         }
     }, [searchTerm]);
 
+    const handleAddCompany = () => {
+        setEditId(null);
+        setModalVisible(true);
+    };
+
+    const handleEditCompany = (id) => {
+        setEditId(id);
+        setModalVisible(true);
+    };
 
     const fetchCompanies = async (searchTerm = "") => {
         const data = await getCompanies(searchTerm);
@@ -66,18 +82,17 @@ const CompanyList = () => {
             await contactService.createContact(contact);
         }
         closeModal();
-    };
 
-    const handleEdit = (company) => {
-        navigate(`/company/edit/${company._id}`);
     };
 
     const handleDelete = async (id) => {
-        if (window.confirm('Are you sure you want to delete this company?')) {
-            await deleteCompany(id);
-            message.success('Company deleted successfully.')
-            fetchCompanies()
+        const deleteResponse = await deleteCompany(id);
+        if (deleteResponse?.status != 200) {
+            message.error(deleteResponse?.message)
+        } else {
+            message.success("Company deleted successfully")
         }
+        fetchCompanies()
     };
 
     // Update your handleImport function:
@@ -150,7 +165,7 @@ const CompanyList = () => {
 
     return (
         <div className="contact-container">
-            <div className="contact-header">
+            <Header className="contact-header">
                 <div className="search-container">
                     <input
                         type="text"
@@ -175,122 +190,137 @@ const CompanyList = () => {
                         <button className="export-btn" onClick={ handleExport }>
                             Export CSV
                         </button> */}
-                    <Button className="add-contact-btn" icon={ <PlusOutlined /> } onClick={ openAddModal }>
+                    <button className="add-contact-btn" onClick={ handleAddCompany }>
+                        <PlusOutlined />
                         Add Company
-                    </Button>
+                    </button>
                 </div>
-            </div>
-
+            </Header>
             <div className="contact-table">
                 <table>
                     <thead>
                         <tr>
                             <th>Company Name</th>
+                            <th>Company Owner</th>
+                            <th>Phone</th>
                             <th>Email</th>
-                            <th>Phone Number</th>
-                            <th>Owner</th>
+                            <th>City</th>
+                            <th>Country</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         { companies.map(company => (
                             <tr key={ company?._id }>
-                                <td>{ company?.companyName }</td>
-                                <td>{ company?.email }</td>
-                                <td>{ company?.phone }</td>
-                                <td>{ company?.companyOwner }</td>
-
+                                <td onClick={ () => handleView(company._id) }> <a href='#'> { company?.companyName || '-' } </a> </td>
+                                <td>{ company?.companyOwner || '-' }</td>
+                                <td>{ company?.phoneNumber || '-' }</td>
+                                <td>{ company?.email || '-' }</td>
+                                <td>{ company?.city || '-' }</td>
+                                <td>{ company?.country || '-' }</td>
                                 <td>
-                                    <button className="edit-btn" onClick={ () => handleView(company._id) }>
-                                        View
+                                    <button className="edit-btn" onClick={ () => handleEditCompany(company._id) }>
+                                        <EditOutlined />
                                     </button>
-                                    <button
-                                        className="edit-btn"
-                                        onClick={ () => handleEdit(company) }
+                                    <Popconfirm
+                                        title="Delete Company"
+                                        description="Are you sure you want to delete this company?"
+                                        onConfirm={ (e) => {
+                                            e.stopPropagation();
+                                            handleDelete(company._id);
+                                        } }
+                                        okText="Yes"
+                                        cancelText="No"
                                     >
-                                        Edit
-                                    </button>
-                                    <button
-                                        className="delete-btn"
-                                        onClick={ () => handleDelete(company._id) }
-                                    >
-                                        Delete
-                                    </button>
+                                        <Button className="delete-btn" onClick={ (e) => e.stopPropagation() }>
+                                            <DeleteOutlined />
+                                        </Button>
+                                    </Popconfirm>
                                 </td>
                             </tr>
                         )) }
                     </tbody>
                 </table>
             </div>
-
-            {/* Modal for Adding/Editing Contact */ }
-            { isModalOpen && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <h2>{ isEditing ? 'Edit Company' : 'Create Company' }</h2>
-                        <form onSubmit={ handleSubmit }>
-                            <input
-                                type="email"
+            <Modal
+                title={ isEditing ? "Edit Company" : "Create Company" }
+                open={ isModalOpen }
+                onCancel={ closeModal }
+                footer={ null }
+            >
+                <Form
+                    form={ form }
+                    layout="vertical"
+                    initialValues={ contact }
+                    onFinish={ handleSubmit }
+                >
+                    <Row gutter={ 24 }>
+                        {/* Column 1 */ }
+                        <Col span={ 12 }>
+                            <Form.Item
+                                label="Email"
                                 name="email"
-                                value={ contact.email }
-                                onChange={ handleChange }
-                                placeholder="Email"
-                                required
-                            />
-                            <input
-                                type="text"
-                                name="firstName"
-                                value={ contact.firstName }
-                                onChange={ handleChange }
-                                placeholder="First Name"
-                            />
-                            <input
-                                type="text"
-                                name="lastName"
-                                value={ contact.lastName }
-                                onChange={ handleChange }
-                                placeholder="Last Name"
-                            />
-                            <input
-                                type="text"
-                                name="jobTitle"
-                                value={ contact.jobTitle }
-                                onChange={ handleChange }
-                                placeholder="Job Title"
-                            />
-                            <input
-                                type="text"
-                                name="phoneNumber"
-                                value={ contact.phoneNumber }
-                                onChange={ handleChange }
-                                placeholder="Phone Number"
-                            />
-                            <select
-                                name="lifecycleStage"
-                                value={ contact.lifecycleStage }
-                                onChange={ handleChange }
+                                rules={ [
+                                    { required: true, message: "Please input email!" },
+                                    { type: "email", message: "Please enter a valid email!" }
+                                ] }
                             >
-                                <option value="Lead">Lead</option>
-                                <option value="Customer">Customer</option>
-                            </select>
-                            <select
-                                name="leadStatus"
-                                value={ contact.leadStatus }
-                                onChange={ handleChange }
-                            >
-                                <option value="--">--</option>
-                                <option value="Qualified">Qualified</option>
-                            </select>
-                            <footer className='model-footer'>
-                                <button className="close-btn" onClick={ closeModal }>Cancel </button>
-                                <button type="submit" className="submit-btn">
-                                    { isEditing ? 'Update Contact' : 'Create Contact' }
-                                </button>
-                            </footer>
-                        </form>
-                    </div>
-                </div>
-            ) }
+                                <Input placeholder="Email" onChange={ handleChange } />
+                            </Form.Item>
+
+                            <Form.Item label="First Name" name="firstName">
+                                <Input placeholder="First Name" onChange={ handleChange } />
+                            </Form.Item>
+
+                            <Form.Item label="Last Name" name="lastName">
+                                <Input placeholder="Last Name" onChange={ handleChange } />
+                            </Form.Item>
+
+                            <Form.Item label="Phone Number" name="phoneNumber">
+                                <Input placeholder="Phone Number" onChange={ handleChange } />
+                            </Form.Item>
+                        </Col>
+
+                        {/* Column 2 */ }
+                        <Col span={ 12 }>
+                            <Form.Item label="Job Title" name="jobTitle">
+                                <Input placeholder="Job Title" onChange={ handleChange } />
+                            </Form.Item>
+
+                            <Form.Item label="Lifecycle Stage" name="lifecycleStage">
+                                <Select onChange={ (value) => handleChange({ target: { name: "lifecycleStage", value } }) }>
+                                    <Select.Option value="Lead">Lead</Select.Option>
+                                    <Select.Option value="Customer">Customer</Select.Option>
+                                </Select>
+                            </Form.Item>
+
+                            <Form.Item label="Lead Status" name="leadStatus">
+                                <Select onChange={ (value) => handleChange({ target: { name: "leadStatus", value } }) }>
+                                    <Select.Option value="--">--</Select.Option>
+                                    <Select.Option value="Qualified">Qualified</Select.Option>
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+
+                    <Form.Item className="modal-footer">
+                        <Button onClick={ closeModal } className="text-btn">
+                            Cancel
+                        </Button>
+                        <Button type="primary" htmlType="submit">
+                            { isEditing ? "Update Contact" : "Create Contact" }
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Modal>
+
+
+            <CompanyFormModal
+                visible={ modalVisible }
+                onCancel={ () => setModalVisible(false) }
+                editId={ editId }
+                fetchCompanies={ fetchCompanies }
+            />
         </div>
     );
 };

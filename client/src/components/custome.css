@@ -400,7 +400,7 @@ button {
 
 .modal-content {
   background-color: white;
-  padding: 20px;
+  padding: 0 10px;
   border-radius: 5px;
   max-width: 600px;
   width: 100%;
@@ -416,10 +416,6 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.modal-header h2 {
-  font-size: 18px;
 }
 
 
@@ -495,6 +491,7 @@ button {
   font-size: 14px;
   font-weight: 600;
   color: #333;
+  text-align: left;
   margin-bottom: 4px;
 }
 
@@ -778,6 +775,11 @@ textarea {
 
 .product-details {
   margin-top: 1rem;
+}
+
+:where(.css-dev-only-do-not-override-1pjlhih).ant-menu-dark.ant-menu-inline .ant-menu-sub.ant-menu-inline,
+:where(.css-dev-only-do-not-override-1pjlhih).ant-menu-dark>.ant-menu.ant-menu-inline .ant-menu-sub.ant-menu-inline {
+  background: #0c3a5b !important;
 }
 
 

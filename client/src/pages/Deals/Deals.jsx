@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Layout, Menu, Button, Avatar, Dropdown, Modal, Form, Input, Select, DatePicker, InputNumber, message, Popconfirm, Upload } from 'antd';
+import { Layout, Menu, Button, Avatar, Dropdown, Modal, Form, Input, Select, DatePicker, InputNumber, message, Popconfirm, Upload, Divider, Col, Row } from 'antd';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import { getCompaniesNames } from '../Company/APIServices';
 
 import {
   UserOutlined,
@@ -50,6 +51,7 @@ function Deals() {
   const [filteredDeals, setFilteredDeals] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [contacts, setContacts] = useState([]);
+  const [contactsList, setContactsList] = useState([]);
   const [collapsed, setCollapsed] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
@@ -58,13 +60,27 @@ function Deals() {
   const [importType, setImportType] = useState(null);
   const [selectedDeal, setSelectedDeal] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [companies, setCompanies] = useState([]);
+
   const [form] = Form.useForm();
   const [editForm] = Form.useForm();
 
   useEffect(() => {
     fetchDeals();
     fetchContacts();
+    fetchContactList();
+    fetchCompanies();
   }, []);
+
+  const fetchCompanies = async () => {
+    try {
+      let data = await getCompaniesNames();
+      setCompanies(data);
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
 
   const logoutFunctionality = async () => {
     logout();
@@ -101,6 +117,17 @@ function Deals() {
       console.error('Error fetching contacts:', error);
     }
   };
+
+  const fetchContactList = async () => {
+    try {
+      const contactsData = await contactService.getContactList();
+      setContactsList(contactsData);
+    } catch (error) {
+      // message.error('Failed to fetch contacts');
+      console.error('Error fetching contacts:', error);
+    }
+  };
+
 
   const handleImport = async (file, type) => {
     try {
@@ -259,8 +286,11 @@ function Deals() {
 
   const openEditModal = (deal) => {
     setSelectedDeal(deal);
+    console.log(deal, "deal")
     editForm.setFieldsValue({
       ...deal,
+      contact: deal?.contact?._id,
+      company: deal?.company?._id,
       closeDate: dayjs(deal.closeDate),
     });
     setIsEditModalVisible(true);
@@ -268,7 +298,8 @@ function Deals() {
 
   const openViewModal = (deal) => {
     setSelectedDeal(deal);
-    setIsViewModalVisible(true);
+    handleView(deal._id);
+    // setIsViewModalVisible(true);
   };
 
   const userMenu = (
@@ -281,7 +312,9 @@ function Deals() {
       </Menu.Item>
     </Menu>
   );
-
+  const handleView = (id) => {
+    navigate(`/deals/view/${id}`);
+  };
   const uploadProps = {
     name: 'file',
     multiple: false,
@@ -427,7 +460,7 @@ function Deals() {
                                     </Popconfirm>
                                   </div>
                                 </div>
-                                <p className={ styles.dealCompany }>{ deal.company }</p>
+                                <p className={ styles.dealCompany }>{ deal.company?.companyName }</p>
                                 <div className={ styles.dealInfo }>
                                   <span className={ `${styles.dealAmount} ${deal.amount < 0 ? styles.negative : ''}` }>
                                     ${ deal.amount.toLocaleString() }
@@ -456,11 +489,13 @@ function Deals() {
       <Modal
         title="Create Deal"
         open={ isModalVisible }
+        width={ 600 }
         onCancel={ () => {
           setIsModalVisible(false);
           form.resetFields();
         } }
         footer={ [
+          <Divider />,
           <Button
             key="cancel"
             className='text-btn'
@@ -480,122 +515,144 @@ function Deals() {
             Create
           </Button>
         ] }
-        width={ 600 }
+        width={ 600 } // Adjusted width for better layout
       >
+        <Divider />
         <Form
           form={ form }
           layout="vertical"
           onFinish={ handleCreateDeal }
         >
-          <Form.Item
-            name="name"
-            label="Deal name"
-            rules={ [{ required: true, message: 'Please enter deal name' }] }
-          >
-            <Input placeholder="Enter deal name" />
-          </Form.Item>
-
-          {/* <Form.Item
-              name="pipeline"
-              label="Pipeline"
-              initialValue="deals"
-              rules={[{ required: true, message: 'Please select pipeline' }]}
-            >
-              <Select placeholder="Select pipeline">
-                <Option value="deals">Deals pipeline</Option>
-              </Select>
-            </Form.Item> */}
-
-          <Form.Item
-            name="stage"
-            label="Deal stage"
-            initialValue="New Leads"
-            rules={ [{ required: true, message: 'Please select deal stage' }] }
-          >
-            <Select placeholder="Select stage">
-              { stages.map(stage => (
-                <Option key={ stage } value={ stage }>{ stage }</Option>
-              )) }
-            </Select>
-          </Form.Item>
-
-          <Form.Item
-            name="amount"
-            label="Amount"
-            rules={ [{ required: true, message: 'Please enter amount' }] }
-          >
-            <InputNumber
-              style={ { width: '100%' } }
-              formatter={ value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }
-              parser={ value => value.replace(/\$\s?|(,*)/g, '') }
-              placeholder="0.00"
-            />
-          </Form.Item>
-
-          <Form.Item
-            name="closeDate"
-            label="Close date"
-            rules={ [{ required: true, message: 'Please select close date' }] }
-          >
-            <DatePicker style={ { width: '100%' } } />
-          </Form.Item>
-
-          <Form.Item
-            name="type"
-            label="Deal type"
-            rules={ [{ required: true, message: 'Please select deal type' }] }
-          >
-            <Select placeholder="Select type">
-              <Option value="new">New Business</Option>
-              <Option value="existing">Existing Business</Option>
-            </Select>
-          </Form.Item>
-
-          <Form.Item
-            name="contact"
-            label="Contact"
-            rules={ [{ required: true, message: 'Please select contact' }] }
-          >
-            {/* <Select
-                showSearch
-                placeholder="Search contacts"
-                filterOption={(input, option) =>
-                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                }
+          <Row gutter={ 24 }>
+            {/* Column 1 */ }
+            <Col span={ 12 }>
+              <Form.Item
+                name="name"
+                label="Deal name"
+                rules={ [{ required: true, message: 'Please enter deal name' }] }
               >
-                {contacts.map(contact => (
-                  <Option key={contact._id} value={contact._id}>
-                    {contact.name}
-                  </Option>
-                ))}
-              </Select> */}
-            <Input placeholder="Enter Contact" />
-          </Form.Item>
+                <Input placeholder="Enter deal name" />
+              </Form.Item>
 
-          <Form.Item
-            name="company"
-            label="Company"
-            rules={ [{ required: true, message: 'Please enter company name' }] }
-          >
-            <Input placeholder="Enter company name" />
-          </Form.Item>
+              <Form.Item
+                name="stage"
+                label="Deal stage"
+                initialValue="New Leads"
+                rules={ [{ required: true, message: 'Please select deal stage' }] }
+              >
+                <Select placeholder="Select stage">
+                  { stages.map(stage => (
+                    <Option key={ stage } value={ stage }>
+                      { stage }
+                    </Option>
+                  )) }
+                </Select>
+              </Form.Item>
+
+              <Form.Item
+                name="amount"
+                label="Amount"
+                rules={ [{ required: true, message: 'Please enter amount' }] }
+              >
+                <InputNumber
+                  style={ { width: '100%' } }
+                  formatter={ value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }
+                  parser={ value => value.replace(/\$\s?|(,*)/g, '') }
+                  placeholder="0.00"
+                />
+              </Form.Item>
+
+              <Form.Item
+                name="closeDate"
+                label="Close date"
+                rules={ [{ required: true, message: 'Please select close date' }] }
+              >
+                <DatePicker style={ { width: '100%' } } />
+              </Form.Item>
+            </Col>
+
+            {/* Column 2 */ }
+            <Col span={ 12 }>
+              <Form.Item
+                name="type"
+                label="Deal type"
+                rules={ [{ required: true, message: 'Please select deal type' }] }
+              >
+                <Select placeholder="Select type">
+                  <Option value="new">New Business</Option>
+                  <Option value="existing">Existing Business</Option>
+                </Select>
+              </Form.Item>
+
+              <Form.Item
+                name="contact"
+                label="Contact"
+                rules={ [{ required: true, message: 'Please select contact' }] }
+              >
+                <Select
+                  showSearch
+                  placeholder="Search contacts"
+                  filterOption={ (input, option) =>
+                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
+                  onChange={ (value) => {
+                    const selectedContact = contactsList.find(contact => contact._id === value);
+                    if (selectedContact) {
+                      form.setFieldsValue({
+                        company: selectedContact.company,
+                      });
+                    }
+                  } }
+                >
+                  { contactsList.map(contact => (
+                    <Option key={ contact._id } value={ contact._id }>
+                      { contact.firstName + " " + contact.lastName }
+                    </Option>
+                  )) }
+                </Select>
+              </Form.Item>
+
+              <Form.Item
+                name="company"
+                label="Company"
+                rules={ [{ required: true, message: 'Please enter company name' }] }
+              >
+                <Select
+                  showSearch
+                  disabled
+                  placeholder="Search Company"
+                  filterOption={ (input, option) =>
+                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
+                >
+                  { companies.map(company => (
+                    <Option key={ company._id } value={ company._id }>
+                      { company?.companyName }
+                    </Option>
+                  )) }
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
       </Modal>
+
 
       {/* Edit Deal Modal */ }
       <Modal
         title="Edit Deal"
         open={ isEditModalVisible }
+        width={ 600 }
         onCancel={ () => {
           setIsEditModalVisible(false);
           setSelectedDeal(null);
           editForm.resetFields();
         } }
         footer={ [
+          <Divider />,
           <Button
             key="cancel"
             className='text-btn'
-
             onClick={ () => {
               setIsEditModalVisible(false);
               setSelectedDeal(null);
@@ -613,95 +670,127 @@ function Deals() {
             Update
           </Button>
         ] }
-        width={ 600 }
+        width={ 600 } // Adjusted for better layout
       >
+        <Divider />
         <Form
           form={ editForm }
           layout="vertical"
           onFinish={ handleEditDeal }
         >
-          <Form.Item
-            name="name"
-            label="Deal name"
-            rules={ [{ required: true, message: 'Please enter deal name' }] }
-          >
-            <Input placeholder="Enter deal name" />
-          </Form.Item>
-
-          <Form.Item
-            name="stage"
-            label="Deal stage"
-            rules={ [{ required: true, message: 'Please select deal stage' }] }
-          >
-            <Select placeholder="Select stage">
-              { stages.map(stage => (
-                <Option key={ stage } value={ stage }>{ stage }</Option>
-              )) }
-            </Select>
-          </Form.Item>
-
-          <Form.Item
-            name="amount"
-            label="Amount"
-            rules={ [{ required: true, message: 'Please enter amount' }] }
-          >
-            <InputNumber
-              style={ { width: '100%' } }
-              formatter={ value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }
-              parser={ value => value.replace(/\$\s?|(,*)/g, '') }
-              placeholder="0.00"
-            />
-          </Form.Item>
-
-          <Form.Item
-            name="closeDate"
-            label="Close date"
-            rules={ [{ required: true, message: 'Please select close date' }] }
-          >
-            <DatePicker style={ { width: '100%' } } />
-          </Form.Item>
-
-          <Form.Item
-            name="type"
-            label="Deal type"
-            rules={ [{ required: true, message: 'Please select deal type' }] }
-          >
-            <Select placeholder="Select type">
-              <Option value="new">New Business</Option>
-              <Option value="existing">Existing Business</Option>
-            </Select>
-          </Form.Item>
-
-          <Form.Item
-            name="contact"
-            label="Contact"
-            rules={ [{ required: true, message: 'Please select contact' }] }
-          >
-            {/* <Select
-                showSearch
-                placeholder="Search contacts"
-                filterOption={(input, option) =>
-                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                }
+          <Row gutter={ 24 }>
+            {/* Column 1 */ }
+            <Col span={ 12 }>
+              <Form.Item
+                name="name"
+                label="Deal name"
+                rules={ [{ required: true, message: 'Please enter deal name' }] }
               >
-                {contacts.map(contact => (
-                  <Option key={contact._id} value={contact._id}>
-                    {contact.name}
-                  </Option>
-                ))}
-              </Select> */}
-            <Input placeholder="Enter Contact" />
-          </Form.Item>
+                <Input placeholder="Enter deal name" />
+              </Form.Item>
 
-          <Form.Item
-            name="company"
-            label="Company"
-            rules={ [{ required: true, message: 'Please enter company name' }] }
-          >
-            <Input placeholder="Enter company name" />
-          </Form.Item>
+              <Form.Item
+                name="stage"
+                label="Deal stage"
+                rules={ [{ required: true, message: 'Please select deal stage' }] }
+              >
+                <Select placeholder="Select stage">
+                  { stages.map(stage => (
+                    <Option key={ stage } value={ stage }>
+                      { stage }
+                    </Option>
+                  )) }
+                </Select>
+              </Form.Item>
+
+              <Form.Item
+                name="amount"
+                label="Amount"
+                rules={ [{ required: true, message: 'Please enter amount' }] }
+              >
+                <InputNumber
+                  style={ { width: '100%' } }
+                  formatter={ value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }
+                  parser={ value => value.replace(/\$\s?|(,*)/g, '') }
+                  placeholder="0.00"
+                />
+              </Form.Item>
+
+              <Form.Item
+                name="closeDate"
+                label="Close date"
+                rules={ [{ required: true, message: 'Please select close date' }] }
+              >
+                <DatePicker style={ { width: '100%' } } />
+              </Form.Item>
+            </Col>
+
+            {/* Column 2 */ }
+            <Col span={ 12 }>
+              <Form.Item
+                name="type"
+                label="Deal type"
+                rules={ [{ required: true, message: 'Please select deal type' }] }
+              >
+                <Select placeholder="Select type">
+                  <Option value="new">New Business</Option>
+                  <Option value="existing">Existing Business</Option>
+                </Select>
+              </Form.Item>
+
+              <Form.Item
+                name="contact"
+                label="Contact"
+                rules={ [{ required: true, message: 'Please select contact' }] }
+              >
+                <Select
+                  showSearch
+                  placeholder="Search contacts"
+                  filterOption={ (input, option) =>
+                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
+                  onChange={ (value) => {
+                    const selectedContact = contactsList.find(contact => contact._id === value);
+                    if (selectedContact) {
+                      editForm.setFieldsValue({
+                        company: selectedContact.company,
+                      });
+                    }
+                  } }
+                >
+                  { contactsList.map(contact => (
+                    <Option key={ contact._id } value={ contact._id }>
+                      { contact.firstName + " " + contact.lastName }
+                    </Option>
+                  )) }
+                </Select>
+              </Form.Item>
+
+              <Form.Item
+                name="company"
+                label="Company"
+                rules={ [{ required: true, message: 'Please enter company name' }] }
+              >
+                <Select
+                  showSearch
+                  disabled
+                  placeholder="Search Company"
+                  filterOption={ (input, option) =>
+                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
+                >
+                  { companies.map(company => (
+                    <Option key={ company._id } value={ company._id }>
+                      { company?.companyName }
+                    </Option>
+                  )) }
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
       </Modal>
+
 
       {/* View Deal Modal */ }
       <Modal
@@ -735,36 +824,38 @@ function Deals() {
         ] }
         width={ 600 }
       >
+        <Divider />
+        { console.log(selectedDeal, "selectedDeal") }
         { selectedDeal && (
           <div className={ styles.viewDealContent }>
             <div className={ styles.viewDealItem }>
               <strong>Deal Name:</strong>
-              <span>{ selectedDeal.name }</span>
+              <span>{ selectedDeal?.name }</span>
             </div>
             <div className={ styles.viewDealItem }>
               <strong>Company:</strong>
-              <span>{ selectedDeal.company }</span>
+              <span>{ selectedDeal?.company?.companyName }</span>
             </div>
             <div className={ styles.viewDealItem }>
               <strong>Stage:</strong>
-              <span>{ selectedDeal.stage }</span>
+              <span>{ selectedDeal?.stage }</span>
             </div>
             <div className={ styles.viewDealItem }>
               <strong>Amount:</strong>
-              <span>${ selectedDeal.amount.toLocaleString() }</span>
+              <span>${ selectedDeal?.amount.toLocaleString() }</span>
             </div>
             <div className={ styles.viewDealItem }>
               <strong>Close Date:</strong>
-              <span>{ new Date(selectedDeal.closeDate).toLocaleDateString() }</span>
+              <span>{ new Date(selectedDeal?.closeDate).toLocaleDateString() }</span>
             </div>
             <div className={ styles.viewDealItem }>
               <strong>Deal Type:</strong>
-              <span>{ selectedDeal.type === 'new' ? 'New Business' : 'Existing Business' }</span>
+              <span>{ selectedDeal?.type === 'new' ? 'New Business' : 'Existing Business' }</span>
             </div>
             { selectedDeal.notes && (
               <div className={ styles.viewDealItem }>
                 <strong>Notes:</strong>
-                <span>{ selectedDeal.notes }</span>
+                <span>{ selectedDeal?.notes }</span>
               </div>
             ) }
           </div>

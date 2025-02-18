@@ -20,7 +20,7 @@ router.get('/', auth, async (req, res) => {
       ];
     }
 
-    const deals = await Deal.find(query).populate('contact');
+    const deals = await Deal.find(query).populate('contact company');
     res.json(deals);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching deals' });
