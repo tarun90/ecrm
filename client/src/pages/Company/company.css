@@ -299,3 +299,10 @@
 .model-footer .close-btn {
   margin-top: 0;
 }
+
+.pagination-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px;
+}
