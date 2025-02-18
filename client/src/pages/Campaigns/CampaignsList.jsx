@@ -117,7 +117,7 @@ const CampaignList = () => {
                                             okText="Yes"
                                             cancelText="No"
                                         >
-                                            <Button className='delete-btn'><DeleteOutlined /></Button>
+                                            <button className='delete-btn'><DeleteOutlined /></button>
                                         </Popconfirm>
                                     </div>
                                 </td>

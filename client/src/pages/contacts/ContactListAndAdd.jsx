@@ -224,22 +224,24 @@ const ContactListAndAdd = () => {
                                 <td>{ contact?.leadStatus }</td>
                                 <td>{ moment(contact?.createdAt).format('DD-MM-YYYY HH:mm') }</td>
                                 <td>
-                                    <Button type="link" className='edit-btn' onClick={ () => handleEdit(contact) }>
-                                        <EditOutlined />
-                                    </Button>
-                                    <Button
-                                        type="link"
-                                        className='delete-btn'
-                                        danger
-                                        onClick={ () => {
-                                            Modal.confirm({
-                                                title: 'Are you sure you want to delete this contact?',
-                                                onOk: () => handleDelete(contact._id)
-                                            });
-                                        } }
-                                    >
-                                        <DeleteOutlined />
-                                    </Button>
+                                    <div className='action-buttons'>
+                                        <button type="link" className='edit-btn' onClick={ () => handleEdit(contact) }>
+                                            <EditOutlined />
+                                        </button>
+                                        <button
+                                            type="link"
+                                            className='delete-btn'
+                                            danger
+                                            onClick={ () => {
+                                                Modal.confirm({
+                                                    title: 'Are you sure you want to delete this contact?',
+                                                    onOk: () => handleDelete(contact._id)
+                                                });
+                                            } }
+                                        >
+                                            <DeleteOutlined />
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         )) }
@@ -316,7 +318,7 @@ const ContactListAndAdd = () => {
                     </Row>
 
                     <Divider />
-                    <Form.Item className="flex justify-end gap-2">
+                    <Form.Item className="flex justify-end gap-2 modal-footer">
                         <Button onClick={ closeModal } className='text-btn '>
                             Cancel
                         </Button>

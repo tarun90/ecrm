@@ -166,7 +166,6 @@ table {
   background-color: #fef2f2;
   color: #dc2626;
   height: auto;
-  padding: 0.5rem 1rem;
   border: 1px solid #fee2e2;
 }
 
@@ -272,8 +271,8 @@ table {
     overflow-x: auto;
   }
 
-  th,
-  td {
+  .contact-table th,
+  .contact-table td {
     padding: 8px 12px;
   }
 

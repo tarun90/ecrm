@@ -409,7 +409,7 @@ button {
 }
 
 .modal .modal-content.scroll {
-  max-height: calc(100vh - 220px);
+  max-height: calc(100vh - 320px);
 }
 
 .modal-header {
@@ -782,6 +782,14 @@ textarea {
   background: #0c3a5b !important;
 }
 
+@media (min-width:1440px) and (max-width:1680px) {
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+}
 
 @media (min-width:992px) and (max-width: 1440px) {
   .products-grid {

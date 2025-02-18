@@ -656,12 +656,12 @@ function Invoices() {
                     >
                       <EditOutlined />
                     </button>
-                    <Button
+                    <button
                       onClick={ () => deleteInvoice(invoice._id) }
                       className="delete-btn"
                     >
                       <DeleteOutlined />
-                    </Button>
+                    </button>
                   </td>
                 </tr>
               )) }
@@ -714,6 +714,7 @@ const InvoiceForm = ({
     <Modal
       title={ isEditing ? "Edit Invoice" : "Create New Invoice" }
       open={ isModalOpen }
+      width={ 600 }
       onCancel={ () => setIsModalOpen(false) }
       footer={ null }
     >

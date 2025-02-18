@@ -120,6 +120,10 @@
   border-bottom: 1px solid #e2e8f0;
 }
 
+.contact-table td:first-child {
+  white-space: nowrap;
+}
+
 .contact-table td {
   padding: 10px 16px;
   color: #374151;
