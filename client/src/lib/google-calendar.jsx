@@ -24,6 +24,20 @@ function validateConfig() {
   }
 }
 
+function saveToken(token) {
+  localStorage.setItem('googleAccessToken', token);
+  localStorage.setItem('googleTokenExpiry', String(Date.now() + 3600 * 1000)); // 1-hour expiry
+}
+
+function getToken() {
+  const token = localStorage.getItem('googleAccessToken');
+  const expiry = localStorage.getItem('googleTokenExpiry');
+  if (token && expiry && Date.now() < Number(expiry)) {
+    return token;
+  }
+  return null;
+}
+
 async function loadScript(src) {
   return new Promise((resolve, reject) => {
     try {
@@ -58,123 +72,60 @@ async function loadScript(src) {
 }
 
 export async function initializeGoogleCalendar() {
-  if (initializationPromise) {
-    return initializationPromise;
-  }
-
+  if (initializationPromise) return initializationPromise;
   initializationPromise = (async () => {
-    try {
-      validateConfig();
-
-      if (!window.gapi) {
-        try {
-          await loadScript('https://apis.google.com/js/api.js');
-        } catch (error) {
-          throw new Error(`Failed to load Google API script: ${error instanceof Error ? error.message : 'Unknown error'}`);
-        }
-      }
-
-      if (!gapiInited) {
-        await new Promise((resolve, reject) => {
+    if (!window.gapi) await loadScript('https://apis.google.com/js/api.js');
+    if (!gapiInited) {
+      await new Promise((resolve, reject) => {
+        gapi.load('client', async () => {
           try {
-            gapi.load('client', {
-              callback: async () => {
-                try {
-                  await gapi.client.init({
-                    apiKey: API_KEY,
-                    discoveryDocs: [
-                      DISCOVERY_DOC,
-                      'https://people.googleapis.com/$discovery/rest?version=v1'
-                    ],
-                  });
-                  gapiInited = true;
-                  resolve();
-                } catch (error) {
-                  const errorMessage = error?.error?.message || error?.message || 'Unknown error occurred';
-                  reject(new Error(`Failed to initialize GAPI client: ${errorMessage}`));
-                }
-              },
-              onerror: (error) => {
-                reject(new Error(`Failed to load GAPI client: ${error?.error?.message || error?.message || 'Unknown error'}`));
-              },
-            });
+            await gapi.client.init({ apiKey: API_KEY, discoveryDocs: [DISCOVERY_DOC] });
+            gapiInited = true;
+            resolve();
           } catch (error) {
-            reject(new Error(`Error during GAPI client initialization: ${error instanceof Error ? error.message : 'Unknown error'}`));
+            reject(new Error('GAPI client init failed'));
           }
         });
-      }
-
-      if (!window.google?.accounts) {
-        try {
-          await loadScript('https://accounts.google.com/gsi/client');
-        } catch (error) {
-          throw new Error(`Failed to load Google Identity Services: ${error instanceof Error ? error.message : 'Unknown error'}`);
-        }
-      }
-
-      if (!tokenClient && window.google?.accounts?.oauth2) {
-        try {
-          tokenClient = google.accounts.oauth2.initTokenClient({
-            client_id: CLIENT_ID,
-            scope: SCOPES,
-            callback: '', // defined at request time
-          });
-          gisInited = true;
-        } catch (error) {
-          throw new Error(`Failed to initialize token client: ${error instanceof Error ? error.message : 'Unknown error'}`);
-        }
-      }
-
-      if (!gapiInited || !gisInited) {
-        throw new Error('Google Calendar API components failed to initialize completely');
-      }
-
-    } catch (error) {
-      gapiInited = false;
-      gisInited = false;
-      tokenClient = undefined;
-      initializationPromise = null;
-
-      console.error('Google Calendar initialization error:', {
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined,
-        error
       });
+    }
+    if (!window.google?.accounts) await loadScript('https://accounts.google.com/gsi/client');
+    if (!tokenClient && window.google?.accounts?.oauth2) {
+      tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        scope: SCOPES,
+        callback: (resp) => {
+          if (resp?.access_token) {
+            saveToken(resp.access_token);
+            gapi.client.setToken({ access_token: resp.access_token });
+          }
+        },
+      });
+      gisInited = true;
+    }
 
-      throw error instanceof Error ? error : new Error('Failed to initialize Google Calendar');
+    // Restore token if available
+    const storedToken = getToken();
+    if (storedToken) {
+      gapi.client.setToken({ access_token: storedToken });
     }
   })();
-
   return initializationPromise;
 }
 
 export async function authenticate() {
-  if (!gapiInited || !gisInited) {
-    try {
-      await initializeGoogleCalendar();
-    } catch (error) {
-      throw new Error('Failed to initialize Google Calendar. Please refresh the page and try again.');
-    }
-  }
-
+  if (!gapiInited || !gisInited) await initializeGoogleCalendar();
   return new Promise((resolve, reject) => {
-    try {
-      tokenClient.callback = (resp) => {
-        if (resp.error !== undefined) {
-          reject(new Error(resp.error));
-          return;
-        }
-        resolve();
-      };
-
-      if (gapi.client.getToken() === null) {
-        tokenClient.requestAccessToken({ prompt: 'consent' });
+    tokenClient.callback = (resp) => {
+      if (resp.error) return reject(new Error(resp.error));
+      const accessToken = gapi.client.getToken()?.access_token;
+      if (accessToken) {
+        saveToken(accessToken);
+        resolve(accessToken);
       } else {
-        tokenClient.requestAccessToken({ prompt: '' });
+        reject(new Error('Failed to retrieve access token'));
       }
-    } catch (err) {
-      reject(new Error('Authentication failed. Please try again.'));
-    }
+    };
+    tokenClient.requestAccessToken({ prompt: gapi.client.getToken() ? '' : 'consent' });
   });
 }
 

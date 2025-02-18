@@ -35,7 +35,8 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('userData');
     localStorage.removeItem('isWebMailLoggedin');
 
-
+    localStorage.removeItem('googleAccessToken');
+    localStorage.removeItem('googleTokenExpiry');
     setUser(null);
     setIsAuthenticated(false);
     delete axios.defaults.headers.common['Authorization'];
