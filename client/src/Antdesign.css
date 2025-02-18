@@ -156,6 +156,7 @@
     color: var(--btn-bg-primary-hover);
 }
 
+.ant-layout-sider-collapsed .ant-menu-vertical .ant-menu-submenu .anticon,
 .ant-layout-sider-collapsed .ant-menu-vertical .ant-menu-item .anticon {
     font-size: 18px;
 }
