@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { message, Popconfirm, Button, Input, Modal } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { getCampaigns, createCampaign, updateCampaign, deleteCampaign } from './campaignService';
 import './campaigns.css';
 import { Header } from 'antd/es/layout/layout';
+import { Delete, Edit } from 'lucide-react';
 
 const CampaignList = () => {
     const [campaigns, setCampaigns] = useState([]);
@@ -89,6 +90,7 @@ const CampaignList = () => {
                             Export CSV
                         </button> */}
                     <button className="add-contact-btn" onClick={ handleAddCampaign }>
+                        <PlusOutlined />
                         Add Campaign
                     </button>
                 </div>
@@ -106,16 +108,18 @@ const CampaignList = () => {
                             <tr key={ campaign._id }>
                                 <td>{ campaign.campaignName }</td>
                                 <td>
-                                    <Button className='edit-btn' onClick={ () => handleEditCampaign(campaign._id, campaign.campaignName) }>Edit</Button>
-                                    <Popconfirm
-                                        title="Delete Campaign"
-                                        description="Are you sure you want to delete this campaign?"
-                                        onConfirm={ () => handleDelete(campaign._id) }
-                                        okText="Yes"
-                                        cancelText="No"
-                                    >
-                                        <Button className='delete-btn'>Delete</Button>
-                                    </Popconfirm>
+                                    <div className='action-buttons'>
+                                        <button className='edit-btn' onClick={ () => handleEditCampaign(campaign._id, campaign.campaignName) } ><EditOutlined /></button>
+                                        <Popconfirm
+                                            title="Delete Campaign"
+                                            description="Are you sure you want to delete this campaign?"
+                                            onConfirm={ () => handleDelete(campaign._id) }
+                                            okText="Yes"
+                                            cancelText="No"
+                                        >
+                                            <Button className='delete-btn'><DeleteOutlined /></Button>
+                                        </Popconfirm>
+                                    </div>
                                 </td>
                             </tr>
                         )) }

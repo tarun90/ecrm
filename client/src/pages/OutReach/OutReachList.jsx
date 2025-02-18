@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { message, Popconfirm, Button, Input, Modal, Select, Checkbox, Upload, Form } from 'antd';
-import { UploadOutlined, FileExcelOutlined, BarChartOutlined, InboxOutlined } from '@ant-design/icons';
+import { message, Popconfirm, Button, Input, Modal, Select, Checkbox, Upload, Form, Row, Col, Divider } from 'antd';
+import { UploadOutlined, FileExcelOutlined, BarChartOutlined, InboxOutlined, DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { getUsers } from '../Users/userService';
 import { getCampaigns } from '../Campaigns/campaignService';
 import { getRegions } from '../Regions/RegionsService';
@@ -346,6 +346,7 @@ const OutReachList = () => {
                             onClick={ handleAddOutreach }
                             className="add-outreach-btn"
                         >
+                            <PlusOutlined />
                             Add Outreach
                         </Button> </> }
                     {/* <Button 
@@ -411,16 +412,18 @@ const OutReachList = () => {
                                 <td>{ item?.createdBy?.name }</td>
                                 { userData?.department?.name == "Lead Generation" &&
                                     <td>
-                                        <Button className='edit-btn' onClick={ () => handleEditOutreach(item._id) }>Edit</Button>
-                                        <Popconfirm
-                                            title="Delete Outreach"
-                                            description="Are you sure you want to delete this outreach?"
-                                            onConfirm={ () => handleDelete(item._id) }
-                                            okText="Yes"
-                                            cancelText="No"
-                                        >
-                                            <Button className='delete-btn'>Delete</Button>
-                                        </Popconfirm>
+                                        <div className='action-buttons'>
+                                            <Button className='edit-btn' onClick={ () => handleEditOutreach(item._id) }><EditOutlined /></Button>
+                                            <Popconfirm
+                                                title="Delete Outreach"
+                                                description="Are you sure you want to delete this outreach?"
+                                                onConfirm={ () => handleDelete(item._id) }
+                                                okText="Yes"
+                                                cancelText="No"
+                                            >
+                                                <Button className='delete-btn'><DeleteOutlined /></Button>
+                                            </Popconfirm>
+                                        </div>
                                     </td>
                                 }
                             </tr>
@@ -438,6 +441,7 @@ const OutReachList = () => {
                 width={ 600 }
                 maskClosable={ false }
             >
+                <Divider />
                 <Form
                     form={ form }
                     onFinish={ handleSubmit }
@@ -454,97 +458,109 @@ const OutReachList = () => {
                         category: '',
                     } }
                 >
-                    <Form.Item
-                        label="Name"
-                        name="name"
-                        rules={ [{ required: true, message: 'Please input the name!' }] }
-                    >
-                        <Input />
-                    </Form.Item>
+                    <Row gutter={ 16 } >
+                        <Col span={ 12 }>
+                            <Form.Item
+                                label="Name"
+                                name="name"
+                                rules={ [{ required: true, message: 'Please input the name!' }] }
+                            >
+                                <Input />
+                            </Form.Item>
 
-                    <Form.Item
-                        label="Email"
-                        name="email"
-                        rules={ [{ required: true, type: 'email', message: 'Please input a valid email!' }] }
-                    >
-                        <Input />
-                    </Form.Item>
+                            <Form.Item
+                                label="Email"
+                                name="email"
+                                rules={ [{ required: true, type: 'email', message: 'Please input a valid email!' }] }
+                            >
+                                <Input />
+                            </Form.Item>
 
-                    <Form.Item
-                        label="Phone"
-                        name="phone"
-                        rules={ [{ required: true, message: 'Please input the phone number!' }] }
-                    >
-                        <Input />
-                    </Form.Item>
+                            <Form.Item
+                                label="Phone"
+                                name="phone"
+                                rules={ [{ required: true, message: 'Please input the phone number!' }] }
+                            >
+                                <Input />
+                            </Form.Item>
 
-                    <Form.Item
-                        label="Website"
-                        name="website"
-                    >
-                        <Input />
-                    </Form.Item>
+                            <Form.Item
+                                label="Website"
+                                name="website"
+                            >
+                                <Input />
+                            </Form.Item>
 
-                    <Form.Item
-                        label="LinkedIn"
-                        name="linkedin"
-                    >
-                        <Input />
-                    </Form.Item>
+                            <Form.Item
+                                label="LinkedIn"
+                                name="linkedin"
+                            >
+                                <Input />
+                            </Form.Item>
+                        </Col>
 
-                    <Form.Item
-                        label="Country"
-                        name="country"
-                    >
-                        <Input />
-                    </Form.Item>
+                        <Col span={ 12 }>
+                            <Form.Item
+                                label="Country"
+                                name="country"
+                            >
+                                <Input />
+                            </Form.Item>
 
-                    <Form.Item
-                        label="Region"
-                        name="region"
-                        rules={ [{ required: true, message: 'Please select the region!' }] }
-                    >
-                        <Select options={ regionOptions } />
-                    </Form.Item>
+                            <Form.Item
+                                label="Region"
+                                name="region"
+                                rules={ [{ required: true, message: 'Please select the region!' }] }
+                            >
+                                <Select options={ regionOptions } />
+                            </Form.Item>
 
-                    <Form.Item
-                        label="Campaign"
-                        name="campaign"
-                        rules={ [{ required: true, message: 'Please select a campaign!' }] }
-                    >
-                        <Select>
-                            { campaigns.map(campaign => (
-                                <Select.Option key={ campaign._id } value={ campaign._id }>
-                                    { campaign.campaignName }
-                                </Select.Option>
-                            )) }
-                        </Select>
-                    </Form.Item>
+                            <Form.Item
+                                label="Campaign"
+                                name="campaign"
+                                rules={ [{ required: true, message: 'Please select a campaign!' }] }
+                            >
+                                <Select>
+                                    { campaigns.map(campaign => (
+                                        <Select.Option key={ campaign._id } value={ campaign._id }>
+                                            { campaign.campaignName }
+                                        </Select.Option>
+                                    )) }
+                                </Select>
+                            </Form.Item>
 
-                    <Form.Item
-                        label="Category"
-                        name="category"
-                        rules={ [{ required: true, message: 'Please select a category!' }] }
-                    >
-                        <Select>
-                            { categories.map(category => (
-                                <Select.Option key={ category._id } value={ category._id }>
-                                    { category.categoryName }
-                                </Select.Option>
-                            )) }
-                        </Select>
-                    </Form.Item>
-
+                            <Form.Item
+                                label="Category"
+                                name="category"
+                                rules={ [{ required: true, message: 'Please select a category!' }] }
+                            >
+                                <Select>
+                                    { categories.map(category => (
+                                        <Select.Option key={ category._id } value={ category._id }>
+                                            { category.categoryName }
+                                        </Select.Option>
+                                    )) }
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Divider />
                     <Form.Item>
-                        <Button onClick={ () => setModalVisible(false) } className='text-btn '>
+                        <Button onClick={ () => setModalVisible(false) } className="text-btn">
                             Cancel
                         </Button>
-                        <Button type="primary" htmlType="submit" loading={ loading } style={ { width: '100%' } }>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            loading={ loading }
+                            style={ { width: '100%' } }
+                        >
                             { editMode ? "Update" : "Create" } Outreach
                         </Button>
                     </Form.Item>
                 </Form>
             </Modal>
+
 
 
             <Modal
@@ -565,61 +581,85 @@ const OutReachList = () => {
                     }
                 } }
                 onOk={ handleImportSubmit }
-                width={ 500 }
+                width={ 600 }
             >
+                <Divider />
                 <div className="import-form">
-                    {/* Campaign Select */ }
-                    <Select
-                        placeholder="Select Campaign"
-                        value={ importData.campaign }
-                        onChange={ (value) => setImportData((prev) => ({ ...prev, campaign: value })) }
-                        style={ { width: '100%', marginBottom: 16 } }
-                    >
-                        { campaigns.map((campaign) => (
-                            <Select.Option key={ campaign._id } value={ campaign._id }>
-                                { campaign.campaignName }
-                            </Select.Option>
-                        )) }
-                    </Select>
+                    <Row gutter={ 16 }>
+                        {/* Campaign Select */ }
+                        <Col span={ 12 }>
+                            <Form.Item label="Campaign" style={ { marginBottom: 16 } }>
+                                <Select
+                                    placeholder="Select Campaign"
+                                    value={ importData.campaign }
+                                    onChange={ (value) => setImportData((prev) => ({ ...prev, campaign: value })) }
+                                    style={ { width: '100%' } }
+                                >
+                                    { campaigns.map((campaign) => (
+                                        <Select.Option key={ campaign._id } value={ campaign._id }>
+                                            { campaign.campaignName }
+                                        </Select.Option>
+                                    )) }
+                                </Select>
+                            </Form.Item>
+                        </Col>
 
-                    {/* Category Select */ }
-                    <Select
-                        value={ importData.category }
-                        onChange={ (value) => setImportData((prev) => ({ ...prev, category: value })) }
-                        placeholder="Select Category"
-                        style={ { width: '100%', marginBottom: 16 } }
-                    >
-                        { categories.map((category) => (
-                            <Select.Option key={ category._id } value={ category._id }>
-                                { category.categoryName }
-                            </Select.Option>
-                        )) }
-                    </Select>
+                        {/* Category Select */ }
+                        <Col span={ 12 }>
+                            <Form.Item label="Category" style={ { marginBottom: 16 } }>
+                                <Select
+                                    value={ importData.category }
+                                    onChange={ (value) => setImportData((prev) => ({ ...prev, category: value })) }
+                                    placeholder="Select Category"
+                                    style={ { width: '100%' } }
+                                >
+                                    { categories.map((category) => (
+                                        <Select.Option key={ category._id } value={ category._id }>
+                                            { category.categoryName }
+                                        </Select.Option>
+                                    )) }
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
 
-                    {/* Region Select */ }
-                    <Select
-                        placeholder="Select Region"
-                        value={ importData.region }
-                        onChange={ (value) => setImportData((prev) => ({ ...prev, region: value })) }
-                        options={ regionOptions }
-                        style={ { width: '100%', marginBottom: 16 } }
-                    />
+                    <Row gutter={ 16 }>
+                        {/* Region Select */ }
+                        <Col span={ 12 }>
+                            <Form.Item label="Region" style={ { marginBottom: 16 } }>
+                                <Select
+                                    placeholder="Select Region"
+                                    value={ importData.region }
+                                    onChange={ (value) => setImportData((prev) => ({ ...prev, region: value })) }
+                                    options={ regionOptions }
+                                    style={ { width: '100%' } }
+                                />
+                            </Form.Item>
+                        </Col>
 
-                    {/* CSV Dragger Upload */ }
-                    <Dragger
-                        { ...uploadProps }
-                        className="csv-uploader"
-                        key={ importModalVisible.toString() }
-                        style={ { marginBottom: 16 } }
-                    >
-                        <p className="ant-upload-drag-icon">
-                            <InboxOutlined />
-                        </p>
-                        <p className="ant-upload-text">Click or drag CSV file to this area to upload</p>
-                        <p className="ant-upload-hint">Support for single CSV file upload</p>
-                    </Dragger>
+                        {/* CSV Dragger Upload */ }
+                        <Col span={ 12 }>
+                            <Form.Item label="CSV Upload" style={ { marginBottom: 16 } }>
+                                <Dragger
+                                    { ...uploadProps }
+                                    className="csv-uploader"
+                                    key={ importModalVisible.toString() }
+                                    style={ { width: '100%' } }
+                                >
+                                    <p className="ant-upload-drag-icon">
+                                        <InboxOutlined />
+                                    </p>
+                                    <p className="ant-upload-text">
+                                        Click or drag CSV file to this area to upload
+                                    </p>
+                                    <p className="ant-upload-hint">Support for single CSV file upload</p>
+                                </Dragger>
+                            </Form.Item>
+                        </Col>
+                    </Row>
                 </div>
             </Modal>
+
 
         </div>
     );

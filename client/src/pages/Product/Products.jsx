@@ -4,7 +4,7 @@ import { Package, Edit2, Search, Plus, Trash2 } from "lucide-react";
 import MainLayout from "../../components/MainLayout";
 import "../../components/custome.css";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
-import { Modal, Form, Input, Select, Button, Divider } from "antd";
+import { Modal, Form, Input, Select, Button, Divider, Row, Col } from "antd";
 import TextArea from "antd/es/input/TextArea";
 
 function Products() {
@@ -253,70 +253,78 @@ function Products() {
       >
         <Divider />
         <Form form={ form } layout="vertical" onFinish={ handleSubmit }>
-          <Form.Item
-            label="Product Name"
-            name="name"
-            rules={ [{ required: true, message: 'Please input product name!' }] }
-          >
-            <Input placeholder="Product Name" />
-          </Form.Item>
+          <Row gutter={ 16 }>
+            <Col span={ 12 }>
+              <Form.Item
+                label="Product Name"
+                name="name"
+                rules={ [{ required: true, message: 'Please input product name!' }] }
+              >
+                <Input placeholder="Product Name" />
+              </Form.Item>
 
-          <Form.Item label="Short Description" name="description_short">
-            <TextArea placeholder="Short Description" rows={ 2 } />
-          </Form.Item>
+              <Form.Item label="Short Description" name="description_short">
+                <TextArea placeholder="Short Description" rows={ 2 } />
+              </Form.Item>
 
-          <Form.Item label="Long Description" name="description_long">
-            <TextArea placeholder="Long Description" rows={ 3 } />
-          </Form.Item>
+              <Form.Item label="SKU" name="sku">
+                <Input placeholder="SKU" />
+              </Form.Item>
 
-          <Form.Item label="Product Type" name="product_type">
-            <Select placeholder="Select Product Type">
-              <Select.Option value="physical">Physical</Select.Option>
-              <Select.Option value="digital">Digital</Select.Option>
-              <Select.Option value="subscription">Subscription</Select.Option>
-              <Select.Option value="service">Service</Select.Option>
-            </Select>
-          </Form.Item>
+              <Form.Item label="Unit Cost" name="unit_cost">
+                <Input type="number" placeholder="Unit Cost" />
+              </Form.Item>
+              <Form.Item label="Currency" name="currency">
+                <Select placeholder="Select Currency">
+                  <Select.Option value="USD">USD</Select.Option>
+                  <Select.Option value="EUR">EUR</Select.Option>
+                  <Select.Option value="GBP">GBP</Select.Option>
+                  <Select.Option value="JPY">JPY</Select.Option>
+                </Select>
+              </Form.Item>
+            </Col>
 
-          <Form.Item label="SKU" name="sku">
-            <Input placeholder="SKU" />
-          </Form.Item>
+            <Col span={ 12 }>
+              <Form.Item label="Product Type" name="product_type">
+                <Select placeholder="Select Product Type">
+                  <Select.Option value="physical">Physical</Select.Option>
+                  <Select.Option value="digital">Digital</Select.Option>
+                  <Select.Option value="subscription">Subscription</Select.Option>
+                  <Select.Option value="service">Service</Select.Option>
+                </Select>
+              </Form.Item>
+              <Form.Item label="Long Description" name="description_long">
+                <TextArea placeholder="Long Description" rows={ 2 } />
+              </Form.Item>
 
-          <Form.Item label="Billing Frequency" name="billing_frequency">
-            <Input placeholder="Billing Frequency (e.g., monthly, annually)" />
-          </Form.Item>
 
-          <Form.Item label="Term" name="term">
-            <Input placeholder="Term (e.g., 12 months)" />
-          </Form.Item>
 
-          <Form.Item label="Unit Cost" name="unit_cost">
-            <Input type="number" placeholder="Unit Cost" />
-          </Form.Item>
+              <Form.Item label="Billing Frequency" name="billing_frequency">
+                <Input placeholder="Billing Frequency (e.g., monthly, annually)" />
+              </Form.Item>
 
-          <Form.Item label="Currency" name="currency">
-            <Select placeholder="Select Currency">
-              <Select.Option value="USD">USD</Select.Option>
-              <Select.Option value="EUR">EUR</Select.Option>
-              <Select.Option value="GBP">GBP</Select.Option>
-              <Select.Option value="JPY">JPY</Select.Option>
-            </Select>
-          </Form.Item>
+              <Form.Item label="Term" name="term">
+                <Input placeholder="Term (e.g., 12 months)" />
+              </Form.Item>
 
-          <Form.Item label="Tax Rate (%)" name="tax_rate">
-            <Select placeholder="Select Tax Rate (%)">
-              <Select.Option value={ 0 }>0%</Select.Option>
-              <Select.Option value={ 5 }>5%</Select.Option>
-              <Select.Option value={ 10 }>10%</Select.Option>
-              <Select.Option value={ 15 }>15%</Select.Option>
-              <Select.Option value={ 18 }>18%</Select.Option>
-              <Select.Option value={ 20 }>20%</Select.Option>
-              <Select.Option value={ 25 }>25%</Select.Option>
-            </Select>
-          </Form.Item>
+
+
+              <Form.Item label="Tax Rate (%)" name="tax_rate">
+                <Select placeholder="Select Tax Rate (%)">
+                  <Select.Option value={ 0 }>0%</Select.Option>
+                  <Select.Option value={ 5 }>5%</Select.Option>
+                  <Select.Option value={ 10 }>10%</Select.Option>
+                  <Select.Option value={ 15 }>15%</Select.Option>
+                  <Select.Option value={ 18 }>18%</Select.Option>
+                  <Select.Option value={ 20 }>20%</Select.Option>
+                  <Select.Option value={ 25 }>25%</Select.Option>
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
           <Divider />
           <Form.Item className="modal-footer">
-            <Button onClick={ onClose } className='text-btn '>
+            <Button onClick={ onClose } className="text-btn">
               Cancel
             </Button>
             <Button type="primary" htmlType="submit" loading={ loading }>
@@ -325,6 +333,7 @@ function Products() {
           </Form.Item>
         </Form>
       </Modal>
+
 
     </div>
   );

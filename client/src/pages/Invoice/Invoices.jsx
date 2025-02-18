@@ -3,7 +3,7 @@ import axios from "axios";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import dayjs from "dayjs";
-import { Search } from "lucide-react";
+import { Edit, Search } from "lucide-react";
 import "../../components/custome.css";
 import "./Invoice.css";
 import {
@@ -16,8 +16,10 @@ import {
   DatePicker,
   InputNumber,
   Divider,
+  Row,
+  Col,
 } from "antd";
-import { DeleteOutlined, DownloadOutlined, PlusOutlined } from "@ant-design/icons";
+import { DeleteOutlined, DownloadOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { Header } from "antd/es/layout/layout";
 function Invoices() {
   const [invoices, setInvoices] = useState([]);
@@ -652,14 +654,14 @@ function Invoices() {
                       onClick={ () => handleEdit(invoice) }
                       className="edit-btn"
                     >
-                      Edit
+                      <EditOutlined />
                     </button>
-                    <button
+                    <Button
                       onClick={ () => deleteInvoice(invoice._id) }
                       className="delete-btn"
                     >
-                      Delete
-                    </button>
+                      <DeleteOutlined />
+                    </Button>
                   </td>
                 </tr>
               )) }
@@ -718,69 +720,82 @@ const InvoiceForm = ({
       <Divider />
       <Form layout="vertical" onFinish={ handleSubmit } initialValues={ formData }>
         <div className="modal-content scroll">
-          <Form.Item
-            onChange={ (value) =>
-              setFormData({ ...formData, invoice_number: value.target.value })
-            }
-            label="Invoice Number"
-            name="invoice_number"
-            rules={ [{ required: true }] }
-          >
-            <Input placeholder="Invoice Number" />
-          </Form.Item>
-          <Form.Item
-            label="Customer Name"
-            name="customer"
-            rules={ [{ required: true, message: "Customer Name is required" }] }
-          >
-            <Select
-              showSearch
-              placeholder="Select Customer"
-              value={ formData.contact || null }
-              onChange={ (value) =>
-                setFormData({ ...formData, contact: value })
-              }
-              className="searchable-dropdown"
-              optionFilterProp="children"
-              filterOption={ (input, option) =>
-                option?.children?.toLowerCase().includes(input.toLowerCase())
-              }
-            >
-              { contacts.map((contact) => (
-                <Select.Option key={ contact._id } value={ contact._id }>
-                  { `${contact.firstName} ${contact.lastName}` }
-                </Select.Option>
-              )) }
-            </Select>
-          </Form.Item>
-          <Form.Item
-            label="Due Date"
-            name="due_date"
-            rules={ [{ required: true, message: "Due Date is required" }] }
-          >
-            <DatePicker
-              style={ { width: "100%" } }
-              format="YYYY-MM-DD"
-              value={
-                formData.due_date
-                  ? dayjs(formData.due_date, "YYYY-MM-DD")
-                  : null
-              } // Ensure proper parsing
-              onChange={ (date, dateString) => {
-                setFormData({ ...formData, due_date: dateString || null }); // Store as string
-              } }
-            />
-          </Form.Item>
-          <Form.Item label="Payment Status" name="payment_status">
-            <Select>
-              <Select.Option value="unpaid">Unpaid</Select.Option>
-              <Select.Option value="paid">Paid</Select.Option>
-              <Select.Option value="partially_paid">
-                Partially Paid
-              </Select.Option>
-              <Select.Option value="overdue">Overdue</Select.Option>
-            </Select>
-          </Form.Item>
+          <Row gutter={ 16 }>
+            <Col span={ 12 }>
+              <Form.Item
+                onChange={ (value) =>
+                  setFormData({ ...formData, invoice_number: value.target.value })
+                }
+                label="Invoice Number"
+                name="invoice_number"
+                rules={ [{ required: true }] }
+              >
+                <Input placeholder="Invoice Number" />
+              </Form.Item>
+
+              <Form.Item
+                label="Customer Name"
+                name="customer"
+                rules={ [{ required: true, message: "Customer Name is required" }] }
+              >
+                <Select
+                  showSearch
+                  placeholder="Select Customer"
+                  value={ formData.contact || null }
+                  onChange={ (value) =>
+                    setFormData({ ...formData, contact: value })
+                  }
+                  className="searchable-dropdown"
+                  optionFilterProp="children"
+                  filterOption={ (input, option) =>
+                    option?.children?.toLowerCase().includes(input.toLowerCase())
+                  }
+                >
+                  { contacts.map((contact) => (
+                    <Select.Option key={ contact._id } value={ contact._id }>
+                      { `${contact.firstName} ${contact.lastName}` }
+                    </Select.Option>
+                  )) }
+                </Select>
+              </Form.Item>
+
+
+            </Col>
+
+            <Col span={ 12 }>
+              <Form.Item
+                label="Due Date"
+                name="due_date"
+                rules={ [{ required: true, message: "Due Date is required" }] }
+              >
+                <DatePicker
+                  style={ { width: "100%" } }
+                  format="YYYY-MM-DD"
+                  value={
+                    formData.due_date
+                      ? dayjs(formData.due_date, "YYYY-MM-DD")
+                      : null
+                  }
+                  onChange={ (date, dateString) => {
+                    setFormData({ ...formData, due_date: dateString || null });
+                  } }
+                />
+
+              </Form.Item>
+              <Form.Item
+                label="Payment Status"
+                name="payment_status"
+              >
+                <Select>
+                  <Select.Option value="unpaid">Unpaid</Select.Option>
+                  <Select.Option value="paid">Paid</Select.Option>
+                  <Select.Option value="partially_paid">Partially Paid</Select.Option>
+                  <Select.Option value="overdue">Overdue</Select.Option>
+                </Select>
+              </Form.Item>
+
+            </Col>
+          </Row>
           <div className="line-items">
             <h3>Line Items</h3>
             <Button
@@ -799,7 +814,7 @@ const InvoiceForm = ({
                   showSearch
                   placeholder="Search Product"
                   optionFilterProp="children"
-                  value={ formData.items[index]?.product || null } // Ensure selected value is set
+                  value={ formData.items[index]?.product || null }
                   filterOption={ (input, option) =>
                     option?.children
                       ?.toLowerCase()
@@ -816,32 +831,38 @@ const InvoiceForm = ({
               </Form.Item>
 
               <div className="line-items-wrapper">
-                <Form.Item label="Quantity">
-                  <InputNumber
-                    min={ 1 }
-                    value={ item.quantity }
-                    onChange={ (value) =>
-                      handleLineItemChange(index, "quantity", value)
-                    }
-                    disabled={ !item.product }
-                  />
-                </Form.Item>
-
-                <Form.Item label="Unit Price">
-                  <InputNumber
-                    min={ 0 }
-                    step={ 0.01 }
-                    value={ item.unit_price }
-                    onChange={ (value) =>
-                      handleLineItemChange(index, "unit_price", value)
-                    }
-                    disabled={ !item.product }
-                  />
-                </Form.Item>
-
-                <Form.Item label="Total Price">
-                  <InputNumber value={ item.total_price } readOnly />
-                </Form.Item>
+                <Row gutter={ 16 }>
+                  <Col span={ 8 }>
+                    <Form.Item label="Quantity">
+                      <InputNumber
+                        min={ 1 }
+                        value={ item.quantity }
+                        onChange={ (value) =>
+                          handleLineItemChange(index, "quantity", value)
+                        }
+                        disabled={ !item.product }
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={ 8 }>
+                    <Form.Item label="Unit Price">
+                      <InputNumber
+                        min={ 0 }
+                        step={ 0.01 }
+                        value={ item.unit_price }
+                        onChange={ (value) =>
+                          handleLineItemChange(index, "unit_price", value)
+                        }
+                        disabled={ !item.product }
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={ 8 }>
+                    <Form.Item label="Total Price">
+                      <InputNumber value={ item.total_price } readOnly />
+                    </Form.Item>
+                  </Col>
+                </Row>
               </div>
               <Button
                 type="link"
@@ -852,28 +873,40 @@ const InvoiceForm = ({
               </Button>
             </div>
           )) }
+
           <div className="line-items-wrapper">
-            <Form.Item label="Subtotal">
-              <InputNumber value={ formData.subtotal } readOnly />
-            </Form.Item>
+            <Row gutter={ 16 }>
+              <Col span={ 8 }>
+                <Form.Item label="Subtotal">
+                  <InputNumber value={ formData.subtotal } readOnly />
+                </Form.Item>
+              </Col>
+              <Col span={ 8 }>
+                <Form.Item label="Tax Amount">
+                  <InputNumber value={ formData.tax_amount } readOnly />
+                </Form.Item>
+              </Col>
+              <Col span={ 8 }>
+                <Form.Item label="Discount Amount">
+                  <InputNumber
+                    min={ 0 }
+                    step={ 0.01 }
+                    value={ formData.discount_amount }
+                    onChange={ handleDiscountChange }
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
 
-            <Form.Item label="Tax Amount">
-              <InputNumber value={ formData.tax_amount } readOnly />
-            </Form.Item>
-
-            <Form.Item label="Discount Amount">
-              <InputNumber
-                min={ 0 }
-                step={ 0.01 }
-                value={ formData.discount_amount }
-                onChange={ handleDiscountChange }
-              />
-            </Form.Item>
-
-            <Form.Item label="Grand Total">
-              <InputNumber value={ formData.grand_total } readOnly />
-            </Form.Item>
+            <Row gutter={ 16 }>
+              <Col span={ 8 }>
+                <Form.Item label="Grand Total">
+                  <InputNumber value={ formData.grand_total } readOnly />
+                </Form.Item>
+              </Col>
+            </Row>
           </div>
+
           <Form.Item label="Currency">
             <Select
               onChange={ (value) =>
@@ -886,6 +919,7 @@ const InvoiceForm = ({
               <Select.Option value="JPY">JPY</Select.Option>
             </Select>
           </Form.Item>
+
           <Form.Item label="Notes">
             <Input.TextArea
               rows={ 2 }
@@ -895,6 +929,7 @@ const InvoiceForm = ({
               }
             />
           </Form.Item>
+
           <Form.Item label="Terms and Conditions">
             <Input.TextArea
               rows={ 2 }
@@ -905,6 +940,7 @@ const InvoiceForm = ({
             />
           </Form.Item>
         </div>
+
         <Divider />
         <div className="modal-footer">
           <Form.Item>
@@ -922,5 +958,6 @@ const InvoiceForm = ({
         </div>
       </Form>
     </Modal>
+
   );
 };

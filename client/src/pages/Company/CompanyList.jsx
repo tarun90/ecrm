@@ -4,11 +4,12 @@ import moment from 'moment';
 import axios from 'axios';
 import { getCompanies, deleteCompany } from './APIServices';
 import { useNavigate } from 'react-router-dom';
-import { message, Popconfirm, Button, Divider, Modal, Form, Input, Select } from 'antd';
+import { message, Popconfirm, Button, Divider, Modal, Form, Input, Select, Col, Row } from 'antd';
 import CompanyFormModal from './CompanyFormModal';
 // import { Button, message } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { Header } from 'antd/es/layout/layout';
+import { Delete, Edit } from 'lucide-react';
 const CompanyList = () => {
     const navigate = useNavigate();
     const [form] = Form.useForm();
@@ -190,6 +191,7 @@ const CompanyList = () => {
                             Export CSV
                         </button> */}
                     <button className="add-contact-btn" onClick={ handleAddCompany }>
+                        <PlusOutlined />
                         Add Company
                     </button>
                 </div>
@@ -218,7 +220,7 @@ const CompanyList = () => {
                                 <td>{ company?.country || '-' }</td>
                                 <td>
                                     <button className="edit-btn" onClick={ () => handleEditCompany(company._id) }>
-                                        Edit
+                                        <EditOutlined />
                                     </button>
                                     <Popconfirm
                                         title="Delete Company"
@@ -230,9 +232,9 @@ const CompanyList = () => {
                                         okText="Yes"
                                         cancelText="No"
                                     >
-                                        <button className="delete-btn" onClick={ (e) => e.stopPropagation() }>
-                                            Delete
-                                        </button>
+                                        <Button className="delete-btn" onClick={ (e) => e.stopPropagation() }>
+                                            <DeleteOutlined />
+                                        </Button>
                                     </Popconfirm>
                                 </td>
                             </tr>
@@ -252,52 +254,54 @@ const CompanyList = () => {
                     initialValues={ contact }
                     onFinish={ handleSubmit }
                 >
-                    <Form.Item
-                        label="Email"
-                        name="email"
-                        rules={ [
-                            { required: true, message: "Please input email!" },
-                            { type: "email", message: "Please enter a valid email!" }
-                        ] }
-                    >
-                        <Input placeholder="Email" onChange={ handleChange } />
-                    </Form.Item>
+                    <Row gutter={ 24 }>
+                        {/* Column 1 */ }
+                        <Col span={ 12 }>
+                            <Form.Item
+                                label="Email"
+                                name="email"
+                                rules={ [
+                                    { required: true, message: "Please input email!" },
+                                    { type: "email", message: "Please enter a valid email!" }
+                                ] }
+                            >
+                                <Input placeholder="Email" onChange={ handleChange } />
+                            </Form.Item>
 
-                    <Form.Item label="First Name" name="firstName">
-                        <label>First Name</label>
-                        <Input placeholder="First Name" onChange={ handleChange } />
-                    </Form.Item>
+                            <Form.Item label="First Name" name="firstName">
+                                <Input placeholder="First Name" onChange={ handleChange } />
+                            </Form.Item>
 
-                    <Form.Item label="Last Name" name="lastName">
-                        <label>Last Name</label>
-                        <Input placeholder="Last Name" onChange={ handleChange } />
-                    </Form.Item>
+                            <Form.Item label="Last Name" name="lastName">
+                                <Input placeholder="Last Name" onChange={ handleChange } />
+                            </Form.Item>
 
-                    <Form.Item label="Job Title" name="jobTitle">
-                        <label>Job Title</label>
-                        <Input placeholder="Job Title" onChange={ handleChange } />
-                    </Form.Item>
+                            <Form.Item label="Phone Number" name="phoneNumber">
+                                <Input placeholder="Phone Number" onChange={ handleChange } />
+                            </Form.Item>
+                        </Col>
 
-                    <Form.Item label="Phone Number" name="phoneNumber">
-                        <label>Phone Number</label>
-                        <Input placeholder="Phone Number" onChange={ handleChange } />
-                    </Form.Item>
+                        {/* Column 2 */ }
+                        <Col span={ 12 }>
+                            <Form.Item label="Job Title" name="jobTitle">
+                                <Input placeholder="Job Title" onChange={ handleChange } />
+                            </Form.Item>
 
-                    <Form.Item label="Lifecycle Stage" name="lifecycleStage">
-                        <label>Lifecycle Stage</label>
-                        <Select onChange={ (value) => handleChange({ target: { name: "lifecycleStage", value } }) }>
-                            <Select.Option value="Lead">Lead</Select.Option>
-                            <Select.Option value="Customer">Customer</Select.Option>
-                        </Select>
-                    </Form.Item>
+                            <Form.Item label="Lifecycle Stage" name="lifecycleStage">
+                                <Select onChange={ (value) => handleChange({ target: { name: "lifecycleStage", value } }) }>
+                                    <Select.Option value="Lead">Lead</Select.Option>
+                                    <Select.Option value="Customer">Customer</Select.Option>
+                                </Select>
+                            </Form.Item>
 
-                    <Form.Item label="Lead Status" name="leadStatus">
-                        <label>Lead Status</label>
-                        <Select onChange={ (value) => handleChange({ target: { name: "leadStatus", value } }) }>
-                            <Select.Option value="--">--</Select.Option>
-                            <Select.Option value="Qualified">Qualified</Select.Option>
-                        </Select>
-                    </Form.Item>
+                            <Form.Item label="Lead Status" name="leadStatus">
+                                <Select onChange={ (value) => handleChange({ target: { name: "leadStatus", value } }) }>
+                                    <Select.Option value="--">--</Select.Option>
+                                    <Select.Option value="Qualified">Qualified</Select.Option>
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
 
                     <Form.Item className="modal-footer">
                         <Button onClick={ closeModal } className="text-btn">
@@ -309,6 +313,7 @@ const CompanyList = () => {
                     </Form.Item>
                 </Form>
             </Modal>
+
 
             <CompanyFormModal
                 visible={ modalVisible }

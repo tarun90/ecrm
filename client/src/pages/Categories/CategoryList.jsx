@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { message, Popconfirm, Button, Input, Modal } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { getCategories, createCategory, updateCategory, deleteCategory } from './categoryService';
 import './categories.css';
+import { Header } from 'antd/es/layout/layout';
+import { Delete, Edit } from 'lucide-react';
 
 const CategoryList = () => {
     const [categories, setCategories] = useState([]);
@@ -59,7 +61,7 @@ const CategoryList = () => {
         const categoryData = {
             categoryName: categoryName.trim()
         };
-        
+
         try {
             if (editId) {
                 await updateCategory(editId, categoryData);
@@ -77,29 +79,29 @@ const CategoryList = () => {
 
     return (
         <div className="category-container">
-            <div className="category-header">
+            <Header className="category-header">
                 <div className="search-container">
                     <Input
                         type="text"
                         placeholder="Search Category..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        value={ searchTerm }
+                        onChange={ (e) => setSearchTerm(e.target.value) }
                         className="search-input"
                     />
                 </div>
                 <div className="action-buttons">
-                    <Button 
+                    <Button
                         type="primary"
-                        icon={<PlusOutlined />}
-                        onClick={handleAddCategory}
+                        icon={ <PlusOutlined /> }
+                        onClick={ handleAddCategory }
                         className="add-category-btn"
                     >
                         Add Category
                     </Button>
                 </div>
-            </div>
+            </Header>
 
-            <div className="category-table">
+            <div className="contact-table">
                 <table>
                     <thead>
                         <tr>
@@ -108,46 +110,46 @@ const CategoryList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {categories.map(category => (
-                            <tr key={category._id}>
-                                <td>{category.categoryName}</td>
+                        { categories.map(category => (
+                            <tr key={ category._id }>
+                                <td>{ category.categoryName }</td>
                                 <td>
-                                    <Button 
+                                    <Button
                                         type="primary"
-                                        onClick={() => handleEditCategory(category)}
+                                        onClick={ () => handleEditCategory(category) }
                                         className="edit-btn"
                                     >
-                                        Edit
+                                        <EditOutlined />
                                     </Button>
                                     <Popconfirm
                                         title="Delete Category"
                                         description="Are you sure you want to delete this category?"
-                                        onConfirm={() => handleDelete(category._id)}
+                                        onConfirm={ () => handleDelete(category._id) }
                                         okText="Yes"
                                         cancelText="No"
                                     >
                                         <Button danger className="delete-btn">
-                                            Delete
+                                            <DeleteOutlined />
                                         </Button>
                                     </Popconfirm>
                                 </td>
                             </tr>
-                        ))}
+                        )) }
                     </tbody>
                 </table>
             </div>
 
             <Modal
-                title={editId ? "Edit Category" : "Add Category"}
-                open={modalVisible}
-                onCancel={() => setModalVisible(false)}
-                onOk={handleSubmit}
-                width={400}
+                title={ editId ? "Edit Category" : "Add Category" }
+                open={ modalVisible }
+                onCancel={ () => setModalVisible(false) }
+                onOk={ handleSubmit }
+                width={ 400 }
             >
                 <div className="category-form">
                     <Input
-                        value={categoryName}
-                        onChange={(e) => setCategoryName(e.target.value)}
+                        value={ categoryName }
+                        onChange={ (e) => setCategoryName(e.target.value) }
                         placeholder="Enter Category Name"
                         className="form-input"
                     />

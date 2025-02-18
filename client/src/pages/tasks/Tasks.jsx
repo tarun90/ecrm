@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Button, Input, Select, DatePicker, Modal, message, Form, Divider } from "antd";
+import { Button, Input, Select, DatePicker, Modal, message, Form, Divider, Col, Row } from "antd";
 import {
   PlusOutlined,
   FilterOutlined,
@@ -387,8 +387,6 @@ function Tasks() {
               type="primary"
               className="update-btn"
               onClick={ () => form.submit() }
-
-            // onClick={ handleAddTask }
             >
               Add Task
             </Button>,
@@ -397,74 +395,83 @@ function Tasks() {
         >
           <Divider />
           <Form layout="vertical" form={ form } onFinish={ handleAddTask }>
-            <Form.Item
-              name="name"
-              label="Task Name"
-              rules={ [{ required: true, message: "Please enter task name" }] }
-            >
-              <Input
-                placeholder="Task Name"
-                value={ newTask.name }
-                name="name"
-                onChange={ handleInputChange }
-              />
-            </Form.Item>
+            <Row gutter={ 24 }>
+              {/* Column 1 */ }
+              <Col span={ 12 }>
+                <Form.Item
+                  name="name"
+                  label="Task Name"
+                  rules={ [{ required: true, message: "Please enter task name" }] }
+                >
+                  <Input
+                    placeholder="Task Name"
+                    value={ newTask.name }
+                    name="name"
+                    onChange={ handleInputChange }
+                  />
+                </Form.Item>
 
-            <Form.Item
-              name="owner"
-              label="Owner"
-              rules={ [{ required: true, message: "Please enter owner name" }] }
-            >
-              <Input
-                name="owner"
-                placeholder="Owner"
-                value={ newTask.owner }
-                onChange={ handleInputChange }
-              />
-            </Form.Item>
+                <Form.Item
+                  name="owner"
+                  label="Owner"
+                  rules={ [{ required: true, message: "Please enter owner name" }] }
+                >
+                  <Input
+                    name="owner"
+                    placeholder="Owner"
+                    value={ newTask.owner }
+                    onChange={ handleInputChange }
+                  />
+                </Form.Item>
 
-            <Form.Item
-              name="startDate"
-              label="Start Date"
-              rules={ [{ required: true, message: "Please select start date" }] }
-            >
-              <DatePicker
-                style={ { width: "100%" } }
-                placeholder="Start Date"
-                onChange={ date => setNewTask({ ...newTask, startDate: date }) }
-              />
-            </Form.Item>
+                <Form.Item
+                  name="startDate"
+                  label="Start Date"
+                  rules={ [{ required: true, message: "Please select start date" }] }
+                >
+                  <DatePicker
+                    style={ { width: "100%" } }
+                    placeholder="Start Date"
+                    onChange={ date => setNewTask({ ...newTask, startDate: date }) }
+                  />
+                </Form.Item>
+              </Col>
 
-            <Form.Item
-              name="dueDate"
-              label="Due Date"
-              rules={ [{ required: true, message: "Please select due date" }] }
-            >
-              <DatePicker
-                style={ { width: "100%" } }
-                placeholder="Due Date"
-                onChange={ date => setNewTask({ ...newTask, dueDate: date }) }
-              />
-            </Form.Item>
+              {/* Column 2 */ }
+              <Col span={ 12 }>
+                <Form.Item
+                  name="dueDate"
+                  label="Due Date"
+                  rules={ [{ required: true, message: "Please select due date" }] }
+                >
+                  <DatePicker
+                    style={ { width: "100%" } }
+                    placeholder="Due Date"
+                    onChange={ date => setNewTask({ ...newTask, dueDate: date }) }
+                  />
+                </Form.Item>
 
-            <Form.Item
-              name="status"
-              label="Status"
-              rules={ [{ required: true, message: "Please select task status" }] }
-            >
-              <Select
-                placeholder="Select Status"
-                value={ newTask.status }
-                onChange={ value => setNewTask({ ...newTask, status: value }) }
-                style={ { width: "100%" } }
-              >
-                <Select.Option value="Pending">Pending</Select.Option>
-                <Select.Option value="In Progress">In Progress</Select.Option>
-                <Select.Option value="Completed">Completed</Select.Option>
-              </Select>
-            </Form.Item>
+                <Form.Item
+                  name="status"
+                  label="Status"
+                  rules={ [{ required: true, message: "Please select task status" }] }
+                >
+                  <Select
+                    placeholder="Select Status"
+                    value={ newTask.status }
+                    onChange={ value => setNewTask({ ...newTask, status: value }) }
+                    style={ { width: "100%" } }
+                  >
+                    <Select.Option value="Pending">Pending</Select.Option>
+                    <Select.Option value="In Progress">In Progress</Select.Option>
+                    <Select.Option value="Completed">Completed</Select.Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
           </Form>
         </Modal>
+
 
         <Modal
           title="Edit Task"
@@ -503,92 +510,91 @@ function Tasks() {
             initialValues={ {
               name: editingTask?.name,
               owner: editingTask?.owner,
-              startDate: editingTask?.startDate
-                ? dayjs(editingTask.startDate)
-                : null,
+              startDate: editingTask?.startDate ? dayjs(editingTask.startDate) : null,
               dueDate: editingTask?.dueDate ? dayjs(editingTask.dueDate) : null,
               status: editingTask?.status,
             } }
             onFinish={ handleUpdateTask }
           >
-            <Form.Item
-              name="name"
-              label="Task Name"
-              rules={ [{ required: true, message: "Please enter task name" }] }
-            >
-              <Input
-                name="name"
-                placeholder="Task Name"
-                value={ editingTask?.name }
-                onChange={ handleEditInputChange }
-              />
-            </Form.Item>
+            <Row gutter={ 24 }>
+              {/* Column 1 */ }
+              <Col span={ 12 }>
+                <Form.Item
+                  name="name"
+                  label="Task Name"
+                  rules={ [{ required: true, message: "Please enter task name" }] }
+                >
+                  <Input
+                    name="name"
+                    placeholder="Task Name"
+                    value={ editingTask?.name }
+                    onChange={ handleEditInputChange }
+                  />
+                </Form.Item>
 
-            <Form.Item
-              name="owner"
-              label="Owner"
-              rules={ [{ required: true, message: "Please enter owner name" }] }
-            >
-              <Input
-                name="owner "
-                placeholder="Owner"
-                value={ editingTask?.owner }
-                onChange={ handleEditInputChange }
-              />
-            </Form.Item>
+                <Form.Item
+                  name="owner"
+                  label="Owner"
+                  rules={ [{ required: true, message: "Please enter owner name" }] }
+                >
+                  <Input
+                    name="owner"
+                    placeholder="Owner"
+                    value={ editingTask?.owner }
+                    onChange={ handleEditInputChange }
+                  />
+                </Form.Item>
 
-            <Form.Item
-              name="startDate"
-              label="Start Date"
-              rules={ [{ required: true, message: "Please select start date" }] }
-            >
-              <DatePicker
-                style={ { width: "100%" } }
-                placeholder="Start Date"
-                value={
-                  editingTask?.startDate ? dayjs(editingTask.startDate) : null
-                }
-                onChange={ date =>
-                  setEditingTask({ ...editingTask, startDate: date })
-                }
-              />
-            </Form.Item>
+                <Form.Item
+                  name="startDate"
+                  label="Start Date"
+                  rules={ [{ required: true, message: "Please select start date" }] }
+                >
+                  <DatePicker
+                    style={ { width: "100%" } }
+                    placeholder="Start Date"
+                    value={ editingTask?.startDate ? dayjs(editingTask.startDate) : null }
+                    onChange={ date => setEditingTask({ ...editingTask, startDate: date }) }
+                  />
+                </Form.Item>
+              </Col>
 
-            <Form.Item
-              name="dueDate"
-              label="Due Date"
-              rules={ [{ required: true, message: "Please select due date" }] }
-            >
-              <DatePicker
-                style={ { width: "100%" } }
-                placeholder="Due Date"
-                value={ editingTask?.dueDate ? dayjs(editingTask.dueDate) : null }
-                onChange={ date =>
-                  setEditingTask({ ...editingTask, dueDate: date })
-                }
-              />
-            </Form.Item>
+              {/* Column 2 */ }
+              <Col span={ 12 }>
+                <Form.Item
+                  name="dueDate"
+                  label="Due Date"
+                  rules={ [{ required: true, message: "Please select due date" }] }
+                >
+                  <DatePicker
+                    style={ { width: "100%" } }
+                    placeholder="Due Date"
+                    value={ editingTask?.dueDate ? dayjs(editingTask.dueDate) : null }
+                    onChange={ date => setEditingTask({ ...editingTask, dueDate: date }) }
+                  />
+                </Form.Item>
 
-            <Form.Item
-              name="status"
-              label="Status"
-              rules={ [{ required: true, message: "Please select task status" }] }
-            >
-              <Select
-                placeholder="Select Status"
-                value={ editingTask?.status }
-                onChange={ value =>
-                  setEditingTask({ ...editingTask, status: value })
-                }
-                style={ { width: "100%" } }
-              >
-                <Select.Option value="Pending">Pending</Select.Option>
-                <Select.Option value="In Progress">In Progress</Select.Option>
-                <Select.Option value="Completed">Completed</Select.Option>
-              </Select>
-            </Form.Item>
+                <Form.Item
+                  name="status"
+                  label="Status"
+                  rules={ [{ required: true, message: "Please select task status" }] }
+                >
+                  <Select
+                    placeholder="Select Status"
+                    value={ editingTask?.status }
+                    onChange={ value => setEditingTask({ ...editingTask, status: value }) }
+                    style={ { width: "100%" } }
+                  >
+                    <Select.Option value="Pending">Pending</Select.Option>
+                    <Select.Option value="In Progress">In Progress</Select.Option>
+                    <Select.Option value="Completed">Completed</Select.Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
           </Form>
         </Modal>
+
       </div>
     </>
   );

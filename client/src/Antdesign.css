@@ -233,3 +233,22 @@
     gap: 10px;
     margin-top: 10px;
 }
+
+.ant-menu-dark.ant-menu-submenu-popup>.ant-menu {
+    padding: 5px;
+    background-color: var(--bg-sidebar);
+}
+
+.ant-menu-dark>.ant-menu .ant-menu-item {
+    color: #fff;
+
+
+}
+
+.ant-menu-dark>.ant-menu .ant-menu-item-selected {
+    border-left: 2px solid #fff;
+}
+
+.ant-menu-dark.ant-menu-inline .ant-menu-sub.ant-menu-inline {
+    background-color: transparent !important;
+}

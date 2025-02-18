@@ -118,6 +118,7 @@ table {
 }
 
 .contact-table th {
+  white-space: nowrap;
   background-color: #e0f2fe;
   color: #0369a1;
   font-weight: 600;

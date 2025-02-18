@@ -2,7 +2,7 @@ import React from 'react';
 import { Settings, Plus, ArrowLeft, Edit, Mail, Phone, Calendar, MoreHorizontal } from 'lucide-react';
 import './ViewContact.css';
 import { Button } from 'antd';
-import { CaretDownOutlined } from '@ant-design/icons';
+import { CaretDownOutlined, EditOutlined } from '@ant-design/icons';
 const ActionButton = ({ icon, label }) => {
   return (
     <div className="action-button">
@@ -63,9 +63,9 @@ const Sidebar = () => {
             <h2 className="deal-title">
               Nicksbuilding.com - New Deal
             </h2>
-            <button className="edit-btn">
-              <Edit />
-            </button>
+            <Button className="edit-btn">
+              <EditOutlined />
+            </Button>
           </div>
 
           <div className="deal-content">

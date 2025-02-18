@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Layout, Menu, Button, Avatar, Dropdown, Modal, Form, Input, Select, DatePicker, InputNumber, message, Popconfirm, Upload, Divider } from 'antd';
+import { Layout, Menu, Button, Avatar, Dropdown, Modal, Form, Input, Select, DatePicker, InputNumber, message, Popconfirm, Upload, Divider, Col, Row } from 'antd';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { getCompaniesNames } from '../Company/APIServices';
 
@@ -489,11 +489,11 @@ function Deals() {
       <Modal
         title="Create Deal"
         open={ isModalVisible }
+        width={ 600 }
         onCancel={ () => {
           setIsModalVisible(false);
           form.resetFields();
         } }
-
         footer={ [
           <Divider />,
           <Button
@@ -515,7 +515,7 @@ function Deals() {
             Create
           </Button>
         ] }
-        width={ 600 }
+        width={ 600 } // Adjusted width for better layout
       >
         <Divider />
         <Form
@@ -523,159 +523,154 @@ function Deals() {
           layout="vertical"
           onFinish={ handleCreateDeal }
         >
-          <Form.Item
-            name="name"
-            label="Deal name"
-            rules={ [{ required: true, message: 'Please enter deal name' }] }
-          >
-            <Input placeholder="Enter deal name" />
-          </Form.Item>
+          <Row gutter={ 24 }>
+            {/* Column 1 */ }
+            <Col span={ 12 }>
+              <Form.Item
+                name="name"
+                label="Deal name"
+                rules={ [{ required: true, message: 'Please enter deal name' }] }
+              >
+                <Input placeholder="Enter deal name" />
+              </Form.Item>
 
-          {/* <Form.Item
-              name="pipeline"
-              label="Pipeline"
-              initialValue="deals"
-              rules={[{ required: true, message: 'Please select pipeline' }]}
-            >
-              <Select placeholder="Select pipeline">
-                <Option value="deals">Deals pipeline</Option>
-              </Select>
-            </Form.Item> */}
+              <Form.Item
+                name="stage"
+                label="Deal stage"
+                initialValue="New Leads"
+                rules={ [{ required: true, message: 'Please select deal stage' }] }
+              >
+                <Select placeholder="Select stage">
+                  { stages.map(stage => (
+                    <Option key={ stage } value={ stage }>
+                      { stage }
+                    </Option>
+                  )) }
+                </Select>
+              </Form.Item>
 
-          <Form.Item
-            name="stage"
-            label="Deal stage"
-            initialValue="New Leads"
-            rules={ [{ required: true, message: 'Please select deal stage' }] }
-          >
-            <Select placeholder="Select stage">
-              { stages.map(stage => (
-                <Option key={ stage } value={ stage }>{ stage }</Option>
-              )) }
-            </Select>
-          </Form.Item>
+              <Form.Item
+                name="amount"
+                label="Amount"
+                rules={ [{ required: true, message: 'Please enter amount' }] }
+              >
+                <InputNumber
+                  style={ { width: '100%' } }
+                  formatter={ value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }
+                  parser={ value => value.replace(/\$\s?|(,*)/g, '') }
+                  placeholder="0.00"
+                />
+              </Form.Item>
 
-          <Form.Item
-            name="amount"
-            label="Amount"
-            rules={ [{ required: true, message: 'Please enter amount' }] }
-          >
-            <InputNumber
-              style={ { width: '100%' } }
-              formatter={ value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }
-              parser={ value => value.replace(/\$\s?|(,*)/g, '') }
-              placeholder="0.00"
-            />
-          </Form.Item>
+              <Form.Item
+                name="closeDate"
+                label="Close date"
+                rules={ [{ required: true, message: 'Please select close date' }] }
+              >
+                <DatePicker style={ { width: '100%' } } />
+              </Form.Item>
+            </Col>
 
-          <Form.Item
-            name="closeDate"
-            label="Close date"
-            rules={ [{ required: true, message: 'Please select close date' }] }
-          >
-            <DatePicker style={ { width: '100%' } } />
-          </Form.Item>
+            {/* Column 2 */ }
+            <Col span={ 12 }>
+              <Form.Item
+                name="type"
+                label="Deal type"
+                rules={ [{ required: true, message: 'Please select deal type' }] }
+              >
+                <Select placeholder="Select type">
+                  <Option value="new">New Business</Option>
+                  <Option value="existing">Existing Business</Option>
+                </Select>
+              </Form.Item>
 
-          <Form.Item
-            name="type"
-            label="Deal type"
-            rules={ [{ required: true, message: 'Please select deal type' }] }
-          >
-            <Select placeholder="Select type">
-              <Option value="new">New Business</Option>
-              <Option value="existing">Existing Business</Option>
-            </Select>
-          </Form.Item>
+              <Form.Item
+                name="contact"
+                label="Contact"
+                rules={ [{ required: true, message: 'Please select contact' }] }
+              >
+                <Select
+                  showSearch
+                  placeholder="Search contacts"
+                  filterOption={ (input, option) =>
+                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
+                  onChange={ (value) => {
+                    const selectedContact = contactsList.find(contact => contact._id === value);
+                    if (selectedContact) {
+                      form.setFieldsValue({
+                        company: selectedContact.company,
+                      });
+                    }
+                  } }
+                >
+                  { contactsList.map(contact => (
+                    <Option key={ contact._id } value={ contact._id }>
+                      { contact.firstName + " " + contact.lastName }
+                    </Option>
+                  )) }
+                </Select>
+              </Form.Item>
 
-          <Form.Item
-            name="contact"
-            label="Contact"
-            rules={ [{ required: true, message: 'Please select contact' }] }
-          >
-            <Select
-              showSearch
-              placeholder="Search contacts"
-              filterOption={ (input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              onChange={ (value) => {
-                // Find the selected contact
-                const selectedContact = contactsList.find(contact => contact._id === value);
-                if (selectedContact) {
-                  // Set the company field value
-                  form.setFieldsValue({
-                    company: selectedContact.company // Assuming this is the company ID
-                  });
-                }
-              } }
-            >
-              { contactsList.map(contact => (
-                <Option key={ contact._id } value={ contact._id }>
-                  { contact.firstName + " " + contact.lastName }
-                </Option>
-              )) }
-            </Select>
-          </Form.Item>
-
-          <Form.Item
-            name="company"
-            label="Company"
-            rules={ [{ required: true, message: 'Please enter company name' }] }
-          >
-            <Select
-              showSearch
-              disabled
-              placeholder="Search Company"
-              filterOption={ (input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-            >
-              { companies.map(company => (
-                <Option key={ company._id } value={ company._id }>
-                  { company?.companyName }
-                </Option>
-              )) }
-            </Select>
-          </Form.Item>
+              <Form.Item
+                name="company"
+                label="Company"
+                rules={ [{ required: true, message: 'Please enter company name' }] }
+              >
+                <Select
+                  showSearch
+                  disabled
+                  placeholder="Search Company"
+                  filterOption={ (input, option) =>
+                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
+                >
+                  { companies.map(company => (
+                    <Option key={ company._id } value={ company._id }>
+                      { company?.companyName }
+                    </Option>
+                  )) }
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
       </Modal>
 
-      {/* Edit Deal Modal */ }
 
+      {/* Edit Deal Modal */ }
       <Modal
         title="Edit Deal"
         open={ isEditModalVisible }
+        width={ 600 }
         onCancel={ () => {
           setIsEditModalVisible(false);
           setSelectedDeal(null);
           editForm.resetFields();
         } }
-
-        footer={
-          [
-            <Divider />,
-            <Button
-              key="cancel"
-              className='text-btn'
-
-              onClick={ () => {
-                setIsEditModalVisible(false);
-                setSelectedDeal(null);
-                editForm.resetFields();
-              } }
-            >
-              Cancel
-            </Button>,
-            <Button
-              key="update"
-              type="primary"
-              onClick={ () => editForm.submit() }
-              loading={ loading }
-            >
-              Update
-            </Button>
-          ] }
-        width={ 600 }
+        footer={ [
+          <Divider />,
+          <Button
+            key="cancel"
+            className='text-btn'
+            onClick={ () => {
+              setIsEditModalVisible(false);
+              setSelectedDeal(null);
+              editForm.resetFields();
+            } }
+          >
+            Cancel
+          </Button>,
+          <Button
+            key="update"
+            type="primary"
+            onClick={ () => editForm.submit() }
+            loading={ loading }
+          >
+            Update
+          </Button>
+        ] }
+        width={ 600 } // Adjusted for better layout
       >
         <Divider />
         <Form
@@ -683,110 +678,119 @@ function Deals() {
           layout="vertical"
           onFinish={ handleEditDeal }
         >
-          <Form.Item
-            name="name"
-            label="Deal name"
-            rules={ [{ required: true, message: 'Please enter deal name' }] }
-          >
-            <Input placeholder="Enter deal name" />
-          </Form.Item>
+          <Row gutter={ 24 }>
+            {/* Column 1 */ }
+            <Col span={ 12 }>
+              <Form.Item
+                name="name"
+                label="Deal name"
+                rules={ [{ required: true, message: 'Please enter deal name' }] }
+              >
+                <Input placeholder="Enter deal name" />
+              </Form.Item>
 
-          <Form.Item
-            name="stage"
-            label="Deal stage"
-            rules={ [{ required: true, message: 'Please select deal stage' }] }
-          >
-            <Select placeholder="Select stage">
-              { stages.map(stage => (
-                <Option key={ stage } value={ stage }>{ stage }</Option>
-              )) }
-            </Select>
-          </Form.Item>
+              <Form.Item
+                name="stage"
+                label="Deal stage"
+                rules={ [{ required: true, message: 'Please select deal stage' }] }
+              >
+                <Select placeholder="Select stage">
+                  { stages.map(stage => (
+                    <Option key={ stage } value={ stage }>
+                      { stage }
+                    </Option>
+                  )) }
+                </Select>
+              </Form.Item>
 
-          <Form.Item
-            name="amount"
-            label="Amount"
-            rules={ [{ required: true, message: 'Please enter amount' }] }
-          >
-            <InputNumber
-              style={ { width: '100%' } }
-              formatter={ value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }
-              parser={ value => value.replace(/\$\s?|(,*)/g, '') }
-              placeholder="0.00"
-            />
-          </Form.Item>
+              <Form.Item
+                name="amount"
+                label="Amount"
+                rules={ [{ required: true, message: 'Please enter amount' }] }
+              >
+                <InputNumber
+                  style={ { width: '100%' } }
+                  formatter={ value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }
+                  parser={ value => value.replace(/\$\s?|(,*)/g, '') }
+                  placeholder="0.00"
+                />
+              </Form.Item>
 
-          <Form.Item
-            name="closeDate"
-            label="Close date"
-            rules={ [{ required: true, message: 'Please select close date' }] }
-          >
-            <DatePicker style={ { width: '100%' } } />
-          </Form.Item>
+              <Form.Item
+                name="closeDate"
+                label="Close date"
+                rules={ [{ required: true, message: 'Please select close date' }] }
+              >
+                <DatePicker style={ { width: '100%' } } />
+              </Form.Item>
+            </Col>
 
-          <Form.Item
-            name="type"
-            label="Deal type"
-            rules={ [{ required: true, message: 'Please select deal type' }] }
-          >
-            <Select placeholder="Select type">
-              <Option value="new">New Business</Option>
-              <Option value="existing">Existing Business</Option>
-            </Select>
-          </Form.Item>
+            {/* Column 2 */ }
+            <Col span={ 12 }>
+              <Form.Item
+                name="type"
+                label="Deal type"
+                rules={ [{ required: true, message: 'Please select deal type' }] }
+              >
+                <Select placeholder="Select type">
+                  <Option value="new">New Business</Option>
+                  <Option value="existing">Existing Business</Option>
+                </Select>
+              </Form.Item>
 
-          <Form.Item
-            name="contact"
-            label="Contact"
-            rules={ [{ required: true, message: 'Please select contact' }] }
-          >
-            <Select
-              showSearch
-              placeholder="Search contacts"
-              filterOption={ (input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              onChange={ (value) => {
-                // Find the selected contact
-                const selectedContact = contactsList.find(contact => contact._id === value);
-                if (selectedContact) {
-                  // Set the company field value
-                  editForm.setFieldsValue({
-                    company: selectedContact.company // Assuming this is the company ID
-                  });
-                }
-              } }
-            >
-              { contactsList.map(contact => (
-                <Option key={ contact._id } value={ contact._id }>
-                  { contact.firstName + " " + contact.lastName }
-                </Option>
-              )) }
-            </Select>
-          </Form.Item>
+              <Form.Item
+                name="contact"
+                label="Contact"
+                rules={ [{ required: true, message: 'Please select contact' }] }
+              >
+                <Select
+                  showSearch
+                  placeholder="Search contacts"
+                  filterOption={ (input, option) =>
+                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
+                  onChange={ (value) => {
+                    const selectedContact = contactsList.find(contact => contact._id === value);
+                    if (selectedContact) {
+                      editForm.setFieldsValue({
+                        company: selectedContact.company,
+                      });
+                    }
+                  } }
+                >
+                  { contactsList.map(contact => (
+                    <Option key={ contact._id } value={ contact._id }>
+                      { contact.firstName + " " + contact.lastName }
+                    </Option>
+                  )) }
+                </Select>
+              </Form.Item>
 
-          <Form.Item
-            name="company"
-            label="Company"
-            rules={ [{ required: true, message: 'Please enter company name' }] }
-          >
-            <Select
-              showSearch
-              disabled
-              placeholder="Search Company"
-              filterOption={ (input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-            >
-              { companies.map(company => (
-                <Option key={ company._id } value={ company._id }>
-                  { company?.companyName }
-                </Option>
-              )) }
-            </Select>
-          </Form.Item>
+              <Form.Item
+                name="company"
+                label="Company"
+                rules={ [{ required: true, message: 'Please enter company name' }] }
+              >
+                <Select
+                  showSearch
+                  disabled
+                  placeholder="Search Company"
+                  filterOption={ (input, option) =>
+                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
+                >
+                  { companies.map(company => (
+                    <Option key={ company._id } value={ company._id }>
+                      { company?.companyName }
+                    </Option>
+                  )) }
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
       </Modal>
+
 
       {/* View Deal Modal */ }
       <Modal
