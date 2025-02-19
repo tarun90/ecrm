@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { message, Popconfirm, Button, Input, Modal, Select, Checkbox, Upload, Form, Row, Col, Divider, DatePicker, Typography } from 'antd';
+import { message, Popconfirm, Button, Input, Modal, Select, Checkbox, Upload, Form, Row, Col, Divider, DatePicker, Typography, Empty } from 'antd';
 import { UploadOutlined, FileExcelOutlined, BarChartOutlined, InboxOutlined, DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { getUsers } from '../Users/userService';  // Add this import
 import { getCampaigns } from '../Campaigns/campaignService';
@@ -22,6 +22,7 @@ import { Link } from 'react-router-dom';
 import { Getcountry } from '../Company/APIServices';
 import axios from 'axios';
 import { createNote } from '../viewOutreach/noteService';
+import NoDataUI from '../../components/NoData';
 
 const { Dragger } = Upload;
 const API_URL = import.meta.env.VITE_TM_API_URL;
@@ -450,6 +451,10 @@ const OutReachList = () => {
         fetchCountry()
         getUsersData()
     }, [])
+   
+    //   if (!outreach || outreach.length === 0) {
+    //     return <NoDataUI />;
+    //   }
     return (
         <div className="outreach-container">
             <Header className="outreach-header">
@@ -588,6 +593,9 @@ const OutReachList = () => {
 
             </Header>
             <div className="contact-table">
+                {(!outreach || outreach.length == 0) ? 
+            <NoDataUI/> :    
+            
                 <table>
                     <thead>
                         <tr>
@@ -614,6 +622,7 @@ const OutReachList = () => {
                             <th>Actions</th>
                         </tr>
                     </thead>
+                    
                     <tbody>
 
                         { outreach.map(item => (
@@ -680,6 +689,7 @@ const OutReachList = () => {
                         )) }
                     </tbody>
                 </table>
+}
             </div>
 
             <Modal
