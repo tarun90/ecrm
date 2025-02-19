@@ -354,3 +354,7 @@
     width: 100%;
     display: inline-block;
 }
+
+.ant-select.ant-select-in-form-item {
+    height: auto;
+}
