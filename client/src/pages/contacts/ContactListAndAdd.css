@@ -17,15 +17,6 @@
   position: relative;
 }
 
-.search-input {
-  width: 100%;
-  padding: 10px 16px;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  font-size: 14px;
-  transition: all 0.2s;
-}
-
 .search-input:focus {
   outline: none;
   border-color: #3b82f6;
@@ -43,7 +34,7 @@
 
 .action-buttons {
   display: flex;
-  gap: 12px;
+  gap: 5px;
   align-items: center;
 }
 
@@ -70,6 +61,7 @@
 
 .filter-btn,
 .export-btn {
+  font-weight: 500;
   height: auto;
   padding: 0.5rem 1rem;
   background-color: #e0f2fe;
@@ -98,7 +90,7 @@
 .export-btn:hover {
   background-color: #bae6fd;
   color: #185d87;
-  border-color: #185d87;
+  border-color: #bae6fd;
 }
 
 .add-contact-btn:hover {
@@ -111,12 +103,11 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
-.outreach-header-wrapper .btn {
-  padding: 10px;
-}
+
 .outreach-container .user-name {
   white-space: nowrap;
 }
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -151,7 +142,7 @@ table {
 
 .edit-btn,
 .delete-btn {
-  padding: 6px 12px;
+  padding: 8px 16px;
   border-radius: 4px;
   font-size: 13px;
   font-weight: 500;

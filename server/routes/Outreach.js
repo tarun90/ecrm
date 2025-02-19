@@ -191,7 +191,19 @@ router.delete('/:id', async (req, res) => {
 });
 
 // Import CSV to Create Outreaches
-router.post('/import', auth, upload.single('file'), (req, res) => {
+router.post('/import', auth, upload.single('file'),async (req, res) => {
+  const existingRecord = await Outreach.findOne({ 
+    sourceFile: req.file.originalname 
+  });
+
+  if (existingRecord) {
+    // Delete the uploaded file since we won't be using it
+    fs.unlinkSync(req.file.path);
+    return res.status(200).json({ 
+      status: 400,
+      message: 'A file with this name has already been imported. Please rename your file or upload a different file.' 
+    });
+  }
   let results = [];
   fs.createReadStream(req.file.path)
     .pipe(csv())
@@ -204,7 +216,8 @@ router.post('/import', auth, upload.single('file'), (req, res) => {
           createdBy: req?.user?.user?._id, // Ensure safe access to nested properties
           region: req.body?.region,
           campaign: req.body?.campaign,
-          category: req.body?.category
+          category: req.body?.category,
+          sourceFile: req.file.originalname
         }));
         // console.log(results)
         await Outreach.insertMany(updatedResults);
@@ -219,15 +232,51 @@ router.post('/import', auth, upload.single('file'), (req, res) => {
 
 // Assign Multiple Outreaches to User
 router.post('/assign', async (req, res) => {
-  const { outreachIds, userId } = req.body;
+  const { outreachIds, sourceFile, userId } = req.body;
+  
   try {
-    await Outreach.updateMany(
-      { _id: { $in: outreachIds } },
-      { $set: { assignedTo: userId, status: "Not Contacted" } }
+    let query;
+    
+    // Determine which type of assignment we're doing
+    if (outreachIds && outreachIds.length > 0) {
+      // Assign by specific IDs
+      query = { _id: { $in: outreachIds } };
+    } else if (sourceFile) {
+      // Assign by source file name
+      query = { sourceFile: sourceFile };
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: 'Either outreachIds or sourceFile must be provided'
+      });
+    }
+
+    // Perform the update
+    const result = await Outreach.updateMany(
+      query,
+      { 
+        $set: { 
+          assignedTo: userId, 
+          status: "Not Contacted" 
+        } 
+      }
     );
-    res.status(200).send({ message: 'Outreaches assigned successfully' });
+
+    // Return more detailed response
+    res.status(200).json({
+      success: true,
+      message: 'Outreaches assigned successfully',
+      modifiedCount: result.modifiedCount,
+      matchedCount: result.matchedCount
+    });
+
   } catch (error) {
-    res.status(500).send(error);
+    console.error('Error in assign endpoint:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error assigning outreaches',
+      error: error.message
+    });
   }
 });
 

@@ -17,7 +17,6 @@ const noteSchema = new mongoose.Schema({
   },
   reminderDate: {
     type: Date,
-    required: true
   },
   attachment: {
     filename: String,

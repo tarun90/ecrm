@@ -1,27 +1,61 @@
 import React, { useEffect, useState } from 'react';
-import { Settings, Plus, ArrowLeft, Edit, Mail, Phone, Calendar, MoreHorizontal, Copy, Paperclip, Trash2  } from 'lucide-react';
+import { Settings, Plus, ArrowLeft, Edit, Mail, Phone, Calendar, MoreHorizontal, Copy, Paperclip, Trash2 } from 'lucide-react';
 import './ViewOutReach.css';
-import { Button, Checkbox, DatePicker, Divider, Form, Input, message, Modal, Upload,Card, Empty, List, Popconfirm, Space, Typography, Tooltip } from 'antd';
-import { CaretDownOutlined, UploadOutlined,  DeleteOutlined, 
-  PlusOutlined, 
-    } from '@ant-design/icons';
+import { Button, Checkbox, DatePicker, Divider, Form, Input, message, Modal, Upload, Card, Empty, List, Popconfirm, Space, Typography, Tooltip, Collapse } from 'antd';
+import {
+  CaretDownOutlined, UploadOutlined, DeleteOutlined,
+  PlusOutlined,
+  RightOutlined,
+} from '@ant-design/icons';
 import axios from 'axios';
 import { getOutreachDataById } from '../OutReach/outreachService';
 import { useNavigate, useParams } from 'react-router-dom';
-import { createNote, getNotesByOutreach, updateNote, deleteNote  } from './noteService';
+import { createNote, getNotesByOutreach, updateNote, deleteNote } from './noteService';
 import moment from 'moment';
+import { Header } from 'antd/es/layout/layout';
 const ActionButton = ({ icon, label, onClick }) => {
   return (
     <div className="action-button">
-      <button className="icon-button" onClick={onClick}>{icon}</button>
-      <span className="button-label">{label}</span>
+      <button className="icon-button" onClick={ onClick }>{ icon }</button>
+      <span className="button-label">{ label }</span>
     </div>
   );
 };
 
 
-
-const MainContent = ({ form, outReachData,modalOpen, modalOpenForNote,modalClose}) => {
+const { Panel } = Collapse;
+const { Text, Link } = Typography;
+const MainContent = ({ form, outReachData, modalOpen, modalOpenForNote, modalClose }) => {
+  const activities = [
+    {
+      key: "1",
+      title: "Logged call",
+      author: "Tarun Bansal",
+      description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+      date: "Feb 19, 2025 at 12:00 PM GMT+5:30",
+    },
+    {
+      key: "2",
+      title: "Note",
+      author: "Tarun Bansal",
+      description: "Call done",
+      date: "Feb 19, 2025 at 12:00 PM GMT+5:30",
+    },
+    {
+      key: "3",
+      title: "Deal activity",
+      author: "Tarun Bansal",
+      description: (
+        <>
+          <Text strong>Tarun Bansal</Text> moved deal to Appointment scheduled.{ " " }
+          <Link href="#" target="_blank">
+            View details
+          </Link>
+        </>
+      ),
+      date: "Feb 5, 2025 at 6:15 PM GMT+5:30",
+    },
+  ];
   let userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userDate')) : {}
   const sections = ['Notes'];
   const checkBoxOptions = ["Email", "Phone", "IM", "Linkedin"];
@@ -31,7 +65,7 @@ const MainContent = ({ form, outReachData,modalOpen, modalOpenForNote,modalClose
   const fetchNotes = async () => {
     try {
       setLoading(true);
-      const fetchedNotes = await getNotesByOutreach(outReachData._id);
+      const fetchedNotes = await getNotesByOutreach(outReachData?._id);
       setNotes(fetchedNotes);
     } catch (error) {
       message.error('Failed to load notes');
@@ -40,10 +74,10 @@ const MainContent = ({ form, outReachData,modalOpen, modalOpenForNote,modalClose
     }
   };
   useEffect(() => {
-    if (outReachData._id) {
+    if (outReachData?._id) {
       fetchNotes();
     }
-  }, [outReachData._id]);
+  }, [outReachData?._id]);
   const handleDelete = async (noteId) => {
     try {
       await deleteNote(noteId);
@@ -53,13 +87,14 @@ const MainContent = ({ form, outReachData,modalOpen, modalOpenForNote,modalClose
       message.error('Failed to delete note: ' + (error.message || 'Unknown error'));
     }
   };
+
   const handleSubmit = async (values) => {
     try {
       if (editingNote) {
         await updateNote(editingNote._id, values);
         message.success('Note updated successfully!');
       } else {
-        await createNote(outReachData._id, values);
+        await createNote(outReachData?._id, values);
         message.success('Note created successfully!');
       }
       fetchNotes();
@@ -102,147 +137,135 @@ const MainContent = ({ form, outReachData,modalOpen, modalOpenForNote,modalClose
     return e?.fileList;
   };
   return (
-    <div className="main-content">
+    <div className="main-content-wrapper">
       { sections.map((section) => (
-             <div key={ section } className="content-section">
-               <div className="section-header">
-                 <h2>{ section }</h2>
-                 <div className="header-actions">
-                  {/* {userData?.department?.name?.toLowerCase() == 'outreach team' && */}
-                 <Button 
-                  type="primary" 
-                  icon={<PlusOutlined />} 
-                  onClick={modalOpenForNote}
-                >
-                  Add
-                </Button>
-{/* } */}
-                   {/* <Settings /> */}
-                 </div>
-               </div>
-               {/* <div className="section-content">
+        <div key={ section } className="content-section">
+          <Header className="section-header">
+            <h2>{ section }</h2>
+            <div className="header-actions">
+              {/* {userData?.department?.name?.toLowerCase() == 'outreach team' && */ }
+              {/* <Button
+                type="primary"
+                icon={ <PlusOutlined /> }
+                onClick={ modalOpenForNote }
+              >
+                Add
+              </Button> */}
+              {/* } */ }
+              {/* <Settings /> */ }
+            </div>
+          </Header>
+          {/* <div className="section-content">
                  <p>No associated objects of this type exist or you don't have permission to view them.</p>
                </div> */}
-               <div className="section-content">
-                 <table>
-                                    <thead>
-                                        <tr>
-                                           
-                                            <th>Contact Method</th>
-                                            <th>Message</th>
-                                            <th>Reminder Date</th>
-                                            <th>Attachment</th>
-                                            <th>Created At</th>
-                                            {/* {userData?.department?.name?.toLowerCase() == 'outreach team' && */}
-                                             <th>Actions</th>
-                                              {/* } */}
-                                           
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {notes.map(item => (
-                                            <tr key={item?._id}>
-                                              
-                                                <td>{item?.contactMethod?.toString()}</td>
-                                                <td>{item?.message}</td>
-                                                <td>{moment(item?.reminderDate).format('DD-MM-YYYY HH:mm')}</td>
-                                                <td>{item?.attachment ? <a target="_blank" href={`${import.meta.env.VITE_TM_API_URL}/${item?.attachment.path}`}> {item?.attachment?.filename} </a>: "-"}</td>
-                                                <td>{moment(item?.createdAt).format('DD-MM-YYYY HH:mm')}</td>
-                                                {/* {userData?.department?.name?.toLowerCase() == 'outreach team' &&  */}
-                                                <td>
-                                                <Button 
-                        type="link" 
-                        icon={<Edit />} 
-                        onClick={() => handleEdit(item)}
-                      />
-                       <Popconfirm
-                          title="Delete Note"
-                          description="Are you sure you want to delete this note?"
-                          onConfirm={() => handleDelete(item._id)}
-                          okText="Yes"
-                          cancelText="No"
-                        >
-                          <Button
-                            type="link"
-                            danger
-                            icon={<Trash2 />}
-                          />
-                        </Popconfirm>                      </td> 
-                                                {/* } */}
-                                                
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-               </div>
-             </div>
-           )) }
-       <Modal
-        title={`${editingNote ? 'Edit' : 'Add'} Note - ${outReachData.name}`}
-        open={modalOpen}
-        onCancel={handleModalClose}
-        footer={null}
-        width={600}
+          <>
+            <Collapse
+              size="large"
+              expandIcon={ ({ isActive }) => (
+                <RightOutlined rotate={ isActive ? 90 : 0 } />
+              ) }
+              ghost
+            >{
+              notes?.map((note)=>(
+                <Panel
+                key={ note?._id }
+                header={
+                  <Text strong>
+                   Note Added  <Text type="secondary">by { note?.createdBy?.name }</Text>
+                  </Text>
+                }
+                extra={ <Text type="secondary">{ moment(note?.createdAt).format('DD-MM-YYYY HH:mm') }</Text> }
+              >
+                 <Text strong>Contacted Through : </Text>  <Text>{ note?.contactMethod?.toString() }</Text>
+               <br/>
+               <Text strong>Message : </Text>  <Text>{ note?.message }</Text><br/>
+            {note?.reminderDate && <><Text strong>Reminder Date : </Text>  <Text>{ moment(note?.reminderDate).format('DD-MM-YYYY HH:mm') }</Text> <br/></>}
+              {note?.attachment && <> <Text strong>Attachment : </Text><a target="_blank" href={`${import.meta.env.VITE_TM_API_URL}/${note?.attachment?.path}`}>{note?.attachment?.filename}</a></>}
+              </Panel>
+              ))
+            }
+              {/* { activities.map((activity) => (
+                <Panel
+                  key={ activity.key }
+                  header={
+                    <Text strong>
+                      { activity.title } <Text type="secondary">by { activity.author }</Text>
+                    </Text>
+                  }
+                  extra={ <Text type="secondary">{ activity.date }</Text> }
+                >
+                  <Text>{ activity.description }</Text>
+                </Panel>
+              )) } */}
+            </Collapse>
+          </>
+        </div>
+      )) }
+      <Modal
+        title={ `${editingNote ? 'Edit' : 'Add'} Note - ${outReachData?.name}` }
+        open={ modalOpen }
+        onCancel={ handleModalClose }
+        footer={ null }
+        width={ 600 }
       >
         <Divider />
         <Form
-          form={form}
+          form={ form }
           layout="vertical"
-          onFinish={handleSubmit}
+          onFinish={ handleSubmit }
         >
-          <div style={{ borderBottom: "1px solid #ddd", paddingBottom: "15px", marginBottom: "20px" }}>
-            <h3 style={{ fontSize: "16px", marginBottom: "10px" }}>Contacted Through</h3>
+          <div style={ { borderBottom: "1px solid #ddd", paddingBottom: "15px", marginBottom: "20px" } }>
+            <h3 style={ { fontSize: "16px", marginBottom: "10px" } }>Contacted Through</h3>
             <Form.Item name="options">
-              <Checkbox.Group options={checkBoxOptions} />
+              <Checkbox.Group options={ checkBoxOptions } />
             </Form.Item>
           </div>
 
           <div>
-            <h3 style={{ fontSize: "16px", marginBottom: "10px" }}>Notes</h3>
+            <h3 style={ { fontSize: "16px", marginBottom: "10px" } }>Notes</h3>
             <Form.Item
               label="Message"
               name="message"
-              rules={[{ required: true, message: "Please enter a message!" }]}
+              rules={ [{ required: true, message: "Please enter a message!" }] }
             >
-              <Input.TextArea placeholder="Enter your message..." rows={3} />
+              <Input.TextArea placeholder="Enter your message..." rows={ 3 } />
             </Form.Item>
 
-            <Form.Item 
-  label="Attachment" 
-  name="attachment"
-  valuePropName="fileList"
-  getValueFromEvent={normFile}
->
-  <Upload 
-    beforeUpload={() => false}
-    maxCount={1}
-    listType="text"
-  >
-    <Button icon={<UploadOutlined />}>Upload Attachment</Button>
-  </Upload>
-</Form.Item>
+            <Form.Item
+              label="Attachment"
+              name="attachment"
+              valuePropName="fileList"
+              getValueFromEvent={ normFile }
+            >
+              <Upload
+                beforeUpload={ () => false }
+                maxCount={ 1 }
+                listType="text"
+              >
+                <Button icon={ <UploadOutlined /> } className='filter-btn'>Upload Attachment</Button>
+              </Upload>
+            </Form.Item>
 
             <Form.Item
               label="Add Reminder"
               name="reminder"
-              rules={[{ required: true, message: "Please enter a reminder!" }]}
             >
               <DatePicker
-                showTime={{ format: 'HH:mm:ss' }}
+                showTime={ { format: 'HH:mm:ss' } }
                 className="w-full"
                 placeholder="Select date"
-                style={{ width: "100%" }}
+                style={ { width: "100%" } }
               />
             </Form.Item>
           </div>
           <Divider />
 
-          <div style={{ textAlign: "right", marginTop: "20px" }}>
-            <Button style={{ marginRight: 10 }} onClick={handleModalClose}>
+          <div style={ { textAlign: "right", marginTop: "20px" } }>
+            <Button style={ { marginRight: 10 } } className='text-btn' onClick={ handleModalClose }>
               Cancel
             </Button>
             <Button type="primary" htmlType="submit">
-              {editingNote ? 'Update' : 'Save'}
+              { editingNote ? 'Update' : 'Save' }
             </Button>
           </div>
         </Form>
@@ -252,7 +275,7 @@ const MainContent = ({ form, outReachData,modalOpen, modalOpenForNote,modalClose
 };
 
 // Sidebar Component
-const Sidebar = ({ outReachData,modalOpenForNote }) => {
+const Sidebar = ({ outReachData, modalOpenForNote }) => {
   //   const [outReachData,setOutReachData]=useState({})
   // const paramsId=useParams()
   const navigate = useNavigate();
@@ -271,18 +294,20 @@ const Sidebar = ({ outReachData,modalOpenForNote }) => {
   //   }
   // }
   const actions = [
-    { icon: <Edit />, label: 'Note',  onClick:()=>{
-      modalOpenForNote()
-    }},
+    {
+      icon: <Edit />, label: 'Note', onClick: () => {
+        modalOpenForNote()
+      }
+    },
     {
       icon: <Mail />, label: 'Email',
       onClick: () => {
-        window.location.href = `mailto:${outReachData.email}`;
+        window.location.href = `mailto:${outReachData?.email}`;
       }
     },
     {
       icon: <Phone />, label: 'Call',
-      onClick: () => window.location.href = `tel:${outReachData.phone}`
+      onClick: () => window.location.href = `tel:${outReachData?.phone}`
     },
 
     // { icon: <Edit />, label: 'Task' },
@@ -291,16 +316,16 @@ const Sidebar = ({ outReachData,modalOpenForNote }) => {
   ];
 
   const actions2 = [
-   
+
     {
       icon: <Mail />, label: 'Email',
       onClick: () => {
-        window.location.href = `mailto:${outReachData.email}`;
+        window.location.href = `mailto:${outReachData?.email}`;
       }
     },
     {
       icon: <Phone />, label: 'Call',
-      onClick: () => window.location.href = `tel:${outReachData.phone}`
+      onClick: () => window.location.href = `tel:${outReachData?.phone}`
     },
 
     // { icon: <Edit />, label: 'Task' },
@@ -314,24 +339,24 @@ const Sidebar = ({ outReachData,modalOpenForNote }) => {
   return (
     <div className="sidebar">
       <div className="sidebar-header">
-        <ArrowLeft className="back-icon" onClick={() => navigate(-1)} />
+        <ArrowLeft className="back-icon" onClick={ () => navigate(-1) } />
         <span>Outreach details</span>
-        {/* <Button icon={ <CaretDownOutlined /> }>Actions </Button> */}
+        {/* <Button icon={ <CaretDownOutlined /> }>Actions </Button> */ }
       </div>
 
       <div className="contact-card scroll">
         <div className="contact-info">
-          <div className="avatar">{outReachData?.name?.at(0)}</div>
+          <div className="avatar">{ outReachData?.name?.at(0) }</div>
           <div className="contact-details">
-            <h2>{outReachData.name}</h2>
-            {/* <h3>Blanden</h3> */}
-            <Button className="email" onClick={() => {
-              navigator.clipboard.writeText(outReachData.email).then(() => {
+            <h2>{ outReachData?.name }</h2>
+            {/* <h3>Blanden</h3> */ }
+            <Button className="email" onClick={ () => {
+              navigator.clipboard.writeText(outReachData?.email).then(() => {
                 message.success('Mail copied!')
               })
 
-            }}>
-              <a >{outReachData.email}</a>
+            } }>
+              <a >{ outReachData?.email }</a>
               <Copy />
             </Button>
 
@@ -339,16 +364,16 @@ const Sidebar = ({ outReachData,modalOpenForNote }) => {
         </div>
 
         <div className="action-buttons">
-          {userData?.department?.name?.toLowerCase == 'outreach team' ? <>
-          {actions.map((action, index) => (
-            <ActionButton key={index} icon={action.icon} label={action.label}
-              onClick={action.onClick} />
-          ))}
+          { userData?.department?.name?.toLowerCase == 'outreach team' ? <>
+            { actions2.map((action, index) => (
+              <ActionButton key={ index } icon={ action.icon } label={ action.label }
+                onClick={ action.onClick } />
+            )) }
           </> : <>
-          {actions2.map((action, index) => (
-            <ActionButton key={index} icon={action.icon} label={action.label}
-              onClick={action.onClick} />
-          ))}
+            { actions2.map((action, index) => (
+              <ActionButton key={ index } icon={ action.icon } label={ action.label }
+                onClick={ action.onClick } />
+            )) }
           </> }
         </div>
 
@@ -356,8 +381,8 @@ const Sidebar = ({ outReachData,modalOpenForNote }) => {
           <div className="about-header">
             <h3>About this Outreach</h3>
             <div className="about-actions">
-              {/* <Button icon={ <CaretDownOutlined /> }>Actions </Button> */}
-              {/* <Settings /> */}
+              {/* <Button icon={ <CaretDownOutlined /> }>Actions </Button> */ }
+              {/* <Settings /> */ }
             </div>
           </div>
 
@@ -367,8 +392,8 @@ const Sidebar = ({ outReachData,modalOpenForNote }) => {
               <div className="email">
                 <a>
                   <div
-                    onClick={() => { window.location.href = `mailto:${outReachData.email}`; }}
-                  >{outReachData.email}</div>
+                    onClick={ () => { window.location.href = `mailto:${outReachData?.email}`; } }
+                  >{ outReachData?.email }</div>
                 </a>
 
 
@@ -378,8 +403,8 @@ const Sidebar = ({ outReachData,modalOpenForNote }) => {
               <p className="label">Phone </p>
               <a >
                 <div
-                  onClick={() => { window.location.href = `tel:${outReachData.phone}`; }}
-                >{outReachData.phone}</div>
+                  onClick={ () => { window.location.href = `tel:${outReachData?.phone}`; } }
+                >{ outReachData?.phone }</div>
               </a>
 
             </div>
@@ -387,7 +412,7 @@ const Sidebar = ({ outReachData,modalOpenForNote }) => {
               <p className="label">Created By </p>
               <a >
                 <div
-                >{outReachData?.createdBy?.name}</div>
+                >{ outReachData?.createdBy?.name }</div>
               </a>
 
             </div>
@@ -420,10 +445,10 @@ const ViewOutReach = () => {
 
     }
   }
-  const modalOpenForNote=()=>{
+  const modalOpenForNote = () => {
     setmodalOpen(true)
   }
-  const modalCloseForNote=()=>{
+  const modalCloseForNote = () => {
     setmodalOpen(false)
     form.resetFields()
   }
@@ -432,9 +457,9 @@ const ViewOutReach = () => {
   }, [])
   return (
     <div className="contact-management">
-      <Sidebar outReachData={outReachData} modalOpenForNote={modalOpenForNote} />
-      < MainContent form={form} outReachData={outReachData}  modalOpen={modalOpen}
-      modalOpenForNote={modalOpenForNote} modalClose={modalCloseForNote}/>
+      <Sidebar outReachData={ outReachData } modalOpenForNote={ modalOpenForNote } />
+      < MainContent form={ form } outReachData={ outReachData } modalOpen={ modalOpen }
+        modalOpenForNote={ modalOpenForNote } modalClose={ modalCloseForNote } />
     </div>
   );
 };

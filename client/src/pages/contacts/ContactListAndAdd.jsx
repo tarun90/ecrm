@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Modal, Form, Input, Select, message, Divider, Row, Col } from 'antd';
-import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
-import Search from 'antd/es/transfer/search';
+import { DeleteOutlined, DownloadOutlined, EditOutlined, ExportOutlined, PlusOutlined } from '@ant-design/icons';
+
 import moment from 'moment';
 import axios from 'axios';
+const { Search } = Input;
 
 import { contactService } from '../../services/api';
 import { getCompaniesNames } from '../Company/APIServices';
@@ -12,16 +13,16 @@ import { getCompaniesNames } from '../Company/APIServices';
 import CompanyFormModal from '../Company/CompanyFormModal';
 import './ContactListAndAdd.css';
 import { Header } from 'antd/es/layout/layout';
-import { Delete, Edit } from 'lucide-react';
+import { Delete, Download, Edit } from 'lucide-react';
 
 const ContactListAndAdd = () => {
     const navigate = useNavigate();
     const [form] = Form.useForm();
     const [contacts, setContacts] = useState([]);
-        const [modalVisible, setModalVisible] = useState(false);
-            const [editId, setEditId] = useState(null);
-        
-        const [searchText, setSearchText] = useState("");
+    const [modalVisible, setModalVisible] = useState(false);
+    const [editId, setEditId] = useState(null);
+
+    const [searchText, setSearchText] = useState("");
     const [contact, setContact] = useState({
         email: '',
         firstName: '',
@@ -62,12 +63,12 @@ const ContactListAndAdd = () => {
         try {
             const data = await getCompaniesNames();
             setCompanies(data);
-        } 
+        }
         catch (error) {
             console.log(error);
         }
     }
-    
+
     const fetchContacts = async (search = '') => {
         setIsSearching(true);
         try {
@@ -179,19 +180,19 @@ const ContactListAndAdd = () => {
     const handleAddCompany = () => {
         setEditId(null);
         setModalVisible(true);
-      };
+    };
 
-      const afterModalCloseSaveData = async (companyName) => {
+    const afterModalCloseSaveData = async (companyName) => {
         try {
-            let data = await getCompaniesNames(); 
+            let data = await getCompaniesNames();
             setCompanies(data);
-    
-            setModalVisible(false); 
-                let matchedCompany = data.find((cvl) => cvl.companyName === companyName);
-    
+
+            setModalVisible(false);
+            let matchedCompany = data.find((cvl) => cvl.companyName === companyName);
+
             if (matchedCompany) {
                 setContact({
-                    company:matchedCompany._id
+                    company: matchedCompany._id
                 })
             } else {
                 console.log("No matching company found.");
@@ -200,25 +201,29 @@ const ContactListAndAdd = () => {
             console.error("Error in afterModalCloseSaveData:", error);
         }
     };
-    
-    
+
+
     return (
         <div className="contact-container">
             <Header className="contact-header">
                 <div className="search-container">
+                    <h1>Contacts</h1>
                     <Search
                         allowClear
                         placeholder="Search by name, email, or phone..."
-                        value={ searchTerm }
                         onChange={ (e) => setSearchTerm(e.target.value) }
                         className="search-input"
-                        style={ { width: 200 } }
+
+                        value={ searchTerm }
+
                     />
+
                     { isSearching && <span className="searching-indicator">Searching...</span> }
                 </div>
                 <div className="action-buttons">
                     <input
                         type="file"
+
                         accept=".csv"
                         onChange={ handleImport }
                         style={ { display: 'none' } }
@@ -226,9 +231,10 @@ const ContactListAndAdd = () => {
                         disabled={ importLoading }
                     />
                     <label htmlFor="csv-upload" className="text-btn">
+                        <DownloadOutlined style={ { marginRight: "5px" } } />
                         { importLoading ? 'Importing...' : 'Import CSV' }
                     </label>
-                    <Button onClick={ handleExport } className='filter-btn'>Export CSV</Button>
+                    <Button onClick={ handleExport } className='filter-btn'><ExportOutlined />Export CSV</Button>
                     <Button
                         type="primary"
                         icon={ <PlusOutlined /> }
@@ -349,39 +355,39 @@ const ContactListAndAdd = () => {
                             </Form.Item>
 
                             <Form.Item label="Company" name="company">
-                            <Select
-                                showSearch
-                                placeholder="Select Company"
-                                name="company"
-                                allowClear
-                                value={contact.company || undefined}
-                                // onChange={handleChange}
-                                onSearch={(value) => setSearchText(value)}
-                              
-                                notFoundContent={
-                                    <>
-                                        <Button
-                                            style={{
-                                                backgroundColor: "#e0f2fe",
-                                                width: "100%",
-                                                color: "#0369a1",
-                                                border: "none", 
-                                                boxShadow: "none", 
-                                            }}
-                                          
-                                            onClick={() => handleAddCompany()}
-                                        >
-                                            + Add Company
-                                        </Button>
-</>
-                                }
-                            >
-                                {companies?.map((company) => (
-                                    <Option key={company._id} value={company._id}>
-                                        {company.companyName}
-                                    </Option>
-                                ))}
-                            </Select>
+                                <Select
+                                    showSearch
+                                    placeholder="Select Company"
+                                    name="company"
+                                    allowClear
+                                    value={ contact.company || undefined }
+                                    // onChange={handleChange}
+                                    onSearch={ (value) => setSearchText(value) }
+
+                                    notFoundContent={
+                                        <>
+                                            <Button
+                                                style={ {
+                                                    backgroundColor: "#e0f2fe",
+                                                    width: "100%",
+                                                    color: "#0369a1",
+                                                    border: "none",
+                                                    boxShadow: "none",
+                                                } }
+
+                                                onClick={ () => handleAddCompany() }
+                                            >
+                                                + Add Company
+                                            </Button>
+                                        </>
+                                    }
+                                >
+                                    { companies?.map((company) => (
+                                        <Option key={ company._id } value={ company._id }>
+                                            { company.companyName }
+                                        </Option>
+                                    )) }
+                                </Select>
                             </Form.Item>
                         </Col>
                     </Row>

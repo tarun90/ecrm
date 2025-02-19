@@ -11,7 +11,13 @@
     justify-content: space-between;
     align-items: center;
 }
+.csv-select .ant-select-item-option-content {
+    padding: 4px 0;
+}
 
+.csv-select .ant-select-item-option-content:hover {
+    background-color: #f5f5f5;
+}
 /* Responsive styles */
 @media (max-width: 768px) {
     .outreach-header {
