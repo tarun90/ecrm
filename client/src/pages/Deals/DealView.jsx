@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Settings, Plus, ArrowLeft, Edit, Mail, Phone, Calendar, MoreHorizontal, Copy } from 'lucide-react';
 import './DealView.css';
 import axios from 'axios';
@@ -117,6 +117,8 @@ const getContacts = async (id) => {
 };
 // Sidebar Component
 const Sidebar = ({deal,DealsData}) => {
+    const navigate = useNavigate();
+  
   const actions = [
     // { icon: <Edit />, label: 'Note' },
     { icon: <Mail />, label: 'Emails', onClick: () => window.location.href = `mailto:${DealsData?.email}` },
@@ -174,7 +176,7 @@ const Sidebar = ({deal,DealsData}) => {
   return (
     <div className="sidebar">
       <div className="sidebar-header">
-        <ArrowLeft className="back-icon" />
+        <ArrowLeft className="back-icon"  onClick={ () => navigate(-1) } />
         <span>Deal</span>
         {/* <Button icon={ <CaretDownOutlined /> }>Actions </Button> */}
       </div>
