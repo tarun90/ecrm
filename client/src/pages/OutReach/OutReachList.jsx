@@ -1,34 +1,3 @@
-import React, { useEffect, useState } from "react";
-import {
-    message,
-    Popconfirm,
-    Button,
-    Input,
-    Modal,
-    Select,
-    Checkbox,
-    Upload,
-    Form,
-    Row,
-    Col,
-    Divider,
-} from "antd";
-import {
-    UploadOutlined,
-    FileExcelOutlined,
-    BarChartOutlined,
-    InboxOutlined,
-    DeleteOutlined,
-    EditOutlined,
-    PlusOutlined,
-    UndoOutlined,
-    FilterOutlined,
-} from "@ant-design/icons";
-import { getUsers } from "../Users/userService"; // Add this import
-import { getCampaigns } from "../Campaigns/campaignService";
-import { getRegions } from "../Regions/RegionsService";
-import "./outreach.css";
-import { getCategories } from "../Categories/categoryService";
 import React, { useEffect, useState } from 'react';
 import { message, Popconfirm, Button, Input, Modal, Select, Checkbox, Upload, Form, Row, Col, Divider, DatePicker, Typography } from 'antd';
 import { UploadOutlined, FileExcelOutlined, BarChartOutlined, InboxOutlined, DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
@@ -58,15 +27,13 @@ const { Dragger } = Upload;
 const API_URL = import.meta.env.VITE_TM_API_URL;
 
 const OutReachList = () => {
-    let userData = localStorage.getItem("userData")
-        ? JSON.parse(localStorage.getItem("userData"))
-        : {};
+    let userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : {}
     const [outreach, setOutreach] = useState([]);
     const [fileList, setFileList] = useState([]);
     const [campaigns, setCampaigns] = useState([]);
     const [categories, setCategories] = useState([]);
     const [regions, setRegions] = useState([]);
-    const [searchTerm, setSearchTerm] = useState("");
+    const [searchTerm, setSearchTerm] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
     const [importModalVisible, setImportModalVisible] = useState(false);
     const [selectedOutreach, setSelectedOutreach] = useState([]);
@@ -95,9 +62,9 @@ const OutReachList = () => {
 
     const [importData, setImportData] = useState({
         campaign: undefined,
-        region: "",
+        region: '',
         category: undefined,
-        file: null,
+        file: null
     });
     const [modalOpen, setmodalOpen] = useState(false)
     const normFile = (e) => {
@@ -107,15 +74,15 @@ const OutReachList = () => {
         return e?.fileList;
     };
     const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        phone: "",
-        website: "",
-        linkedin: "",
-        country: "",
-        region: "",
-        campaign: "",
-        category: "",
+        name: '',
+        email: '',
+        phone: '',
+        website: '',
+        linkedin: '',
+        country: '',
+        region: '',
+        campaign: '',
+        category: '',
     });
 
     useEffect(() => {
@@ -129,9 +96,11 @@ const OutReachList = () => {
 
     useEffect(() => {
         fetchOutreach();
+
     }, []);
     useEffect(() => {
         fetchOutreach();
+
     }, [searchTerm]);
     const modalOpenForNote = () => {
         setmodalOpen(true)
@@ -147,12 +116,10 @@ const OutReachList = () => {
     };
     const fetchUsers = async () => {
         try {
-            let userData = localStorage.getItem("userData")
-                ? JSON.parse(localStorage.getItem("userData"))
-                : {};
+            let userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : {}
             let regionId = userData?.regionId || "";
             const data = await getUsers(regionId);
-            console.log(data);
+            console.log(data)
             setUsers(data?.users);
         } catch (error) {
             // message.error('Failed to fetch users');
@@ -204,9 +171,9 @@ const OutReachList = () => {
     const handleImportCSV = () => {
         setImportData({
             campaign: undefined,
-            region: "",
+            region: '',
             category: undefined,
-            file: null,
+            file: null
         });
         setFileList([]);
         setImportModalVisible(true);
@@ -214,22 +181,17 @@ const OutReachList = () => {
 
     const handleImportSubmit = async () => {
         try {
-            console.log(importData, "ketul");
-            if (
-                !importData.campaign ||
-                !importData.region ||
-                !importData.category ||
-                !importData.file
-            ) {
-                message.error("Please fill in all required fields");
+            console.log(importData, "ketul")
+            if (!importData.campaign || !importData.region || !importData.category || !importData.file) {
+                message.error('Please fill in all required fields');
                 return;
             }
 
             const formData = new FormData();
-            formData.append("file", importData.file);
-            formData.append("campaign", importData.campaign);
-            formData.append("region", importData.region);
-            formData.append("category", importData.category);
+            formData.append('file', importData.file);
+            formData.append('campaign', importData.campaign);
+            formData.append('region', importData.region);
+            formData.append('category', importData.category);
 
             setLoading(true);
             const resp = await importCSV(formData);
@@ -261,8 +223,8 @@ const OutReachList = () => {
     };
 
     const uploadProps = {
-        accept: ".csv",
-        beforeUpload: file => {
+        accept: '.csv',
+        beforeUpload: (file) => {
             setImportData(prev => ({ ...prev, file }));
             setFileList([file]);
             return false; // Prevent automatic upload
@@ -290,7 +252,7 @@ const OutReachList = () => {
 
     const regionOptions = regions.map(region => ({
         value: region._id,
-        label: region?.regionName,
+        label: region?.regionName
     }));
     const handleAddOutreach = () => {
         setEditMode(false);
@@ -299,7 +261,7 @@ const OutReachList = () => {
         setModalVisible(true);
     };
 
-    const handleEditOutreach = id => {
+    const handleEditOutreach = (id) => {
         const outreachItem = outreach.find(item => item._id === id);
         if (outreachItem) {
             form.setFieldsValue({
@@ -318,20 +280,20 @@ const OutReachList = () => {
             setModalVisible(true);
         }
     };
-    const handleDelete = async id => {
+    const handleDelete = async (id) => {
         try {
             setLoading(true);
             await deleteOutreach(id);
-            message.success("Outreach deleted successfully");
+            message.success('Outreach deleted successfully');
             fetchOutreach();
         } catch (error) {
-            message.error("Failed to delete outreach");
+            message.error('Failed to delete outreach');
         } finally {
             setLoading(false);
         }
     };
 
-    const handleCheckboxChange = id => {
+    const handleCheckboxChange = (id) => {
         setSelectedOutreach(prev => {
             if (prev.includes(id)) {
                 return prev.filter(outreachId => outreachId !== id);
@@ -340,7 +302,7 @@ const OutReachList = () => {
         });
     };
 
-    const handleSelectAll = checked => {
+    const handleSelectAll = (checked) => {
         if (checked) {
             setSelectedOutreach(outreach.map(item => item._id));
         } else {
@@ -348,22 +310,20 @@ const OutReachList = () => {
         }
     };
 
-    const handleSubmit = async values => {
+    const handleSubmit = async (values) => {
         try {
             setLoading(true);
             if (editMode) {
                 await updateOutreach(editId, values);
-                message.success("Outreach updated successfully");
+                message.success('Outreach updated successfully');
             } else {
                 await createOutreach(values);
-                message.success("Outreach created successfully");
+                message.success('Outreach created successfully');
             }
             setModalVisible(false);
             fetchOutreach();
         } catch (error) {
-            message.error(
-                editMode ? "Failed to update outreach" : "Failed to create outreach"
-            );
+            message.error(editMode ? 'Failed to update outreach' : 'Failed to create outreach');
         } finally {
             setLoading(false);
         }
@@ -384,14 +344,14 @@ const OutReachList = () => {
 
     const handleAssignOutreach = async (userId) => {
         if (selectedOutreach.length === 0) {
-            message.warning("Please select outreach items to assign");
+            message.warning('Please select outreach items to assign');
             return;
         }
 
         try {
             setLoading(true);
             await assignOutreach(selectedOutreach, userId);
-            message.success("Outreach assigned successfully");
+            message.success('Outreach assigned successfully');
             fetchOutreach();
             setSelectedOutreach([]);
         } catch (error) {
@@ -427,7 +387,7 @@ const OutReachList = () => {
 
     const handleViewReports = () => {
         // TODO: Implement reports view
-        message.info("Reports feature coming soon");
+        message.info('Reports feature coming soon');
     };
     //country data fetch
     const fetchCountry = async () => {
@@ -436,8 +396,9 @@ const OutReachList = () => {
             setCountry(data.data);
         } catch (error) {
             console.log(error);
+
         }
-    };
+    }
 
     const handleFilterSubmit = async () => {
         try {
@@ -458,12 +419,12 @@ const OutReachList = () => {
 
             // ✅ Update filtered data
             setFilteredData(response.data);
-            setOutreach(response?.data);
+            setOutreach(response?.data)
 
-            console.log(response.data, "response.data");
+            console.log(response.data, 'response.data');
             message.success("Filters applied successfully!");
-            setfilterModal(false);
-            form.resetFields();
+            setfilterModal(false)
+            form.resetFields()
         } catch (error) {
             console.error("Error filtering outreach:", error);
             message.error("Failed to apply filters.");
@@ -472,21 +433,23 @@ const OutReachList = () => {
         }
     };
 
-    console.log(filterData, "filterData");
+    console.log(filterData, 'filterData');
     const getUsersData = async () => {
         try {
-            let userdata = await getUsers();
+            let userdata = await getUsers()
             console.log(userdata);
 
-            setUserData(userdata.users);
+            setUserData(userdata.users)
+
         } catch (error) {
             console.log(error);
+
         }
-    };
+    }
     useEffect(() => {
-        fetchCountry();
-        getUsersData();
-    }, []);
+        fetchCountry()
+        getUsersData()
+    }, [])
     return (
         <div className="outreach-container">
             <Header className="outreach-header">
@@ -501,23 +464,11 @@ const OutReachList = () => {
                         />
                     </div>
                     <Button className='filter-btn btn' onClick={ () => { setfilterModal(true) } }>Filter</Button>
-                    {/* <Button disabled={filterData==[]} type='primary' onClick={()=>{fetchOutreach()}}>Reset Filter</Button> */ }
-                    <Button
-                        className="filter-btn btn"
-                        icon={ <FilterOutlined /> }
-                        onClick={ () => {
-                            setfilterModal(true);
-                        } }
-                    >
-                        Filter
-                    </Button>
-
                     <Button
                         disabled={ !filterData } // Disable if no filtered data
                         className='delete-btn btn'
                         onClick={ () => { fetchOutreach(); setFilteredData() } }
                     >
-                        <UndoOutlined />
                         Reset Filter
                     </Button>
                     <span style={ { fontWeight: 500, marginRight: "10px" } }>
@@ -602,6 +553,8 @@ const OutReachList = () => {
                             <span style={ { fontWeight: 500, marginLeft: "10px" } }>
                                 { selectedOutreach.length } outreach selected
                             </span>
+
+
                         </div>
                     ) }
 
@@ -631,6 +584,7 @@ const OutReachList = () => {
                         Reports
                     </Button> */}
                 </div>
+
             </Header>
             <div className="contact-table">
                 <table>
@@ -643,7 +597,7 @@ const OutReachList = () => {
                                         checked={ selectedOutreach.length === outreach.length }
                                     />
                                 </th>
-                            ) }
+                            }
                             <th>Name</th>
                             <th>Email</th>
                             <th>Phone</th>
@@ -656,9 +610,7 @@ const OutReachList = () => {
                             <th>Category</th>
                             <th>Assigned To</th>
                             <th>Created By</th>
-                            {/* {(userData?.department?.name == "Lead Generation" || userData?.department?.name == "outreach team") &&  */ }
                             <th>Actions</th>
-                            {/* } */ }
                         </tr>
                     </thead>
                     <tbody>
@@ -691,10 +643,8 @@ const OutReachList = () => {
                                 <td>{ item?.category?.categoryName }</td>
                                 <td>{ item?.assignedTo?.name ? item?.assignedTo.name : "-" }</td>
                                 <td>{ item?.createdBy?.name }</td>
-                                {/* {(userData?.department?.name == "Lead Generation" || userData?.department?.name == "outreach team") && */ }
                                 <td>
                                     <div className='action-buttons'>
-                                        {/* {userData?.department?.name == "outreach team" &&  */ }
                                         {/* <Button
                                                 type="primary"
                                                 icon={<PlusOutlined />}
@@ -711,7 +661,6 @@ const OutReachList = () => {
                                             >
                                                 History
                                             </Button></Link>
-                                        {/* } */ }
                                         { userData?.department?.name == "Lead Generation" && <>
                                             <button className='edit-btn' onClick={ () => handleEditOutreach(item._id) }><EditOutlined /></button>
                                             <Popconfirm
@@ -726,14 +675,12 @@ const OutReachList = () => {
                                         </> }
                                     </div>
                                 </td>
-                                {/* } */ }
                             </tr>
                         )) }
                     </tbody>
                 </table>
             </div>
 
-            {/* Add/Edit Outreach Modal */ }
             <Modal
                 title={ editMode ? "Edit Outreach" : "Add Outreach" }
                 open={ modalVisible }
@@ -785,11 +732,17 @@ const OutReachList = () => {
                                 <Input />
                             </Form.Item>
 
-                            <Form.Item label="Website" name="website">
+                            <Form.Item
+                                label="Website"
+                                name="website"
+                            >
                                 <Input />
                             </Form.Item>
 
-                            <Form.Item label="LinkedIn" name="linkedin">
+                            <Form.Item
+                                label="LinkedIn"
+                                name="linkedin"
+                            >
                                 <Input />
                             </Form.Item>
                         </Col>
@@ -856,7 +809,6 @@ const OutReachList = () => {
                 </Form>
             </Modal>
 
-            {/* Import CSV Modal */ }
             <Modal
                 destroyOnClose={ true }
                 title="Import CSV"
@@ -865,7 +817,7 @@ const OutReachList = () => {
                     setImportModalVisible(false);
                     setImportData({
                         campaign: undefined,
-                        region: "",
+                        region: '',
                         file: null,
                         category: undefined,
                     });
@@ -937,11 +889,10 @@ const OutReachList = () => {
                             <p className="ant-upload-text">
                                 Click or drag CSV file to this area to upload
                             </p>
-                            <p className="ant-upload-hint">
-                                Support for single CSV file upload
-                            </p>
+                            <p className="ant-upload-hint">Support for single CSV file upload</p>
                         </Dragger>
                     </Form.Item>
+
                 </div>
                 <Divider />
                 <div className="modal-footer">
@@ -950,7 +901,7 @@ const OutReachList = () => {
                             setImportModalVisible(false);
                             setImportData({
                                 campaign: undefined,
-                                region: "",
+                                region: '',
                                 file: null,
                                 category: undefined,
                             });
@@ -1050,7 +1001,6 @@ const OutReachList = () => {
                 </Form>
             </Modal> */}
 
-            {/* //Filter Modal */ }
             <Modal
                 title="Outreach Filter"
                 open={ filterModal }
@@ -1063,7 +1013,6 @@ const OutReachList = () => {
                 <Form form={ form } layout="vertical"
                 //    onFinish={setApiData}
                 >
-                    {/* Country Dropdown */ }
                     <Form.Item
                         label="Country"
                         name="country"
@@ -1086,7 +1035,6 @@ const OutReachList = () => {
                         </Select>
                     </Form.Item>
 
-                    {/* Status Dropdown */ }
                     {/* <Form.Item
                         label="Status"
                         name="status"
@@ -1101,7 +1049,6 @@ const OutReachList = () => {
                         </Select>
                     </Form.Item> */}
 
-                    {/* Region Dropdown */ }
                     <Form.Item
                         label="Region"
                         name="region"
@@ -1116,7 +1063,6 @@ const OutReachList = () => {
                         />
                     </Form.Item>
 
-                    {/* Campaigns Dropdown */ }
                     <Form.Item
                         label="Campaigns"
                         name="campaign"
@@ -1136,7 +1082,6 @@ const OutReachList = () => {
                         </Select>
                     </Form.Item>
 
-                    {/* Category Dropdown */ }
                     <Form.Item
                         label="Category"
                         name="category"
@@ -1156,7 +1101,6 @@ const OutReachList = () => {
                         </Select>
                     </Form.Item>
 
-                    {/* Assign To Dropdown */ }
                     {/* <Form.Item
                         label="Assign To"
                         name="assignTo"
@@ -1175,7 +1119,6 @@ const OutReachList = () => {
 
                     <Divider />
 
-                    {/* Modal Footer (Buttons) */ }
                     <div style={ { textAlign: "right" } }>
                         <Button
                             className='text-btn'
@@ -1261,6 +1204,7 @@ const OutReachList = () => {
                     </div>
                 </Form>
             </Modal>
+
         </div>
     );
 };
