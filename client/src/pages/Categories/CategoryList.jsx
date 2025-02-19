@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { message, Popconfirm, Button, Input, Modal } from 'antd';
+import { message, Popconfirm, Button, Input, Modal, Form } from 'antd';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { getCategories, createCategory, updateCategory, deleteCategory } from './categoryService';
 import './categories.css';
@@ -12,6 +12,7 @@ const CategoryList = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [editId, setEditId] = useState(null);
     const [categoryName, setCategoryName] = useState('');
+    const [form] = Form.useForm();
 
     useEffect(() => {
         fetchCategories();
@@ -114,24 +115,26 @@ const CategoryList = () => {
                             <tr key={ category._id }>
                                 <td>{ category.categoryName }</td>
                                 <td>
-                                    <Button
-                                        type="primary"
-                                        onClick={ () => handleEditCategory(category) }
-                                        className="edit-btn"
-                                    >
-                                        <EditOutlined />
-                                    </Button>
-                                    <Popconfirm
-                                        title="Delete Category"
-                                        description="Are you sure you want to delete this category?"
-                                        onConfirm={ () => handleDelete(category._id) }
-                                        okText="Yes"
-                                        cancelText="No"
-                                    >
-                                        <Button danger className="delete-btn">
-                                            <DeleteOutlined />
-                                        </Button>
-                                    </Popconfirm>
+                                    <div className="action-buttons">
+                                        <button
+                                            type="primary"
+                                            onClick={ () => handleEditCategory(category) }
+                                            className="edit-btn"
+                                        >
+                                            <EditOutlined />
+                                        </button>
+                                        <Popconfirm
+                                            title="Delete Category"
+                                            description="Are you sure you want to delete this category?"
+                                            onConfirm={ () => handleDelete(category._id) }
+                                            okText="Yes"
+                                            cancelText="No"
+                                        >
+                                            <button danger className="delete-btn">
+                                                <DeleteOutlined />
+                                            </button>
+                                        </Popconfirm>
+                                    </div>
                                 </td>
                             </tr>
                         )) }
@@ -143,17 +146,33 @@ const CategoryList = () => {
                 title={ editId ? "Edit Category" : "Add Category" }
                 open={ modalVisible }
                 onCancel={ () => setModalVisible(false) }
-                onOk={ handleSubmit }
-                width={ 400 }
+                footer={ null } // Let Form handle submission
             >
-                <div className="category-form">
-                    <Input
-                        value={ categoryName }
-                        onChange={ (e) => setCategoryName(e.target.value) }
-                        placeholder="Enter Category Name"
-                        className="form-input"
-                    />
-                </div>
+                <Form
+                    form={ form }
+                    layout="vertical"
+                    onFinish={ handleSubmit } // Submits when user clicks "OK"
+                >
+                    <Form.Item
+                        label="Category Name"
+                        // name="categoryName"
+                        rules={ [{ required: true, message: "Please enter category name" }] }
+                    >
+                        <Input placeholder="Enter Category Name"
+                            value={ categoryName }
+                            onChange={ (e) => setCategoryName(e.target.value) } />
+                    </Form.Item>
+
+                    {/* Buttons inside the form to align properly */ }
+                    <div className="modal-footer" style={ { marginTop: "16px", textAlign: "right" } }>
+                        <Button onClick={ () => setModalVisible(false) } className="text-btn">
+                            Cancel
+                        </Button>
+                        <Button type="primary" htmlType="submit" style={ { marginLeft: "8px" } }>
+                            OK
+                        </Button>
+                    </div>
+                </Form>
             </Modal>
         </div>
     );

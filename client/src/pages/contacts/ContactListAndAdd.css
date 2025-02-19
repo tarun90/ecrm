@@ -111,7 +111,12 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
-
+.outreach-header-wrapper .btn {
+  padding: 10px;
+}
+.outreach-container .user-name {
+  white-space: nowrap;
+}
 table {
   width: 100%;
   border-collapse: collapse;
@@ -166,7 +171,6 @@ table {
   background-color: #fef2f2;
   color: #dc2626;
   height: auto;
-  padding: 0.5rem 1rem;
   border: 1px solid #fee2e2;
 }
 
@@ -272,8 +276,8 @@ table {
     overflow-x: auto;
   }
 
-  th,
-  td {
+  .contact-table th,
+  .contact-table td {
     padding: 8px 12px;
   }
 

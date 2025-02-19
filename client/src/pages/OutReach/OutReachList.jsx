@@ -372,67 +372,68 @@ const OutReachList = () => {
                         <Input
                             type="text"
                             placeholder="Search Outreach..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                            value={ searchTerm }
+                            onChange={ (e) => setSearchTerm(e.target.value) }
                             className="search-input"
                         />
                     </div>
-                    <Button type='primary' onClick={() => { setfilterModal(true) }}>Filter</Button>
-                    {/* <Button disabled={filterData==[]} type='primary' onClick={()=>{fetchOutreach()}}>Reset Filter</Button> */}
+                    <Button className='filter-btn btn' onClick={ () => { setfilterModal(true) } }>Filter</Button>
+                    {/* <Button disabled={filterData==[]} type='primary' onClick={()=>{fetchOutreach()}}>Reset Filter</Button> */ }
                     <Button
-                        disabled={!filterData} // Disable if no filtered data
-                        type="primary"
-                        onClick={() => { fetchOutreach(); setFilteredData() }}
+                        disabled={ !filterData } // Disable if no filtered data
+                        className='delete-btn btn'
+                        onClick={ () => { fetchOutreach(); setFilteredData() } }
                     >
                         Reset Filter
                     </Button>
-                    {selectedOutreach.length > 0 && (
+                    { selectedOutreach.length > 0 && (
                         <div className="assignment-section">
-                            <span style={{ fontWeight: 500, marginRight: "10px" }}>
-                                Assign Outreach To : &nbsp; 
+                            <span style={ { fontWeight: 500, marginRight: "10px" } }>
+                                Assign Outreach To : &nbsp;
                             </span>
                             <Select
-                                style={{ width: 200 }}
+                                style={ { width: 200 } }
                                 showSearch
                                 placeholder="Assign to user"
-                                onChange={handleAssignOutreach}
+                                onChange={ handleAssignOutreach }
                                 allowClear
-                                filterOption={(input, option) =>
+                                filterOption={ (input, option) =>
                                     (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
                                 }
                                 optionFilterProp="children"
                             >
-                                {users.map(user => (
-                                    <Select.Option key={user._id} value={user._id}>
-                                        {user.name}
+                                { users.map(user => (
+                                    <Select.Option key={ user._id } value={ user._id }>
+                                        { user.name }
                                     </Select.Option>
-                                ))}
+                                )) }
                             </Select>
-                            <span style={{ fontWeight: 500, marginLeft: "10px" }}>
-                                {selectedOutreach.length} outreach selected
+                            <span style={ { fontWeight: 500, marginLeft: "10px" } }>
+                                { selectedOutreach.length } outreach selected
                             </span>
 
-                          
+
                         </div>
-                    )}
+                    ) }
 
                 </div>
                 <div className="action-buttons">
-                    {userData?.department?.name == "Lead Generation" && <>
+                    { userData?.department?.name == "Lead Generation" && <>
                         <Button
-                            onClick={handleImportCSV}
-                            icon={<UploadOutlined />}
+                            onClick={ handleImportCSV }
+                            icon={ <UploadOutlined /> }
                             className="import-btn"
                         >
                             Import CSV
                         </Button>
                         <Button
                             type="primary"
-                            onClick={handleAddOutreach}
+                            onClick={ handleAddOutreach }
                             className="add-outreach-btn"
                         >
+                            <PlusOutlined />
                             Add Outreach
-                        </Button> </>}
+                        </Button> </> }
                     {/* <Button 
                         onClick={handleViewReports}
                         icon={<BarChartOutlined />}
@@ -441,84 +442,84 @@ const OutReachList = () => {
                         Reports
                     </Button> */}
                 </div>
-       
-        </Header >
-    <div className="contact-table">
-        <table>
-            <thead>
-                <tr>
-                    {userData?.isRegionHead &&
-                        <th>
-                            <Checkbox
-                                onChange={(e) => handleSelectAll(e.target.checked)}
-                                checked={selectedOutreach.length === outreach.length}
-                            />
-                        </th>
-                    }
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Website</th>
-                    <th>LinkedIn</th>
-                    <th>Country</th>
-                    <th>Status</th>
-                    <th>Region</th>
-                    <th>Campaign</th>
-                    <th>Category</th>
-                    <th>Assigned To</th>
-                    <th>Created By</th>
-                    {userData?.department?.name == "Lead Generation" && <th>Actions</th>}
-                </tr>
-            </thead>
-            <tbody>
 
-                {outreach.map(item => (
-                    <tr key={item._id}>
-                        {userData?.isRegionHead &&
-                            <td>
-                                <Checkbox
-                                    checked={selectedOutreach.includes(item._id)}
-                                    onChange={() => handleCheckboxChange(item._id)}
-                                />
-                            </td>
-                        }
-                        <td><Link to={`/ViewOutReach/${item._id}`}>
-                            {item.name}</Link></td>
-                        <td>{item?.email}</td>
-                        <td>{item?.phone}</td>
-                        <td>{item?.website}</td>
-                        <td>{item?.linkedin}</td>
-                        <td>{item?.country}</td>
-                        <td>{item?.status}</td>
-                        <td>{item?.region?.regionName}</td>
-                        <td>{item?.campaign?.campaignName}</td>
-                        <td>{item?.category?.categoryName}</td>
-                        <td>{item?.assignedTo?.name ? item?.assignedTo.name : "-"}</td>
-                        <td>{item?.createdBy?.name}</td>
-                        {userData?.department?.name == "Lead Generation" &&
-                            <td>
-                            <div className='action-buttons'>
-                                <button className='edit-btn' onClick={ () => handleEditOutreach(item._id) }><EditOutlined /></button>
-                                <Popconfirm
-                                    title="Delete Outreach"
-                                    description="Are you sure you want to delete this outreach?"
-                                    onConfirm={ () => handleDelete(item._id) }
-                                    okText="Yes"
-                                    cancelText="No"
-                                >
-                                    <button className='delete-btn'><DeleteOutlined /></button>
-                                </Popconfirm>
-                            </div>
-                        </td>
-                        }
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-    </div>
+            </Header>
+            <div className="contact-table">
+                <table>
+                    <thead>
+                        <tr>
+                            { userData?.isRegionHead &&
+                                <th>
+                                    <Checkbox
+                                        onChange={ (e) => handleSelectAll(e.target.checked) }
+                                        checked={ selectedOutreach.length === outreach.length }
+                                    />
+                                </th>
+                            }
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Website</th>
+                            <th>LinkedIn</th>
+                            <th>Country</th>
+                            <th>Status</th>
+                            <th>Region</th>
+                            <th>Campaign</th>
+                            <th>Category</th>
+                            <th>Assigned To</th>
+                            <th>Created By</th>
+                            { userData?.department?.name == "Lead Generation" && <th>Actions</th> }
+                        </tr>
+                    </thead>
+                    <tbody>
 
-{/* Add/Edit Outreach Modal */ }
-<Modal
+                        { outreach.map(item => (
+                            <tr key={ item._id }>
+                                { userData?.isRegionHead &&
+                                    <td>
+                                        <Checkbox
+                                            checked={ selectedOutreach.includes(item._id) }
+                                            onChange={ () => handleCheckboxChange(item._id) }
+                                        />
+                                    </td>
+                                }
+                                <td><Link to={ `/ViewOutReach/${item._id}` }>
+                                    <span className='user-name'>{ item.name }</span></Link></td>
+                                <td>{ item?.email }</td>
+                                <td>{ item?.phone }</td>
+                                <td>{ item?.website }</td>
+                                <td>{ item?.linkedin }</td>
+                                <td>{ item?.country }</td>
+                                <td>{ item?.status }</td>
+                                <td>{ item?.region?.regionName }</td>
+                                <td>{ item?.campaign?.campaignName }</td>
+                                <td>{ item?.category?.categoryName }</td>
+                                <td>{ item?.assignedTo?.name ? item?.assignedTo.name : "-" }</td>
+                                <td>{ item?.createdBy?.name }</td>
+                                { userData?.department?.name == "Lead Generation" &&
+                                    <td>
+                                        <div className='action-buttons'>
+                                            <button className='edit-btn' onClick={ () => handleEditOutreach(item._id) }><EditOutlined /></button>
+                                            <Popconfirm
+                                                title="Delete Outreach"
+                                                description="Are you sure you want to delete this outreach?"
+                                                onConfirm={ () => handleDelete(item._id) }
+                                                okText="Yes"
+                                                cancelText="No"
+                                            >
+                                                <button className='delete-btn'><DeleteOutlined /></button>
+                                            </Popconfirm>
+                                        </div>
+                                    </td>
+                                }
+                            </tr>
+                        )) }
+                    </tbody>
+                </table>
+            </div>
+
+            {/* Add/Edit Outreach Modal */ }
+            <Modal
                 title={ editMode ? "Edit Outreach" : "Add Outreach" }
                 open={ modalVisible }
                 onCancel={ () => setModalVisible(false) }
@@ -630,7 +631,7 @@ const OutReachList = () => {
                         </Col>
                     </Row>
                     <Divider />
-                    <Form.Item>
+                    <div className='modal-footer'>
                         <Button onClick={ () => setModalVisible(false) } className="text-btn">
                             Cancel
                         </Button>
@@ -638,16 +639,16 @@ const OutReachList = () => {
                             type="primary"
                             htmlType="submit"
                             loading={ loading }
-                            style={ { width: '100%' } }
+
                         >
                             { editMode ? "Update" : "Create" } Outreach
                         </Button>
-                    </Form.Item>
+                    </div>
                 </Form>
             </Modal>
 
-{/* Import CSV Modal */ }
-<Modal
+            {/* Import CSV Modal */ }
+            <Modal
                 destroyOnClose={ true }
                 title="Import CSV"
                 open={ importModalVisible }
@@ -666,18 +667,121 @@ const OutReachList = () => {
                 } }
                 onOk={ handleImportSubmit }
                 width={ 600 }
+                footer={ false }
             >
                 <Divider />
                 <div className="import-form">
+
+                    <Form.Item label="Campaign" style={ { marginBottom: 16 } }>
+                        <Select
+                            placeholder="Select Campaign"
+                            value={ importData.campaign }
+                            onChange={ (value) => setImportData((prev) => ({ ...prev, campaign: value })) }
+                            style={ { width: '100%' } }
+                        >
+                            { campaigns.map((campaign) => (
+                                <Select.Option key={ campaign._id } value={ campaign._id }>
+                                    { campaign.campaignName }
+                                </Select.Option>
+                            )) }
+                        </Select>
+                    </Form.Item>
+
+                    <Form.Item label="Category" style={ { marginBottom: 16 } }>
+                        <Select
+                            value={ importData.category }
+                            onChange={ (value) => setImportData((prev) => ({ ...prev, category: value })) }
+                            placeholder="Select Category"
+                            style={ { width: '100%' } }
+                        >
+                            { categories.map((category) => (
+                                <Select.Option key={ category._id } value={ category._id }>
+                                    { category.categoryName }
+                                </Select.Option>
+                            )) }
+                        </Select>
+                    </Form.Item>
+
+                    <Form.Item label="Region" style={ { marginBottom: 16 } }>
+                        <Select
+                            placeholder="Select Region"
+                            value={ importData.region }
+                            onChange={ (value) => setImportData((prev) => ({ ...prev, region: value })) }
+                            options={ regionOptions }
+                            style={ { width: '100%' } }
+                        />
+                    </Form.Item>
+
+
+
+
+                    <Form.Item label="CSV Upload" style={ { marginBottom: 16 } }>
+                        <Dragger
+                            { ...uploadProps }
+                            className="csv-uploader"
+                            key={ importModalVisible.toString() }
+                            style={ { width: '100%' } }
+                        >
+                            <p className="ant-upload-drag-icon">
+                                <InboxOutlined />
+                            </p>
+                            <p className="ant-upload-text">
+                                Click or drag CSV file to this area to upload
+                            </p>
+                            <p className="ant-upload-hint">Support for single CSV file upload</p>
+                        </Dragger>
+                    </Form.Item>
+
+                </div>
+                <Divider />
+                <div className="modal-footer">
+                    <Button
+                        className="text-btn" onClick={ () => {
+                            setImportModalVisible(false);
+                            setImportData({
+                                campaign: undefined,
+                                region: '',
+                                file: null,
+                                category: undefined,
+                            });
+                            // Clear the file from Dragger
+                            if (uploadProps.onChange) {
+                                uploadProps.onChange({ fileList: [] });
+                            }
+                        } } >   Cancel
+                    </Button>
+                    <Button
+                        type="primary" htmlType="submit"
+                        onClick={ handleImportSubmit } >
+                        Ok</Button>
+                </div>
+            </Modal>
+
+            {/* <Modal
+                destroyOnClose
+                title="Import CSV"
+                open={ importModalVisible }
+                onCancel={ () => {
+                    setImportModalVisible(false);
+                    form.resetFields(); // Reset form on close
+                } }
+                onOk={ () => form.submit() } // Submits the form on OK click
+                width={ 600 }
+            >
+                <Divider />
+                <Form
+                    form={ form }
+                    layout="vertical"
+                    onFinish={ handleImportSubmit } // Handles form submission
+                >
                     <Row gutter={ 16 }>
                         <Col span={ 12 }>
-                            <Form.Item label="Campaign" style={ { marginBottom: 16 } }>
-                                <Select
-                                    placeholder="Select Campaign"
-                                    value={ importData.campaign }
-                                    onChange={ (value) => setImportData((prev) => ({ ...prev, campaign: value })) }
-                                    style={ { width: '100%' } }
-                                >
+                            <Form.Item
+                                label="Campaign"
+                                name="campaign"
+                            // rules={ [{ required: true, message: "Please select a campaign" }] }
+                            >
+                                <Select placeholder="Select Campaign" style={ { width: "100%" } }>
                                     { campaigns.map((campaign) => (
                                         <Select.Option key={ campaign._id } value={ campaign._id }>
                                             { campaign.campaignName }
@@ -688,13 +792,12 @@ const OutReachList = () => {
                         </Col>
 
                         <Col span={ 12 }>
-                            <Form.Item label="Category" style={ { marginBottom: 16 } }>
-                                <Select
-                                    value={ importData.category }
-                                    onChange={ (value) => setImportData((prev) => ({ ...prev, category: value })) }
-                                    placeholder="Select Category"
-                                    style={ { width: '100%' } }
-                                >
+                            <Form.Item
+                                label="Category"
+                                name="category"
+                            // rules={ [{ required: true, message: "Please select a category" }] }
+                            >
+                                <Select placeholder="Select Category" style={ { width: "100%" } }>
                                     { categories.map((category) => (
                                         <Select.Option key={ category._id } value={ category._id }>
                                             { category.categoryName }
@@ -707,78 +810,74 @@ const OutReachList = () => {
 
                     <Row gutter={ 16 }>
                         <Col span={ 12 }>
-                            <Form.Item label="Region" style={ { marginBottom: 16 } }>
-                                <Select
-                                    placeholder="Select Region"
-                                    value={ importData.region }
-                                    onChange={ (value) => setImportData((prev) => ({ ...prev, region: value })) }
-                                    options={ regionOptions }
-                                    style={ { width: '100%' } }
-                                />
+                            <Form.Item
+                                label="Region"
+                                name="region"
+                            // rules={ [{ required: true, message: "Please select a region" }] }
+                            >
+                                <Select placeholder="Select Region" options={ regionOptions } style={ { width: "100%" } } />
                             </Form.Item>
                         </Col>
 
                         <Col span={ 12 }>
-                            <Form.Item label="CSV Upload" style={ { marginBottom: 16 } }>
-                                <Dragger
-                                    { ...uploadProps }
-                                    className="csv-uploader"
-                                    key={ importModalVisible.toString() }
-                                    style={ { width: '100%' } }
-                                >
+                            <Form.Item
+                                label="CSV Upload"
+                                name="file"
+                                valuePropName="fileList"
+                                getValueFromEvent={ (e) => (Array.isArray(e) ? e : e?.fileList) }
+                            // rules={ [{ required: true, message: "Please upload a CSV file" }] }
+                            >
+                                <Dragger { ...uploadProps } className="csv-uploader">
                                     <p className="ant-upload-drag-icon">
                                         <InboxOutlined />
                                     </p>
-                                    <p className="ant-upload-text">
-                                        Click or drag CSV file to this area to upload
-                                    </p>
+                                    <p className="ant-upload-text">Click or drag CSV file to this area to upload</p>
                                     <p className="ant-upload-hint">Support for single CSV file upload</p>
                                 </Dragger>
                             </Form.Item>
                         </Col>
                     </Row>
-                </div>
-            </Modal>
+                </Form>
+            </Modal> */}
 
-
-{/* //Filter Modal */ }
-<Modal
-    title="Outreach Filter"
-    open={filterModal}
-    onCancel={() => { setfilterModal(false) }}
-    footer={null}
-    width={600}
-    destroyOnClose
->
-    <Divider />
-    <Form form={form} layout="vertical"
-    //    onFinish={setApiData}
-    >
-        {/* Country Dropdown */}
-        <Form.Item
-            label="Country"
-            name="country"
-        // rules={[{ required: true, message: "Please select a country!" }]}
-        >
-            <Select
-                placeholder="Select Country"
-                showSearch
-                allowClear
-                onSelect={(value) => setFormData({ ...formData, country: value })} // ✅ Fixed onSelect
-                filterOption={(input, option) =>
-                    option?.children.toLowerCase().includes(input.toLowerCase())
-                } // ✅ Enables search filtering
+            {/* //Filter Modal */ }
+            <Modal
+                title="Outreach Filter"
+                open={ filterModal }
+                onCancel={ () => { setfilterModal(false) } }
+                footer={ null }
+                width={ 600 }
+                destroyOnClose
             >
-                {country?.map((item) => (
-                    <Option key={item.id || item.name} value={item.name} style={{ textTransform: "capitalize" }}>
-                        {item.name}
-                    </Option>
-                ))}
-            </Select>
-        </Form.Item>
+                <Divider />
+                <Form form={ form } layout="vertical"
+                //    onFinish={setApiData}
+                >
+                    {/* Country Dropdown */ }
+                    <Form.Item
+                        label="Country"
+                        name="country"
+                    // rules={[{ required: true, message: "Please select a country!" }]}
+                    >
+                        <Select
+                            placeholder="Select Country"
+                            showSearch
+                            allowClear
+                            onSelect={ (value) => setFormData({ ...formData, country: value }) } // ✅ Fixed onSelect
+                            filterOption={ (input, option) =>
+                                option?.children.toLowerCase().includes(input.toLowerCase())
+                            } // ✅ Enables search filtering
+                        >
+                            { country?.map((item) => (
+                                <Option key={ item.id || item.name } value={ item.name } style={ { textTransform: "capitalize" } }>
+                                    { item.name }
+                                </Option>
+                            )) }
+                        </Select>
+                    </Form.Item>
 
-        {/* Status Dropdown */}
-        {/* <Form.Item
+                    {/* Status Dropdown */ }
+                    {/* <Form.Item
                         label="Status"
                         name="status"
                         rules={[{ required: true, message: "Please select a status!" }]}
@@ -792,93 +891,94 @@ const OutReachList = () => {
                         </Select>
                     </Form.Item> */}
 
-        {/* Region Dropdown */}
-        <Form.Item
-            label="Region"
-            name="region"
-        // rules={[{ required: true, message: "Please select a region!" }]}
-        >
-            <Select
-                value={formData.region}
-                onChange={(value) => setFormData({ ...formData, region: value })}
-                placeholder="Region"
-                // className="form-input"
-                options={regionOptions}
-            />
-        </Form.Item>
+                    {/* Region Dropdown */ }
+                    <Form.Item
+                        label="Region"
+                        name="region"
+                    // rules={[{ required: true, message: "Please select a region!" }]}
+                    >
+                        <Select
+                            value={ formData.region }
+                            onChange={ (value) => setFormData({ ...formData, region: value }) }
+                            placeholder="Region"
+                            // className="form-input"
+                            options={ regionOptions }
+                        />
+                    </Form.Item>
 
-        {/* Campaigns Dropdown */}
-        <Form.Item
-            label="Campaigns"
-            name="campaign"
-        // rules={[{ required: true, message: "Please select a campaign!" }]}
-        >
-            <Select
-                // value={formData.campaign}
-                onChange={(value) => setFormData({ ...formData, campaign: value })}
-                placeholder="Campaign"
-            // className="form-input"
-            >
-                {campaigns.map(campaign => (
-                    <Select.Option key={campaign._id} value={campaign._id}>
-                        {campaign.campaignName}
-                    </Select.Option>
-                ))}
-            </Select>
-        </Form.Item>
+                    {/* Campaigns Dropdown */ }
+                    <Form.Item
+                        label="Campaigns"
+                        name="campaign"
+                    // rules={[{ required: true, message: "Please select a campaign!" }]}
+                    >
+                        <Select
+                            // value={formData.campaign}
+                            onChange={ (value) => setFormData({ ...formData, campaign: value }) }
+                            placeholder="Campaign"
+                        // className="form-input"
+                        >
+                            { campaigns.map(campaign => (
+                                <Select.Option key={ campaign._id } value={ campaign._id }>
+                                    { campaign.campaignName }
+                                </Select.Option>
+                            )) }
+                        </Select>
+                    </Form.Item>
 
-        {/* Category Dropdown */}
-        <Form.Item
-            label="Category"
-            name="category"
-        // rules={[{ required: true, message: "Please select a category!" }]}
-        >
-            <Select
-                // value={formData.category}
-                onChange={(value) => setFormData({ ...formData, category: value })}
-                placeholder="Category"
-            // className="form-input"
-            >
-                {categories.map(category => (
-                    <Select.Option key={category._id} value={category._id}>
-                        {category.categoryName}
-                    </Select.Option>
-                ))}
-            </Select>
-        </Form.Item>
+                    {/* Category Dropdown */ }
+                    <Form.Item
+                        label="Category"
+                        name="category"
+                    // rules={[{ required: true, message: "Please select a category!" }]}
+                    >
+                        <Select
+                            // value={formData.category}
+                            onChange={ (value) => setFormData({ ...formData, category: value }) }
+                            placeholder="Category"
+                        // className="form-input"
+                        >
+                            { categories.map(category => (
+                                <Select.Option key={ category._id } value={ category._id }>
+                                    { category.categoryName }
+                                </Select.Option>
+                            )) }
+                        </Select>
+                    </Form.Item>
 
-        {/* Assign To Dropdown */}
-        <Form.Item
-            label="Assign To"
-            name="assignTo"
-            onChange={(value) => setFormData({ ...formData, assignTo: value?._id })}
+                    {/* Assign To Dropdown */ }
+                    <Form.Item
+                        label="Assign To"
+                        name="assignTo"
+                        onChange={ (value) => setFormData({ ...formData, assignTo: value?._id }) }
 
-        // rules={[{ required: true, message: "Please assign a user!" }]}
-        >
-            <Select placeholder="Assign To">
-                {UserData?.map((item) => (
-                    <Option key={item._id} value={item._id}>
-                        {item.name}
-                    </Option>
-                ))}
-            </Select>
-        </Form.Item>
+                    // rules={[{ required: true, message: "Please assign a user!" }]}
+                    >
+                        <Select placeholder="Assign To">
+                            { UserData?.map((item) => (
+                                <Option key={ item._id } value={ item._id }>
+                                    { item.name }
+                                </Option>
+                            )) }
+                        </Select>
+                    </Form.Item>
 
-        <Divider />
+                    <Divider />
 
-        {/* Modal Footer (Buttons) */}
-        <div style={{ textAlign: "right" }}>
-            <Button
-                onClick={() => { setfilterModal(false) }}
-                style={{ marginRight: 10 }}>
-                Cancel
-            </Button>
-            <Button type="primary" onClick={handleFilterSubmit} htmlType="submit" loading={loading}>
-                Save
-            </Button>
-        </div>
-    </Form>
-</Modal>
+                    {/* Modal Footer (Buttons) */ }
+                    <div style={ { textAlign: "right" } }>
+                        <Button
+                            className='text-btn'
+                            onClick={ () => { setfilterModal(false) } }
+                            style={ { marginRight: 10 } }>
+                            Cancel
+                        </Button>
+                        <Button type="primary" onClick={ handleFilterSubmit } htmlType="submit" loading={ loading }>
+                            Save
+                        </Button>
+                    </div>
+                </Form>
+            </Modal>
 
         </div >
     );
