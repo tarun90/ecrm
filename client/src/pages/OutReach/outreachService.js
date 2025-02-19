@@ -94,3 +94,12 @@ export const getSourceFiles = async () => {
     throw error;
   }
 };
+
+export const getAnalyticsData = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/analytics-data`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

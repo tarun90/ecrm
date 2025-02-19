@@ -5,6 +5,7 @@ import csv from 'csv-parser';
 import fs from 'fs';
 import auth from '../middleware/auth.js';
 import User from '../models/User.js';
+import mongoose, { Mongoose } from 'mongoose';
 
 const router = express.Router();
 
@@ -276,6 +277,97 @@ router.post('/assign', async (req, res) => {
       success: false,
       message: 'Error assigning outreaches',
       error: error.message
+    });
+  }
+});
+
+
+router.get('/analytics-data', auth, async (req, res) => {
+  try {
+    const user = req?.user?.user;
+    
+    // Base query for department-based filtering
+    let matchQuery = {};
+
+    // Department-based filtering
+    if (user.isRegionHead) {
+      matchQuery.region = new mongoose.Types.ObjectId(user.regionId);
+    }
+
+    const pipeline = [
+      {
+        $match: matchQuery
+      },
+      {
+        $lookup: {
+          from: 'categories',
+          localField: 'category',
+          foreignField: '_id',
+          as: 'categoryData'
+        }
+      },
+      {
+        $lookup: {
+          from: 'campaigns',
+          localField: 'campaign',
+          foreignField: '_id',
+          as: 'campaignData'
+        }
+      },
+      {
+        $lookup: {
+          from: 'regions',
+          localField: 'region',
+          foreignField: '_id',
+          as: 'regionData'
+        }
+      },
+      {
+        $lookup: {
+          from: 'notes',
+          localField: '_id',
+          foreignField: 'outreachId',
+          as: 'notes'
+        }
+      },
+      {
+        $addFields: {
+          categoryName: { $arrayElemAt: ['$categoryData.categoryName', 0] },
+          campaignName: { $arrayElemAt: ['$campaignData.campaignName', 0] },
+          regionName: { $arrayElemAt: ['$regionData.regionName', 0] }
+        }
+      },
+      {
+        $group: {
+          _id: {
+            category: '$categoryName',
+            campaign: '$campaignName',
+            region: '$regionName'
+          },
+          totalData: { $sum: 1 },
+          totalTouches: { $sum: { $size: '$notes' } }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          category: '$_id.category',
+          campaign: '$_id.campaign',
+          region: '$_id.region',
+          totalData: 1,
+          totalTouches: 1
+        }
+      }
+    ];
+
+    const result = await Outreach.aggregate(pipeline);
+    res.status(200).json(result);
+    
+  } catch (error) {
+    console.error('Error fetching aggregated data:', error);
+    res.status(500).json({ 
+      message: 'Error fetching aggregated data', 
+      error: error.message 
     });
   }
 });

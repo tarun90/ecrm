@@ -41,6 +41,8 @@ const Sidebar = ({ collapsed, onCollapse }) => {
 
   const isAdmin = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData'))
     .isAdmin : {}
+    const isRegionHead = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData'))
+    .isRegionHead : {}
   const menuItems = [
     {
       key: '1',
@@ -118,6 +120,11 @@ const Sidebar = ({ collapsed, onCollapse }) => {
           label: 'Outreach',
           onClick: () => navigate('/outreach/list'),
         },
+        isRegionHead && {
+          key: '10-4',
+          label: 'Analytics',
+          onClick: () => navigate('/outreach/analytics'),
+        }
       ].filter(Boolean),
     },
   ];
