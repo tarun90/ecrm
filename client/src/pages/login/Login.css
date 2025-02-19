@@ -27,7 +27,6 @@
 }
 
 .loginCard input {
-    border-color: #0077bd;
     padding: 14px 16px;
 }
 
@@ -38,7 +37,6 @@
 }
 
 .ant-form .ant-input-outlined {
-    border-color: #0077bd;
     background-color: #fff;
     color: rgba(0, 0, 0, 0.88);
 }
