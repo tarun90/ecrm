@@ -58,6 +58,10 @@ const outReachSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
+    },
+    sourceFile: {
+        type: String,
+        trim: true,
     }
 }, {
     timestamps: true

@@ -9,7 +9,9 @@ export const createNote = async (outreachId, noteData) => {
     // Add the contact methods as a JSON string
     formData.append('contactMethod', JSON.stringify(noteData.options));
     formData.append('message', noteData.message);
-    formData.append('reminderDate', noteData.reminder.toISOString());
+    if (noteData.reminder) {
+      formData.append('reminderDate', noteData.reminder.toISOString());
+  }
     
     // Add file if it exists
     if (noteData.attachment) {
@@ -52,11 +54,12 @@ export const getNoteById = async (noteId) => {
 export const updateNote = async (noteId, noteData) => {
   try {
     const formData = new FormData();
-    console.log(noteData,"ketul")
     // Add the contact methods as a JSON string
     formData.append('contactMethod', JSON.stringify(noteData.options));
     formData.append('message', noteData.message);
-    formData.append('reminderDate', noteData.reminder.toISOString());
+    if (noteData.reminder) {
+      formData.append('reminderDate', noteData.reminder.toISOString());
+  }
     
     // Add new file if it exists
     if (noteData.attachment && noteData.attachment.length > 0 && noteData.attachment[0].originFileObj) {

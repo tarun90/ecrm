@@ -345,7 +345,7 @@ const Sidebar = ({ outReachData,modalOpenForNote }) => {
               onClick={action.onClick} />
           ))}
           </> : <>
-          {actions2.map((action, index) => (
+          {actions.map((action, index) => (
             <ActionButton key={index} icon={action.icon} label={action.label}
               onClick={action.onClick} />
           ))}
