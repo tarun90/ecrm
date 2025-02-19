@@ -27,6 +27,19 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
+// Get deal details
+router.get('/:id', auth, async (req, res) => {
+  try {
+    const dealId = req.params.id;
+    const deal = await Deal.findById(dealId); // Assuming you're using MongoDB with Mongoose
+    if (!deal) {
+        return res.status(404).json({ message: "Deal not found" });
+    }
+    res.json(deal);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching deals' });
+  }
+});
 
 // Create new deal
 router.post('/', auth, async (req, res) => {
