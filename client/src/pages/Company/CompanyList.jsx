@@ -13,7 +13,7 @@ import { Delete, Edit } from 'lucide-react';
 const CompanyList = () => {
     const navigate = useNavigate();
     const [form] = Form.useForm();
-
+    const { Search } = Input;
     const [contacts, setContacts] = useState([]);
     const [companies, setCompanies] = useState([]);
     const [contact, setContact] = useState({
@@ -168,13 +168,16 @@ const CompanyList = () => {
             <Header className="contact-header">
                 <div className="search-container">
                     <h1>Companies</h1>
-                    <input
-                        type="text"
+
+                    <Search
+                        allowClear
                         placeholder="Search by name, email, or phone..."
                         value={ searchTerm }
                         onChange={ (e) => setsearchTerm(e.target.value) }
                         className="search-input"
+                        style={ { width: 200 } }
                     />
+
                     {/* { isSearching && <span className="searching-indicator">Searching...</span> } */ }
                 </div>
                 <div className="action-buttons">

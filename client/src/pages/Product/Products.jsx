@@ -18,7 +18,7 @@ function Products() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [form] = Form.useForm();
-
+  const { Search } = Input;
   const initialFormData = {
     name: "",
     product_type: "",
@@ -146,13 +146,14 @@ function Products() {
         <div className="product-wrapper">
           <h1>Products</h1>
           <div className="search-container">
-            <Search className="search-icon" />
-            <input
-              type="text"
-              placeholder="Search products..."
+
+            <Search
+              allowClear
+              placeholder="Search by name, email, or phone..."
               value={ searchTerm }
               onChange={ (e) => setSearchTerm(e.target.value) }
-              className="product-search"
+              className="search-input"
+              style={ { width: 200 } }
             />
           </div>
         </div>

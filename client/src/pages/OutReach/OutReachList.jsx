@@ -23,6 +23,7 @@ import { Getcountry } from '../Company/APIServices';
 import axios from 'axios';
 import { createNote } from '../viewOutreach/noteService';
 import NoDataUI from '../../components/NoData';
+import { Search } from 'lucide-react';
 
 const { Dragger } = Upload;
 const API_URL = import.meta.env.VITE_TM_API_URL;
@@ -44,6 +45,7 @@ const OutReachList = () => {
     const [users, setUsers] = useState([]);
     const [outreachIdForNote, setOutreachIdForNote] = useState(null);
     const [selectedCSV, setSelectedcsv] = useState(null);
+    const { Search } = Input;
     const [dropdownData, setDropdownData] = useState({
         countries: [],
         statuses: [],
@@ -451,7 +453,7 @@ const OutReachList = () => {
         fetchCountry()
         getUsersData()
     }, [])
-   
+
     //   if (!outreach || outreach.length === 0) {
     //     return <NoDataUI />;
     //   }
@@ -461,7 +463,7 @@ const OutReachList = () => {
                 <div className="outreach-header-wrapper">
                     <div className="search-container">
                         <h1>Outreach</h1>
-                        <Input
+                        <Search
                             type="text"
                             placeholder="Search Outreach..."
                             value={ searchTerm }
@@ -593,69 +595,69 @@ const OutReachList = () => {
 
             </Header>
             <div className="contact-table">
-                {(!outreach || outreach.length == 0) ? 
-            <NoDataUI/> :    
-            
-                <table>
-                    <thead>
-                        <tr>
-                            { userData?.isRegionHead &&
-                                <th>
-                                    <Checkbox
-                                        onChange={ (e) => handleSelectAll(e.target.checked) }
-                                        checked={ selectedOutreach.length === outreach.length }
-                                    />
-                                </th>
-                            }
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Website</th>
-                            <th>LinkedIn</th>
-                            <th>Country</th>
-                            <th>Status</th>
-                            <th>Region</th>
-                            <th>Campaign</th>
-                            <th>Category</th>
-                            <th>Assigned To</th>
-                            <th>Created By</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    
-                    <tbody>
+                { (!outreach || outreach.length == 0) ?
+                    <NoDataUI /> :
 
-                        { outreach.map(item => (
-                            <tr key={ item._id }>
+                    <table>
+                        <thead>
+                            <tr>
                                 { userData?.isRegionHead &&
-                                    <td>
+                                    <th>
                                         <Checkbox
-                                            checked={ selectedOutreach.includes(item._id) }
-                                            onChange={ () => handleCheckboxChange(item._id) }
+                                            onChange={ (e) => handleSelectAll(e.target.checked) }
+                                            checked={ selectedOutreach.length === outreach.length }
                                         />
-                                    </td>
+                                    </th>
                                 }
-                                {/* <td><Link to={`/ViewOutReach/${item._id}`}>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Website</th>
+                                <th>LinkedIn</th>
+                                <th>Country</th>
+                                <th>Status</th>
+                                <th>Region</th>
+                                <th>Campaign</th>
+                                <th>Category</th>
+                                <th>Assigned To</th>
+                                <th>Created By</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            { outreach.map(item => (
+                                <tr key={ item._id }>
+                                    { userData?.isRegionHead &&
+                                        <td>
+                                            <Checkbox
+                                                checked={ selectedOutreach.includes(item._id) }
+                                                onChange={ () => handleCheckboxChange(item._id) }
+                                            />
+                                        </td>
+                                    }
+                                    {/* <td><Link to={`/ViewOutReach/${item._id}`}>
                                     <span className='user-name'>{item.name}</span></Link></td> */}
-                                <td onClick={ () => {
-                                    setOutreachIdForNote(item?._id)
-                                    modalOpenForNote()
-                                } } style={ { color: 'blue', cursor: 'pointer' } }>
-                                    <span className='user-name'>{ item.name }</span></td>
-                                <td>{ item?.email }</td>
-                                <td>{ item?.phone }</td>
-                                <td>{ item?.website }</td>
-                                <td>{ item?.linkedin }</td>
-                                <td>{ item?.country }</td>
-                                <td>{ item?.status }</td>
-                                <td>{ item?.region?.regionName }</td>
-                                <td>{ item?.campaign?.campaignName }</td>
-                                <td>{ item?.category?.categoryName }</td>
-                                <td>{ item?.assignedTo?.name ? item?.assignedTo.name : "-" }</td>
-                                <td>{ item?.createdBy?.name }</td>
-                                <td>
-                                    <div className='action-buttons'>
-                                        {/* <Button
+                                    <td onClick={ () => {
+                                        setOutreachIdForNote(item?._id)
+                                        modalOpenForNote()
+                                    } } style={ { color: 'blue', cursor: 'pointer' } }>
+                                        <span className='user-name'>{ item.name }</span></td>
+                                    <td>{ item?.email }</td>
+                                    <td>{ item?.phone }</td>
+                                    <td>{ item?.website }</td>
+                                    <td>{ item?.linkedin }</td>
+                                    <td>{ item?.country }</td>
+                                    <td>{ item?.status }</td>
+                                    <td>{ item?.region?.regionName }</td>
+                                    <td>{ item?.campaign?.campaignName }</td>
+                                    <td>{ item?.category?.categoryName }</td>
+                                    <td>{ item?.assignedTo?.name ? item?.assignedTo.name : "-" }</td>
+                                    <td>{ item?.createdBy?.name }</td>
+                                    <td>
+                                        <div className='action-buttons'>
+                                            {/* <Button
                                                 type="primary"
                                                 icon={<PlusOutlined />}
                                                 onClick={() => {
@@ -665,31 +667,31 @@ const OutReachList = () => {
                                             >
                                                 Add Note
                                             </Button> */}
-                                        <Link to={ `/ViewOutReach/${item._id}` }>
-                                            <Button
-                                                type="primary"
-                                            >
-                                                History
-                                            </Button></Link>
-                                        { userData?.department?.name == "Lead Generation" && <>
-                                            <button className='edit-btn' onClick={ () => handleEditOutreach(item._id) }><EditOutlined /></button>
-                                            <Popconfirm
-                                                title="Delete Outreach"
-                                                description="Are you sure you want to delete this outreach?"
-                                                onConfirm={ () => handleDelete(item._id) }
-                                                okText="Yes"
-                                                cancelText="No"
-                                            >
-                                                <button className='delete-btn'><DeleteOutlined /></button>
-                                            </Popconfirm>
-                                        </> }
-                                    </div>
-                                </td>
-                            </tr>
-                        )) }
-                    </tbody>
-                </table>
-}
+                                            <Link to={ `/ViewOutReach/${item._id}` }>
+                                                <Button
+                                                    type="primary"
+                                                >
+                                                    History
+                                                </Button></Link>
+                                            { userData?.department?.name == "Lead Generation" && <>
+                                                <button className='edit-btn' onClick={ () => handleEditOutreach(item._id) }><EditOutlined /></button>
+                                                <Popconfirm
+                                                    title="Delete Outreach"
+                                                    description="Are you sure you want to delete this outreach?"
+                                                    onConfirm={ () => handleDelete(item._id) }
+                                                    okText="Yes"
+                                                    cancelText="No"
+                                                >
+                                                    <button className='delete-btn'><DeleteOutlined /></button>
+                                                </Popconfirm>
+                                            </> }
+                                        </div>
+                                    </td>
+                                </tr>
+                            )) }
+                        </tbody>
+                    </table>
+                }
             </div>
 
             <Modal

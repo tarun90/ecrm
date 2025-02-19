@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Modal, Form, Input, Select, message, Divider, Row, Col } from 'antd';
 import { DeleteOutlined, DownloadOutlined, EditOutlined, ExportOutlined, PlusOutlined } from '@ant-design/icons';
-import Search from 'antd/es/transfer/search';
+
 import moment from 'moment';
 import axios from 'axios';
+const { Search } = Input;
 
 import { contactService } from '../../services/api';
 import { getCompaniesNames } from '../Company/APIServices';
@@ -210,11 +211,13 @@ const ContactListAndAdd = () => {
                     <Search
                         allowClear
                         placeholder="Search by name, email, or phone..."
-                        value={ searchTerm }
                         onChange={ (e) => setSearchTerm(e.target.value) }
                         className="search-input"
-                        style={ { width: 200 } }
+
+                        value={ searchTerm }
+
                     />
+
                     { isSearching && <span className="searching-indicator">Searching...</span> }
                 </div>
                 <div className="action-buttons">

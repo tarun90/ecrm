@@ -258,13 +258,6 @@ textarea {
   width: 300px;
 }
 
-.search-input {
-  border: none;
-  outline: none;
-  width: 100%;
-  padding: 8px;
-  font-size: 14px;
-}
 
 .header-actions {
   display: flex;

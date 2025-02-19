@@ -4,7 +4,7 @@ import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { getCampaigns, createCampaign, updateCampaign, deleteCampaign } from './campaignService';
 import './campaigns.css';
 import { Header } from 'antd/es/layout/layout';
-import { Delete, Edit } from 'lucide-react';
+import { Delete, Edit, Search } from 'lucide-react';
 
 const CampaignList = () => {
     const [campaigns, setCampaigns] = useState([]);
@@ -13,6 +13,8 @@ const CampaignList = () => {
     const [editId, setEditId] = useState(null);
     const [campaignName, setCampaignName] = useState('');
     const [form] = Form.useForm();
+    const { Search } = Input;
+
     useEffect(() => {
         fetchCampaigns();
     }, [searchTerm]);
@@ -67,8 +69,8 @@ const CampaignList = () => {
             <Header className="contact-header">
                 <div className="search-container">
                     <h1>Campaigns</h1>
-                    <input
-                        type="text"
+                    <Search
+                        allowClear
                         placeholder="Search Campaign..."
                         value={ searchTerm }
                         onChange={ (e) => setSearchTerm(e.target.value) }

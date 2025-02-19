@@ -10,13 +10,11 @@
     max-width: 400px;
 }
 
-.search-input {
-    width: 100%;
-}
+
 
 .action-buttons {
     display: flex;
-    gap: 12px;
+    gap: 5px;
     align-items: center;
 }
 
