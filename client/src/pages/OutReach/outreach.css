@@ -1,0 +1,30 @@
+.outreach-header .outreach-header-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.ant-layout-content .ant-layout-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .outreach-header {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .search-container {
+        max-width: 100%;
+    }
+
+    .action-buttons {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}

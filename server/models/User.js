@@ -15,10 +15,23 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  department:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'departments',
+    default:null
+  },
+  
   img: String,
   tokens: Object,
   lastLogin: { type: Date, default: Date.now },
-  isActive: { type: Boolean, default: true }
+  isActive: { type: Boolean, default: true },
+  isRegionHead: { type: Boolean, default: false },
+  regionId:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Region',
+    default:null
+  },
+  
 }, { timestamps: true });
 
 userSchema.methods.comparePassword = function (candidatePassword, cb) {

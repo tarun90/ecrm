@@ -21,6 +21,10 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     padding: 1rem 2rem;
     z-index: 100;
+    height: auto;
+    min-height: 64px;
+    line-height: normal;
+    margin-bottom: 20px;
 }
 
 .ant-layout-content::-webkit-scrollbar-track {
@@ -152,8 +156,10 @@
     color: var(--btn-bg-primary-hover);
 }
 
+.ant-layout-sider-collapsed .ant-menu-vertical .ant-menu-submenu .anticon,
 .ant-layout-sider-collapsed .ant-menu-vertical .ant-menu-item .anticon {
     font-size: 18px;
+    color: #fff;
 }
 
 .ant-menu-title-content {
@@ -176,9 +182,17 @@
     box-shadow: none;
 }
 
-.ant-btn-primary :not(:disabled):hover {
-    background: #185d87;
+.ant-form-item-row.ant-row {
+    flex-direction: column;
 }
+
+.ant-form-item-label label {
+    width: 100%;
+}
+
+/* .ant-btn-primary :not(:disabled):hover {
+    background: #185d87;
+} */
 
 .ant-input-outlined:focus,
 .ant-input-outlined:hover,
@@ -205,6 +219,7 @@
     color: #ff4d4f;
 }
 
+
 .ant-layout-content .products-section .delete-btn:disabled:hover,
 .btn-wrapper .delete-btn:disabled span,
 .ant-btn-variant-text:disabled:hover,
@@ -216,4 +231,69 @@
 
 .ant-btn-variant-text:disabled .ant-btn-icon svg {
     color: rgba(0, 0, 0, 0.25);
+}
+
+.ant-modal .ant-modal-header {
+    margin-bottom: 20px;
+}
+
+.modal-footer .ant-form-item-control-input-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: end;
+    gap: 10px;
+}
+
+.ant-form .modal-footer {
+    margin-bottom: 0;
+}
+
+.ant-menu-dark.ant-menu-submenu-popup>.ant-menu {
+    padding: 5px;
+    background-color: var(--bg-sidebar);
+}
+
+.ant-menu-dark>.ant-menu .ant-menu-item {
+    color: #fff;
+
+
+}
+
+.ant-menu-dark>.ant-menu .ant-menu-item-selected {
+    border-left: 2px solid #fff;
+}
+
+.ant-menu-dark.ant-menu-inline .ant-menu-sub.ant-menu-inline {
+    background-color: transparent !important;
+}
+
+.action-buttons .ant-btn.edit-btn:hover {
+    background-color: #e0e7ff;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.ant-checkbox-wrapper .ant-checkbox-checked span.ant-checkbox-inner {
+    background-color: #185d87;
+    border-color: transparent;
+}
+
+.ant-form-item .ant-form-item-control {
+    min-height: auto;
+}
+
+.ant-upload-wrapper .ant-upload-list .ant-upload-list-item .ant-upload-list-item-name {
+    color: #0077bd;
+}
+
+.ant-upload-wrapper .ant-upload-list .ant-upload-list-item {
+    padding: 10px;
+}
+
+.ant-upload-wrapper .ant-upload-list .ant-upload-list-item {
+    height: auto;
 }

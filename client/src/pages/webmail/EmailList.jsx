@@ -4,6 +4,8 @@ import axios from 'axios';
 import './EmailList.css';
 import DOMPurify from 'dompurify';
 import { useAuth } from '../../contexts/AuthContext';
+import { DeleteOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
 
 const EmailList = ({ type, searchQuery }) => {
   const { userEmail, sessionToken } = useAuth();
@@ -292,10 +294,10 @@ ${selectedEmail.body}`;
               <i className="fas fa-share"></i>
               Forward
             </button>
-            <button className="email-action-btn" onClick={ handleDelete }>
-              <i className="fas fa-trash"></i>
+            <Button className="email-action-btn" onClick={ handleDelete }>
+              <DeleteOutlined />
               Delete
-            </button>
+            </Button>
             <button
               className="email-action-btn"
               onClick={ handleSummarize }

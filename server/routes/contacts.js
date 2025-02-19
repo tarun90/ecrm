@@ -134,11 +134,13 @@ router.put('/:id', auth, async (req, res) => {
 // Create new contact
 router.post('/', auth, async (req, res) => {
   try {
+    console.log('HHHhT');
+
     const contact = new Contact({
       ...req.body,
-      contactOwner:req?.user?.user?._id
+      contactOwner: req?.user?.user?._id
     });
-    
+
     await contact.save();
     res.status(201).json(contact);
   } catch (error) {
