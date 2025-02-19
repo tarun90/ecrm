@@ -14,17 +14,67 @@ export const createCompany = async (companyData) => {
 
 export const getCompanies = async (searchTerm = "", page = 1, pageSize = 10) => {
   try {
-    const response = await axios.get(API_URL, {
+    console.log('Calling API with:', { searchTerm, page, pageSize });
+    
+    const response = await axios.get(`${API_URL}`, {
       params: {
-        ...(searchTerm ? { searchTerm } : {}),
+        searchTerm,
         page,
         pageSize
-      },
+      }
     });
     
-    return response.data;
+    console.log('Raw API response:', response.data);
+
+    // If response.data is an array, implement pagination manually
+    if (Array.isArray(response.data)) {
+      const allData = response.data;
+      const totalItems = allData.length;
+      
+      // Calculate start and end indices for the current page
+      const startIndex = (page - 1) * pageSize;
+      const endIndex = Math.min(startIndex + pageSize, totalItems);
+      
+      // Slice the array to get only the items for the current page
+      const paginatedData = allData.slice(startIndex, endIndex);
+      
+      console.log('Pagination details:', {
+        page,
+        pageSize,
+        totalItems,
+        startIndex,
+        endIndex,
+        itemsOnThisPage: paginatedData.length
+      });
+
+      return {
+        data: paginatedData,
+        total: totalItems,
+        success: true,
+        currentPage: page,
+        totalPages: Math.ceil(totalItems / pageSize)
+      };
+    }
+    
+    // If response has pagination structure from backend
+    return {
+      data: response.data.companies || response.data.data || [], 
+      total: response.data.total || 0,
+      success: true,
+      currentPage: response.data.currentPage || page,
+      totalPages: response.data.totalPages || Math.ceil((response.data.total || 0) / pageSize)
+    };
   } catch (error) {
-    throw error.response?.data || error.message;
+    console.error('Error in getCompanies:', error);
+    console.error('Error response:', error.response);
+    return {
+      data: [],
+      total: 0,
+      success: false,
+      message: error.response?.data?.message || 'Failed to fetch companies',
+      currentPage: page,
+      totalPages: 0
+    };
   }
 };
 

@@ -38,19 +38,20 @@ const CompanyList = () => {
     const [importStatus, setImportStatus] = useState('');
     const API_URL = import.meta.env.VITE_TM_API_URL;
     const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize, setPageSize] = useState(2);
+    const [pageSize, setPageSize] = useState(10);
     const [total, setTotal] = useState(0);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (searchTerm) {
-            const delayDebounceFn = setTimeout(() => {
-                fetchCompanies(searchTerm, currentPage, pageSize);
-            }, 500);
+        fetchCompanies(searchTerm, currentPage, pageSize);
+    }, []);
 
-            return () => clearTimeout(delayDebounceFn);
-        } else {
-            fetchCompanies("", currentPage, pageSize);
-        }
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(() => {
+            fetchCompanies(searchTerm, currentPage, pageSize);
+        }, 500);
+
+        return () => clearTimeout(delayDebounceFn);
     }, [searchTerm, currentPage, pageSize]);
 
     const handleAddCompany = () => {
@@ -65,41 +66,42 @@ const CompanyList = () => {
 
     const fetchCompanies = async (searchTerm = "", page = 1, pageSize = 10) => {
         try {
-            const response = await getCompanies(searchTerm, page, pageSize);
-            console.log('Page:', page, 'PageSize:', pageSize); // Debug log
-            console.log('API Response:', response);
+            setLoading(true);
+            console.log('Fetching companies with:', { searchTerm, page, pageSize });
             
-            if (response && typeof response === 'object') {
-                // For testing with dummy data
-                const dummyData = [
-                    { _id: 1, companyName: 'Company A', companyOwner: 'Owner 1', phoneNumber: '123', email: 'a@test.com', city: 'City A', country: 'Country A' },
-                    { _id: 2, companyName: 'Company B', companyOwner: 'Owner 2', phoneNumber: '456', email: 'b@test.com', city: 'City B', country: 'Country B' },
-                    { _id: 3, companyName: 'Company C', companyOwner: 'Owner 3', phoneNumber: '789', email: 'c@test.com', city: 'City C', country: 'Country C' }
-                ];
-
-                // Calculate start and end indices for pagination
-                const startIndex = (page - 1) * pageSize;
-                const endIndex = startIndex + pageSize;
+            const response = await getCompanies(searchTerm, page, pageSize);
+            console.log('API Response in component:', response);
+            
+            if (response.success) {
+                // Make sure we're using the paginated data
+                setCompanies(response.data);
+                setTotal(response.total);
                 
-                // Slice the data according to pagination
-                const paginatedData = dummyData.slice(startIndex, endIndex);
+                // Update current page if it's different from what we got back
+                if (response.currentPage !== currentPage) {
+                    setCurrentPage(response.currentPage);
+                }
                 
-                setCompanies(paginatedData);
-                setTotal(dummyData.length); // Set total to full dataset length
-                
-                console.log('Current page data:', paginatedData); // Debug log
+                console.log('Pagination state:', {
+                    currentPage: response.currentPage,
+                    totalPages: response.totalPages,
+                    itemsOnPage: response.data.length,
+                    totalItems: response.total
+                });
             } else {
+                message.error(response.message || 'Failed to fetch companies');
                 setCompanies([]);
                 setTotal(0);
-                message.error('Invalid data format received from server');
             }
         } catch (error) {
-            console.error('Error fetching companies:', error);
+            console.error('Error in fetchCompanies:', error);
             message.error('Failed to fetch companies');
             setCompanies([]);
             setTotal(0);
+        } finally {
+            setLoading(false);
         }
-    }
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -199,9 +201,9 @@ const CompanyList = () => {
     };
 
     const handlePageChange = (page, size) => {
+        console.log('Page change:', { page, size });
         setCurrentPage(page);
         setPageSize(size);
-        // Fetch companies with new pagination parameters
         fetchCompanies(searchTerm, page, size);
     };
 
@@ -239,37 +241,56 @@ const CompanyList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        { companies.map(company => (
-                            <tr key={ company?._id }>
-                                <td onClick={ () => handleView(company._id) }> <a href='#'> { company?.companyName || '-' } </a> </td>
-                                <td>{ company?.companyOwner || '-' }</td>
-                                <td>{ company?.phoneNumber || '-' }</td>
-                                <td>{ company?.email || '-' }</td>
-                                <td>{ company?.city || '-' }</td>
-                                <td>{ company?.country || '-' }</td>
-                                <td>
-                                    <div className='action-buttons'>
-                                        <Button className="edit-btn" onClick={ () => handleEditCompany(company._id) }>
-                                            <EditOutlined />
-                                        </Button>
-                                        <Popconfirm
-                                            title="Delete Company"
-                                            description="Are you sure you want to delete this company?"
-                                            onConfirm={ (e) => {
-                                                e.stopPropagation();
-                                                handleDelete(company._id);
-                                            } }
-                                            okText="Yes"
-                                            cancelText="No"
-                                        >
-                                            <Button className="delete-btn" onClick={ (e) => e.stopPropagation() }>
-                                                <DeleteOutlined />
-                                            </Button>
-                                        </Popconfirm>
-                                    </div>
+                        {loading ? (
+                            <tr>
+                                <td colSpan="7" style={{ textAlign: 'center', padding: '20px' }}>
+                                    Loading...
                                 </td>
                             </tr>
-                        )) }
+                        ) : companies.length === 0 ? (
+                            <tr>
+                                <td colSpan="7" style={{ textAlign: 'center', padding: '20px' }}>
+                                    No companies found
+                                </td>
+                            </tr>
+                        ) : (
+                            companies.map(company => (
+                                <tr key={company._id}>
+                                    <td onClick={() => handleView(company._id)}>
+                                        <a href='#'>{company?.companyName || '-'}</a>
+                                    </td>
+                                    <td>{company?.companyOwner || '-'}</td>
+                                    <td>{company?.phoneNumber || '-'}</td>
+                                    <td>{company?.email || '-'}</td>
+                                    <td>{company?.city || '-'}</td>
+                                    <td>{company?.country || '-'}</td>
+                                    <td>
+                                        <div className='action-buttons'>
+                                            <Button className="edit-btn" onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleEditCompany(company._id);
+                                            }}>
+                                                <EditOutlined />
+                                            </Button>
+                                            <Popconfirm
+                                                title="Delete Company"
+                                                description="Are you sure you want to delete this company?"
+                                                onConfirm={(e) => {
+                                                    e.stopPropagation();
+                                                    handleDelete(company._id);
+                                                }}
+                                                okText="Yes"
+                                                cancelText="No"
+                                            >
+                                                <Button className="delete-btn" onClick={(e) => e.stopPropagation()}>
+                                                    <DeleteOutlined />
+                                                </Button>
+                                            </Popconfirm>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
                     </tbody>
                 </table>
             </div>
@@ -283,7 +304,12 @@ const CompanyList = () => {
                     showSizeChanger
                     showQuickJumper
                     showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
-                    pageSizeOptions={['2', '3', '5', '10']}
+                    pageSizeOptions={['5', '10', '20', '50']}
+                    disabled={loading}
+                    onShowSizeChange={(current, size) => {
+                        console.log('Page size changed:', { current, size });
+                        handlePageChange(1, size); // Reset to first page when changing page size
+                    }}
                 />
             </div>
 
