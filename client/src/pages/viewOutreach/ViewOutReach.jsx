@@ -144,13 +144,13 @@ const MainContent = ({ form, outReachData, modalOpen, modalOpenForNote, modalClo
             <h2>{ section }</h2>
             <div className="header-actions">
               {/* {userData?.department?.name?.toLowerCase() == 'outreach team' && */ }
-              <Button
+              {/* <Button
                 type="primary"
                 icon={ <PlusOutlined /> }
                 onClick={ modalOpenForNote }
               >
                 Add
-              </Button>
+              </Button> */}
               {/* } */ }
               {/* <Settings /> */ }
             </div>
@@ -165,8 +165,26 @@ const MainContent = ({ form, outReachData, modalOpen, modalOpenForNote, modalClo
                 <RightOutlined rotate={ isActive ? 90 : 0 } />
               ) }
               ghost
-            >
-              { activities.map((activity) => (
+            >{
+              notes?.map((note)=>(
+                <Panel
+                key={ note?._id }
+                header={
+                  <Text strong>
+                   Note Added  <Text type="secondary">by { note?.createdBy?.name }</Text>
+                  </Text>
+                }
+                extra={ <Text type="secondary">{ moment(note?.createdAt).format('DD-MM-YYYY HH:mm') }</Text> }
+              >
+                 <Text strong>Contacted Through : </Text>  <Text>{ note?.contactMethod?.toString() }</Text>
+               <br/>
+               <Text strong>Message : </Text>  <Text>{ note?.message }</Text><br/>
+            {note?.reminderDate && <><Text strong>Reminder Date : </Text>  <Text>{ moment(note?.reminderDate).format('DD-MM-YYYY HH:mm') }</Text> <br/></>}
+              {note?.attachment && <> <Text strong>Attachment : </Text><a target="_blank" href={`${import.meta.env.VITE_TM_API_URL}/${note?.attachment?.path}`}>{note?.attachment?.filename}</a></>}
+              </Panel>
+              ))
+            }
+              {/* { activities.map((activity) => (
                 <Panel
                   key={ activity.key }
                   header={
@@ -178,7 +196,7 @@ const MainContent = ({ form, outReachData, modalOpen, modalOpenForNote, modalClo
                 >
                   <Text>{ activity.description }</Text>
                 </Panel>
-              )) }
+              )) } */}
             </Collapse>
           </>
         </div>
@@ -231,7 +249,6 @@ const MainContent = ({ form, outReachData, modalOpen, modalOpenForNote, modalClo
             <Form.Item
               label="Add Reminder"
               name="reminder"
-              rules={ [{ required: true, message: "Please enter a reminder!" }] }
             >
               <DatePicker
                 showTime={ { format: 'HH:mm:ss' } }
@@ -348,12 +365,12 @@ const Sidebar = ({ outReachData, modalOpenForNote }) => {
 
         <div className="action-buttons">
           { userData?.department?.name?.toLowerCase == 'outreach team' ? <>
-            { actions.map((action, index) => (
+            { actions2.map((action, index) => (
               <ActionButton key={ index } icon={ action.icon } label={ action.label }
                 onClick={ action.onClick } />
             )) }
           </> : <>
-            { actions.map((action, index) => (
+            { actions2.map((action, index) => (
               <ActionButton key={ index } icon={ action.icon } label={ action.label }
                 onClick={ action.onClick } />
             )) }
