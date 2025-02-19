@@ -1,5 +1,4 @@
-/* Base Styles */
-:root {
+Base Styles:root {
   --side-bar-hover: #002742;
   --color-white: #ffffff;
 }
@@ -524,27 +523,11 @@ body {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.header-content {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0.75rem 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.header-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #1f2937;
-}
-
 .view-toggle {
   display: flex;
   align-items: center;
-  background-color: #f3f4f6;
-  border-radius: 0.5rem;
-  padding: 0.25rem;
+  flex-wrap: wrap;
+
 }
 
 .view-button {
@@ -567,7 +550,7 @@ body {
 }
 
 .view-button:hover {
-  color: #1f2937;
+  color: var(--primary-color);
 }
 
 .app-main {
@@ -578,10 +561,8 @@ body {
   padding: 1.5rem 1rem;
 }
 
-.calendar-container {
-  background-color: var(--color-white);
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.evant-warpper {
+  padding-bottom: 40px;
 }
 
 .app-footer {
@@ -605,4 +586,8 @@ body {
 
 .custom-calendar-event:hover {
   opacity: 1;
+}
+
+.evant-header .header-content {
+  justify-content: space-between;
 }

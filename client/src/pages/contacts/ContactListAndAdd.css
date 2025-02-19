@@ -70,6 +70,8 @@
 
 .filter-btn,
 .export-btn {
+  height: auto;
+  padding: 0.5rem 1rem;
   background-color: #e0f2fe;
   color: #0369a1;
   border: 1px solid #bae6fd;
@@ -91,9 +93,12 @@
   background-color: #e5e7eb;
 }
 
+.ant-btn-variant-outlined.ant-btn-default.filter-btn:hover,
 .filter-btn:hover,
 .export-btn:hover {
   background-color: #bae6fd;
+  color: #185d87;
+  border-color: #185d87;
 }
 
 .add-contact-btn:hover {
@@ -106,13 +111,19 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
-
+.outreach-header-wrapper .btn {
+  padding: 10px;
+}
+.outreach-container .user-name {
+  white-space: nowrap;
+}
 table {
   width: 100%;
   border-collapse: collapse;
 }
 
 .contact-table th {
+  white-space: nowrap;
   background-color: #e0f2fe;
   color: #0369a1;
   font-weight: 600;
@@ -160,10 +171,10 @@ table {
   background-color: #fef2f2;
   color: #dc2626;
   height: auto;
-  padding: 0.5rem 1rem;
   border: 1px solid #fee2e2;
 }
 
+.ant-btn.ant-btn-color-primary.ant-btn-variant-link.edit-btn:hover,
 .edit-btn:hover {
   background-color: #e0e7ff;
 }
@@ -233,6 +244,10 @@ table {
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
 }
 
+.ant-checkbox .ant-checkbox-inner {
+  background-color: #fff;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .contact-container {
@@ -261,8 +276,8 @@ table {
     overflow-x: auto;
   }
 
-  th,
-  td {
+  .contact-table th,
+  .contact-table td {
     padding: 8px 12px;
   }
 

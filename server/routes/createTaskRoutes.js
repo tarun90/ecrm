@@ -67,7 +67,7 @@ Status: ${task.status}`,
     // Create a new task, including a createdBy field if req.user exists
     const task = new Task({
       ...req.body,
-      createdBy: req.user?._id, // Corrected: use req.user?.userId instead of "req ? user?.userId"
+      createdBy: req.user?.user?._id, // Corrected: use req.user?.userId instead of "req ? user?.userId"
     });
 
     try {

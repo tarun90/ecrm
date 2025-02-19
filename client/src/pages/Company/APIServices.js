@@ -66,3 +66,12 @@ export const deleteCompany = async (id) => {
     throw error.response?.data || error.message;
   }
 };
+
+export const Getcountry = async () => {
+  try {
+    const response = await axios.get("https://countriesnow.space/api/v0.1/countries/positions");
+    return response?.data
+  } catch (error) {
+    console.log(error);
+  };
+};

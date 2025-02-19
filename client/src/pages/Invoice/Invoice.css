@@ -1,38 +1,137 @@
 .ant-input-number,
 .item-wrapper .ant-input-number,
 .item-wrapper .ant-form-item {
-    width: 100%;
+  width: 100%;
 }
 
 .modal-content.scroll {
-    max-height: calc(100vh - 250px);
+  max-height: calc(100vh - 350px);
 }
 
 .modal-footer .ant-form-item .ant-form-item-control-input-content {
-    justify-content: flex-end;
-    gap: 8px;
-    margin-top: 5px;
-    display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 5px;
+  display: flex;
 }
 
 .line-items {
-    margin-top: 25px;
+  margin-top: 25px;
 }
 
 .item-wrapper {
-    margin: 10px 0;
+  margin: 10px 0;
 }
 
 .item-wrapper .delete-btn {
-    margin: 0;
+  margin: 0;
 }
 
 .delete-invoice {
-    background-color: red;
-    color: #fff;
+  background-color: red;
+  color: #fff;
 }
 
 .delete-invoice:disabled {
-    background-color: #ccc;
-    color: #fff;
+  background-color: #ccc;
+  color: #fff;
+}
+
+.filter-container {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: #f8f9fa;
+  padding: 12px 15px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  border: 1px solid #dee2e6;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.filter-input,
+.filter-dropdown {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  transition: all 0.3s ease-in-out;
+  background: #fff;
+  height: 40px;
+}
+
+.filter-input {
+  width: 200px;
+}
+
+.filter-dropdown {
+  width: 140px;
+  cursor: pointer;
+}
+
+.filter-input:focus,
+.filter-dropdown:focus {
+  border-color: #007bff;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  /* border: 1px solid #ccc; */
+  padding: 8px 12px;
+  border-radius: 5px;
+  width: 250px;
+  background: #ffffff;
+  height: 40px;
+}
+
+.search-icon-invoice {
+  color: #007bff;
+  margin-right: 8px;
+}
+
+.clear-filters {
+  background: #ff4d4f;
+  color: #ffffff;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  height: 40px;
+  transition: all 0.3s ease-in-out;
+}
+
+.clear-filters:hover {
+  background: #d9363e;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .filter-container {
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .filter-group {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .filter-input,
+  .filter-dropdown,
+  .search-bar,
+  .clear-filters {
+    width: 100%;
+    max-width: 250px;
+  }
 }

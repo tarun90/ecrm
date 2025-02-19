@@ -13,6 +13,15 @@ import productRoutes from './routes/products.js';
 import invoiceRoutes from './routes/invoice.js';
 import emails from './routes/emails.js';
 import company from "./routes/Company.js"
+import campaigns from "./routes/Campaigns.js"
+import Regions from "./routes/Regions.js";
+import Category from "./routes/Category.js";
+import Department from "./routes/Department.js";
+import Outreach from "./routes/Outreach.js";
+import Users from "./routes/Users.js";
+import noteRoutes from './routes/noteRoutes.js';
+import Activities from "./routes/Activities.js";
+
 
 dotenv.config();
 
@@ -20,6 +29,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.json());
 
 // Connect to MongoDB
@@ -53,6 +63,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/deals', dealRoutes);
 app.use('/api/contacts', contactRoutes);
 app.use('/api/events', eventmanager); 
+app.use('/api', noteRoutes);
 // app.use('/api/emails', emails); 
 
 
@@ -65,6 +76,13 @@ app.use('/api/products', productRoutes);
 app.use('/api/invoices', invoiceRoutes);
 app.use('/api/emails', emails);
 app.use('/api/company',company)
+app.use('/api/campaign',campaigns)
+app.use('/api/regions', Regions)
+app.use('/api/categories',Category)
+app.use('/api/outreach',Outreach);
+app.use('/api/users',Users);
+app.use('/api/dept',Department);
+app.use('/api/activities',Activities);
 
 // Start the reminder check every minute
 // setInterval(checkReminders, 60 * 1000);

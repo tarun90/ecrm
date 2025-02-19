@@ -3,7 +3,7 @@ import { Routes, Route, Navigate, Link, useLocation, useNavigate } from 'react-r
 import EmailList from './EmailList';
 import ComposeEmail from './ComposeEmail';
 import './WebMailDashboard.css';
-import { SearchOutlined, SyncOutlined } from '@ant-design/icons';
+import { EditOutlined, InboxOutlined, SearchOutlined, SendOutlined, SyncOutlined } from '@ant-design/icons';
 
 const WebMailDashboard = () => {
   // const { userEmail, logout } = useAuth();
@@ -54,14 +54,15 @@ const WebMailDashboard = () => {
 
         </div>
         <div onClick={ () => { changeActiveState('compose') } } className="compose-btn">
+        <EditOutlined/>
           Compose
         </div>
         <nav className="nav-menu">
           <div onClick={ () => { changeActiveState('inbox') } } className={ `nav-item ${isActive('inbox')}` }>
-            <i className="fas fa-inbox"></i> Inbox
+          <InboxOutlined /> Inbox
           </div>
-          <div onClick={ () => { changeActiveState('sent') } } className={ `nav-item ${isActive('  sent')}` }>
-            <i className="fas fa-paper-plane"></i> Sent
+          <div onClick={ () => { changeActiveState('sent') } } className={ `nav-item ${isActive('sent')}` }>
+          <SendOutlined /> Sent
           </div>
         </nav>
       </aside>

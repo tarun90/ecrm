@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
     const invoices = await Invoice.find().populate({
         path: 'contact', 
         select: 'firstName lastName' // Fetch only firstName and lastName
-      });;
+      });
     console.log(invoices, "Hello invoicesss");
     res.status(200).json(invoices);
   } catch (error) {

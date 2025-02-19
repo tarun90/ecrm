@@ -25,7 +25,10 @@ div.buisness-manage-container {
   transition: 0.2s all;
 }
 
-
+.search-container-wrapper{
+  order: 1;
+  width: 100%;
+}
 
 .buisness-manage-container .nav-bar-items button.invoice-btn:hover {
   color: #fff;
@@ -400,7 +403,7 @@ button {
 
 .modal-content {
   background-color: white;
-  padding: 20px;
+  padding: 0 10px;
   border-radius: 5px;
   max-width: 600px;
   width: 100%;
@@ -409,17 +412,13 @@ button {
 }
 
 .modal .modal-content.scroll {
-  max-height: calc(100vh - 220px);
+  max-height: calc(100vh - 320px);
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.modal-header h2 {
-  font-size: 18px;
 }
 
 
@@ -495,6 +494,7 @@ button {
   font-size: 14px;
   font-weight: 600;
   color: #333;
+  text-align: left;
   margin-bottom: 4px;
 }
 
@@ -780,6 +780,19 @@ textarea {
   margin-top: 1rem;
 }
 
+:where(.css-dev-only-do-not-override-1pjlhih).ant-menu-dark.ant-menu-inline .ant-menu-sub.ant-menu-inline,
+:where(.css-dev-only-do-not-override-1pjlhih).ant-menu-dark>.ant-menu.ant-menu-inline .ant-menu-sub.ant-menu-inline {
+  background: #0c3a5b !important;
+}
+
+@media (min-width:1440px) and (max-width:1680px) {
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+}
 
 @media (min-width:992px) and (max-width: 1440px) {
   .products-grid {

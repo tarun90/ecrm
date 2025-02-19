@@ -9,6 +9,8 @@ router.get('/', async (req, res) => {
     const products = await Product.find();
     res.json(products);
   } catch (error) {
+    console.log('Karan', error);
+
     res.status(500).json({ message: error.message });
   }
 });
