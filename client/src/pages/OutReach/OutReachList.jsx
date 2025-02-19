@@ -431,6 +431,7 @@ const OutReachList = () => {
                             onClick={ handleAddOutreach }
                             className="add-outreach-btn"
                         >
+                            <PlusOutlined />
                             Add Outreach
                         </Button> </> }
                     {/* <Button 
@@ -630,7 +631,7 @@ const OutReachList = () => {
                         </Col>
                     </Row>
                     <Divider />
-                    <Form.Item>
+                    <Form.Item className='modal-footer'>
                         <Button onClick={ () => setModalVisible(false) } className="text-btn">
                             Cancel
                         </Button>
@@ -666,6 +667,7 @@ const OutReachList = () => {
                 } }
                 onOk={ handleImportSubmit }
                 width={ 600 }
+                footer={ false }
             >
                 <Divider />
                 <div className="import-form">
@@ -738,6 +740,28 @@ const OutReachList = () => {
                             </Form.Item>
                         </Col>
                     </Row>
+                </div>
+                <Divider />
+                <div className="modal-footer">
+                    <Button
+                        className="text-btn" onClick={ () => {
+                            setImportModalVisible(false);
+                            setImportData({
+                                campaign: undefined,
+                                region: '',
+                                file: null,
+                                category: undefined,
+                            });
+                            // Clear the file from Dragger
+                            if (uploadProps.onChange) {
+                                uploadProps.onChange({ fileList: [] });
+                            }
+                        } } >   Cancel
+                    </Button>
+                    <Button
+                        type="primary" htmlType="submit"
+                        onClick={ handleImportSubmit } >
+                        Ok</Button>
                 </div>
             </Modal>
 

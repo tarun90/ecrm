@@ -280,3 +280,15 @@
     background-color: #185d87;
     border-color: transparent;
 }
+
+.ant-form-item .ant-form-item-control {
+    min-height: auto;
+}
+
+.ant-upload-wrapper .ant-upload-list .ant-upload-list-item .ant-upload-list-item-name {
+    color: #0077bd;
+}
+
+.ant-upload-wrapper .ant-upload-list .ant-upload-list-item {
+    padding: 10px;
+}
