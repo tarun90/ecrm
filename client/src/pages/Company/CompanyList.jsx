@@ -175,7 +175,7 @@ const CompanyList = () => {
                         value={ searchTerm }
                         onChange={ (e) => setsearchTerm(e.target.value) }
                         className="search-input"
-                        style={ { width: 200 } }
+                        style={ { width: 300 } }
                     />
 
                     {/* { isSearching && <span className="searching-indicator">Searching...</span> } */ }

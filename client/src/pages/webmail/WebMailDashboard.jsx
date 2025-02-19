@@ -4,6 +4,7 @@ import EmailList from './EmailList';
 import ComposeEmail from './ComposeEmail';
 import './WebMailDashboard.css';
 import { EditOutlined, InboxOutlined, SearchOutlined, SendOutlined, SyncOutlined } from '@ant-design/icons';
+import { Header } from 'antd/es/layout/layout';
 
 const WebMailDashboard = () => {
   // const { userEmail, logout } = useAuth();
@@ -67,14 +68,15 @@ const WebMailDashboard = () => {
         </nav>
       </aside>
       <main className="main-content">
-        <div className="search-bar">
-          <form onSubmit={ handleSearch }>
+        <Header className="search-bar">
+          <form onSubmit={ handleSearch } width={ 300 }>
             <input
               type="text"
               placeholder="Search emails..."
               value={ searchQuery }
               onChange={ (e) => setSearchQuery(e.target.value) }
               disabled={ isSearching }
+
             />
             <button className='close-btn' disabled={ isSearching }>
               { isSearching ? (
@@ -84,7 +86,7 @@ const WebMailDashboard = () => {
               ) }
             </button>
           </form>
-        </div>
+        </Header>
         {/* <Routes>  
           <Route path="/" element={<EmailList type="inbox" />} />
           <Route path="/sent" element={<EmailList type="sent" />} />

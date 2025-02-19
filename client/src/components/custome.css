@@ -106,7 +106,7 @@ div.product-header {
   display: flex;
   align-items: center;
   gap: 10px;
-  max-width: 300px;
+  max-width: 425px;
 }
 
 .search-icon {

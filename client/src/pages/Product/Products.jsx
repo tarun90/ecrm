@@ -153,7 +153,7 @@ function Products() {
               value={ searchTerm }
               onChange={ (e) => setSearchTerm(e.target.value) }
               className="search-input"
-              style={ { width: 200 } }
+              style={ { width: 300 } }
             />
           </div>
         </div>
