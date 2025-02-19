@@ -16,15 +16,10 @@ const copyToClipboard = (text) => {
   message.success('Copied to clipboard!');
 };
 
-// Function to Open Mailbox in Chrome
-const openMailClient = (email) => {
-  window.open(`mailto:${email}`, '_blank');
-};
-
-const ActionButton = ({ icon, label }) => {
+const ActionButton = ({ icon, label, onClick }) => {
   return (
     <div className="action-button">
-      <button className="icon-button">{ icon }</button>
+      <button className="icon-button" onClick={onClick}>{ icon }</button>
       <span className="button-label">{ label }</span>
     </div>
   );
@@ -124,8 +119,8 @@ const getContacts = async (id) => {
 const Sidebar = ({deal,DealsData}) => {
   const actions = [
     // { icon: <Edit />, label: 'Note' },
-    { icon: <Mail />, label: 'Email' },
-    { icon: <Phone />, label: 'Call' },
+    { icon: <Mail />, label: 'Emails', onClick: () => window.location.href = `mailto:${DealsData?.email}` },
+    { icon: <Phone />, label: 'Calls', onClick: () => window.location.href = `tel:${DealsData?.phoneNumber}` },
     // { icon: <Edit />, label: 'Task' },
     // { icon: <Calendar />, label: 'Meeting' },
     // { icon: <MoreHorizontal />, label: 'More' }
@@ -181,7 +176,7 @@ const Sidebar = ({deal,DealsData}) => {
       <div className="sidebar-header">
         <ArrowLeft className="back-icon" />
         <span>Deal</span>
-        <Button icon={ <CaretDownOutlined /> }>Actions </Button>
+        {/* <Button icon={ <CaretDownOutlined /> }>Actions </Button> */}
       </div>
 
       <div className="contact-card scroll">
@@ -199,18 +194,22 @@ const Sidebar = ({deal,DealsData}) => {
         </div>
 
         <div className="action-buttons">
-          {[{ icon: <Mail />, label: 'Email',onClick: () => openMailClient(DealsData?.email) }, { icon: <Phone />, label: 'Call' }].map((action, index) => (
-            <ActionButton key={index} icon={action.icon} label={action.label} />
+          {actions?.map((action, index) => (
+            <ActionButton key={index} icon={action.icon} label={action.label}
+              onClick={action.onClick} />
           ))}
+          {/* {[{ icon: <Mail />, label: 'Emailsss',onClick: () => window.location.href = `mailto:${DealsData?.email}` }, { icon: <Phone />, label: 'Call' }].map((action, index) => (
+            <ActionButton key={index} icon={action.icon} label={action.label} />
+          ))} */}
         </div>
 
         <div className="about-section">
           <div className="about-header">
             <h3>About this ...</h3>
-            <div className="about-actions">
+            {/* <div className="about-actions">
               <Button icon={ <CaretDownOutlined /> }>Actions </Button>
               <Settings />
-            </div>
+            </div> */}
           </div>
 
           <div className="contact-fields">
