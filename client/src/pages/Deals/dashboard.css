@@ -80,7 +80,7 @@
 
 .Sidebar .ant-layout-sider-children .ant-menu .ant-menu-submenu,
 .Sidebar .ant-layout-sider-children .ant-menu .ant-menu-submenu:hover,
-.Sidebar .ant-layout-sider-children .ant-menu .ant-menu-submenu-active{
+.Sidebar .ant-layout-sider-children .ant-menu .ant-menu-submenu-active {
     border: 0;
 }
 
@@ -143,7 +143,6 @@
 }
 
 .header-content .ant-form .ant-input-outlined {
-    border-color: #0077bd;
     background-color: #fff;
     color: rgba(0, 0, 0, 0.88);
 }

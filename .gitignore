@@ -33,3 +33,5 @@ client/Dockerfile
 server/Dockerfile
 docker-compose.yml
 server/uploads/
+client/package-lock.json
+server/package-lock.json
