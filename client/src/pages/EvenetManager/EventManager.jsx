@@ -15,9 +15,10 @@ import {
   updateEvent,
   deleteEvent,
 } from '../../lib/google-calendar';
+import { Layout } from 'antd';
 import "./EvenetManager.css"
 import MainLayout from '../../components/MainLayout';
-
+const { Header, Sider, Content } = Layout;
 
 function EventManager() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -44,39 +45,29 @@ function EventManager() {
   }, []);
 
   useEffect(() => {
-    const init = async () => {
+    const checkAuthState = async () => {
       try {
         await initializeGoogleCalendar();
-        setError(null);
+        const token = localStorage.getItem('googleAccessToken');
+        if (token) {
+          setIsAuthenticated(true);
+          fetchEvents();
+        }
       } catch (error) {
-        const message = error?.message || 'Failed to initialize Google Calendar';
-        console.error('Failed to initialize Google Calendar:', error);
-        setError(message);
+        setError('Failed to initialize Google Calendar');
       }
     };
-
-    init();
-  }, []);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      fetchEvents();
-      const interval = setInterval(fetchEvents, 30 * 1000);
-      return () => clearInterval(interval);
-    }
-  }, [isAuthenticated, fetchEvents]);
+    checkAuthState();
+  }, [fetchEvents]);
 
   const handleAuth = async () => {
     try {
       await authenticate();
       setIsAuthenticated(true);
-      setError(null);
       toast.success('Successfully connected to Google Calendar');
+      fetchEvents();
     } catch (error) {
-      const message = error?.message || 'Authentication failed';
-      console.error('Authentication error:', error);
-      setError(message);
-      toast.error('Failed to connect to Google Calendar');
+      toast.error('Authentication failed');
     }
   };
 
