@@ -200,7 +200,12 @@ const MainContent = ({contactsData,deals}) => {
                         <td>{deal?.contact?.firstName + " " + deal?.contact?.lastName}</td>
                         <td>{deal?.amount}</td>
                         <td>{deal?.stage}</td>
-                        <td>{new Date(deal?.closeDate).toISOString().split('T')[0]}</td>
+                        <td>
+                          {new Date(deal?.closeDate).getDate().toString().padStart(2, '0') + '-' +
+                          (new Date(deal?.closeDate).getMonth() + 1).toString().padStart(2, '0') + '-' +
+                          new Date(deal?.closeDate).getFullYear()}
+                        </td>
+
                       </tr>
                     ))
                   ) : (
