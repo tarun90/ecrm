@@ -10,7 +10,8 @@ import {
   FileTextOutlined,
   MailOutlined,
   FolderOutlined,
-  AppstoreOutlined
+  AppstoreOutlined,
+  FileDoneOutlined
 } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import HeaderLogo from '../assets/Icons/headerlogo';
@@ -61,7 +62,7 @@ const Sidebar = ({ collapsed, onCollapse }) => {
     },
     {
       key: '4',
-      icon: <UnorderedListOutlined />,
+      icon: <FileDoneOutlined />,
       label: 'Tasks',
       onClick: () => navigate('/tasks'),
     },

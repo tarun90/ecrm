@@ -167,6 +167,7 @@ const CompanyList = () => {
         <div className="contact-container">
             <Header className="contact-header">
                 <div className="search-container">
+                    <h1>Companies</h1>
                     <input
                         type="text"
                         placeholder="Search by name, email, or phone..."

@@ -103,6 +103,8 @@ div.product-header {
 .search-container {
   position: relative;
   flex: 1;
+  display: flex;
+  gap: 10px;
   max-width: 300px;
 }
 
@@ -138,7 +140,9 @@ div.product-header {
   gap: 1rem;
 }
 
-
+:where(.css-dev-only-do-not-override-1pjlhih).ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector {
+  background-color: #fff;
+}
 
 .product-info {
   display: flex;
@@ -746,11 +750,11 @@ textarea {
 
 
 .product-card {
-  background: linear-gradient(285deg, #187cb70f 25.9%, #36a0df24 94.4%);
+  background-color: #ffffff;
   border-radius: 8px;
   padding: 16px;
   margin-bottom: 12px;
-  box-shadow: 0px 2px 3px 0 #36a0df66;
+  box-shadow: 0px 2px 3px 0 #f1f1f166;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
   text-align: left;
@@ -759,7 +763,7 @@ textarea {
 
 
 .product-card:hover {
-  box-shadow: -1px 3px 2px 0 #36a0df66;
+  box-shadow: -1px 3px 2px 0 #dbdbdb66;
 }
 
 .edit-button svg {

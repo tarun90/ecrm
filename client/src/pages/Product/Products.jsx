@@ -3,6 +3,7 @@ import axios from "axios";
 import { Package, Edit2, Search, Plus, Trash2 } from "lucide-react";
 import MainLayout from "../../components/MainLayout";
 import "../../components/custome.css";
+import "./Products.css";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { Modal, Form, Input, Select, Button, Divider, Row, Col } from "antd";
 import TextArea from "antd/es/input/TextArea";
@@ -142,15 +143,18 @@ function Products() {
   return (
     <div className="products-section">
       <div className="product-header">
-        <div className="search-container">
-          <Search className="search-icon" />
-          <input
-            type="text"
-            placeholder="Search products..."
-            value={ searchTerm }
-            onChange={ (e) => setSearchTerm(e.target.value) }
-            className="product-search"
-          />
+        <div className="product-wrapper">
+          <h1>Products</h1>
+          <div className="search-container">
+            <Search className="search-icon" />
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={ searchTerm }
+              onChange={ (e) => setSearchTerm(e.target.value) }
+              className="product-search"
+            />
+          </div>
         </div>
         <div className="btn-wrapper">
           <Button

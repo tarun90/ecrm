@@ -136,6 +136,7 @@ function Tasks() {
       <div className="app-container add-task-dashboard">
         <Header className="top-nav">
           <div className="nav-content">
+            <h1> Task</h1>
 
             { showFilters && (
               <div className="filters-panel">
@@ -244,10 +245,10 @@ function Tasks() {
                         <CalendarOutlined />
                         <span>
                           { new Date(task.dueDate).toLocaleDateString('en-GB', {
-  day: '2-digit',
-  month: '2-digit',
-  year: 'numeric'
-}).replace(/\//g, '-') }
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric'
+                          }).replace(/\//g, '-') }
                         </span>
                       </div>
                     </div>
@@ -306,10 +307,10 @@ function Tasks() {
                         <CalendarOutlined />
                         <span>
                           { new Date(task.dueDate).toLocaleDateString('en-GB', {
-  day: '2-digit',
-  month: '2-digit',
-  year: 'numeric'
-}).replace(/\//g, '-') }
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric'
+                          }).replace(/\//g, '-') }
                         </span>
                       </div>
                     </div>
@@ -358,10 +359,10 @@ function Tasks() {
                         <CalendarOutlined />
                         <span>
                           { new Date(task.dueDate).toLocaleDateString('en-GB', {
-  day: '2-digit',
-  month: '2-digit',
-  year: 'numeric'
-}).replace(/\//g, '-') }
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric'
+                          }).replace(/\//g, '-') }
                         </span>
                       </div>
                     </div>

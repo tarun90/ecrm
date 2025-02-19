@@ -455,6 +455,7 @@ const OutReachList = () => {
             <Header className="outreach-header">
                 <div className="outreach-header-wrapper">
                     <div className="search-container">
+                        <h1>Outreach</h1>
                         <Input
                             type="text"
                             placeholder="Search Outreach..."

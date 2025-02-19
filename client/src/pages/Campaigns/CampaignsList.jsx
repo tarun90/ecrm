@@ -66,6 +66,7 @@ const CampaignList = () => {
         <div className="campaign-container">
             <Header className="contact-header">
                 <div className="search-container">
+                    <h1>Campaigns</h1>
                     <input
                         type="text"
                         placeholder="Search Campaign..."

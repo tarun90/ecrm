@@ -338,6 +338,7 @@
     text-align: left;
 }
 
+.ant-select .ant-select-selector,
 .ant-form-item .ant-form-item-control-input .ant-form-item-control-input-content .ant-input-outlined:hover,
 .ant-form-item .ant-form-item-control-input .ant-form-item-control-input-content .ant-input-outlined,
 .ant-input-outlined:focus-within {

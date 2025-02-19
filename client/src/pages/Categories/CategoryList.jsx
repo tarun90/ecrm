@@ -82,6 +82,7 @@ const CategoryList = () => {
         <div className="category-container">
             <Header className="category-header">
                 <div className="search-container">
+                    <h1>Categories</h1>
                     <Input
                         type="text"
                         placeholder="Search Category..."

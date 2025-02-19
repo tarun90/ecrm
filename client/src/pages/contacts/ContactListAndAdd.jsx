@@ -206,6 +206,7 @@ const ContactListAndAdd = () => {
         <div className="contact-container">
             <Header className="contact-header">
                 <div className="search-container">
+                    <h1>Contacts</h1>
                     <Search
                         allowClear
                         placeholder="Search by name, email, or phone..."

@@ -348,9 +348,14 @@ function Deals() {
     //   </Menu>
     // </Sider>
     <Layout className='main-content-wrapper'>
+
       <Header className="content-header">
         <div className={ styles.headerContent }>
+
           <div className={ styles.headerActions }>
+            <div className='heading'>
+              <h1>Deals</h1>
+            </div>
             <Search
               placeholder="Search deals by name or company..."
               allowClear
@@ -463,15 +468,16 @@ function Deals() {
                                 <p className={ styles.dealCompany }>{ deal.company?.companyName }</p>
                                 <div className={ styles.dealInfo }>
                                   <span className={ `${styles.dealAmount} ${deal.amount < 0 ? styles.negative : ''}` }>
+                                    Amount:
                                     ${ deal.amount.toLocaleString() }
                                   </span>
                                   <span>•</span>
                                   <span>
-                                  <ClockCircleOutlined /> {new Date(deal.closeDate).toLocaleDateString('en-GB', {
-  day: '2-digit',
-  month: '2-digit',
-  year: 'numeric'
-}).replace(/\//g, '-')}
+                                    <ClockCircleOutlined /> { new Date(deal.closeDate).toLocaleDateString('en-GB', {
+                                      day: '2-digit',
+                                      month: '2-digit',
+                                      year: 'numeric'
+                                    }).replace(/\//g, '-') }
                                   </span>
                                 </div>
                               </div>
@@ -519,7 +525,7 @@ function Deals() {
             Create
           </Button>
         ] }
-        width={ 600 } // Adjusted width for better layout
+
       >
         <Divider />
         <Form
@@ -571,7 +577,7 @@ function Deals() {
                 label="Close date"
                 rules={ [{ required: true, message: 'Please select close date' }] }
               >
-                <DatePicker style={ { width: '100%' } }  format="DD-MM-YYYY"/>
+                <DatePicker style={ { width: '100%' } } format="DD-MM-YYYY" />
               </Form.Item>
             </Col>
 
@@ -674,7 +680,7 @@ function Deals() {
             Update
           </Button>
         ] }
-        width={ 600 } // Adjusted for better layout
+
       >
         <Divider />
         <Form
@@ -725,7 +731,7 @@ function Deals() {
                 label="Close date"
                 rules={ [{ required: true, message: 'Please select close date' }] }
               >
-                <DatePicker style={ { width: '100%' } }  format="DD-MM-YYYY" />
+                <DatePicker style={ { width: '100%' } } format="DD-MM-YYYY" />
               </Form.Item>
             </Col>
 
