@@ -194,6 +194,7 @@
 
 .ant-form-item-row.ant-row {
     flex-direction: column;
+    display: block;
 }
 
 .ant-form-item-label label {
@@ -343,6 +344,7 @@
 .ant-form-item .ant-form-item-control-input .ant-form-item-control-input-content .ant-input-outlined,
 .ant-input-outlined:focus-within {
     box-shadow: none;
+    height: 42px;
     background-color: #fff;
 }
 
