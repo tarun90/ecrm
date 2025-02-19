@@ -631,7 +631,7 @@ const OutReachList = () => {
                         </Col>
                     </Row>
                     <Divider />
-                    <Form.Item className='modal-footer'>
+                    <div className='modal-footer'>
                         <Button onClick={ () => setModalVisible(false) } className="text-btn">
                             Cancel
                         </Button>
@@ -639,11 +639,11 @@ const OutReachList = () => {
                             type="primary"
                             htmlType="submit"
                             loading={ loading }
-                            style={ { width: '100%' } }
+
                         >
                             { editMode ? "Update" : "Create" } Outreach
                         </Button>
-                    </Form.Item>
+                    </div>
                 </Form>
             </Modal>
 
@@ -671,75 +671,67 @@ const OutReachList = () => {
             >
                 <Divider />
                 <div className="import-form">
-                    <Row gutter={ 16 }>
-                        <Col span={ 12 }>
-                            <Form.Item label="Campaign" style={ { marginBottom: 16 } }>
-                                <Select
-                                    placeholder="Select Campaign"
-                                    value={ importData.campaign }
-                                    onChange={ (value) => setImportData((prev) => ({ ...prev, campaign: value })) }
-                                    style={ { width: '100%' } }
-                                >
-                                    { campaigns.map((campaign) => (
-                                        <Select.Option key={ campaign._id } value={ campaign._id }>
-                                            { campaign.campaignName }
-                                        </Select.Option>
-                                    )) }
-                                </Select>
-                            </Form.Item>
-                        </Col>
 
-                        <Col span={ 12 }>
-                            <Form.Item label="Category" style={ { marginBottom: 16 } }>
-                                <Select
-                                    value={ importData.category }
-                                    onChange={ (value) => setImportData((prev) => ({ ...prev, category: value })) }
-                                    placeholder="Select Category"
-                                    style={ { width: '100%' } }
-                                >
-                                    { categories.map((category) => (
-                                        <Select.Option key={ category._id } value={ category._id }>
-                                            { category.categoryName }
-                                        </Select.Option>
-                                    )) }
-                                </Select>
-                            </Form.Item>
-                        </Col>
+                    <Form.Item label="Campaign" style={ { marginBottom: 16 } }>
+                        <Select
+                            placeholder="Select Campaign"
+                            value={ importData.campaign }
+                            onChange={ (value) => setImportData((prev) => ({ ...prev, campaign: value })) }
+                            style={ { width: '100%' } }
+                        >
+                            { campaigns.map((campaign) => (
+                                <Select.Option key={ campaign._id } value={ campaign._id }>
+                                    { campaign.campaignName }
+                                </Select.Option>
+                            )) }
+                        </Select>
+                    </Form.Item>
 
-                        <Col span={ 12 }>
-                            <Form.Item label="Region" style={ { marginBottom: 16 } }>
-                                <Select
-                                    placeholder="Select Region"
-                                    value={ importData.region }
-                                    onChange={ (value) => setImportData((prev) => ({ ...prev, region: value })) }
-                                    options={ regionOptions }
-                                    style={ { width: '100%' } }
-                                />
-                            </Form.Item>
-                        </Col>
+                    <Form.Item label="Category" style={ { marginBottom: 16 } }>
+                        <Select
+                            value={ importData.category }
+                            onChange={ (value) => setImportData((prev) => ({ ...prev, category: value })) }
+                            placeholder="Select Category"
+                            style={ { width: '100%' } }
+                        >
+                            { categories.map((category) => (
+                                <Select.Option key={ category._id } value={ category._id }>
+                                    { category.categoryName }
+                                </Select.Option>
+                            )) }
+                        </Select>
+                    </Form.Item>
+
+                    <Form.Item label="Region" style={ { marginBottom: 16 } }>
+                        <Select
+                            placeholder="Select Region"
+                            value={ importData.region }
+                            onChange={ (value) => setImportData((prev) => ({ ...prev, region: value })) }
+                            options={ regionOptions }
+                            style={ { width: '100%' } }
+                        />
+                    </Form.Item>
 
 
-                    </Row>
-                    <Row >
-                        <Col >
-                            <Form.Item label="CSV Upload" style={ { marginBottom: 16 } }>
-                                <Dragger
-                                    { ...uploadProps }
-                                    className="csv-uploader"
-                                    key={ importModalVisible.toString() }
-                                    style={ { width: '100%' } }
-                                >
-                                    <p className="ant-upload-drag-icon">
-                                        <InboxOutlined />
-                                    </p>
-                                    <p className="ant-upload-text">
-                                        Click or drag CSV file to this area to upload
-                                    </p>
-                                    <p className="ant-upload-hint">Support for single CSV file upload</p>
-                                </Dragger>
-                            </Form.Item>
-                        </Col>
-                    </Row>
+
+
+                    <Form.Item label="CSV Upload" style={ { marginBottom: 16 } }>
+                        <Dragger
+                            { ...uploadProps }
+                            className="csv-uploader"
+                            key={ importModalVisible.toString() }
+                            style={ { width: '100%' } }
+                        >
+                            <p className="ant-upload-drag-icon">
+                                <InboxOutlined />
+                            </p>
+                            <p className="ant-upload-text">
+                                Click or drag CSV file to this area to upload
+                            </p>
+                            <p className="ant-upload-hint">Support for single CSV file upload</p>
+                        </Dragger>
+                    </Form.Item>
+
                 </div>
                 <Divider />
                 <div className="modal-footer">
@@ -988,7 +980,7 @@ const OutReachList = () => {
                 </Form>
             </Modal>
 
-        </div>
+        </div >
     );
 };
 

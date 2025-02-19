@@ -219,6 +219,7 @@
     color: #ff4d4f;
 }
 
+
 .ant-layout-content .products-section .delete-btn:disabled:hover,
 .btn-wrapper .delete-btn:disabled span,
 .ant-btn-variant-text:disabled:hover,
@@ -291,4 +292,8 @@
 
 .ant-upload-wrapper .ant-upload-list .ant-upload-list-item {
     padding: 10px;
+}
+
+.ant-upload-wrapper .ant-upload-list .ant-upload-list-item {
+    height: auto;
 }
