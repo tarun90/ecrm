@@ -42,7 +42,7 @@ function Sales() {
     sales_person: "",
     contact: "",
     grand_total: "",
-    activities: "suport_package",
+    activities: "",
     status: "in_progress",
     currency: "USD"
   };

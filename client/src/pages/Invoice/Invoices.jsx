@@ -118,7 +118,7 @@ function Invoices() {
       const response = await axios.get(
         `${import.meta.env.VITE_TM_API_URL}/api/sales?page=${currentPage}`
       );
-      setSales(response.data);
+      setSales(response.data.data);
     } catch (err) {
       setError("Failed to fetch sales. Please try again later.");
     } finally {

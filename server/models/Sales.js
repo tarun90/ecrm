@@ -30,12 +30,10 @@ sales_updated_date: {
   },
   activities: {
     type: String,
-    enum: ['magento_dadicated', 'seo', 'magento_suport_package', 'suport_package'],
     default: 'suport_package'
   },
   status: {
     type: String,
-    enum: ['in_progress', 'on_hold', 'completed'],
     default: 'in_progress'
   }
 }, {
