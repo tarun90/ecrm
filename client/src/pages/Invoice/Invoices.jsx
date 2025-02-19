@@ -46,6 +46,7 @@ function Invoices() {
   const [isEditing, setIsEditing] = useState(false);
   const [currentInvoice, setCurrentInvoice] = useState(null);
   const [size, setSize] = useState("large");
+  const { Search } = Input;
   const initialFormData = {
     invoice_number: "",
     contact: "",
@@ -664,74 +665,7 @@ function Invoices() {
   return (
     <Layout className="main-content-wrapper">
       <Header className="invoice-header">
-        <div className="search-container-wrapper">
-          <div className="filter-container">
-            <div className="filter-group">
-              <div className="search-bar">
-                <Search className="search-icon-invoice" />
-                <input
-                  type="text"
-                  placeholder="Search invoices..."
-                  value={ searchTerm }
-                  onChange={ (e) => setSearchTerm(e.target.value) }
-                  className="filter-input"
-                />
-              </div>
-              {/* 📑 Filter by Invoice Number */ }
-              <input
-                type="text"
-                placeholder="Invoice Number..."
-                value={ invoiceFilter }
-                onChange={ (e) => setInvoiceFilter(e.target.value) }
-                className="filter-input"
-              />
-
-              {/* 🧑‍💼 Filter by Customer */ }
-              <input
-                type="text"
-                placeholder="Customer Name..."
-                value={ customerFilter }
-                onChange={ (e) => setCustomerFilter(e.target.value) }
-                className="filter-input"
-              />
-
-              {/* 📅 Filter by Due Date */ }
-              <input
-                type="text"
-                placeholder="Due Date (DD/MM/YYYY)..."
-                value={ dueDateFilter }
-                onChange={ (e) => setDueDateFilter(e.target.value) }
-                className="filter-input"
-              />
-
-              {/* 📌 Filter by Status */ }
-              <select
-                value={ statusFilter }
-                onChange={ (e) => setStatusFilter(e.target.value) }
-                className="filter-dropdown"
-              >
-                <option value="">All Statuses</option>
-                <option value="unpaid">Unpaid</option>
-                <option value="paid">Paid</option>
-                <option value="overdue">Overdue</option>
-              </select>
-            </div>
-
-            {/* 🔄 Clear Filters Button */ }
-            <button
-              className="clear-filters"
-              onClick={ () => {
-                setSearchTerm("");
-                setInvoiceFilter("");
-                setCustomerFilter("");
-                setDueDateFilter("");
-                setStatusFilter("");
-              } }
-            >
-              Clear Filters
-            </button>
-          </div>
-        </div>
+        <h1>Invoices</h1>
         <div className="action-buttons">
           <Button
             onClick={ exportPDF }
@@ -762,7 +696,72 @@ function Invoices() {
           </Button>
         </div>
       </Header>
+      <Header className="filter-container">
+        <div className="filter-group">
 
+          <Search
+            allowClear
+            placeholder="Search invoices..."
+            value={ searchTerm }
+            onChange={ (e) => setSearchTerm(e.target.value) }
+            className="search-input"
+            style={ { width: 300 } }
+          />
+
+          {/* 📑 Filter by Invoice Number */ }
+          <input
+            type="text"
+            placeholder="Invoice Number..."
+            value={ invoiceFilter }
+            onChange={ (e) => setInvoiceFilter(e.target.value) }
+            className="filter-input"
+          />
+
+          {/* 🧑‍💼 Filter by Customer */ }
+          <input
+            type="text"
+            placeholder="Customer Name..."
+            value={ customerFilter }
+            onChange={ (e) => setCustomerFilter(e.target.value) }
+            className="filter-input"
+          />
+
+          {/* 📅 Filter by Due Date */ }
+          <input
+            type="text"
+            placeholder="Due Date (DD/MM/YYYY)..."
+            value={ dueDateFilter }
+            onChange={ (e) => setDueDateFilter(e.target.value) }
+            className="filter-input"
+          />
+
+          {/* 📌 Filter by Status */ }
+          <select
+            value={ statusFilter }
+            onChange={ (e) => setStatusFilter(e.target.value) }
+            className="filter-dropdown"
+          >
+            <option value="">All Statuses</option>
+            <option value="unpaid">Unpaid</option>
+            <option value="paid">Paid</option>
+            <option value="overdue">Overdue</option>
+          </select>
+        </div>
+
+        {/* 🔄 Clear Filters Button */ }
+        <button
+          className="delete-btn"
+          onClick={ () => {
+            setSearchTerm("");
+            setInvoiceFilter("");
+            setCustomerFilter("");
+            setDueDateFilter("");
+            setStatusFilter("");
+          } }
+        >
+          Clear Filters
+        </button>
+      </Header>
       { error && (
         <div className="error-message">
           <p>{ error }</p>

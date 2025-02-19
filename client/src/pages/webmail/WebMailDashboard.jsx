@@ -54,15 +54,15 @@ const WebMailDashboard = () => {
 
         </div>
         <div onClick={ () => { changeActiveState('compose') } } className="compose-btn">
-        <EditOutlined/>
+          <EditOutlined />
           Compose
         </div>
         <nav className="nav-menu">
           <div onClick={ () => { changeActiveState('inbox') } } className={ `nav-item ${isActive('inbox')}` }>
-          <InboxOutlined /> Inbox
+            <InboxOutlined /> Inbox
           </div>
           <div onClick={ () => { changeActiveState('sent') } } className={ `nav-item ${isActive('sent')}` }>
-          <SendOutlined /> Sent
+            <SendOutlined /> Sent
           </div>
         </nav>
       </aside>

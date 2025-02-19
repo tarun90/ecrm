@@ -17,15 +17,6 @@
   position: relative;
 }
 
-.search-input {
-  width: 100%;
-  padding: 10px 16px;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  font-size: 14px;
-  transition: all 0.2s;
-}
-
 .search-input:focus {
   outline: none;
   border-color: #3b82f6;
@@ -43,7 +34,7 @@
 
 .action-buttons {
   display: flex;
-  gap: 12px;
+  gap: 5px;
   align-items: center;
 }
 

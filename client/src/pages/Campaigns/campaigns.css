@@ -1,10 +1,10 @@
-.campaign-container{
+.campaign-container {
     flex: 1;
     min-width: 280px;
     position: relative;
 }
 
-.campaign-header{
+.campaign-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -15,13 +15,4 @@
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.search-input{
-    width: 100%;
-    padding: 10px 16px;
-    border: 1px solid #e2e8f0;
-    border-radius: 6px;
-    font-size: 14px;
-    transition: all 0.2s;
 }

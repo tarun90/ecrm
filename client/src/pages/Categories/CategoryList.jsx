@@ -4,7 +4,7 @@ import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { getCategories, createCategory, updateCategory, deleteCategory } from './categoryService';
 import './categories.css';
 import { Header } from 'antd/es/layout/layout';
-import { Delete, Edit } from 'lucide-react';
+import { Delete, Edit, Search } from 'lucide-react';
 
 const CategoryList = () => {
     const [categories, setCategories] = useState([]);
@@ -13,6 +13,7 @@ const CategoryList = () => {
     const [editId, setEditId] = useState(null);
     const [categoryName, setCategoryName] = useState('');
     const [form] = Form.useForm();
+    const { Search } = Input;
 
     useEffect(() => {
         fetchCategories();
@@ -83,8 +84,7 @@ const CategoryList = () => {
             <Header className="category-header">
                 <div className="search-container">
                     <h1>Categories</h1>
-                    <Input
-                        type="text"
+                    <Search
                         placeholder="Search Category..."
                         value={ searchTerm }
                         onChange={ (e) => setSearchTerm(e.target.value) }

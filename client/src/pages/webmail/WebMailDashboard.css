@@ -55,10 +55,12 @@
   font-weight: 500;
   transition: box-shadow 0.2s;
 }
+
 .compose-btn span,
 .mail-dashboard .nav-menu .nav-item span {
   margin-right: 15px;
 }
+
 .compose-btn:hover {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
@@ -68,12 +70,15 @@
   flex-direction: column;
   gap: 8px;
 }
-.mail-dashboard .nav-menu{
+
+.mail-dashboard .nav-menu {
   padding: 0;
 }
-.mail-dashboard .nav-menu .nav-item{
+
+.mail-dashboard .nav-menu .nav-item {
   margin: 0;
 }
+
 .nav-item {
   display: flex;
   align-items: center;
@@ -113,19 +118,14 @@
   border-radius: 8px;
   border: none;
   width: 100%;
-<<<<<<< HEAD
   height: 50px;
   max-width: 500px;
-=======
-  max-width: 100%;
->>>>>>> fd22e68 (naresh design changes)
   box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3);
 }
 
 .search-bar form {
   width: 100%;
   display: flex;
-  gap: 10px;
 }
 
 .search-bar input {
