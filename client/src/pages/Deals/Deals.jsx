@@ -467,7 +467,11 @@ function Deals() {
                                   </span>
                                   <span>•</span>
                                   <span>
-                                    <ClockCircleOutlined /> { new Date(deal.closeDate).toLocaleDateString() }
+                                  <ClockCircleOutlined /> {new Date(deal.closeDate).toLocaleDateString('en-GB', {
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric'
+}).replace(/\//g, '-')}
                                   </span>
                                 </div>
                               </div>
@@ -567,7 +571,7 @@ function Deals() {
                 label="Close date"
                 rules={ [{ required: true, message: 'Please select close date' }] }
               >
-                <DatePicker style={ { width: '100%' } } />
+                <DatePicker style={ { width: '100%' } }  format="DD-MM-YYYY"/>
               </Form.Item>
             </Col>
 
@@ -721,7 +725,7 @@ function Deals() {
                 label="Close date"
                 rules={ [{ required: true, message: 'Please select close date' }] }
               >
-                <DatePicker style={ { width: '100%' } } />
+                <DatePicker style={ { width: '100%' } }  format="DD-MM-YYYY" />
               </Form.Item>
             </Col>
 

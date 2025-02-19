@@ -266,7 +266,7 @@ const ContactListAndAdd = () => {
                                 <td>{ contact?.contactOwner?.name }</td>
                                 <td>{ contact?.jobTitle }</td>
                                 <td>{ contact?.leadStatus }</td>
-                                <td>{ moment(contact?.createdAt).format('DD-MM-YYYY HH:mm') }</td>
+                                <td>{ moment(contact?.createdAt).format('DD-MM-YYYY') }</td>
                                 <td>
                                     <div className='action-buttons'>
                                         <button type="link" className='edit-btn' onClick={ () => handleEdit(contact) }>
