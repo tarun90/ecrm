@@ -150,6 +150,7 @@ function Tasks() {
                   <DatePicker
                     className="filter-input"
                     onChange={ date => setFilters({ ...filters, dueDate: date }) }
+                    format="DD-MM-YYYY"
                   />
                   <Button
                     type="primary"
@@ -242,7 +243,11 @@ function Tasks() {
                       <div className="info-item">
                         <CalendarOutlined />
                         <span>
-                          { new Date(task.dueDate).toLocaleDateString() }
+                          { new Date(task.dueDate).toLocaleDateString('en-GB', {
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric'
+}).replace(/\//g, '-') }
                         </span>
                       </div>
                     </div>
@@ -300,7 +305,11 @@ function Tasks() {
                       <div className="info-item">
                         <CalendarOutlined />
                         <span>
-                          { new Date(task.dueDate).toLocaleDateString() }
+                          { new Date(task.dueDate).toLocaleDateString('en-GB', {
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric'
+}).replace(/\//g, '-') }
                         </span>
                       </div>
                     </div>
@@ -348,7 +357,11 @@ function Tasks() {
                       <div className="info-item">
                         <CalendarOutlined />
                         <span>
-                          { new Date(task.dueDate).toLocaleDateString() }
+                          { new Date(task.dueDate).toLocaleDateString('en-GB', {
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric'
+}).replace(/\//g, '-') }
                         </span>
                       </div>
                     </div>

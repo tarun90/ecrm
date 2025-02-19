@@ -73,3 +73,24 @@ export const assignOutreach = async (outreachIds, userId) => {
     throw error;
   }
 };
+
+export const assignOutreachBySourceFile = async (sourceFile, userId) => {
+  try {
+    const response = await axios.post(`${API_URL}/assign`, {
+      sourceFile,
+      userId,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getSourceFiles = async () => {
+  try {
+    const response = await axios.get(`${import.meta.env.VITE_TM_API_URL}/api/source-files`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
