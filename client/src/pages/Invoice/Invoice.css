@@ -83,16 +83,7 @@
   border-color: #007bff;
 }
 
-.search-bar {
-  display: flex;
-  align-items: center;
-  /* border: 1px solid #ccc; */
-  padding: 8px 12px;
-  border-radius: 5px;
-  width: 250px;
-  background: #ffffff;
-  height: 40px;
-}
+
 
 .search-icon-invoice {
   color: #007bff;

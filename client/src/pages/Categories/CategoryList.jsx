@@ -85,10 +85,12 @@ const CategoryList = () => {
                 <div className="search-container">
                     <h1>Categories</h1>
                     <Search
+                        allowClear
                         placeholder="Search Category..."
                         value={ searchTerm }
                         onChange={ (e) => setSearchTerm(e.target.value) }
                         className="search-input"
+                        width={ 300 }
                     />
                 </div>
                 <div className="action-buttons">

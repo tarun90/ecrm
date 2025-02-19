@@ -213,7 +213,7 @@ const ContactListAndAdd = () => {
                         placeholder="Search by name, email, or phone..."
                         onChange={ (e) => setSearchTerm(e.target.value) }
                         className="search-input"
-
+                        width={ 300 }
                         value={ searchTerm }
 
                     />
