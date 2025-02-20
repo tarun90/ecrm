@@ -25,6 +25,10 @@ const outReachSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
+    designation: {
+        type: String,
+        trim: true
+    },
     country: {
         type: String,
         trim: true

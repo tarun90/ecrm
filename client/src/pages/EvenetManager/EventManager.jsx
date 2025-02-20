@@ -45,39 +45,29 @@ function EventManager() {
   }, []);
 
   useEffect(() => {
-    const init = async () => {
+    const checkAuthState = async () => {
       try {
         await initializeGoogleCalendar();
-        setError(null);
+        const token = localStorage.getItem('googleAccessToken');
+        if (token) {
+          setIsAuthenticated(true);
+          fetchEvents();
+        }
       } catch (error) {
-        const message = error?.message || 'Failed to initialize Google Calendar';
-        console.error('Failed to initialize Google Calendar:', error);
-        setError(message);
+        setError('Failed to initialize Google Calendar');
       }
     };
-
-    init();
-  }, []);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      fetchEvents();
-      const interval = setInterval(fetchEvents, 30 * 1000);
-      return () => clearInterval(interval);
-    }
-  }, [isAuthenticated, fetchEvents]);
+    checkAuthState();
+  }, [fetchEvents]);
 
   const handleAuth = async () => {
     try {
       await authenticate();
       setIsAuthenticated(true);
-      setError(null);
       toast.success('Successfully connected to Google Calendar');
+      fetchEvents();
     } catch (error) {
-      const message = error?.message || 'Authentication failed';
-      console.error('Authentication error:', error);
-      setError(message);
-      toast.error('Failed to connect to Google Calendar');
+      toast.error('Authentication failed');
     }
   };
 
@@ -196,30 +186,30 @@ function EventManager() {
     );
   }
 
-  // if (!isAuthenticated) {
-  //   return (
-  //     <div className="auth-container">
-  //       <div className="auth-card">
-  //         <div className="auth-icon-container">
-  //           <CalendarIcon className="auth-icon" />
-  //         </div>
-  //         <h1 className="auth-title">Calendar Event Manager</h1>
-  //         <p className="auth-description">Connect with Google Calendar to manage your events</p>
-  //         <button
-  //           onClick={ handleAuth }
-  //           className="auth-button"
-  //         >
-  //           <LogIn className="button-icon" />
-  //           Connect with Google Calendar
-  //         </button>
-  //       </div>
-  //     </div>
-  //   );
-  // }
+  if (!isAuthenticated) {
+    return (
+      <div className="auth-container">
+        <div className="auth-card">
+          <div className="auth-icon-container">
+            <CalendarIcon className="auth-icon" />
+          </div>
+          <h1 className="auth-title">Calendar Event Manager</h1>
+          <p className="auth-description">Connect with Google Calendar to manage your events</p>
+          <button
+            onClick={ handleAuth }
+            className="auth-button"
+          >
+            <LogIn className="button-icon" />
+            Connect with Google Calendar
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <Layout className='main-content-wrapper evant-wrapper '>
-      <Header className="content-header evant-header">
+    <Layout className='main-content-wrapper'>
+      <Header className="content-header">
         <div className="header-content">
           <div className='heading'>
             <h1 >Event Planner</h1>
@@ -243,7 +233,7 @@ function EventManager() {
         </div>
       </Header>
 
-      <Content className="content-warpper evant-warpper">
+      <Content className="content-warpper">
         <div className="calendar-container">
           <FullCalendar
             plugins={ [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin] }
