@@ -43,6 +43,8 @@ const Sidebar = ({ collapsed, onCollapse }) => {
     .isAdmin : {}
     const isRegionHead = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData'))
     .isRegionHead : {}
+    const isSuperAdmin = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData'))
+    .isSuperAdmin : {}
   const menuItems = [
     {
       key: '1',
@@ -120,10 +122,15 @@ const Sidebar = ({ collapsed, onCollapse }) => {
           label: 'Outreach',
           onClick: () => navigate('/outreach/list'),
         },
-        isRegionHead && {
+        (isRegionHead || isSuperAdmin) && {
           key: '10-4',
           label: 'Analytics',
           onClick: () => navigate('/outreach/analytics'),
+        },
+        (isRegionHead || isSuperAdmin) && {
+          key: '10-5',
+          label: 'Analytics2',
+          onClick: () => navigate('/outreach/analytics2'),
         }
       ].filter(Boolean),
     },

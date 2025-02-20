@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import "./analytics.css"
 import { Input } from 'antd';
 import { Header } from 'antd/es/layout/layout';
-import { getAnalyticsData } from '../OutReach/outreachService';
+import { getUserCampaignData } from '../OutReach/outreachService';
 import NoDataUI from '../../components/NoData';
 const { Search } = Input;
 
-const Analytics = () => {
+const Analytics2 = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [analyticsData, setAnalyticsData] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -14,10 +14,10 @@ const Analytics = () => {
     const fetchAnalyticsData = async (search = '') => {
         try {
             setLoading(true);
-            const data = await getAnalyticsData(search);
+            const data = await getUserCampaignData(search);
             setAnalyticsData(data);
         } catch (error) {
-            console.error('Error fetching analytics data:', error);
+            console.error('Error fetching user campaign data:', error);
         } finally {
             setLoading(false);
         }
@@ -44,10 +44,10 @@ const Analytics = () => {
         <div className="analytics-container">
             <Header className="analytics-header">
                 <div className="search-container">
-                    <h1>Analytics</h1>
+                    <h1>Analytics2</h1>
                     <Search
                         allowClear
-                        placeholder="Search by category, campaign, or region..."
+                        placeholder="Search by user or campaign..."
                         value={searchTerm}
                         onChange={(e) => handleSearch(e.target.value)}
                         className="search-input"
@@ -67,21 +67,17 @@ const Analytics = () => {
                     <table>
                         <thead>
                             <tr>
-                                <th>Category</th>
+                                <th>User</th>
                                 <th>Campaign Name</th>
-                                <th>Region</th>
-                                <th>Data</th>
-                                <th>Total Touch</th>
+                                <th>Outreach Data</th>
                             </tr>
                         </thead>
                         <tbody>
                             {analyticsData.map((item, index) => (
                                 <tr key={index}>
-                                    <td>{item?.category}</td>
-                                    <td>{item?.campaign}</td>
-                                    <td>{item?.region}</td>
-                                    <td>{item?.totalData}</td>
-                                    <td>{item?.totalTouches}</td>
+                                    <td>{item?.userName}</td>
+                                    <td>{item?.campaignName}</td>
+                                    <td>{item?.totalOutreach}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -92,4 +88,4 @@ const Analytics = () => {
     );
 };
 
-export default Analytics;
+export default Analytics2;

@@ -285,12 +285,18 @@ router.post('/assign', async (req, res) => {
 router.get('/analytics-data', auth, async (req, res) => {
   try {
     const user = req?.user?.user;
+    if(!user.isSuperAdmin && !user.isRegionHead){
+      res.status(401).json({ 
+        message: 'You are not authorised to perform this action.', 
+      });
+    }
+    const { search } = req.query;
     
     // Base query for department-based filtering
     let matchQuery = {};
 
     // Department-based filtering
-    if (user.isRegionHead) {
+    if (user.isRegionHead  && !user.isSuperAdmin) {
       matchQuery.region = new mongoose.Types.ObjectId(user.regionId);
     }
 
@@ -336,7 +342,24 @@ router.get('/analytics-data', auth, async (req, res) => {
           campaignName: { $arrayElemAt: ['$campaignData.campaignName', 0] },
           regionName: { $arrayElemAt: ['$regionData.regionName', 0] }
         }
-      },
+      }
+    ];
+
+    // Add search condition if search parameter is provided
+    if (search?.trim()) {
+      pipeline.push({
+        $match: {
+          $or: [
+            { categoryName: { $regex: search, $options: 'i' } },
+            { campaignName: { $regex: search, $options: 'i' } },
+            { regionName: { $regex: search, $options: 'i' } }
+          ]
+        }
+      });
+    }
+
+    // Add grouping and projection stages
+    pipeline.push(
       {
         $group: {
           _id: {
@@ -358,7 +381,7 @@ router.get('/analytics-data', auth, async (req, res) => {
           totalTouches: 1
         }
       }
-    ];
+    );
 
     const result = await Outreach.aggregate(pipeline);
     res.status(200).json(result);
@@ -367,6 +390,155 @@ router.get('/analytics-data', auth, async (req, res) => {
     console.error('Error fetching aggregated data:', error);
     res.status(500).json({ 
       message: 'Error fetching aggregated data', 
+      error: error.message 
+    });
+  }
+});
+
+router.get('/user-campaign-data', auth, async (req, res) => {
+  try {
+    
+    const user = req?.user?.user;
+    if(!user.isSuperAdmin && !user.isRegionHead){
+      res.status(401).json({ 
+        message: 'You are not authorised to perform this action.', 
+      });
+    }
+    const { search } = req.query;
+    
+    let matchQuery = {};
+    if (user.isRegionHead  && !user.isSuperAdmin) {
+      matchQuery.region = new mongoose.Types.ObjectId(user.regionId);
+    }
+
+    // Add condition to only include assigned data
+    matchQuery.assignedTo = { $ne: null };
+
+    const pipeline = [
+      {
+        $match: matchQuery
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'assignedTo',
+          foreignField: '_id',
+          as: 'userData'
+        }
+      },
+      {
+        $lookup: {
+          from: 'campaigns',
+          localField: 'campaign',
+          foreignField: '_id',
+          as: 'campaignData'
+        }
+      },
+      {
+        $addFields: {
+          userName: { $arrayElemAt: ['$userData.name', 0] },
+          campaignName: { $arrayElemAt: ['$campaignData.campaignName', 0] }
+        }
+      }
+    ];
+
+    // Add search condition if search parameter is provided
+    if (search?.trim()) {
+      pipeline.push({
+        $match: {
+          $or: [
+            { userName: { $regex: search, $options: 'i' } },
+            { campaignName: { $regex: search, $options: 'i' } }
+          ]
+        }
+      });
+    }
+
+    // Continue with grouping, projection and sorting
+    pipeline.push(
+      {
+        $group: {
+          _id: {
+            user: '$userName',
+            campaign: '$campaignName',
+            assignedTo: '$assignedTo'
+          },
+          totalOutreach: { $sum: 1 }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          userName: '$_id.user',
+          campaignName: '$_id.campaign',
+          totalOutreach: 1
+        }
+      },
+      {
+        $sort: {
+          userName: 1,
+          campaignName: 1
+        }
+      }
+    );
+
+    const result = await Outreach.aggregate(pipeline);
+    let unassignedMatchQuery = {
+      'outreaches': { $size: 0 },
+      'isActive': true
+    };
+
+    if (user.isRegionHead && !user.isSuperAdmin) {
+      unassignedMatchQuery.regionId = new mongoose.Types.ObjectId(user.regionId);
+    }
+
+    if (search?.trim()) {
+      unassignedMatchQuery.name = { $regex: search, $options: 'i' };
+    }
+    // Modified unassigned users query to include search
+    const unassignedUsersQuery = [
+      {
+        $lookup: {
+          from: 'outreaches',
+          localField: '_id',
+          foreignField: 'assignedTo',
+          as: 'outreaches'
+        }
+      },
+      {
+        $match: unassignedMatchQuery
+      },
+    ];  
+
+    
+
+    // Add search condition for unassigned users if search parameter exists
+    if (search?.trim()) {
+      unassignedUsersQuery.push({
+        $match: {
+          name: { $regex: search, $options: 'i' }
+        }
+      });
+    }
+
+    // Project unassigned users data
+    unassignedUsersQuery.push({
+      $project: {
+        userName: '$name',
+        campaignName: { $literal: "-" },
+        totalOutreach: { $literal: 0 }
+      }
+    });
+
+    const unassignedUsers = await User.aggregate(unassignedUsersQuery);
+    const data = [...result, ...unassignedUsers];
+    
+    res.status(200).json(data);
+    
+  } catch (error) {
+    console.error('Error fetching user campaign data:', error);
+    res.status(500).json({ 
+      message: 'Error fetching user campaign data', 
       error: error.message 
     });
   }
