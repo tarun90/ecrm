@@ -82,9 +82,9 @@ const CategoryList = () => {
     return (
         <div className="category-container">
             <Header className="category-header">
-                <div className="search-container">
+                <div className="heading">
                     <h1>Categories</h1>
-                  
+
                 </div>
                 <div className="action-buttons">
                     <Button
@@ -98,15 +98,15 @@ const CategoryList = () => {
                 </div>
             </Header>
             <div className='global-search'>
-                        <Search
-                            allowClear
-                            placeholder="Search Category..."
-                            value={ searchTerm }
-                            onChange={ (e) => setSearchTerm(e.target.value) }
-                            className="search-input"
-                            width={ 300 }
-                        />
-                    </div>
+                <Search
+                    allowClear
+                    placeholder="Search Category..."
+                    value={ searchTerm }
+                    onChange={ (e) => setSearchTerm(e.target.value) }
+                    className="search-input"
+                    width={ 300 }
+                />
+            </div>
             <div className="contact-table">
                 <table>
                     <thead>

@@ -68,7 +68,9 @@ const CampaignList = () => {
         <div className="campaign-container">
             <Header className="contact-header">
                 <div className="search-container">
-                    <h1>Campaigns</h1>
+                    <div className='heading'>
+                        <h1>Campaigns</h1>
+                    </div>
                     {/* { isSearching && <span className="searching-indicator">Searching...</span> } */ }
                 </div>
                 <div className="action-buttons">
@@ -91,15 +93,7 @@ const CampaignList = () => {
                     </button>
                 </div>
             </Header>
-            <div className='global-search'>
-                        <Search
-                            allowClear
-                            placeholder="Search Campaign..."
-                            value={ searchTerm }
-                            onChange={ (e) => setSearchTerm(e.target.value) }
-                            className="search-input"
-                        />
-                    </div>
+
             <div className="contact-table">
                 <table>
                     <thead>

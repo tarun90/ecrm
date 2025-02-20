@@ -210,7 +210,7 @@ const CompanyList = () => {
     return (
         <div className="contact-container">
             <Header className="contact-header">
-                <div className="search-container">
+                <div className="heading">
                     <h1>Companies</h1>
                 </div>
                 <div className="action-buttons">

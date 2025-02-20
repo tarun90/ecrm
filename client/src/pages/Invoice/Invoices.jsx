@@ -666,7 +666,9 @@ function Invoices() {
   return (
     <Layout className="main-content-wrapper">
       <Header className="invoice-header">
-        <h1>Invoices</h1>
+        <div className="heading">
+          <h1>Invoices</h1>
+        </div>
         <div className="action-buttons">
           <Button
             onClick={ exportPDF }
@@ -697,7 +699,7 @@ function Invoices() {
           </Button>
         </div>
       </Header>
-      <Header className="filter-container">
+      <div className="global-search">
         <div className="filter-group">
 
           <Search
@@ -762,7 +764,7 @@ function Invoices() {
         >
           Clear Filters
         </button>
-      </Header>
+      </div>
       { error && (
         <div className="error-message">
           <p>{ error }</p>
@@ -921,7 +923,7 @@ const InvoiceForm = ({
       width={ 400 }
       onClose={ () => setIsModalOpen(false) }
       footer={
-        <div className="modal-footer" style={ { textAlign: "right", padding: "10px 16px" } }>
+        <div className="modal-footer" style={ { textAlign: "right" } }>
           <Button className="text-btn" onClick={ () => setIsModalOpen(false) }>
             Cancel
           </Button>
