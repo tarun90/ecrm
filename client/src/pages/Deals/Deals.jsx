@@ -430,14 +430,14 @@ function Deals() {
                                 <div className={ styles.dealHeader }>
                                   <h4>{ deal.name }</h4>
                                   <div className={ styles.dealActions }>
-                                    <Button
+                                    {/* <Button
                                       type="text"
                                       icon={ <EyeOutlined /> }
                                       onClick={ (e) => {
                                         e.stopPropagation();
                                         openViewModal(deal);
                                       } }
-                                    />
+                                    /> */}
                                     <Button
                                       type="text"
                                       icon={ <EditOutlined /> }
