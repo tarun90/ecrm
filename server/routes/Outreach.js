@@ -35,8 +35,10 @@ router.get('/', auth, async (req, res) => {
   try {
     const user = req?.user?.user;
     
-    // Get search string from query
-    const { search } = req.query;
+    // Get pagination parameters and search string from query
+    const { search, page = 1, pageSize = 10 } = req.query;
+    const skip = (parseInt(page) - 1) * parseInt(pageSize);
+    const limit = parseInt(pageSize);
 
     // Base query
     let query = {};
@@ -53,11 +55,11 @@ router.get('/', auth, async (req, res) => {
       query.assignedTo = user._id;
     }
 
-    // Add search filter if search string is provided
+    // If search string is provided
     if (search) {
       const searchRegex = new RegExp(search, 'i');
       
-      // Populate the relations first to search in their fields
+      // Get total count for pagination
       const outreaches = await Outreach.find(query)
         .populate('campaign', 'campaignName')
         .populate('region', 'regionName')
@@ -79,23 +81,48 @@ router.get('/', auth, async (req, res) => {
         );
       });
 
-      return res.status(200).send(filteredOutreaches);
+      // Apply pagination to filtered results
+      const paginatedResults = filteredOutreaches.slice(skip, skip + limit);
+      
+      return res.status(200).json({
+        success: true,
+        data: paginatedResults,
+        total: filteredOutreaches.length,
+        currentPage: parseInt(page),
+        pageSize: limit,
+        totalPages: Math.ceil(filteredOutreaches.length / limit)
+      });
     }
 
-    // If no search string, return all results based on department access
+    // If no search string, use MongoDB pagination
+    const total = await Outreach.countDocuments(query);
+    
     const outreaches = await Outreach.find(query)
       .populate('campaign', 'campaignName')
       .populate('region', 'regionName')
       .populate('createdBy', 'name email')
       .populate('category', 'categoryName')
       .populate('assignedTo', 'name')
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
 
-    res.status(200).send(outreaches);
+    res.status(200).json({
+      success: true,
+      data: outreaches,
+      total,
+      currentPage: parseInt(page),
+      pageSize: limit,
+      totalPages: Math.ceil(total / limit)
+    });
 
   } catch (error) {
     console.error('Error fetching outreaches:', error);
-    res.status(500).send({ message: 'Internal Server Error', error });
+    res.status(500).json({ 
+      success: false,
+      message: 'Internal Server Error', 
+      error: error.message 
+    });
   }
 });
 //Get Data by id

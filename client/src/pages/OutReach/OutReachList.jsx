@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { message, Popconfirm, Button, Input, Modal, Select, Checkbox, Upload, Form, Row, Col, Divider, DatePicker, Typography, Empty, Drawer } from 'antd';
+import { message, Popconfirm, Button, Input, Modal, Select, Checkbox, Upload, Form, Row, Col, Divider, DatePicker, Typography, Empty, Drawer, Pagination } from 'antd';
 import { UploadOutlined, FileExcelOutlined, BarChartOutlined, InboxOutlined, DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { getUsers } from '../Users/userService';  // Add this import
 import { getCampaigns } from '../Campaigns/campaignService';
@@ -54,6 +54,9 @@ const OutReachList = () => {
         categories: [],
         assignToUsers: [],
     });
+    const [currentPage, setCurrentPage] = useState(1);
+const [pageSize, setPageSize] = useState(100);
+const [total, setTotal] = useState(0);
     const checkBoxOptions = ["Email", "Phone", "IM", "Linkedin"];
 
     const [form] = Form.useForm();
@@ -129,7 +132,11 @@ const OutReachList = () => {
             // message.error('Failed to fetch users');
         }
     };
-
+    const handlePageChange = (page, size) => {
+        setCurrentPage(page);
+        setPageSize(size);
+        fetchOutreach(searchTerm, page, size);
+      };
     const fetchCampaigns = async () => {
         try {
             const data = await getCampaigns();
@@ -160,13 +167,34 @@ const OutReachList = () => {
         }
     };
 
-    const fetchOutreach = async () => {
+    const fetchOutreach = async (searchTerm = "", page = 1, pageSize = 100) => {
         try {
             setLoading(true);
-            const data = await getOutreach(searchTerm);
-            setOutreach(data);
+            const response = await getOutreach(searchTerm, page, pageSize);
+            
+            if (response.success) {
+                setOutreach(response.data);
+                setTotal(response.total);
+                
+                // Update current page if it's different from what we got back
+                if (response.currentPage !== currentPage) {
+                    setCurrentPage(response.currentPage);
+                }
+                
+                // Update page size if it changed
+                if (response.pageSize !== pageSize) {
+                    setPageSize(response.pageSize);
+                }
+            } else {
+                message.error(response.message || 'Failed to fetch outreach data');
+                setOutreach([]);
+                setTotal(0);
+            }
         } catch (error) {
-            // message.error('Failed to fetch outreach data');
+            console.error('Error in fetchOutreach:', error);
+            message.error('Failed to fetch outreach data');
+            setOutreach([]);
+            setTotal(0);
         } finally {
             setLoading(false);
         }
@@ -702,7 +730,25 @@ const OutReachList = () => {
                             )) }
                         </tbody>
                     </table>
+                    
                 }
+                 <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end' }}>
+        <Pagination
+          current={currentPage}
+          pageSize={pageSize}
+          total={total}
+          onChange={handlePageChange}
+        //   showSizeChanger
+          showQuickJumper
+          showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+          pageSizeOptions={['100', '200']}
+          disabled={loading}
+          onShowSizeChange={(current, size) => {
+            console.log('Page size changed:', { current, size });
+            handlePageChange(1, size);
+          }}
+        />
+      </div>
             </div>
 
             <Drawer

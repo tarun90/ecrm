@@ -9,7 +9,6 @@ const outReachSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true,
         trim: true,
         lowercase: true
     },
@@ -72,7 +71,7 @@ const outReachSchema = new mongoose.Schema({
 });
 
 // Add index for efficient querying
-outReachSchema.index({ email: 1, campaign: 1 }, { unique: true });
+outReachSchema.index({  campaign: 1 }, { unique: true });
 
 const OutReach = mongoose.model('OutReach', outReachSchema);
 
