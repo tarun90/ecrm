@@ -785,8 +785,17 @@ textarea {
   margin-top: 1rem;
 }
 
-
-
+/* global search css */
+.global-search{
+  margin: 10px 0;
+  text-align: left;
+}
+.global-search .ant-input-outlined:focus-within{
+  height: 32px;
+}
+.global-search .search-input{
+  max-width: 300px;
+}
 @media (min-width:1440px) and (max-width:1680px) {
   .products-grid {
     display: grid;

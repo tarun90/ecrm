@@ -238,6 +238,11 @@ table {
 .ant-checkbox .ant-checkbox-inner {
   background-color: #fff;
 }
+.contact-container{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
 
 /* Responsive Design */
 @media (max-width: 768px) {

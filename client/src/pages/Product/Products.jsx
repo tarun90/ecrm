@@ -145,17 +145,6 @@ function Products() {
       <div className="product-header">
         <div className="product-wrapper">
           <h1>Products</h1>
-          <div className="search-container">
-
-            <Search
-              allowClear
-              placeholder="Search by name, email, or phone..."
-              value={ searchTerm }
-              onChange={ (e) => setSearchTerm(e.target.value) }
-              className="search-input"
-              style={ { width: 300 } }
-            />
-          </div>
         </div>
         <div className="btn-wrapper">
           <Button
@@ -181,7 +170,17 @@ function Products() {
           </Button>
         </div>
       </div>
-
+      <div className="global-search">
+          <Search
+              allowClear
+              placeholder="Search by name, email, or phone..."
+              value={ searchTerm }
+              onChange={ (e) => setSearchTerm(e.target.value) }
+              className="search-input"
+              style={ { width: 300 } }
+            />
+      </div>
+   
       { error && (
         <div className="error-message">
           <div className="error-content">
@@ -196,59 +195,57 @@ function Products() {
           </div>
         </div>
       ) }
-
-      { loading ? (
-        <div className="loading-spinner"></div>
-      ) : (
-        <div className="products-grid">
-          { filteredProducts.map((product) => (
-            <div key={ product._id } className="product-card">
-              <input
-                type="checkbox"
-                checked={ selectedProducts.includes(product._id) }
-                onChange={ () => {
-                  setSelectedProducts((prev) =>
-                    prev.includes(product._id)
-                      ? prev.filter((id) => id !== product._id)
-                      : [...prev, product._id]
-                  );
-                } }
-              />
-              <div className="product-info">
-                <div>
-                  <h3 className="product-name">{ product.name }</h3>
-                  <p className="product-sku">SKU: { product.sku }</p>
+        { loading ? (
+          <div className="loading-spinner"></div>
+        ) : (
+          <div className="products-grid">
+            { filteredProducts.map((product) => (
+              <div key={ product._id } className="product-card">
+                <input
+                  type="checkbox"
+                  checked={ selectedProducts.includes(product._id) }
+                  onChange={ () => {
+                    setSelectedProducts((prev) =>
+                      prev.includes(product._id)
+                        ? prev.filter((id) => id !== product._id)
+                        : [...prev, product._id]
+                    );
+                  } }
+                />
+                <div className="product-info">
+                  <div>
+                    <h3 className="product-name">{ product.name }</h3>
+                    <p className="product-sku">SKU: { product.sku }</p>
+                  </div>
+                  <div>
+                    <Button
+                      type="text"
+                      icon={ <EditOutlined /> }
+                      onClick={ () => handleEdit(product) }
+                      className="edit-button"
+                    />
+                    <Button
+                      type="text"
+                      danger
+                      icon={ <DeleteOutlined /> }
+                      onClick={ () => deleteProduct(product._id) }
+                      className="delete-btn"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <Button
-                    type="text"
-                    icon={ <EditOutlined /> }
-                    onClick={ () => handleEdit(product) }
-                    className="edit-button"
-                  />
-                  <Button
-                    type="text"
-                    danger
-                    icon={ <DeleteOutlined /> }
-                    onClick={ () => deleteProduct(product._id) }
-                    className="delete-btn"
-                  />
+                <div className="product-details">
+                  <p className="short-description">{ product.description_short }</p>
+                  <div className="price-container">
+                    <span className="price">
+                      { product.currency } { product.unit_cost }
+                    </span>
+                    <span className="product-type">{ product.product_type }</span>
+                  </div>
                 </div>
               </div>
-              <div className="product-details">
-                <p className="short-description">{ product.description_short }</p>
-                <div className="price-container">
-                  <span className="price">
-                    { product.currency } { product.unit_cost }
-                  </span>
-                  <span className="product-type">{ product.product_type }</span>
-                </div>
-              </div>
-            </div>
-          )) }
-        </div>
-      ) }
-
+            )) }
+          </div>
+        ) }
       <Modal
         title={ isEditing ? "Edit Product" : "Add New Product" }
         open={ isModalOpen }

@@ -14,7 +14,11 @@
 .csv-select .ant-select-item-option-content {
     padding: 4px 0;
 }
-
+.outreach-container{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
 .csv-select .ant-select-item-option-content:hover {
     background-color: #f5f5f5;
 }

@@ -212,15 +212,6 @@ const CompanyList = () => {
             <Header className="contact-header">
                 <div className="search-container">
                     <h1>Companies</h1>
-
-                    <Search
-                        allowClear
-                        placeholder="Search by name, email, or phone..."
-                        value={searchTerm}
-                        onChange={(e) => setsearchTerm(e.target.value)}
-                        className="search-input"
-                        style={ { width: 300 } }
-                    />
                 </div>
                 <div className="action-buttons">
                     <button className="add-contact-btn" onClick={handleAddCompany}>
@@ -229,7 +220,16 @@ const CompanyList = () => {
                     </button>
                 </div>
             </Header>
-
+            <div className='global-search'>
+                    <Search
+                        allowClear
+                        placeholder="Search by name, email, or phone..."
+                        value={searchTerm}
+                        onChange={(e) => setsearchTerm(e.target.value)}
+                        className="search-input"
+                        style={ { width: 300 } }
+                    />
+            </div>
             <div className="contact-table">
                 <table>
                     <thead>

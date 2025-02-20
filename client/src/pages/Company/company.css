@@ -95,6 +95,14 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   overflow: auto;
 }
+.main-content-wrapper .contact-table{
+  flex: 1;
+}
+.contact-table thead{
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
 
 .contact-table table {
   width: 100%;
