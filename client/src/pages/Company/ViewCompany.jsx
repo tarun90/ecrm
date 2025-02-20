@@ -10,7 +10,7 @@ import { contactService } from '../../services/api';
 const ActionButton = ({ icon, label, onClick }) => {
   return (
     <div className="action-button">
-      <button className="icon-button" onClick={onClick}>{ icon }</button>
+      <button className="icon-button" onClick={ onClick }>{ icon }</button>
       <span className="button-label">{ label }</span>
     </div>
   );
@@ -34,7 +34,7 @@ const MainContent = () => {
       // Fetch contacts and deals related to this company
       const contactsData = await contactService.getAllContacts();
       const dealsData = await dealService.getAllDeals();
-      
+
       // Filter for contacts and deals belonging to this company
       setContacts(contactsData.filter(contact => contact.company?._id === id || contact.company === id));
       setDeals(dealsData.filter(deal => deal.company?._id === id || deal.company === id));
@@ -51,8 +51,8 @@ const MainContent = () => {
       title: 'Name',
       key: 'name',
       render: (text, record) => (
-        <a onClick={() => navigate(`/contact/view/${record._id}`)}>
-          {`${record.firstName} ${record.lastName}`}
+        <a onClick={ () => navigate(`/contact/view/${record._id}`) }>
+          { `${record.firstName} ${record.lastName}` }
         </a>
       ),
     },
@@ -84,8 +84,8 @@ const MainContent = () => {
       dataIndex: 'name',
       key: 'name',
       render: (text, record) => (
-        <a onClick={() => navigate(`/deals/view/${record._id}`)}>
-          {text}
+        <a onClick={ () => navigate(`/deals/view/${record._id}`) }>
+          { text }
         </a>
       ),
     },
@@ -125,17 +125,17 @@ const MainContent = () => {
     if (data.length === 0) {
       return (
         <div className="section-content">
-          <p>No associated {section.toLowerCase()} exist or you don't have permission to view them.</p>
+          <p>No associated { section.toLowerCase() } exist or you don't have permission to view them.</p>
         </div>
       );
     }
 
     return (
-      <Table 
-        dataSource={data} 
-        columns={columns} 
+      <Table
+        dataSource={ data }
+        columns={ columns }
         rowKey="_id"
-        pagination={{ pageSize: 5 }}
+        pagination={ { pageSize: 5 } }
         className="section-table"
       />
     );
@@ -143,10 +143,10 @@ const MainContent = () => {
 
   return (
     <div className="main-content">
-      {sections.map((section) => (
-        <div key={section} className="content-section">
+      { sections.map((section) => (
+        <div key={ section } className="content-section">
           <div className="section-header">
-            <h2>{section}</h2>
+            <h2>{ section }</h2>
             {/* <div className="header-actions">
               <button className="add-button add-contact-btn">
                 <Plus />
@@ -155,9 +155,9 @@ const MainContent = () => {
               <Settings />
             </div> */}
           </div>
-          {renderContent(section)}
+          { renderContent(section) }
         </div>
-      ))}
+      )) }
     </div>
   );
 };
@@ -205,13 +205,13 @@ const Sidebar = () => {
   };
 
   const actions = [
-    { 
-      icon: <Mail />, 
+    {
+      icon: <Mail />,
       label: 'Email',
       onClick: () => window.open(`mailto:${company.email}`)
     },
-    { 
-      icon: <Phone />, 
+    {
+      icon: <Phone />,
       label: 'Call',
       onClick: handlePhoneClick
     }
@@ -220,37 +220,37 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
       <div className="sidebar-header">
-        <ArrowLeft className="back-icon" onClick={() => navigate('/company')} style={{ cursor: 'pointer' }} />
+        <ArrowLeft className="back-icon" onClick={ () => navigate('/company') } style={ { cursor: 'pointer' } } />
         <span> Company </span>
-        {/* <Button icon={ <CaretDownOutlined /> }>Actions </Button> */}
+        {/* <Button icon={ <CaretDownOutlined /> }>Actions </Button> */ }
       </div>
 
       <div className="contact-card scroll">
         <div className="contact-info">
           <div className="avatar">
-            {company?.companyName?.substring(0, 2) || 'CO'}
+            { company?.companyName?.substring(0, 2) || 'CO' }
           </div>
           <div className="contact-details">
-            <h2>{company?.companyName || 'Company Name'}</h2>
-            <h3>{company?.companyOwner || 'Owner Name'}</h3>
-            {company?.email && (
+            <h2>{ company?.companyName || 'Company Name' }</h2>
+            <h3>{ company?.companyOwner || 'Owner Name' }</h3>
+            { company?.email && (
               <Button className="email">
-                <a href={`mailto:${company.email}`}>{company.email}</a>
-                <Copy className="copy-icon" onClick={handleCopyEmail} style={{ cursor: 'pointer' }} />
+                <a href={ `mailto:${company.email}` }>{ company.email }</a>
+                <Copy className="copy-icon" onClick={ handleCopyEmail } style={ { cursor: 'pointer' } } />
               </Button>
-            )}
+            ) }
           </div>
         </div>
 
         <div className="action-buttons">
-          {actions.map((action, index) => (
-            <ActionButton 
-              key={index} 
-              icon={action.icon} 
-              label={action.label} 
-              onClick={action.onClick}
+          { actions.map((action, index) => (
+            <ActionButton
+              key={ index }
+              icon={ action.icon }
+              label={ action.label }
+              onClick={ action.onClick }
             />
-          ))}
+          )) }
         </div>
 
         <div className="about-section">
@@ -263,32 +263,32 @@ const Sidebar = () => {
           </div> */}
 
           <div className="contact-fields">
-            {company?.email && (
+            { company?.email && (
               <div className="field">
                 <p className="label">Email</p>
                 <div className="email">
-                  <a href={`mailto:${company.email}`}>{company.email}</a>
+                  <a href={ `mailto:${company.email}` }>{ company.email }</a>
                 </div>
               </div>
-            )}
-            {company?.phoneNumber && (
+            ) }
+            { company?.phoneNumber && (
               <div className="field">
                 <p className="label">Phone:</p>
-                <div className="value">{company.phoneNumber}</div>
+                <div className="value">{ company.phoneNumber }</div>
               </div>
-            )}
-            {company?.industry && (
+            ) }
+            { company?.industry && (
               <div className="field">
                 <p className="label">Industry:</p>
-                <div className="value">{company.industry}</div>
+                <div className="value">{ company.industry }</div>
               </div>
-            )}
-            {company?.type && (
+            ) }
+            { company?.type && (
               <div className="field">
                 <p className="label">Type:</p>
-                <div className="value">{company.type}</div>
+                <div className="value">{ company.type }</div>
               </div>
-            )}
+            ) }
           </div>
         </div>
       </div>
