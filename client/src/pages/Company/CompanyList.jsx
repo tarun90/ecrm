@@ -4,7 +4,7 @@ import moment from 'moment';
 import axios from 'axios';
 import { getCompanies, deleteCompany } from './APIServices';
 import { useNavigate } from 'react-router-dom';
-import { message, Popconfirm, Button, Pagination, Divider, Modal, Form, Input, Select, Col, Row } from 'antd';
+import { message, Popconfirm, Button, Pagination, Divider, Modal, Form, Input, Select, Col, Row, Drawer } from 'antd';
 import CompanyFormModal from './CompanyFormModal';
 // import { Button, message } from 'antd';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
@@ -68,20 +68,20 @@ const CompanyList = () => {
         try {
             setLoading(true);
             console.log('Fetching companies with:', { searchTerm, page, pageSize });
-            
+
             const response = await getCompanies(searchTerm, page, pageSize);
             console.log('API Response in component:', response);
-            
+
             if (response.success) {
                 // Make sure we're using the paginated data
                 setCompanies(response.data);
                 setTotal(response.total);
-                
+
                 // Update current page if it's different from what we got back
                 if (response.currentPage !== currentPage) {
                     setCurrentPage(response.currentPage);
                 }
-                
+
                 console.log('Pagination state:', {
                     currentPage: response.currentPage,
                     totalPages: response.totalPages,
@@ -216,14 +216,14 @@ const CompanyList = () => {
                     <Search
                         allowClear
                         placeholder="Search by name, email, or phone..."
-                        value={searchTerm}
-                        onChange={(e) => setsearchTerm(e.target.value)}
+                        value={ searchTerm }
+                        onChange={ (e) => setsearchTerm(e.target.value) }
                         className="search-input"
                         style={ { width: 300 } }
                     />
                 </div>
                 <div className="action-buttons">
-                    <button className="add-contact-btn" onClick={handleAddCompany}>
+                    <button className="add-contact-btn" onClick={ handleAddCompany }>
                         <PlusOutlined />
                         Add Company
                     </button>
@@ -244,48 +244,48 @@ const CompanyList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {loading ? (
+                        { loading ? (
                             <tr>
-                                <td colSpan="7" style={{ textAlign: 'center', padding: '20px' }}>
+                                <td colSpan="7" style={ { textAlign: 'center', padding: '20px' } }>
                                     Loading...
                                 </td>
                             </tr>
                         ) : companies.length === 0 ? (
                             <tr>
-                                <td colSpan="7" style={{ textAlign: 'center', padding: '20px' }}>
+                                <td colSpan="7" style={ { textAlign: 'center', padding: '20px' } }>
                                     No companies found
                                 </td>
                             </tr>
                         ) : (
                             companies.map(company => (
-                                <tr key={company._id}>
-                                    <td onClick={() => handleView(company._id)}>
-                                        <a href='#'>{company?.companyName || '-'}</a>
+                                <tr key={ company._id }>
+                                    <td onClick={ () => handleView(company._id) }>
+                                        <a href='#'>{ company?.companyName || '-' }</a>
                                     </td>
-                                    <td>{company?.companyOwner || '-'}</td>
-                                    <td>{company?.phoneNumber || '-'}</td>
-                                    <td>{company?.email || '-'}</td>
-                                    <td>{company?.city || '-'}</td>
-                                    <td>{company?.country || '-'}</td>
+                                    <td>{ company?.companyOwner || '-' }</td>
+                                    <td>{ company?.phoneNumber || '-' }</td>
+                                    <td>{ company?.email || '-' }</td>
+                                    <td>{ company?.city || '-' }</td>
+                                    <td>{ company?.country || '-' }</td>
                                     <td>
                                         <div className='action-buttons'>
-                                            <Button className="edit-btn" onClick={(e) => {
+                                            <Button className="edit-btn" onClick={ (e) => {
                                                 e.stopPropagation();
                                                 handleEditCompany(company._id);
-                                            }}>
+                                            } }>
                                                 <EditOutlined />
                                             </Button>
                                             <Popconfirm
                                                 title="Delete Company"
                                                 description="Are you sure you want to delete this company?"
-                                                onConfirm={(e) => {
+                                                onConfirm={ (e) => {
                                                     e.stopPropagation();
                                                     handleDelete(company._id);
-                                                }}
+                                                } }
                                                 okText="Yes"
                                                 cancelText="No"
                                             >
-                                                <Button className="delete-btn" onClick={(e) => e.stopPropagation()}>
+                                                <Button className="delete-btn" onClick={ (e) => e.stopPropagation() }>
                                                     <DeleteOutlined />
                                                 </Button>
                                             </Popconfirm>
@@ -293,50 +293,51 @@ const CompanyList = () => {
                                     </td>
                                 </tr>
                             ))
-                        )}
+                        ) }
                     </tbody>
                 </table>
             </div>
 
-            <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end' }}>
+            <div style={ { marginTop: '20px', display: 'flex', justifyContent: 'flex-end' } }>
                 <Pagination
-                    current={currentPage}
-                    pageSize={pageSize}
-                    total={total}
-                    onChange={handlePageChange}
+                    current={ currentPage }
+                    pageSize={ pageSize }
+                    total={ total }
+                    onChange={ handlePageChange }
                     showSizeChanger
                     showQuickJumper
-                    showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
-                    pageSizeOptions={['5', '10', '20', '50']}
-                    disabled={loading}
-                    onShowSizeChange={(current, size) => {
+                    showTotal={ (total, range) => `${range[0]}-${range[1]} of ${total} items` }
+                    pageSizeOptions={ ['5', '10', '20', '50'] }
+                    disabled={ loading }
+                    onShowSizeChange={ (current, size) => {
                         console.log('Page size changed:', { current, size });
                         handlePageChange(1, size); // Reset to first page when changing page size
-                    }}
+                    } }
                 />
             </div>
 
-            <Modal
-                title={isEditing ? "Edit Company" : "Create Company"}
-                open={isModalOpen}
-                onCancel={closeModal}
-                footer={null}
+            <Drawer
+                title={ isEditing ? "Edit Company" : "Create Company" }
+                open={ isModalOpen }
+                onClose={ closeModal }
+                width={ 400 }
+
             >
                 <Form
-                    form={form}
+                    form={ form }
                     layout="vertical"
-                    initialValues={contact}
-                    onFinish={handleSubmit}
+                    initialValues={ contact }
+                    onFinish={ handleSubmit }
                 >
-                    <Row gutter={24}>
-                        <Col span={12}>
+                    <Row gutter={ 24 }>
+                        <Col span={ 24 }>
                             <Form.Item
                                 label="Email"
                                 name="email"
-                                rules={[
+                                rules={ [
                                     { required: true, message: "Please input email!" },
-                                    { type: "email", message: "Please enter a valid email!" }
-                                ]}
+                                    { type: "email", message: "Please enter a valid email!" },
+                                ] }
                             >
                                 <Input placeholder="Email" />
                             </Form.Item>
@@ -354,7 +355,7 @@ const CompanyList = () => {
                             </Form.Item>
                         </Col>
 
-                        <Col span={12}>
+                        <Col span={ 24 }>
                             <Form.Item label="Job Title" name="jobTitle">
                                 <Input placeholder="Job Title" />
                             </Form.Item>
@@ -375,22 +376,23 @@ const CompanyList = () => {
                         </Col>
                     </Row>
 
-                    <Form.Item className="modal-footer">
-                        <Button onClick={closeModal} className="text-btn">
+                    <div style={ { textAlign: "right", marginTop: 16 } }>
+                        <Button onClick={ closeModal } className="text-btn">
                             Cancel
                         </Button>
-                        <Button type="primary" htmlType="submit">
-                            {isEditing ? "Update Contact" : "Create Contact"}
+                        <Button type="primary" htmlType="submit" style={ { marginLeft: 8 } }>
+                            { isEditing ? "Update Contact" : "Create Contact" }
                         </Button>
-                    </Form.Item>
+                    </div>
                 </Form>
-            </Modal>
+            </Drawer>
+
 
             <CompanyFormModal
-                visible={modalVisible}
-                onCancel={() => setModalVisible(false)}
-                editId={editId}
-                fetchCompanies={fetchCompanies}
+                visible={ modalVisible }
+                onCancel={ () => setModalVisible(false) }
+                editId={ editId }
+                fetchCompanies={ fetchCompanies }
             />
         </div>
     );

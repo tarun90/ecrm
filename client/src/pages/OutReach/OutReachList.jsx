@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { message, Popconfirm, Button, Input, Modal, Select, Checkbox, Upload, Form, Row, Col, Divider, DatePicker, Typography, Empty } from 'antd';
+import { message, Popconfirm, Button, Input, Modal, Select, Checkbox, Upload, Form, Row, Col, Divider, DatePicker, Typography, Empty, Drawer } from 'antd';
 import { UploadOutlined, FileExcelOutlined, BarChartOutlined, InboxOutlined, DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { getUsers } from '../Users/userService';  // Add this import
 import { getCampaigns } from '../Campaigns/campaignService';
@@ -696,15 +696,25 @@ const OutReachList = () => {
                 }
             </div>
 
-            <Modal
+            <Drawer
                 title={ editMode ? "Edit Outreach" : "Add Outreach" }
                 open={ modalVisible }
-                onCancel={ () => setModalVisible(false) }
-                footer={ null }  // We'll use Ant Design's Form submission
-                width={ 600 }
+                onClose={ () => setModalVisible(false) }
+                width={ 400 }
                 maskClosable={ false }
+                footer={ <div className='modal-footer'>
+                    <Button onClick={ () => setModalVisible(false) } className="text-btn">
+                        Cancel
+                    </Button>
+                    <Button
+                        type="primary"
+                        htmlType="submit"
+                        loading={ loading }
+                    >
+                        { editMode ? "Update" : "Create" } Outreach
+                    </Button>
+                </div> }
             >
-                <Divider />
                 <Form
                     form={ form }
                     onFinish={ handleSubmit }
@@ -721,8 +731,8 @@ const OutReachList = () => {
                         category: '',
                     } }
                 >
-                    <Row gutter={ 16 } >
-                        <Col span={ 12 }>
+                    <Row gutter={ 24 }>
+                        <Col span={ 24 }>
                             <Form.Item
                                 label="Name"
                                 name="name"
@@ -762,7 +772,7 @@ const OutReachList = () => {
                             </Form.Item>
                         </Col>
 
-                        <Col span={ 12 }>
+                        <Col span={ 24 }>
                             <Form.Item
                                 label="Country"
                                 name="country"
@@ -807,28 +817,16 @@ const OutReachList = () => {
                             </Form.Item>
                         </Col>
                     </Row>
-                    <Divider />
-                    <div className='modal-footer'>
-                        <Button onClick={ () => setModalVisible(false) } className="text-btn">
-                            Cancel
-                        </Button>
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            loading={ loading }
 
-                        >
-                            { editMode ? "Update" : "Create" } Outreach
-                        </Button>
-                    </div>
                 </Form>
-            </Modal>
+            </Drawer>
 
-            <Modal
+
+            <Drawer
                 destroyOnClose={ true }
                 title="Import CSV"
                 open={ importModalVisible }
-                onCancel={ () => {
+                onClose={ () => {
                     setImportModalVisible(false);
                     setImportData({
                         campaign: undefined,
@@ -841,13 +839,10 @@ const OutReachList = () => {
                         uploadProps.onChange({ fileList: [] });
                     }
                 } }
-                onOk={ handleImportSubmit }
                 width={ 600 }
-                footer={ false }
             >
-                <Divider />
-                <div className="import-form">
 
+                <div className="import-form">
                     <Form.Item label="Campaign" style={ { marginBottom: 16 } }>
                         <Select
                             placeholder="Select Campaign"
@@ -888,9 +883,6 @@ const OutReachList = () => {
                         />
                     </Form.Item>
 
-
-
-
                     <Form.Item label="CSV Upload" style={ { marginBottom: 16 } }>
                         <Dragger
                             { ...uploadProps }
@@ -907,12 +899,12 @@ const OutReachList = () => {
                             <p className="ant-upload-hint">Support for single CSV file upload</p>
                         </Dragger>
                     </Form.Item>
-
                 </div>
                 <Divider />
                 <div className="modal-footer">
                     <Button
-                        className="text-btn" onClick={ () => {
+                        className="text-btn"
+                        onClick={ () => {
                             setImportModalVisible(false);
                             setImportData({
                                 campaign: undefined,
@@ -924,170 +916,73 @@ const OutReachList = () => {
                             if (uploadProps.onChange) {
                                 uploadProps.onChange({ fileList: [] });
                             }
-                        } } >   Cancel
+                        } }
+                    >
+                        Cancel
                     </Button>
                     <Button
-                        type="primary" htmlType="submit"
-                        onClick={ handleImportSubmit } >
-                        Ok</Button>
+                        type="primary"
+                        htmlType="submit"
+                        onClick={ handleImportSubmit }
+                    >
+                        Ok
+                    </Button>
                 </div>
-            </Modal>
+            </Drawer>
 
-            {/* <Modal
-                destroyOnClose
-                title="Import CSV"
-                open={ importModalVisible }
-                onCancel={ () => {
-                    setImportModalVisible(false);
-                    form.resetFields(); // Reset form on close
-                } }
-                onOk={ () => form.submit() } // Submits the form on OK click
-                width={ 600 }
-            >
-                <Divider />
-                <Form
-                    form={ form }
-                    layout="vertical"
-                    onFinish={ handleImportSubmit } // Handles form submission
-                >
-                    <Row gutter={ 16 }>
-                        <Col span={ 12 }>
-                            <Form.Item
-                                label="Campaign"
-                                name="campaign"
-                            // rules={ [{ required: true, message: "Please select a campaign" }] }
-                            >
-                                <Select placeholder="Select Campaign" style={ { width: "100%" } }>
-                                    { campaigns.map((campaign) => (
-                                        <Select.Option key={ campaign._id } value={ campaign._id }>
-                                            { campaign.campaignName }
-                                        </Select.Option>
-                                    )) }
-                                </Select>
-                            </Form.Item>
-                        </Col>
 
-                        <Col span={ 12 }>
-                            <Form.Item
-                                label="Category"
-                                name="category"
-                            // rules={ [{ required: true, message: "Please select a category" }] }
-                            >
-                                <Select placeholder="Select Category" style={ { width: "100%" } }>
-                                    { categories.map((category) => (
-                                        <Select.Option key={ category._id } value={ category._id }>
-                                            { category.categoryName }
-                                        </Select.Option>
-                                    )) }
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-
-                    <Row gutter={ 16 }>
-                        <Col span={ 12 }>
-                            <Form.Item
-                                label="Region"
-                                name="region"
-                            // rules={ [{ required: true, message: "Please select a region" }] }
-                            >
-                                <Select placeholder="Select Region" options={ regionOptions } style={ { width: "100%" } } />
-                            </Form.Item>
-                        </Col>
-
-                        <Col span={ 12 }>
-                            <Form.Item
-                                label="CSV Upload"
-                                name="file"
-                                valuePropName="fileList"
-                                getValueFromEvent={ (e) => (Array.isArray(e) ? e : e?.fileList) }
-                            // rules={ [{ required: true, message: "Please upload a CSV file" }] }
-                            >
-                                <Dragger { ...uploadProps } className="csv-uploader">
-                                    <p className="ant-upload-drag-icon">
-                                        <InboxOutlined />
-                                    </p>
-                                    <p className="ant-upload-text">Click or drag CSV file to this area to upload</p>
-                                    <p className="ant-upload-hint">Support for single CSV file upload</p>
-                                </Dragger>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                </Form>
-            </Modal> */}
-
-            <Modal
+            <Drawer
                 title="Outreach Filter"
                 open={ filterModal }
-                onCancel={ () => { setfilterModal(false) } }
-                footer={ null }
-                width={ 600 }
+                onClose={ () => setfilterModal(false) }
+                width={ 400 }
+                footer={ <div style={ { textAlign: "right" } }>
+                    <Button
+                        className='text-btn'
+                        onClick={ () => setfilterModal(false) }
+                        style={ { marginRight: 10 } }
+                    >
+                        Cancel
+                    </Button>
+                    <Button type="primary" onClick={ handleFilterSubmit } htmlType="submit" loading={ loading }>
+                        Save
+                    </Button>
+                </div> }
                 destroyOnClose
             >
-                <Divider />
-                <Form form={ form } layout="vertical"
-                //    onFinish={setApiData}
-                >
-                    <Form.Item
-                        label="Country"
-                        name="country"
-                    // rules={[{ required: true, message: "Please select a country!" }]}
-                    >
+
+                <Form form={ form } layout="vertical">
+                    <Form.Item label="Country" name="country">
                         <Select
                             placeholder="Select Country"
                             showSearch
                             allowClear
-                            onSelect={ (value) => setFormData({ ...formData, country: value }) } // ✅ Fixed onSelect
+                            onSelect={ (value) => setFormData({ ...formData, country: value }) }
                             filterOption={ (input, option) =>
                                 option?.children.toLowerCase().includes(input.toLowerCase())
-                            } // ✅ Enables search filtering
+                            }
                         >
                             { country?.map((item) => (
-                                <Option key={ item.id || item.name } value={ item.name } style={ { textTransform: "capitalize" } }>
+                                <Select.Option key={ item.id || item.name } value={ item.name } style={ { textTransform: "capitalize" } }>
                                     { item.name }
-                                </Option>
+                                </Select.Option>
                             )) }
                         </Select>
                     </Form.Item>
 
-                    {/* <Form.Item
-                        label="Status"
-                        name="status"
-                        rules={[{ required: true, message: "Please select a status!" }]}
-                    >
-                        <Select placeholder="Select Status">
-                            {dropdownData?.statuses.map((item) => (
-                                <Option key={item.id} value={item.name}>
-                                    {item.name}
-                                </Option>
-                            ))}
-                        </Select>
-                    </Form.Item> */}
-
-                    <Form.Item
-                        label="Region"
-                        name="region"
-                    // rules={[{ required: true, message: "Please select a region!" }]}
-                    >
+                    <Form.Item label="Region" name="region">
                         <Select
                             value={ formData.region }
                             onChange={ (value) => setFormData({ ...formData, region: value }) }
                             placeholder="Region"
-                            // className="form-input"
                             options={ regionOptions }
                         />
                     </Form.Item>
 
-                    <Form.Item
-                        label="Campaigns"
-                        name="campaign"
-                    // rules={[{ required: true, message: "Please select a campaign!" }]}
-                    >
+                    <Form.Item label="Campaigns" name="campaign">
                         <Select
-                            // value={formData.campaign}
                             onChange={ (value) => setFormData({ ...formData, campaign: value }) }
                             placeholder="Campaign"
-                        // className="form-input"
                         >
                             { campaigns.map(campaign => (
                                 <Select.Option key={ campaign._id } value={ campaign._id }>
@@ -1097,16 +992,10 @@ const OutReachList = () => {
                         </Select>
                     </Form.Item>
 
-                    <Form.Item
-                        label="Category"
-                        name="category"
-                    // rules={[{ required: true, message: "Please select a category!" }]}
-                    >
+                    <Form.Item label="Category" name="category">
                         <Select
-                            // value={formData.category}
                             onChange={ (value) => setFormData({ ...formData, category: value }) }
                             placeholder="Category"
-                        // className="form-input"
                         >
                             { categories.map(category => (
                                 <Select.Option key={ category._id } value={ category._id }>
@@ -1116,53 +1005,32 @@ const OutReachList = () => {
                         </Select>
                     </Form.Item>
 
-                    {/* <Form.Item
-                        label="Assign To"
-                        name="assignTo"
-                        onChange={(value) => setFormData({ ...formData, assignTo: value?._id })}
 
-                    // rules={[{ required: true, message: "Please assign a user!" }]}
-                    >
-                        <Select placeholder="Assign To">
-                            {UserData?.map((item) => (
-                                <Option key={item._id} value={item._id}>
-                                    {item.name}
-                                </Option>
-                            ))}
-                        </Select>
-                    </Form.Item> */}
 
-                    <Divider />
-
-                    <div style={ { textAlign: "right" } }>
-                        <Button
-                            className='text-btn'
-                            onClick={ () => { setfilterModal(false) } }
-                            style={ { marginRight: 10 } }>
-                            Cancel
-                        </Button>
-                        <Button type="primary" onClick={ handleFilterSubmit } htmlType="submit" loading={ loading }>
-                            Save
-                        </Button>
-                    </div>
                 </Form>
-            </Modal>
+            </Drawer>
 
 
-            <Modal
+            <Drawer
                 title={ `Add Note` }
                 open={ modalOpen }
-                onCancel={ handleModalClose }
-                footer={ null }
-                width={ 600 }
+                onClose={ handleModalClose }
+                width={ 400 }
+                footer={ <div style={ { textAlign: "right" } }>
+                    <Button style={ { marginRight: 10 } } onClick={ handleModalClose }>
+                        Cancel
+                    </Button>
+                    <Button type="primary" htmlType="submit">
+                        Save
+                    </Button>
+                </div> }
             >
-                <Divider />
                 <Form
                     form={ form }
                     layout="vertical"
                     onFinish={ handleSubmitNote }
                 >
-                    <div style={ { borderBottom: "1px solid #ddd", paddingBottom: "15px", marginBottom: "20px" } }>
+                    <div>
                         <h3 style={ { fontSize: "16px", marginBottom: "10px" } }>Contacted Through</h3>
                         <Form.Item name="options">
                             <Checkbox.Group options={ checkBoxOptions } />
@@ -1189,6 +1057,7 @@ const OutReachList = () => {
                                 beforeUpload={ () => false }
                                 maxCount={ 1 }
                                 listType="text"
+
                             >
                                 <Button icon={ <UploadOutlined /> }>Upload Attachment</Button>
                             </Upload>
@@ -1197,7 +1066,6 @@ const OutReachList = () => {
                         <Form.Item
                             label="Add Reminder"
                             name="reminder"
-                        //   rules={[{ required: true, message: "Please enter a reminder!" }]}
                         >
                             <DatePicker
                                 showTime={ { format: 'HH:mm:ss' } }
@@ -1207,18 +1075,12 @@ const OutReachList = () => {
                             />
                         </Form.Item>
                     </div>
-                    <Divider />
 
-                    <div style={ { textAlign: "right", marginTop: "20px" } }>
-                        <Button style={ { marginRight: 10 } } onClick={ handleModalClose }>
-                            Cancel
-                        </Button>
-                        <Button type="primary" htmlType="submit">
-                            Save
-                        </Button>
-                    </div>
+
+
                 </Form>
-            </Modal>
+            </Drawer>
+
 
         </div>
     );

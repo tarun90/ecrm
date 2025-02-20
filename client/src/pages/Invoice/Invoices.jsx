@@ -19,6 +19,7 @@ import {
   Divider,
   Row,
   Col,
+  Drawer,
 } from "antd";
 import {
   DeleteOutlined,
@@ -841,11 +842,11 @@ function Invoices() {
                       ? `${invoice.contact.firstName} ${invoice.contact.lastName}`
                       : "Unknown Customer" }
                   </td>
-                  <td>{new Date(invoice.due_date).toLocaleDateString('en-GB', {
-  day: '2-digit',
-  month: '2-digit',
-  year: 'numeric'
-}).replace(/\//g, '-') }</td>
+                  <td>{ new Date(invoice.due_date).toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                  }).replace(/\//g, '-') }</td>
                   <td className={ `status ${invoice.payment_status}` }>
                     { invoice.payment_status }
                   </td>
@@ -914,25 +915,35 @@ const InvoiceForm = ({
   loading,
 }) => {
   return (
-    <Modal
+    <Drawer
       title={ isEditing ? "Edit Invoice" : "Create New Invoice" }
       open={ isModalOpen }
-      width={ 600 }
-      onCancel={ () => setIsModalOpen(false) }
-      footer={ null }
+      width={ 400 }
+      onClose={ () => setIsModalOpen(false) }
+      footer={
+        <div className="modal-footer" style={ { textAlign: "right", padding: "10px 16px" } }>
+          <Button className="text-btn" onClick={ () => setIsModalOpen(false) }>
+            Cancel
+          </Button>
+          <Button type="primary" htmlType="submit" loading={ loading } onClick={ () => form.submit() }>
+            { loading ? "Saving..." : isEditing ? "Update Invoice" : "Create Invoice" }
+          </Button>
+        </div>
+      }
     >
       <Form layout="vertical" onFinish={ handleSubmit } initialValues={ formData }>
-        <div className="modal-content scroll">
+        <div className="modal-content">
           <Form.Item
-            onChange={ (value) =>
-              setFormData({ ...formData, invoice_number: value.target.value })
-            }
             label="Invoice Number"
             name="invoice_number"
             rules={ [{ required: true }] }
+            onChange={ (value) =>
+              setFormData({ ...formData, invoice_number: value.target.value })
+            }
           >
             <Input placeholder="Invoice Number" />
           </Form.Item>
+
           <Form.Item
             label="Customer Name"
             name="contact"
@@ -956,6 +967,7 @@ const InvoiceForm = ({
               )) }
             </Select>
           </Form.Item>
+
           <Form.Item
             label="Due Date"
             name="due_date"
@@ -968,24 +980,23 @@ const InvoiceForm = ({
                 formData.due_date
                   ? dayjs(formData.due_date, "YYYY-MM-DD")
                   : null
-              } // Ensure proper parsing
+              }
               onChange={ (date, dateString) => {
-                setFormData({ ...formData, due_date: dateString || null }); // Store as string
+                setFormData({ ...formData, due_date: dateString || null });
               } }
             />
           </Form.Item>
+
           <Form.Item label="Payment Status" name="payment_status">
             <Select
-              value={ formData.payment_status } // Ensure the selected value is shown
+              value={ formData.payment_status }
               onChange={ (value) =>
                 setFormData({ ...formData, payment_status: value })
               }
             >
               <Select.Option value="unpaid">Unpaid</Select.Option>
               <Select.Option value="paid">Paid</Select.Option>
-              <Select.Option value="partially_paid">
-                Partially Paid
-              </Select.Option>
+              <Select.Option value="partially_paid">Partially Paid</Select.Option>
               <Select.Option value="overdue">Overdue</Select.Option>
             </Select>
           </Form.Item>
@@ -1001,6 +1012,7 @@ const InvoiceForm = ({
               Add Item
             </Button>
           </div>
+
           { formData.items.map((item, index) => (
             <div key={ index } className="item-wrapper">
               <Form.Item label="Select Product">
@@ -1008,11 +1020,9 @@ const InvoiceForm = ({
                   showSearch
                   placeholder="Search Product"
                   optionFilterProp="children"
-                  value={ formData.items[index]?.product || null } // Ensure selected value is set
+                  value={ formData.items[index]?.product || null }
                   filterOption={ (input, option) =>
-                    option?.children
-                      ?.toLowerCase()
-                      .includes(input.toLowerCase())
+                    option?.children?.toLowerCase().includes(input.toLowerCase())
                   }
                   onChange={ (value) => handleProductSelect(index, value) }
                 >
@@ -1029,9 +1039,7 @@ const InvoiceForm = ({
                   <InputNumber
                     min={ 1 }
                     value={ item.quantity }
-                    onChange={ (value) =>
-                      handleLineItemChange(index, "quantity", value)
-                    }
+                    onChange={ (value) => handleLineItemChange(index, "quantity", value) }
                     disabled={ !item.product }
                   />
                 </Form.Item>
@@ -1041,9 +1049,7 @@ const InvoiceForm = ({
                     min={ 0 }
                     step={ 0.01 }
                     value={ item.unit_price }
-                    onChange={ (value) =>
-                      handleLineItemChange(index, "unit_price", value)
-                    }
+                    onChange={ (value) => handleLineItemChange(index, "unit_price", value) }
                     disabled={ !item.product }
                   />
                 </Form.Item>
@@ -1052,6 +1058,7 @@ const InvoiceForm = ({
                   <InputNumber value={ item.total_price } readOnly />
                 </Form.Item>
               </div>
+
               <Button
                 type="link"
                 className="delete-btn"
@@ -1061,6 +1068,7 @@ const InvoiceForm = ({
               </Button>
             </div>
           )) }
+
           <div className="line-items-wrapper">
             <Form.Item label="Subtotal">
               <InputNumber value={ formData.subtotal } readOnly />
@@ -1117,24 +1125,9 @@ const InvoiceForm = ({
             />
           </Form.Item>
         </div>
-
-        <Divider />
-        <div className="modal-footer">
-          <Form.Item>
-            <Button className="text-btn" onClick={ () => setIsModalOpen(false) }>
-              Cancel
-            </Button>
-            <Button type="primary" htmlType="submit" loading={ loading }>
-              { loading
-                ? "Saving..."
-                : isEditing
-                  ? "Update Invoice"
-                  : "Create Invoice" }
-            </Button>
-          </Form.Item>
-        </div>
       </Form>
-    </Modal>
+    </Drawer>
+
 
   );
 };

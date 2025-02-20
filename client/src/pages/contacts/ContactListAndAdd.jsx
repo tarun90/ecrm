@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Modal, Form, Input, Select, message, Divider, Row, Col } from 'antd';
+import { Button, Modal, Form, Input, Select, message, Divider, Row, Col, Drawer } from 'antd';
 import { DeleteOutlined, DownloadOutlined, EditOutlined, ExportOutlined, PlusOutlined } from '@ant-design/icons';
 
 import moment from 'moment';
@@ -299,56 +299,89 @@ const ContactListAndAdd = () => {
                 </table>
             </div>
 
-            <Modal
-                title={ isEditing ? 'Edit Contact' : 'Create Contact' }
+            <Drawer
+                title={ isEditing ? "Edit Contact" : "Create Contact" }
                 open={ isModalOpen }
-                onCancel={ closeModal }
-                footer={ null }
+                width={ 400 }
+                onClose={ () => {
+                    closeModal();
+                    form.resetFields();
+                } }
+                footer={
+                    <div style={ { textAlign: "right" } }>
+                        <Button
+                            key="cancel"
+                            className="text-btn"
+                            onClick={ () => {
+                                closeModal();
+                                form.resetFields();
+                            } }
+                        >
+                            Cancel
+                        </Button>
+                        <Button key="create" type="primary" onClick={ () => form.submit() }>
+                            { isEditing ? "Update Contact" : "Create Contact" }
+                        </Button>
+                    </div>
+                }
             >
-                <Divider />
                 <Form form={ form } layout="vertical" onFinish={ handleSubmit }>
                     <Row gutter={ 24 }>
-                        {/* Column 1 */ }
-                        <Col span={ 12 }>
+                        <Col span={ 24 }>
                             <Form.Item
                                 label="Email"
                                 name="email"
                                 rules={ [
-                                    { required: true, message: 'Please input email!' },
-                                    { type: 'email', message: 'Please enter a valid email!' }
+                                    { required: true, message: "Please input email!" },
+                                    { type: "email", message: "Please enter a valid email!" },
                                 ] }
                             >
                                 <Input placeholder="Email" />
                             </Form.Item>
 
-                            <Form.Item label="First Name" name="firstName">
+                            <Form.Item
+                                label="First Name"
+                                name="firstName"
+                                rules={ [{ required: true, message: "Please enter first name" }] }
+                            >
                                 <Input placeholder="First Name" />
                             </Form.Item>
 
-                            <Form.Item label="Last Name" name="lastName">
+                            <Form.Item
+                                label="Last Name"
+                                name="lastName"
+                                rules={ [{ required: true, message: "Please enter last name" }] }
+                            >
                                 <Input placeholder="Last Name" />
                             </Form.Item>
 
-                            <Form.Item label="Phone Number" name="phoneNumber">
+                            <Form.Item
+                                label="Phone Number"
+                                name="phoneNumber"
+                                rules={ [{ required: true, message: "Please enter phone number" }] }
+                            >
                                 <Input placeholder="Phone Number" />
                             </Form.Item>
                         </Col>
 
-                        {/* Column 2 */ }
-                        <Col span={ 12 }>
+                        <Col span={ 24 }>
                             <Form.Item label="Job Title" name="jobTitle">
                                 <Input placeholder="Job Title" />
                             </Form.Item>
 
-                            <Form.Item label="Lifecycle Stage" name="lifecycleStage">
-                                <Select>
+                            <Form.Item
+                                label="Lifecycle Stage"
+                                name="lifecycleStage"
+                                rules={ [{ required: true, message: "Please select lifecycle stage" }] }
+                            >
+                                <Select placeholder="Select lifecycle stage">
                                     <Select.Option value="Lead">Lead</Select.Option>
                                     <Select.Option value="Customer">Customer</Select.Option>
                                 </Select>
                             </Form.Item>
 
                             <Form.Item label="Lead Status" name="leadStatus">
-                                <Select>
+                                <Select placeholder="Select lead status">
                                     <Select.Option value="">--</Select.Option>
                                     <Select.Option value="Qualified">Qualified</Select.Option>
                                 </Select>
@@ -358,51 +391,36 @@ const ContactListAndAdd = () => {
                                 <Select
                                     showSearch
                                     placeholder="Select Company"
-                                    name="company"
                                     allowClear
-                                    value={ contact.company || undefined }
-                                    // onChange={handleChange}
                                     onSearch={ (value) => setSearchText(value) }
-
-                                    notFoundContent={
+                                    dropdownRender={ (menu) => (
                                         <>
+                                            { menu }
+                                            <Divider style={ { margin: "8px 0" } } />
                                             <Button
-                                                style={ {
-                                                    backgroundColor: "#e0f2fe",
-                                                    width: "100%",
-                                                    color: "#0369a1",
-                                                    border: "none",
-                                                    boxShadow: "none",
-                                                } }
-
-                                                onClick={ () => handleAddCompany() }
+                                                type="text"
+                                                icon="+"
+                                                style={ { width: "100%", color: "#0369a1" } }
+                                                onClick={ handleAddCompany }
                                             >
-                                                + Add Company
+                                                Add Company
                                             </Button>
                                         </>
-                                    }
+                                    ) }
                                 >
                                     { companies?.map((company) => (
-                                        <Option key={ company._id } value={ company._id }>
+                                        <Select.Option key={ company._id } value={ company._id }>
                                             { company.companyName }
-                                        </Option>
+                                        </Select.Option>
                                     )) }
                                 </Select>
                             </Form.Item>
                         </Col>
                     </Row>
-
-                    <Divider />
-                    <Form.Item className="flex justify-end gap-2 modal-footer">
-                        <Button onClick={ closeModal } className='text-btn '>
-                            Cancel
-                        </Button>
-                        <Button type="primary" htmlType="submit">
-                            { isEditing ? 'Update Contact' : 'Create Contact' }
-                        </Button>
-                    </Form.Item>
                 </Form>
-            </Modal>
+            </Drawer>
+
+
 
 
         </div>

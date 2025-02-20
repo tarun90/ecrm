@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Button, Input, Select, DatePicker, Modal, message, Form, Divider, Col, Row } from "antd";
+import { Button, Input, Select, DatePicker, Modal, message, Form, Divider, Col, Row, Drawer } from "antd";
 import {
   PlusOutlined,
   FilterOutlined,
@@ -377,52 +377,41 @@ function Tasks() {
           </div>
         </div>
 
-        <Modal
+        <Drawer
           title="Add New Task"
           open={ showModal }
-          onCancel={ () => {
+          width={ 400 }
+          onClose={ () => {
             setShowModal(false);
             form.resetFields();
           } }
-          footer={ [
-            <Divider />,
-            <Button
-              key="cancel"
-              className="text-btn"
-              onClick={ () => {
-                setShowModal(false);
-                form.resetFields();
-              } }
-            >
-              Cancel
-            </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              className="update-btn"
-              onClick={ () => form.submit() }
-            >
-              Add Task
-            </Button>,
-          ] }
-          width={ 600 }
+          footer={
+            <div style={ { textAlign: "right", padding: "10px 16px" } }>
+              <Button
+                key="cancel"
+                className="text-btn"
+                onClick={ () => {
+                  setShowModal(false);
+                  form.resetFields();
+                } }
+              >
+                Cancel
+              </Button>
+              <Button key="submit" type="primary" className="update-btn" onClick={ () => form.submit() }>
+                Add Task
+              </Button>
+            </div>
+          }
         >
-          <Divider />
           <Form layout="vertical" form={ form } onFinish={ handleAddTask }>
             <Row gutter={ 24 }>
-              {/* Column 1 */ }
-              <Col span={ 12 }>
+              <Col span={ 24 }>
                 <Form.Item
                   name="name"
                   label="Task Name"
                   rules={ [{ required: true, message: "Please enter task name" }] }
                 >
-                  <Input
-                    placeholder="Task Name"
-                    value={ newTask.name }
-                    name="name"
-                    onChange={ handleInputChange }
-                  />
+                  <Input placeholder="Task Name" value={ newTask.name } name="name" onChange={ handleInputChange } />
                 </Form.Item>
 
                 <Form.Item
@@ -430,12 +419,7 @@ function Tasks() {
                   label="Owner"
                   rules={ [{ required: true, message: "Please enter owner name" }] }
                 >
-                  <Input
-                    name="owner"
-                    placeholder="Owner"
-                    value={ newTask.owner }
-                    onChange={ handleInputChange }
-                  />
+                  <Input name="owner" placeholder="Owner" value={ newTask.owner } onChange={ handleInputChange } />
                 </Form.Item>
 
                 <Form.Item
@@ -446,13 +430,12 @@ function Tasks() {
                   <DatePicker
                     style={ { width: "100%" } }
                     placeholder="Start Date"
-                    onChange={ date => setNewTask({ ...newTask, startDate: date }) }
+                    onChange={ (date) => setNewTask({ ...newTask, startDate: date }) }
                   />
                 </Form.Item>
               </Col>
 
-              {/* Column 2 */ }
-              <Col span={ 12 }>
+              <Col span={ 24 }>
                 <Form.Item
                   name="dueDate"
                   label="Due Date"
@@ -461,7 +444,7 @@ function Tasks() {
                   <DatePicker
                     style={ { width: "100%" } }
                     placeholder="Due Date"
-                    onChange={ date => setNewTask({ ...newTask, dueDate: date }) }
+                    onChange={ (date) => setNewTask({ ...newTask, dueDate: date }) }
                   />
                 </Form.Item>
 
@@ -473,7 +456,7 @@ function Tasks() {
                   <Select
                     placeholder="Select Status"
                     value={ newTask.status }
-                    onChange={ value => setNewTask({ ...newTask, status: value }) }
+                    onChange={ (value) => setNewTask({ ...newTask, status: value }) }
                     style={ { width: "100%" } }
                   >
                     <Select.Option value="Pending">Pending</Select.Option>
@@ -484,40 +467,36 @@ function Tasks() {
               </Col>
             </Row>
           </Form>
-        </Modal>
+        </Drawer>
 
 
-        <Modal
+
+        <Drawer
           title="Edit Task"
           open={ editingTask !== null }
-          onCancel={ () => {
+          width={ 400 }
+          onClose={ () => {
             setEditingTask(null);
             editForm.resetFields();
           } }
-          footer={ [
-            <Divider />,
-            <Button
-              key="cancel"
-              className="text-btn"
-              onClick={ () => {
-                setEditingTask(null);
-                editForm.resetFields();
-              } }
-            >
-              Cancel
-            </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              className="update-btn"
-              onClick={ () => editForm.submit() }
-            >
-              Update Task
-            </Button>,
-          ] }
-          width={ 600 }
+          footer={
+            <div style={ { textAlign: "right", padding: "10px 16px" } }>
+              <Button
+                key="cancel"
+                className="text-btn"
+                onClick={ () => {
+                  setEditingTask(null);
+                  editForm.resetFields();
+                } }
+              >
+                Cancel
+              </Button>
+              <Button key="submit" type="primary" className="update-btn" onClick={ () => editForm.submit() }>
+                Update Task
+              </Button>
+            </div>
+          }
         >
-          <Divider />
           <Form
             layout="vertical"
             form={ editForm }
@@ -531,19 +510,13 @@ function Tasks() {
             onFinish={ handleUpdateTask }
           >
             <Row gutter={ 24 }>
-              {/* Column 1 */ }
-              <Col span={ 12 }>
+              <Col span={ 24 }>
                 <Form.Item
                   name="name"
                   label="Task Name"
                   rules={ [{ required: true, message: "Please enter task name" }] }
                 >
-                  <Input
-                    name="name"
-                    placeholder="Task Name"
-                    value={ editingTask?.name }
-                    onChange={ handleEditInputChange }
-                  />
+                  <Input name="name" placeholder="Task Name" onChange={ handleEditInputChange } />
                 </Form.Item>
 
                 <Form.Item
@@ -551,12 +524,7 @@ function Tasks() {
                   label="Owner"
                   rules={ [{ required: true, message: "Please enter owner name" }] }
                 >
-                  <Input
-                    name="owner"
-                    placeholder="Owner"
-                    value={ editingTask?.owner }
-                    onChange={ handleEditInputChange }
-                  />
+                  <Input name="owner" placeholder="Owner" onChange={ handleEditInputChange } />
                 </Form.Item>
 
                 <Form.Item
@@ -568,13 +536,12 @@ function Tasks() {
                     style={ { width: "100%" } }
                     placeholder="Start Date"
                     value={ editingTask?.startDate ? dayjs(editingTask.startDate) : null }
-                    onChange={ date => setEditingTask({ ...editingTask, startDate: date }) }
+                    onChange={ (date) => setEditingTask({ ...editingTask, startDate: date }) }
                   />
                 </Form.Item>
               </Col>
 
-              {/* Column 2 */ }
-              <Col span={ 12 }>
+              <Col span={ 24 }>
                 <Form.Item
                   name="dueDate"
                   label="Due Date"
@@ -584,7 +551,7 @@ function Tasks() {
                     style={ { width: "100%" } }
                     placeholder="Due Date"
                     value={ editingTask?.dueDate ? dayjs(editingTask.dueDate) : null }
-                    onChange={ date => setEditingTask({ ...editingTask, dueDate: date }) }
+                    onChange={ (date) => setEditingTask({ ...editingTask, dueDate: date }) }
                   />
                 </Form.Item>
 
@@ -596,7 +563,7 @@ function Tasks() {
                   <Select
                     placeholder="Select Status"
                     value={ editingTask?.status }
-                    onChange={ value => setEditingTask({ ...editingTask, status: value }) }
+                    onChange={ (value) => setEditingTask({ ...editingTask, status: value }) }
                     style={ { width: "100%" } }
                   >
                     <Select.Option value="Pending">Pending</Select.Option>
@@ -607,7 +574,8 @@ function Tasks() {
               </Col>
             </Row>
           </Form>
-        </Modal>
+        </Drawer>
+
 
       </div>
     </>

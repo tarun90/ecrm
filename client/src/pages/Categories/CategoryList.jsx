@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { message, Popconfirm, Button, Input, Modal, Form } from 'antd';
+import { message, Popconfirm, Button, Input, Modal, Form, Drawer } from 'antd';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { getCategories, createCategory, updateCategory, deleteCategory } from './categoryService';
 import './categories.css';
@@ -145,11 +145,19 @@ const CategoryList = () => {
                 </table>
             </div>
 
-            <Modal
+            <Drawer
                 title={ editId ? "Edit Category" : "Add Category" }
                 open={ modalVisible }
-                onCancel={ () => setModalVisible(false) }
-                footer={ null } // Let Form handle submission
+                onClose={ () => setModalVisible(false) }
+                footer={ <div className="modal-footer" style={ { marginTop: "16px", textAlign: "right" } }>
+                    <Button onClick={ () => setModalVisible(false) } className="text-btn">
+                        Cancel
+                    </Button>
+                    <Button type="primary" htmlType="submit" style={ { marginLeft: "8px" } }>
+                        OK
+                    </Button>
+                </div> } // Let Form handle submission
+                width={ 400 } // Adjust width as needed
             >
                 <Form
                     form={ form }
@@ -158,25 +166,20 @@ const CategoryList = () => {
                 >
                     <Form.Item
                         label="Category Name"
-                        // name="categoryName"
                         rules={ [{ required: true, message: "Please enter category name" }] }
                     >
-                        <Input placeholder="Enter Category Name"
+                        <Input
+                            placeholder="Enter Category Name"
                             value={ categoryName }
-                            onChange={ (e) => setCategoryName(e.target.value) } />
+                            onChange={ (e) => setCategoryName(e.target.value) }
+                        />
                     </Form.Item>
 
-                    {/* Buttons inside the form to align properly */ }
-                    <div className="modal-footer" style={ { marginTop: "16px", textAlign: "right" } }>
-                        <Button onClick={ () => setModalVisible(false) } className="text-btn">
-                            Cancel
-                        </Button>
-                        <Button type="primary" htmlType="submit" style={ { marginLeft: "8px" } }>
-                            OK
-                        </Button>
-                    </div>
+
+
                 </Form>
-            </Modal>
+            </Drawer>
+
         </div>
     );
 };

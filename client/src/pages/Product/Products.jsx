@@ -5,7 +5,7 @@ import MainLayout from "../../components/MainLayout";
 import "../../components/custome.css";
 import "./Products.css";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
-import { Modal, Form, Input, Select, Button, Divider, Row, Col } from "antd";
+import { Modal, Form, Input, Select, Button, Divider, Row, Col, Drawer } from "antd";
 import TextArea from "antd/es/input/TextArea";
 
 function Products() {
@@ -249,21 +249,29 @@ function Products() {
         </div>
       ) }
 
-      <Modal
+      <Drawer
         title={ isEditing ? "Edit Product" : "Add New Product" }
         open={ isModalOpen }
-        onCancel={ onClose }
-        footer={ null }
-        width={ 600 }
+        width={ 400 }
+        onClose={ onClose }
+        footer={
+          <div style={ { textAlign: "right", padding: "10px 16px" } }>
+            <Button onClick={ onClose } className="text-btn">
+              Cancel
+            </Button>
+            <Button type="primary" htmlType="submit" loading={ loading } onClick={ () => form.submit() }>
+              { isEditing ? "Update Product" : "Create Product" }
+            </Button>
+          </div>
+        }
       >
-        <Divider />
         <Form form={ form } layout="vertical" onFinish={ handleSubmit }>
-          <Row gutter={ 16 }>
-            <Col span={ 12 }>
+          <Row gutter={ 24 }>
+            <Col span={ 24 }>
               <Form.Item
                 label="Product Name"
                 name="name"
-                rules={ [{ required: true, message: 'Please input product name!' }] }
+                rules={ [{ required: true, message: "Please input product name!" }] }
               >
                 <Input placeholder="Product Name" />
               </Form.Item>
@@ -279,6 +287,7 @@ function Products() {
               <Form.Item label="Unit Cost" name="unit_cost">
                 <Input type="number" placeholder="Unit Cost" />
               </Form.Item>
+
               <Form.Item label="Currency" name="currency">
                 <Select placeholder="Select Currency">
                   <Select.Option value="USD">USD</Select.Option>
@@ -289,7 +298,7 @@ function Products() {
               </Form.Item>
             </Col>
 
-            <Col span={ 12 }>
+            <Col span={ 24 }>
               <Form.Item label="Product Type" name="product_type">
                 <Select placeholder="Select Product Type">
                   <Select.Option value="physical">Physical</Select.Option>
@@ -298,11 +307,10 @@ function Products() {
                   <Select.Option value="service">Service</Select.Option>
                 </Select>
               </Form.Item>
+
               <Form.Item label="Long Description" name="description_long">
                 <TextArea placeholder="Long Description" rows={ 2 } />
               </Form.Item>
-
-
 
               <Form.Item label="Billing Frequency" name="billing_frequency">
                 <Input placeholder="Billing Frequency (e.g., monthly, annually)" />
@@ -311,8 +319,6 @@ function Products() {
               <Form.Item label="Term" name="term">
                 <Input placeholder="Term (e.g., 12 months)" />
               </Form.Item>
-
-
 
               <Form.Item label="Tax Rate (%)" name="tax_rate">
                 <Select placeholder="Select Tax Rate (%)">
@@ -327,17 +333,9 @@ function Products() {
               </Form.Item>
             </Col>
           </Row>
-          <Divider />
-          <Form.Item className="modal-footer">
-            <Button onClick={ onClose } className="text-btn">
-              Cancel
-            </Button>
-            <Button type="primary" htmlType="submit" loading={ loading }>
-              { isEditing ? "Update Product" : "Create Product" }
-            </Button>
-          </Form.Item>
         </Form>
-      </Modal>
+      </Drawer>
+
 
 
     </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { message, Popconfirm, Button, Input, Modal, Form } from 'antd';
+import { message, Popconfirm, Button, Input, Modal, Form, Drawer } from 'antd';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { getCampaigns, createCampaign, updateCampaign, deleteCampaign } from './campaignService';
 import './campaigns.css';
@@ -130,13 +130,17 @@ const CampaignList = () => {
                 </table>
             </div>
 
-
-            <Modal
+            <Drawer
                 title={ editId ? "Edit Campaign" : "Add Campaign" }
                 open={ modalVisible }
-                onCancel={ () => setModalVisible(false) }
-                onOk={ () => form.submit() } // Submits form on "OK" button click
-                footer={ false }
+                onClose={ () => setModalVisible(false) }
+                width={ 400 } // Adjust width as needed
+                footer={
+                    <div className='modal-footer'>
+                        <Button onClick={ () => setModalVisible(false) } className='text-btn'>Cancel</Button>
+                        <Button type="primary" onClick={ () => form.submit() }>Ok</Button>
+                    </div>
+                }
             >
                 <Form
                     form={ form }
@@ -145,20 +149,18 @@ const CampaignList = () => {
                 >
                     <Form.Item
                         label="Campaign Name"
-                        // name="campaignName"
                         rules={ [{ required: true, message: "Please enter campaign name" }] }
                     >
                         <Input
                             value={ campaignName }
                             onChange={ (e) => setCampaignName(e.target.value) }
                             placeholder="Enter Campaign Name"
-                        />                    </Form.Item>
+                        />
+                    </Form.Item>
                 </Form>
-                <div className='modal-footer'>
-                    <Button onClick={ () => setModalVisible(false) } className='text-btn'>Cancel</Button>
-                    <Button type="primary" onClick={ () => form.submit() }> Ok </Button>
-                </div>
-            </Modal>
+
+            </Drawer>
+
 
         </div>
     );

@@ -7,7 +7,10 @@ import {
   Space,
   Modal,
   Divider,
-  message
+  message,
+  Drawer,
+  Row,
+  Col
 } from 'antd';
 import { createCompany, getCompanyById, Getcountry, updateCompany } from './APIServices';
 import currenciesData from './currency';
@@ -147,70 +150,81 @@ const CompanyFormModal = ({ visible, onCancel, editId = null, fetchCompanies, co
   };
 
   return (
-    <Modal
-      title={ editId ? "Edit Company" : "Add Company" }
+
+
+    <Drawer
+      title={ editId ? "Edit Company" : "Create Company" }
       open={ visible }
-      onCancel={ onCancel }
-      width={ 600 }
-      footer={ null }
+      onClose={ onCancel }
+      width={ 400 }
+      footer={
+        <div style={ { display: "flex", justifyContent: "flex-end", gap: "8px" } }>
+          <Button onClick={ onCancel } className="text-btn">
+            Cancel
+          </Button>
+          <Button type="primary" htmlType="submit" loading={ loading }>
+            { editId ? "Update Company" : "Save Company" }
+          </Button>
+        </div>
+      }
     >
-      <Divider />
       <Form
         form={ form }
         layout="vertical"
         onFinish={ handleSubmit }
         initialValues={ {
-          industry: '',
-          type: '',
-          country: '',
-          webTechnologies: []
+          industry: "",
+          type: "",
+          country: "",
+          webTechnologies: [],
         } }
       >
-        <div className='modal-content scroll'>
-          <div className="form-grid" style={ { display: 'grid', gridTemplateColumns: '1fr 1fr' } }>
+        <Row gutter={ 24 }>
+          <Col span={ 24 }>
             <Form.Item
               label="Company Name"
               name="companyName"
-              rules={ [{ required: true, message: 'Please input company name!' }] }
+              rules={ [{ required: true, message: "Please input company name!" }] }
             >
-              <Input />
+              <Input placeholder="Company Name" />
             </Form.Item>
 
             <Form.Item
               label="Company Owner"
               name="companyOwner"
-              rules={ [{ required: true, message: 'Please input company owner!' }] }
+              rules={ [{ required: true, message: "Please input company owner!" }] }
             >
-              <Input />
+              <Input placeholder="Company Owner" />
             </Form.Item>
 
             <Form.Item
               label="Email"
               name="email"
               rules={ [
-                { type: 'email', message: 'Please enter a valid email address!' }
+                { required: true, message: "Please input email!" },
+                { type: "email", message: "Please enter a valid email!" },
               ] }
             >
-              <Input />
+              <Input placeholder="Email" />
             </Form.Item>
 
             <Form.Item
               label="Phone Number"
               name="phoneNumber"
-              rules={ [
-                { pattern: /^[0-9+-]+$/, message: 'Please enter a valid phone number!' }
-              ] }
+              rules={ [{ pattern: /^[0-9+-]+$/, message: "Please enter a valid phone number!" }] }
             >
-              <Input />
+              <Input placeholder="Phone Number" />
             </Form.Item>
+          </Col>
 
+          <Col span={ 24 }>
             <Form.Item
               label="Industry"
               name="industry"
-              rules={ [{ required: true, message: 'Please select an industry!' }] }
+              rules={ [{ required: true, message: "Please select an industry!" }] }
             >
               <Select placeholder="Select Industry">
-                { industries.map(industry => (
+                { industries.map((industry) => (
                   <Select.Option key={ industry } value={ industry }>
                     { industry }
                   </Select.Option>
@@ -221,10 +235,10 @@ const CompanyFormModal = ({ visible, onCancel, editId = null, fetchCompanies, co
             <Form.Item
               label="Type"
               name="type"
-              rules={ [{ required: true, message: 'Please select company type!' }] }
+              rules={ [{ required: true, message: "Please select company type!" }] }
             >
               <Select placeholder="Select Type">
-                { companyTypes.map(type => (
+                { companyTypes.map((type) => (
                   <Select.Option key={ type } value={ type }>
                     { type }
                   </Select.Option>
@@ -236,157 +250,33 @@ const CompanyFormModal = ({ visible, onCancel, editId = null, fetchCompanies, co
               label="Website URL"
               name="websiteUrl"
               rules={ [
-                { required: true, message: 'Please input website URL!' },
-                { type: 'url', message: 'Please enter a valid URL!' }
+                { required: true, message: "Please input website URL!" },
+                { type: "url", message: "Please enter a valid URL!" },
               ] }
             >
-              <Input />
-            </Form.Item>
-
-            <Form.Item
-              label="Time Zone"
-              name="timeZone"
-              rules={ [{ required: true, message: 'Please input time zone!' }] }
-            >
-              <Input placeholder="e.g., GMT+5:30, EST, PST" />
-            </Form.Item>
-
-            <Form.Item
-              label="City"
-              name="city"
-            >
-              <Input />
-            </Form.Item>
-
-            <Form.Item
-              label="State/Region"
-              name="stateRegion"
-            >
-              <Input />
+              <Input placeholder="Website URL" />
             </Form.Item>
 
             <Form.Item
               label="Country"
               name="country"
+              rules={ [{ required: true, message: "Please select a country!" }] }
             >
-              <Select
-                placeholder="Select Country"
-                showSearch
-                allowClear
-              >
-
+              <Select placeholder="Select Country" showSearch allowClear>
                 { country?.map((item, index) => (
-                  <Option
-                    key={ index }
-                    value={ item?.name }
-                    style={ { textTransform: "capitalize" } }
-                  >
+                  <Select.Option key={ index } value={ item?.name } style={ { textTransform: "capitalize" } }>
                     { item?.name }
-                  </Option>
-                )) }
-              </Select>
-            </Form.Item>
-
-            <Form.Item
-              label="Postal Code"
-              name="postalCode"
-              rules={ [
-                { pattern: /^[0-9]+$/, message: 'Please enter numbers only!' }
-              ] }
-            >
-              <Input />
-            </Form.Item>
-
-            <Form.Item
-              label="Number of Employees"
-              name="numberOfEmployees"
-              rules={ [
-                { pattern: /^[0-9]+$/, message: 'Please enter numbers only!' }
-              ] }
-            >
-              <Input />
-            </Form.Item>
-
-            <Form.Item
-              label="Annual Revenue"
-              name="annualRevenue"
-              rules={ [
-                { pattern: /^[0-9]+$/, message: 'Please enter numbers only!' }
-              ] }
-            >
-              <Input />
-            </Form.Item>
-
-            <Form.Item
-              label="Web Technologies"
-              name="webTechnologies"
-            >
-              <Select
-                mode="multiple"
-                placeholder="Select Web Technologies"
-              >
-                { webTechnologies.map(tech => (
-                  <Select.Option key={ tech } value={ tech }>
-                    { tech }
                   </Select.Option>
                 )) }
               </Select>
             </Form.Item>
+          </Col>
+        </Row>
 
-            <Form.Item
-              label="LinkedIn Company Page"
-              name="linkedinPage"
-              rules={ [
-                { type: 'url', message: 'Please enter a valid LinkedIn URL!' }
-              ] }
-            >
-              <Input />
-            </Form.Item>
 
-            <Form.Item
-              label="Currency"
-              name="Currency"
-              rules={ [{ required: true, message: 'Please select a currency!' }] }
-            >
-              <Select
-                showSearch
-                placeholder="Select Currency"
-                style={ { width: '100%' } }
-              >
-                { currenciesData.map(currency => (
-                  <Select.Option
-                    key={ currency.code }
-                    value={ currency.code }
-                  >
-                    <span style={ { fontWeight: 500 } }>{ currency.code }</span>
-                    <span style={ { color: '#666', marginLeft: 8 } }>{ currency.name }</span>
-                  </Select.Option>
-                )) }
-              </Select>
-            </Form.Item>
-
-            <Form.Item
-              label="Description"
-              name="description"
-              className="full-width"
-              style={ { gridColumn: '1 / -1' } }
-            >
-              <TextArea rows={ 4 } />
-            </Form.Item>
-          </div>
-        </div>
-        <Divider />
-
-        <div style={ { display: 'flex', justifyContent: 'flex-end', gap: '8px' } }>
-          <Button onClick={ onCancel } className='text-btn '>
-            Cancel
-          </Button>
-          <Button type="primary" htmlType="submit" loading={ loading }>
-            { editId ? "Update Company" : "Save Company" }
-          </Button>
-        </div>
       </Form>
-    </Modal>
+    </Drawer>
+
   );
 };
 
