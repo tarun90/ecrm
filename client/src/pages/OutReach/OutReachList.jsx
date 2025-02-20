@@ -278,6 +278,7 @@ const OutReachList = () => {
                 region: outreachItem.region._id,
                 campaign: outreachItem.campaign._id,
                 category: outreachItem.category._id,
+                designation: outreachItem?.designation
             });
             setEditMode(true);
             setEditId(id);
@@ -473,6 +474,7 @@ const OutReachList = () => {
                     >
                         Reset Filter
                     </Button>
+                    {userData?.isRegionHead &&<>
                     <span style={ { fontWeight: 500, marginRight: "10px" } }>
                         Assign CSV:
                     </span>
@@ -530,6 +532,7 @@ const OutReachList = () => {
 
                         </div>
                     ) }
+                    </> }
                     { (selectedOutreach.length > 0 && selectedCSV == null) && (
                         <div className="assignment-section">
                             <span style={ { fontWeight: 500, marginRight: "10px" } }>
@@ -709,10 +712,10 @@ const OutReachList = () => {
                         Cancel
                     </Button>
                     <Button
-                        type="primary"
-                        htmlType="submit"
-                        loading={ loading }
-                    >
+            type="primary"
+            onClick={() => form.submit()}
+            loading={loading}
+          >
                         { editMode ? "Update" : "Create" } Outreach
                     </Button>
                 </div> }
@@ -731,6 +734,7 @@ const OutReachList = () => {
                         region: '',
                         campaign: '',
                         category: '',
+                        designation:'',
                     } }
                 >
                     <Row gutter={ 24 }>
@@ -769,6 +773,12 @@ const OutReachList = () => {
                             <Form.Item
                                 label="LinkedIn"
                                 name="linkedin"
+                            >
+                                <Input />
+                            </Form.Item>
+                            <Form.Item
+                                label="Designation"
+                                name="designation"
                             >
                                 <Input />
                             </Form.Item>
