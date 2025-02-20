@@ -93,13 +93,12 @@
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  overflow: auto;
+  overflow: hidden;
 }
 
 .contact-table table {
   width: 100%;
   border-collapse: collapse;
-  padding: 10px;
 }
 
 .contact-table th {
@@ -107,14 +106,9 @@
   color: #0369a1;
   font-weight: 600;
   text-align: left;
-  white-space: nowrap;
   padding: 16px;
   font-size: 14px;
   border-bottom: 1px solid #e2e8f0;
-}
-
-.contact-table td:first-child {
-  white-space: nowrap;
 }
 
 .contact-table td {
@@ -143,7 +137,6 @@
   transition: all 0.2s;
 }
 
-.ant-btn.ant-btn-color-primary.ant-btn-variant-link.edit-btn,
 .edit-btn {
   background-color: #eef2ff;
   color: #4f46e5;
@@ -160,10 +153,7 @@
   background-color: #e0e7ff;
 }
 
-.ant-btn.css-dev-only-do-not-override-1pjlhih.delete-btn:hover,
 .delete-btn:hover {
-  border: 1px solid #fee2e2;
-  color: #dc2626;
   background-color: #fee2e2;
 }
 
@@ -301,4 +291,11 @@
 
 .model-footer .close-btn {
   margin-top: 0;
+}
+
+.pagination-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px;
 }
