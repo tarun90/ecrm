@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       port: 5173,
-      allowedHosts: ['crm.elsner.com'],
+      allowedHosts: ['crm.elsner.com', 'dev-crm.elsnerdev.co'],
     },
   };
 });
