@@ -464,15 +464,6 @@ const OutReachList = () => {
                 <div className="outreach-header-wrapper">
                     <div className="search-container">
                         <h1>Outreach</h1>
-
-                        <Search
-                            allowClear
-                            placeholder="Search Outreach..."
-                            value={ searchTerm }
-                            onChange={ (e) => setSearchTerm(e.target.value) }
-                            className="search-input"
-                            width={ 300 }
-                        />
                     </div>
                     <Button className='filter-btn btn' onClick={ () => { setfilterModal(true) } }>Filter</Button>
                     <Button
@@ -597,6 +588,16 @@ const OutReachList = () => {
                 </div>
 
             </Header>
+            <div className='global-search'>
+                            <Search
+                                allowClear
+                                placeholder="Search Outreach..."
+                                value={ searchTerm }
+                                onChange={ (e) => setSearchTerm(e.target.value) }
+                                className="search-input"
+                                width={ 300 }
+                            />
+                        </div>
             <div className="contact-table">
                 { (!outreach || outreach.length == 0) ?
                     <NoDataUI /> :

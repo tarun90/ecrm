@@ -145,17 +145,6 @@ function Products() {
       <div className="product-header">
         <div className="product-wrapper">
           <h1>Products</h1>
-          <div className="search-container">
-
-            <Search
-              allowClear
-              placeholder="Search by name, email, or phone..."
-              value={ searchTerm }
-              onChange={ (e) => setSearchTerm(e.target.value) }
-              className="search-input"
-              style={ { width: 300 } }
-            />
-          </div>
         </div>
         <div className="btn-wrapper">
           <Button
@@ -180,6 +169,16 @@ function Products() {
             Delete Selected
           </Button>
         </div>
+      </div>
+      <div className="global-search">
+        <Search
+          allowClear
+          placeholder="Search by name, email, or phone..."
+          value={ searchTerm }
+          onChange={ (e) => setSearchTerm(e.target.value) }
+          className="search-input"
+          style={ { width: 300 } }
+        />
       </div>
 
       { error && (

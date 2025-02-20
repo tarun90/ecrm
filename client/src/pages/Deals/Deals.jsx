@@ -356,12 +356,6 @@ function Deals() {
             <div className='heading'>
               <h1>Deals</h1>
             </div>
-            <Search
-              placeholder="Search deals by name or company..."
-              allowClear
-              onChange={ (e) => handleSearch(e.target.value) }
-              className={ styles.searchBar }
-            />
             <Button
               type="primary"
               icon={ <PlusOutlined /> }
@@ -395,6 +389,14 @@ function Deals() {
 
         </div>
       </Header>
+      <div className='global-search'>
+         <Search
+              placeholder="Search deals by name or company..."
+              allowClear
+              onChange={ (e) => handleSearch(e.target.value) }
+              className={ styles.searchBar }
+            />
+      </div>
       <Content className="content-warpper">
         <DragDropContext onDragEnd={ onDragEnd }>
           <div className={ styles.kanbanBoard }>
