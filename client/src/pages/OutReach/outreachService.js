@@ -95,9 +95,26 @@ export const getSourceFiles = async () => {
   }
 };
 
-export const getAnalyticsData = async () => {
+export const getAnalyticsData = async (search = '') => {
   try {
-    const response = await axios.get(`${API_URL}/analytics-data`);
+    const response = await axios.get(`${API_URL}/analytics-data`, {
+      params: {
+        search: search.trim()
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getUserCampaignData = async (search = '') => {
+  try {
+    const response = await axios.get(`${API_URL}/user-campaign-data`, {
+      params: {
+        search: search.trim()
+      }
+    });
     return response.data;
   } catch (error) {
     throw error;

@@ -57,6 +57,7 @@ const OutReachList = () => {
     const checkBoxOptions = ["Email", "Phone", "IM", "Linkedin"];
 
     const [form] = Form.useForm();
+    const [formFilter] = Form.useForm();
     const [country, setCountry] = useState([])
     const [filterModal, setfilterModal] = useState(false)
     const [UserData, setUserData] = useState([])
@@ -406,7 +407,7 @@ const OutReachList = () => {
     const handleFilterSubmit = async () => {
         try {
             setLoading(true);
-            const values = await form.validateFields(); // Get form values
+            const values = await formFilter.validateFields(); // Get form values
 
             // ✅ API request
             const response = await axios.post(
@@ -427,7 +428,7 @@ const OutReachList = () => {
             console.log(response.data, 'response.data');
             message.success("Filters applied successfully!");
             setfilterModal(false)
-            form.resetFields()
+            formFilter.resetFields()
         } catch (error) {
             console.error("Error filtering outreach:", error);
             message.error("Failed to apply filters.");
@@ -1025,7 +1026,7 @@ const OutReachList = () => {
                 destroyOnClose
             >
                 <Divider />
-                <Form form={ form } layout="vertical"
+                <Form form={ formFilter } layout="vertical"
                 //    onFinish={setApiData}
                 >
                     <Form.Item

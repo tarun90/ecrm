@@ -26,6 +26,8 @@ const userSchema = new mongoose.Schema({
   lastLogin: { type: Date, default: Date.now },
   isActive: { type: Boolean, default: true },
   isRegionHead: { type: Boolean, default: false },
+  isAdmin: { type: Boolean, default: false },
+  isSuperAdmin: { type: Boolean, default: false },
   regionId:{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Region',
