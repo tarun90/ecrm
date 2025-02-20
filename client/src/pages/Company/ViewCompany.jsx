@@ -104,7 +104,11 @@ const MainContent = () => {
       title: 'Close Date',
       dataIndex: 'closeDate',
       key: 'closeDate',
-      render: (date) => new Date(date).toLocaleDateString(),
+      render: (date) => new Date(date).toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      }).replace(/\//g, '-'),
     },
     {
       title: 'Type',

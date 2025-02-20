@@ -729,7 +729,7 @@ function Invoices() {
           {/* 📅 Filter by Due Date */ }
           <input
             type="text"
-            placeholder="Due Date (DD/MM/YYYY)..."
+            placeholder="Due Date (DD-MM-YYYY)..."
             value={ dueDateFilter }
             onChange={ (e) => setDueDateFilter(e.target.value) }
             className="filter-input"
@@ -841,7 +841,11 @@ function Invoices() {
                       ? `${invoice.contact.firstName} ${invoice.contact.lastName}`
                       : "Unknown Customer" }
                   </td>
-                  <td>{ new Date(invoice.due_date).toLocaleDateString() }</td>
+                  <td>{new Date(invoice.due_date).toLocaleDateString('en-GB', {
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric'
+}).replace(/\//g, '-') }</td>
                   <td className={ `status ${invoice.payment_status}` }>
                     { invoice.payment_status }
                   </td>
@@ -959,7 +963,7 @@ const InvoiceForm = ({
           >
             <DatePicker
               style={ { width: "100%" } }
-              format="YYYY-MM-DD"
+              format="DD-MM-YYYY"
               value={
                 formData.due_date
                   ? dayjs(formData.due_date, "YYYY-MM-DD")
