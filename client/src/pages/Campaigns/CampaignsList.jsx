@@ -5,6 +5,7 @@ import { getCampaigns, createCampaign, updateCampaign, deleteCampaign } from './
 import './campaigns.css';
 import { Header } from 'antd/es/layout/layout';
 import { Delete, Edit, Search } from 'lucide-react';
+import NoDataUI from '../../components/NoData';
 
 const CampaignList = () => {
     const [campaigns, setCampaigns] = useState([]);
@@ -91,6 +92,7 @@ const CampaignList = () => {
                     </button>
                 </div>
             </Header>
+            {!campaigns || campaigns?.length == 0 ? <NoDataUI/> :<>
             <div className='global-search'>
                         <Search
                             allowClear
@@ -101,6 +103,7 @@ const CampaignList = () => {
                         />
                     </div>
             <div className="contact-table">
+             
                 <table>
                     <thead>
                         <tr>
@@ -131,6 +134,7 @@ const CampaignList = () => {
                     </tbody>
                 </table>
             </div>
+            </>}
 
             <Drawer
                 title={ editId ? "Edit Campaign" : "Add Campaign" }

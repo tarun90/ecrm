@@ -1038,7 +1038,7 @@ const OutReachList = () => {
                     <Button style={ { marginRight: 10 } } onClick={ handleModalClose }>
                         Cancel
                     </Button>
-                    <Button type="primary" htmlType="submit">
+                    <Button type="primary" onClick={() => form.submit()}>
                         Save
                     </Button>
                 </div> }
