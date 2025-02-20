@@ -13,6 +13,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { createNote, getNotesByOutreach, updateNote, deleteNote } from './noteService';
 import moment from 'moment';
 import { Header } from 'antd/es/layout/layout';
+import NoDataUI from '../../components/NoData';
 const ActionButton = ({ icon, label, onClick }) => {
   return (
     <div className="action-button">
@@ -159,6 +160,9 @@ const MainContent = ({ form, outReachData, modalOpen, modalOpenForNote, modalClo
                  <p>No associated objects of this type exist or you don't have permission to view them.</p>
                </div> */}
           <>
+          {!notes || notes.length == 0 ?
+          <NoDataUI />
+        :
             <Collapse
               size="large"
               expandIcon={ ({ isActive }) => (
@@ -198,6 +202,7 @@ const MainContent = ({ form, outReachData, modalOpen, modalOpenForNote, modalClo
                 </Panel>
               )) } */}
             </Collapse>
+}
           </>
         </div>
       )) }
