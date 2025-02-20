@@ -136,7 +136,9 @@ function Tasks() {
       <div className="app-container add-task-dashboard">
         <Header className="top-nav">
           <div className="nav-content">
-            <h1> Task</h1>
+            <div className="heading">
+              <h1> Task </h1>
+            </div>
 
             { showFilters && (
               <div className="filters-panel">

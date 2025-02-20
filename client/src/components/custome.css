@@ -43,19 +43,10 @@ div.buisness-manage-container {
   padding: 0;
 }
 
-.invoice-header {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-
-  z-index: 100;
-
-}
 
 .invoice-header .delete-btn {
   padding: 0.5rem 1rem;
-  line-height: inherit;
+  line-height: normal;
 }
 
 .invoice-table {
@@ -71,16 +62,6 @@ div.buisness-manage-container {
   text-align: center;
   text-decoration: none;
   display: block;
-}
-
-
-
-div.product-header {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  z-index: 100;
 }
 
 .product-header .btn-wrapper {
@@ -550,6 +531,10 @@ button {
   align-items: center;
 }
 
+.line-items h3 {
+  color: #33475b;
+}
+
 .line-item {
   display: flex;
   flex-wrap: wrap;
@@ -786,16 +771,34 @@ textarea {
 }
 
 /* global search css */
-.global-search{
-  margin: 10px 0;
+.global-search {
+  margin-bottom: 10px;
   text-align: left;
 }
-.global-search .ant-input-outlined:focus-within{
+
+.global-search .ant-input-outlined:focus-within {
   height: 32px;
 }
-.global-search .search-input{
+
+.global-search .search-input {
   max-width: 300px;
 }
+
+
+
+
+
+
+.heading h1 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: normal;
+  color: #1f2937;
+}
+
+
+
+
 @media (min-width:1440px) and (max-width:1680px) {
   .products-grid {
     display: grid;

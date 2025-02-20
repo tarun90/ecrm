@@ -1,19 +1,6 @@
-.contact-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
-  gap: 16px;
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
 .search-container {
   flex: 1;
-  min-width: 280px;
+
   position: relative;
 }
 
@@ -67,6 +54,7 @@
   background-color: #e0f2fe;
   color: #0369a1;
   border: 1px solid #bae6fd;
+  border-radius: 3px;
 }
 
 .add-contact-btn {
@@ -238,7 +226,8 @@ table {
 .ant-checkbox .ant-checkbox-inner {
   background-color: #fff;
 }
-.contact-container{
+
+.contact-container {
   display: flex;
   flex-direction: column;
   height: 100%;

@@ -38,7 +38,7 @@ const MainLayout = ({ children }) => {
           fontWeight: 600,
           alignItems: 'center',
           justifyContent: 'flex-end',
-          background: " var(--bg-primary)"
+          backgroundImage: "linear-gradient(-303deg,rgb(0, 39, 66), #2772a8 56%, #043152)"
         } }>
           <span>{ userData?.name }</span>
           <Dropdown overlay={ userMenu } trigger={ ['click'] }>

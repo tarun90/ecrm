@@ -5,7 +5,7 @@ import { getCategories, createCategory, updateCategory, deleteCategory } from '.
 import './categories.css';
 import { Header } from 'antd/es/layout/layout';
 import { Delete, Edit, Search } from 'lucide-react';
-
+import NoDataUI from '../../components/NoData';
 const CategoryList = () => {
     const [categories, setCategories] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -82,9 +82,9 @@ const CategoryList = () => {
     return (
         <div className="category-container">
             <Header className="category-header">
-                <div className="search-container">
+                <div className="heading">
                     <h1>Categories</h1>
-                  
+
                 </div>
                 <div className="action-buttons">
                     <Button
@@ -97,16 +97,18 @@ const CategoryList = () => {
                     </Button>
                 </div>
             </Header>
+            {!categories || categories?.length == 0 ? <NoDataUI/> :
+            <>
             <div className='global-search'>
-                        <Search
-                            allowClear
-                            placeholder="Search Category..."
-                            value={ searchTerm }
-                            onChange={ (e) => setSearchTerm(e.target.value) }
-                            className="search-input"
-                            width={ 300 }
-                        />
-                    </div>
+                <Search
+                    allowClear
+                    placeholder="Search Category..."
+                    value={ searchTerm }
+                    onChange={ (e) => setSearchTerm(e.target.value) }
+                    className="search-input"
+                    width={ 300 }
+                />
+            </div>
             <div className="contact-table">
                 <table>
                     <thead>
@@ -146,6 +148,7 @@ const CategoryList = () => {
                     </tbody>
                 </table>
             </div>
+            </>}
 
             <Drawer
                 title={ editId ? "Edit Category" : "Add Category" }
@@ -155,7 +158,7 @@ const CategoryList = () => {
                     <Button onClick={ () => setModalVisible(false) } className="text-btn">
                         Cancel
                     </Button>
-                    <Button type="primary" htmlType="submit" style={ { marginLeft: "8px" } }>
+                    <Button type="primary"    onClick={() => form.submit()} style={ { marginLeft: "8px" } }>
                         OK
                     </Button>
                 </div> } // Let Form handle submission

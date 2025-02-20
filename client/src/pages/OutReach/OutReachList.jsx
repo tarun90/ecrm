@@ -462,9 +462,49 @@ const OutReachList = () => {
     return (
         <div className="outreach-container">
             <Header className="outreach-header">
+                <div className='heading'>
+                    <h1>Outreach</h1>
+                </div>
+
+                <div className="action-buttons">
+                    { userData?.department?.name == "Lead Generation" && <>
+                        <Button
+                            onClick={ handleImportCSV }
+                            icon={ <UploadOutlined /> }
+                            className="import-btn"
+                        >
+                            Import CSV
+                        </Button>
+                        <Button
+                            type="primary"
+                            onClick={ handleAddOutreach }
+                            className="add-outreach-btn"
+                        >
+                            <PlusOutlined />
+                            Add Outreach
+                        </Button> </> }
+                    {/* <Button 
+                        onClick={handleViewReports}
+                        icon={<BarChartOutlined />}
+                        className="reports-btn"
+                    >
+                        Reports
+                    </Button> */}
+                </div>
+
+            </Header>
+            <div className='global-search'>
+                <Search
+                    allowClear
+                    placeholder="Search Outreach..."
+                    value={ searchTerm }
+                    onChange={ (e) => setSearchTerm(e.target.value) }
+                    className="search-input"
+                    width={ 300 }
+                />
                 <div className="outreach-header-wrapper">
-                    <div className="search-container">
-                        <h1>Outreach</h1>
+                    <div className="search-container"
+                    >
                     </div>
                     <Button className='filter-btn btn' onClick={ () => { setfilterModal(true) } }>Filter</Button>
                     <Button
@@ -564,43 +604,7 @@ const OutReachList = () => {
                     ) }
 
                 </div>
-                <div className="action-buttons">
-                    { userData?.department?.name == "Lead Generation" && <>
-                        <Button
-                            onClick={ handleImportCSV }
-                            icon={ <UploadOutlined /> }
-                            className="import-btn"
-                        >
-                            Import CSV
-                        </Button>
-                        <Button
-                            type="primary"
-                            onClick={ handleAddOutreach }
-                            className="add-outreach-btn"
-                        >
-                            <PlusOutlined />
-                            Add Outreach
-                        </Button> </> }
-                    {/* <Button 
-                        onClick={handleViewReports}
-                        icon={<BarChartOutlined />}
-                        className="reports-btn"
-                    >
-                        Reports
-                    </Button> */}
-                </div>
-
-            </Header>
-            <div className='global-search'>
-                            <Search
-                                allowClear
-                                placeholder="Search Outreach..."
-                                value={ searchTerm }
-                                onChange={ (e) => setSearchTerm(e.target.value) }
-                                className="search-input"
-                                width={ 300 }
-                            />
-                        </div>
+            </div>
             <div className="contact-table">
                 { (!outreach || outreach.length == 0) ?
                     <NoDataUI /> :
@@ -942,7 +946,6 @@ const OutReachList = () => {
                 </div>
             </Drawer>
 
-
             <Drawer
                 title="Outreach Filter"
                 open={ filterModal }
@@ -962,7 +965,7 @@ const OutReachList = () => {
                 </div> }
                 destroyOnClose
             >
-                <Divider />
+
                 <Form form={ formFilter } layout="vertical"
                 //    onFinish={setApiData}
                 >
@@ -1038,7 +1041,7 @@ const OutReachList = () => {
                     <Button style={ { marginRight: 10 } } onClick={ handleModalClose }>
                         Cancel
                     </Button>
-                    <Button type="primary" htmlType="submit">
+                    <Button type="primary" onClick={() => form.submit()}>
                         Save
                     </Button>
                 </div> }

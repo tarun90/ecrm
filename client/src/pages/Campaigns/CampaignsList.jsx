@@ -5,6 +5,7 @@ import { getCampaigns, createCampaign, updateCampaign, deleteCampaign } from './
 import './campaigns.css';
 import { Header } from 'antd/es/layout/layout';
 import { Delete, Edit, Search } from 'lucide-react';
+import NoDataUI from '../../components/NoData';
 
 const CampaignList = () => {
     const [campaigns, setCampaigns] = useState([]);
@@ -68,7 +69,9 @@ const CampaignList = () => {
         <div className="campaign-container">
             <Header className="contact-header">
                 <div className="search-container">
-                    <h1>Campaigns</h1>
+                    <div className='heading'>
+                        <h1>Campaigns</h1>
+                    </div>
                     {/* { isSearching && <span className="searching-indicator">Searching...</span> } */ }
                 </div>
                 <div className="action-buttons">
@@ -91,46 +94,49 @@ const CampaignList = () => {
                     </button>
                 </div>
             </Header>
-            <div className='global-search'>
-                        <Search
-                            allowClear
-                            placeholder="Search Campaign..."
-                            value={ searchTerm }
-                            onChange={ (e) => setSearchTerm(e.target.value) }
-                            className="search-input"
-                        />
-                    </div>
-            <div className="contact-table">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Campaign Name</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        { campaigns.map(campaign => (
-                            <tr key={ campaign._id }>
-                                <td>{ campaign.campaignName }</td>
-                                <td>
-                                    <div className='action-buttons'>
-                                        <button className='edit-btn' onClick={ () => handleEditCampaign(campaign._id, campaign.campaignName) } ><EditOutlined /></button>
-                                        <Popconfirm
-                                            title="Delete Campaign"
-                                            description="Are you sure you want to delete this campaign?"
-                                            onConfirm={ () => handleDelete(campaign._id) }
-                                            okText="Yes"
-                                            cancelText="No"
-                                        >
-                                            <button className='delete-btn'><DeleteOutlined /></button>
-                                        </Popconfirm>
-                                    </div>
-                                </td>
+            { !campaigns || campaigns?.length == 0 ? <NoDataUI /> : <>
+                <div className='global-search'>
+                    <Search
+                        allowClear
+                        placeholder="Search Campaign..."
+                        value={ searchTerm }
+                        onChange={ (e) => setSearchTerm(e.target.value) }
+                        className="search-input"
+                    />
+                </div>
+                <div className="contact-table">
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Campaign Name</th>
+                                <th>Actions</th>
                             </tr>
-                        )) }
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            { campaigns.map(campaign => (
+                                <tr key={ campaign._id }>
+                                    <td>{ campaign.campaignName }</td>
+                                    <td>
+                                        <div className='action-buttons'>
+                                            <button className='edit-btn' onClick={ () => handleEditCampaign(campaign._id, campaign.campaignName) } ><EditOutlined /></button>
+                                            <Popconfirm
+                                                title="Delete Campaign"
+                                                description="Are you sure you want to delete this campaign?"
+                                                onConfirm={ () => handleDelete(campaign._id) }
+                                                okText="Yes"
+                                                cancelText="No"
+                                            >
+                                                <button className='delete-btn'><DeleteOutlined /></button>
+                                            </Popconfirm>
+                                        </div>
+                                    </td>
+                                </tr>
+                            )) }
+                        </tbody>
+                    </table>
+                </div>
+            </> }
 
             <Drawer
                 title={ editId ? "Edit Campaign" : "Add Campaign" }

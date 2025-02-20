@@ -143,7 +143,7 @@ function Products() {
   return (
     <div className="products-section">
       <div className="product-header">
-        <div className="product-wrapper">
+        <div className="heading">
           <h1>Products</h1>
         </div>
         <div className="btn-wrapper">

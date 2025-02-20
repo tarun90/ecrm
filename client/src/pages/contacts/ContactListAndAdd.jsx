@@ -207,7 +207,9 @@ const ContactListAndAdd = () => {
         <div className="contact-container">
             <Header className="contact-header">
                 <div className="search-container">
-                    <h1>Contacts</h1>
+                    <div className='heading'>
+                        <h1>Contacts</h1>
+                    </div>
                 </div>
                 <div className="action-buttons">
                     <input
@@ -234,18 +236,18 @@ const ContactListAndAdd = () => {
                 </div>
             </Header>
             <div className='global-search'>
-                    <Search
-                        allowClear
-                        placeholder="Search by name, email, or phone..."
-                        onChange={ (e) => setSearchTerm(e.target.value) }
-                        className="search-input"
-                        width={ 300 }
-                        value={ searchTerm }
+                <Search
+                    allowClear
+                    placeholder="Search by name, email, or phone..."
+                    onChange={ (e) => setSearchTerm(e.target.value) }
+                    className="search-input"
+                    width={ 300 }
+                    value={ searchTerm }
 
-                    />
-                    </div>
+                />
+            </div>
 
-                    { isSearching && <span className="searching-indicator">Searching...</span> }
+            { isSearching && <span className="searching-indicator">Searching...</span> }
             <div className="contact-table">
                 <table>
                     <thead>

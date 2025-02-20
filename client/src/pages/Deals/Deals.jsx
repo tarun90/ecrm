@@ -351,7 +351,6 @@ function Deals() {
 
       <Header className="content-header">
         <div className={ styles.headerContent }>
-
           <div className={ styles.headerActions }>
             <div className='heading'>
               <h1>Deals</h1>
@@ -390,13 +389,14 @@ function Deals() {
         </div>
       </Header>
       <div className='global-search'>
-         <Search
-              placeholder="Search deals by name or company..."
-              allowClear
-              onChange={ (e) => handleSearch(e.target.value) }
-              className={ styles.searchBar }
-            />
+        <Search
+          placeholder="Search deals by name or company..."
+          allowClear
+          onChange={ (e) => handleSearch(e.target.value) }
+          className={ styles.searchBar }
+        />
       </div>
+
       <Content className="content-warpper">
         <DragDropContext onDragEnd={ onDragEnd }>
           <div className={ styles.kanbanBoard }>
