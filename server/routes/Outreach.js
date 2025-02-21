@@ -35,8 +35,19 @@ router.get('/', auth, async (req, res) => {
   try {
     const user = req?.user?.user;
     
-    // Get pagination parameters and search string from query
-    const { search, page = 1, pageSize = 10 } = req.query;
+    // Get pagination parameters, search string, and filters from query
+    const { 
+      search, 
+      page = 1, 
+      pageSize = 10,
+      country,
+      status,
+      region,
+      campaign,
+      category,
+      assignTo 
+    } = req.query;
+
     const skip = (parseInt(page) - 1) * parseInt(pageSize);
     const limit = parseInt(pageSize);
 
@@ -55,19 +66,28 @@ router.get('/', auth, async (req, res) => {
       query.assignedTo = user._id;
     }
 
+    // Apply filters if provided
+    if (country) query.country = country;
+    if (status) query.status = status;
+    if (region) query.region = region;
+    if (campaign) query.campaign = campaign;
+    // if (category) query.category = category;
+    if (assignTo) query.assignedTo = assignTo;
+
     // If search string is provided
     if (search) {
       const searchRegex = new RegExp(search, 'i');
       
-      // Get total count for pagination
+      // Get filtered and populated results
       const outreaches = await Outreach.find(query)
         .populate('campaign', 'campaignName')
         .populate('region', 'regionName')
         .populate('createdBy', 'name email')
         // .populate('category', 'categoryName')
-        .populate('assignedTo', 'name');
+        .populate('assignedTo', 'name')
+        .sort({ createdAt: -1 });
 
-      // Filter the populated results
+      // Apply search filter to populated results
       const filteredOutreaches = outreaches.filter(outreach => {
         return (
           outreach.campaign?.campaignName?.match(searchRegex) ||
@@ -99,7 +119,7 @@ router.get('/', auth, async (req, res) => {
       });
     }
 
-    // If no search string, use MongoDB pagination
+    // If no search string, use MongoDB pagination with filters
     const total = await Outreach.countDocuments(query);
     
     const outreaches = await Outreach.find(query)
@@ -138,7 +158,7 @@ router.get('/outreacbyid/:id', async (req, res) => {
       .populate('campaign', 'campaignName') // Populate campaign and retrieve only the name field
       .populate('region', 'regionName')   // Populate region and retrieve only the name field
       .populate('createdBy', 'name email') // Populate createdBy and retrieve name and email
-      .populate('category', 'categoryName')
+      // .populate('category', 'categoryName')
       
     res.status(200).json(outreaches);
     

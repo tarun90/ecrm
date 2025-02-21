@@ -2,12 +2,32 @@
 import axios from 'axios';
 
 const API_URL = `${import.meta.env.VITE_TM_API_URL}/api/outreach`;
-export const getOutreach = async (searchString = '', page = 1, pageSize = 100) => {
+export const getOutreach = async (
+  searchString = '',
+  page = 1,
+  pageSize = 100,
+  filters = {
+    country: '',
+    status: '',
+    region: '',
+    campaign: '',
+    category: '',
+    assignTo: ''
+  }
+) => {
   try {
+    // Initialize URLSearchParams with pagination and search
     const params = new URLSearchParams({
       search: searchString,
       page: page.toString(),
       pageSize: pageSize.toString()
+    });
+
+    // Add filter parameters if they have values
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value) {
+        params.append(key, value.toString());
+      }
     });
 
     const response = await axios.get(`${API_URL}?${params.toString()}`);
@@ -45,6 +65,7 @@ export const getOutreach = async (searchString = '', page = 1, pageSize = 100) =
     };
   }
 };
+
 export const getOutreachDataById = async (id) => {
   try {
     const response = await axios.get(`${API_URL}/outreacbyid/${id}`);

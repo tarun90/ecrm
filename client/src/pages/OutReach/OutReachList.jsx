@@ -66,7 +66,15 @@ const OutReachList = () => {
     const [UserData, setUserData] = useState([])
     const [filterData, setFilteredData] = useState([])
     const [sourceFiles, setSourceFiles] = useState([])
-
+    const [filters, setFilters] = useState({
+        country: '',
+        status: '',
+        region: '',
+        campaign: '',
+        // category: '',
+        assignTo: ''
+      });
+      
     const [importData, setImportData] = useState({
         campaign: undefined,
         region: '',
@@ -101,14 +109,11 @@ const OutReachList = () => {
         fetchSourceFiles();
     }, []);
 
+   
     useEffect(() => {
         fetchOutreach();
 
-    }, []);
-    useEffect(() => {
-        fetchOutreach();
-
-    }, [searchTerm]);
+    }, [searchTerm, filters]);
     const modalOpenForNote = () => {
         setmodalOpen(true)
     }
@@ -168,39 +173,36 @@ const OutReachList = () => {
         }
     };
 
-    const fetchOutreach = async ( page = 1, pageSize = 100) => {
+    const fetchOutreach = async (page = 1, pageSize = 100) => {
         try {
-            console.log(page, pageSize)
-            setLoading(true);
-            const response = await getOutreach(searchTerm, page, pageSize);
-
-            if (response.success) {
-                setOutreach(response.data);
-                setTotal(response.total);
-
-                // Update current page if it's different from what we got back
-                if (response.currentPage !== currentPage) {
-                    setCurrentPage(response.currentPage);
-                }
-
-                // Update page size if it changed
-                if (response.pageSize !== pageSize) {
-                    setPageSize(response.pageSize);
-                }
-            } else {
-                message.error(response.message || 'Failed to fetch outreach data');
-                setOutreach([]);
-                setTotal(0);
+          setLoading(true);
+          const response = await getOutreach(searchTerm, page, pageSize, filters);
+      
+          if (response.success) {
+            setOutreach(response.data);
+            setTotal(response.total);
+      
+            if (response.currentPage !== currentPage) {
+              setCurrentPage(response.currentPage);
             }
-        } catch (error) {
-            console.error('Error in fetchOutreach:', error);
-            message.error('Failed to fetch outreach data');
+      
+            if (response.pageSize !== pageSize) {
+              setPageSize(response.pageSize);
+            }
+          } else {
+            message.error(response.message || 'Failed to fetch outreach data');
             setOutreach([]);
             setTotal(0);
+          }
+        } catch (error) {
+          console.error('Error in fetchOutreach:', error);
+          message.error('Failed to fetch outreach data');
+          setOutreach([]);
+          setTotal(0);
         } finally {
-            setLoading(false);
+          setLoading(false);
         }
-    };
+      };
 
     const handleImportCSV = () => {
         setImportData({
@@ -436,39 +438,42 @@ const OutReachList = () => {
 
         }
     }
-
+    const handleResetFilters = () => {
+        setFilters({
+          country: '',
+          status: '',
+          region: '',
+          campaign: '',
+          // category: '',
+          assignTo: ''
+        });
+        formFilter.resetFields();
+        fetchOutreach(1);
+      };
     const handleFilterSubmit = async () => {
         try {
-            setLoading(true);
-            const values = await formFilter.validateFields(); // Get form values
-
-            // ✅ API request
-            const response = await axios.post(
-                `${API_URL}/api/outreach/filter`,
-                values,
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${localStorage.getItem("token")}`, // Auth token
-                    },
-                }
-            );
-
-            // ✅ Update filtered data
-            setFilteredData(response.data);
-            setOutreach(response?.data)
-
-            console.log(response.data, 'response.data');
-            message.success("Filters applied successfully!");
-            setfilterModal(false)
-            formFilter.resetFields()
+          setLoading(true);
+          const values = await formFilter.validateFields();
+          
+          // Update filters state
+          setFilters(values);
+          setCurrentPage(1)
+          
+          // Fetch data with new filters
+        //   await fetchOutreach(1); // Reset to first page when applying filters
+          
+          message.success("Filters applied successfully!");
+          setfilterModal(false);
+          
+          // Don't reset form fields so users can see current filters
+          // formFilter.resetFields();
         } catch (error) {
-            console.error("Error filtering outreach:", error);
-            message.error("Failed to apply filters.");
+          console.error("Error filtering outreach:", error);
+          message.error("Failed to apply filters.");
         } finally {
-            setLoading(false);
+          setLoading(false);
         }
-    };
+      };
 
     console.log(filterData, 'filterData');
     const getUsersData = async () => {
@@ -541,10 +546,10 @@ const OutReachList = () => {
 
                     <Button className='filter-btn btn' onClick={ () => { setfilterModal(true) } }>Filter</Button>
                     <Button
-                        disabled={ !filterData } // Disable if no filtered data
-                        className='delete-btn btn'
-                        onClick={ () => { fetchOutreach(); setFilteredData() } }
-                    >
+    className='delete-btn btn'
+    onClick={handleResetFilters}
+    disabled={!Object.values(filters).some(value => value)}
+  >
                         Reset Filter
                     </Button>
                     {( userData?.isRegionHead || userData?.isSuperAdmin) &&
@@ -693,7 +698,7 @@ const OutReachList = () => {
                                         setOutreachIdForNote(item?._id)
                                         modalOpenForNote()
                                     } } style={ { color: 'blue', cursor: 'pointer' } }>
-                                        <span className='user-name'>{ item.name }</span></td>
+                                        <span className='user-name'>{ item.name ? item.name : "-" }</span></td>
                                     <td>{ item?.email }</td>
                                     <td>{ item?.phone }</td>
                                     <td>{ item?.website }</td>
@@ -1034,6 +1039,7 @@ const OutReachList = () => {
                         type="primary"
                         htmlType="submit"
                         onClick={ handleImportSubmit }
+                        loading={ loading }
                     >
                         Ok
                     </Button>
