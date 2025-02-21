@@ -9,12 +9,88 @@ const router = express.Router();
  * ---------------------------- */
 router.get('/', async (req, res) => {
   try {
-    const sales = await Sales.find().populate({
-      path: 'company', // Populate company details
-      select: 'companyName' // Only fetch the company name
-    });
+    let { 
+      page = 1, 
+      pageSize = 10, 
+      search = "", 
+      status = "", 
+      sales_date_range = null, 
+      updated_date_range = null 
+    } = req.query;
 
-    res.status(200).json(sales);
+    page = parseInt(page);
+    pageSize = parseInt(pageSize);
+
+    if (isNaN(page) || page < 1) page = 1;
+    if (isNaN(pageSize) || pageSize < 1) pageSize = 10;
+
+    const matchQuery = {};
+
+    if (status) {
+      matchQuery.status = status;
+    }
+
+    if (sales_date_range && Array.isArray(sales_date_range) && sales_date_range.length === 2) {
+      const startDate = new Date(sales_date_range[0]);
+      const endDate = new Date(sales_date_range[1]);
+
+      if (!isNaN(startDate) && !isNaN(endDate)) {
+        matchQuery.sales_date = { $gte: startDate, $lte: endDate };
+      }
+    }
+
+    if (updated_date_range && Array.isArray(updated_date_range) && updated_date_range.length === 2) {
+      const startUpdatedDate = new Date(updated_date_range[0]);
+      const endUpdatedDate = new Date(updated_date_range[1]);
+
+      if (!isNaN(startUpdatedDate) && !isNaN(endUpdatedDate)) {
+        matchQuery.sales_updated_date = { $gte: startUpdatedDate, $lte: endUpdatedDate };
+      }
+    }
+
+    const pipeline = [
+      {
+        $lookup: {
+          from: "companies",
+          localField: "company",
+          foreignField: "_id",
+          as: "company"
+        }
+      },
+      { $unwind: "$company" },
+    ];
+
+    if (search) {
+      pipeline.push({
+        $match: {
+          $or: [
+            { sales_number: { $regex: search, $options: "i" } },
+            { "company.companyName": { $regex: search, $options: "i" } }
+          ]
+        }
+      });
+    }
+
+    pipeline.push({ $match: matchQuery });
+
+    pipeline.push({ $sort: { sales_number: 1 } });
+    pipeline.push({ $skip: (page - 1) * pageSize });
+    pipeline.push({ $limit: pageSize });
+
+    const sales = await Sales.aggregate(pipeline);
+
+    const total = await Sales.aggregate([
+      ...pipeline.slice(0, pipeline.length - 3),
+      { $count: "total" }
+    ]);
+
+    res.status(200).json({
+      success: true,
+      data: sales,
+      currentPage: page,
+      pageSize,
+      total: total.length > 0 ? total[0].total : 0
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

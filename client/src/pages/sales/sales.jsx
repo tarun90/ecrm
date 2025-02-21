@@ -52,6 +52,10 @@ const Sales = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentSale, setCurrentSale] = useState(null);
   const [form] = Form.useForm();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [total, setTotal] = useState(0);
+
 
   // Filter states
   const [filters, setFilters] = useState({
@@ -67,18 +71,43 @@ const Sales = () => {
     fetchSales();
     fetchCompanies();
     fetchActivities();
-  }, []);
+  }, [filters]);
 
-  const fetchSales = async () => {
+  const fetchSales = async (page = 1, size = 10) => {
     setLoading(true);
     try {
-      const response = await axios.get(`${import.meta.env.VITE_TM_API_URL}/api/sales`);
-      setSales(response.data);
+      const response = await axios.get(`${import.meta.env.VITE_TM_API_URL}/api/sales`, {
+        params: { 
+          page, 
+          pageSize: size, 
+          search: filters.search || "", 
+          status: filters.status || "", 
+          sales_date_range: filters.sales_date_range.length === 2 
+            ? [dayjs(filters.sales_date_range[0]).startOf('day').toISOString(), dayjs(filters.sales_date_range[1]).endOf('day').toISOString()]
+            : null, 
+          updated_date_range: filters.updated_date_range.length === 2 
+            ? [dayjs(filters.updated_date_range[0]).startOf('day').toISOString(), dayjs(filters.updated_date_range[1]).endOf('day').toISOString()]
+            : null, 
+        }
+      });
+  
+      if (response.data.success) {
+        setSales(response.data.data);
+        setTotal(response.data.total);
+        setCurrentPage(page);
+        setPageSize(size);
+      } else {
+        message.error(response.data.message || "Failed to fetch sales data.");
+      }
     } catch (error) {
       message.error("Failed to fetch sales.");
     } finally {
       setLoading(false);
     }
+  };  
+
+  const handlePageChange = (page, size) => {
+    fetchSales(page, size, filters.search);
   };
 
   const fetchCompanies = async () => {
@@ -142,65 +171,29 @@ const Sales = () => {
     }
   };
 
+  const handleSearch = (e) => {
+    setFilters(prevFilters => ({ ...prevFilters, search: e.target.value }));
+  };
+  
+  const handleDateFilterChange = (dates, type) => {
+    setFilters(prevFilters => ({ 
+      ...prevFilters, 
+      [type]: dates && dates.length ? dates : []
+    }));
+  }; 
+  
+  const handleStatusChange = (value) => {
+    setFilters(prevFilters => ({ ...prevFilters, status: value }));
+  };
+  
   const handleClearFilters = () => {
     setFilters({
-      so_number: "",
-      companyName: "",
-      sales_date: null,
+      search: "",
       status: "",
+      sales_date_range: [],
+      updated_date_range: []
     });
   };
-
-  const disableFutureDates = (current) => {
-    return current && current > dayjs().endOf("day"); // Prevents selection beyond today
-  };
-
-  const filteredSales = sales.filter((sale) => {
-    const {
-      so_number,
-      companyName,
-      status,
-      sales_date_range = [],
-      updated_date_range = [],
-    } = filters;
-
-    const matchesSO =
-      !so_number ||
-      (sale.sales_number &&
-        sale.sales_number.toLowerCase().includes(so_number.toLowerCase()));
-
-    const matchesCompany =
-      !companyName ||
-      (sale.company?.companyName &&
-        sale.company.companyName.toLowerCase().includes(companyName.toLowerCase()));
-
-    const matchesStatus = !status || sale.status === status;
-
-    const matchesSalesCreatedDate =
-      !Array.isArray(sales_date_range) ||
-      sales_date_range.length !== 2 ||
-      (sale.sales_date &&
-        dayjs(sale.sales_date).isBetween(
-          dayjs(sales_date_range[0]),
-          dayjs(sales_date_range[1]),
-          "day",
-          "[]"
-        ));
-
-    const matchesSalesUpdatedDate =
-      !Array.isArray(updated_date_range) ||
-      updated_date_range.length !== 2 ||
-      (sale.sales_updated_date &&
-        dayjs(sale.sales_updated_date).isBetween(
-          dayjs(updated_date_range[0]),
-          dayjs(updated_date_range[1]),
-          "day",
-          "[]"
-        ));
-
-    return matchesSO && matchesCompany && matchesStatus && matchesSalesCreatedDate && matchesSalesUpdatedDate;
-  });
-
 
   const columns = [
     {
@@ -235,6 +228,13 @@ const Sales = () => {
       key: "sales_date",
       render: (date) => (date ? dayjs(date).format("DD-MM-YYYY hh:mm A") : "N/A"),
       sorter: (a, b) => new Date(a.sales_date) - new Date(b.sales_date),
+    },
+    {
+      title: "Sales Date",
+      dataIndex: "sales_updated_date",
+      key: "sales_updated_date",
+      render: (date) => (date ? dayjs(date).format("DD-MM-YYYY hh:mm A") : "N/A"),
+      sorter: (a, b) => new Date(a.sales_updated_date) - new Date(b.sales_updated_date),
     },
     {
       title: "Grand Total",
@@ -277,45 +277,43 @@ const Sales = () => {
 
       <div className="global-search">
 
-        <Search
-          allowClear
-          placeholder="Search by Name, SO Number..."
-
-          className="search-input"
-          width={ 300 }
-          value={ filters.so_number }
-          onChange={ (e) => setFilters({ ...filters, so_number: e.target.value }) }
-        />
+      <Search
+        allowClear
+        placeholder="Search by SO Number or Company Name"
+        onChange={handleSearch}
+        className="search-input"
+        style={{ width: 250 }}
+      />
         <div className="fillter-wrapper">
-          <RangePicker
-            placeholder={ ["Sales Created From", "Sales Created To"] }
-            value={ filters.sales_date_range }
-            onChange={ (dates) => setFilters({ ...filters, sales_date_range: dates }) }
-            format="DD-MM-YYYY"
-            disabledDate={ disableFutureDates }
-          />
+        <RangePicker
+          placeholder={["Sales Created From", "Sales Created To"]}
+          value={filters.sales_date_range}
+          onChange={(dates) => handleDateFilterChange(dates, "sales_date_range")}
+          format="DD-MM-YYYY"
+          disabledDate={(current) => current && current > dayjs().endOf("day")}
+        />
 
-          <RangePicker
-            placeholder={ ["Updated From", "Updated To"] }
-            value={ filters.updated_date_range }
-            onChange={ (dates) => setFilters({ ...filters, updated_date_range: dates }) }
-            format="DD-MM-YYYY"
-            disabledDate={ disableFutureDates }
-          />
+        <RangePicker
+          placeholder={["Updated From", "Updated To"]}
+          value={filters.updated_date_range}
+          onChange={(dates) => handleDateFilterChange(dates, "updated_date_range")}
+          format="DD-MM-YYYY"
+          disabledDate={(current) => current && current > dayjs().endOf("day")}
+        />
 
-          <Select
-            placeholder="Status"
-            value={ filters.status }
-            onChange={ (value) => setFilters({ ...filters, status: value }) }
-            allowClear
-            style={ { width: 150 } }
-          >
-            <Option value="Pending">Pending</Option>
-            <Option value="In Progress">In Progress</Option>
-            <Option value="Completed">Completed</Option>
-            <Option value="On Hold">On Hold</Option>
-            <Option value="Canceled">Canceled</Option>
-          </Select>
+        <Select
+          placeholder="Status"
+          value={filters.status}
+          onChange={handleStatusChange}
+          allowClear
+          style={{ width: 150 }}
+        >
+          <Option value="Pending">Pending</Option>
+          <Option value="In Progress">In Progress</Option>
+          <Option value="Completed">Completed</Option>
+          <Option value="On Hold">On Hold</Option>
+          <Option value="Canceled">Canceled</Option>
+        </Select>
 
           <Button onClick={ handleClearFilters } className="delete-btn">
             Clear Filters
@@ -323,33 +321,24 @@ const Sales = () => {
         </div>
       </div>
       <Table
-        columns={ columns }
-        dataSource={ filteredSales }
+        columns={columns}
+        dataSource={sales}
         rowKey="_id"
-        loading={ loading }
-
+        loading={loading}
+        pagination={false}
       />
-      {/* <div className='pagination'>
-        <Pagination
-          current={ currentPage }
-          pageSize={ pageSize }
-          total={ total }
-          onChange={ handlePageChange }
-          showSizeChanger
-          columns={ columns }
-          dataSource={ filteredSales }
-          rowKey="_id"
-          loading={ loading }
-          showQuickJumper
-          showTotal={ (total, range) => `${range[0]}-${range[1]} of ${total} items` }
-          pageSizeOptions={ ['100', '200'] }
-          disabled={ loading }
-          onShowSizeChange={ (current, size) => {
-            console.log('Page size changed:', { current, size });
-            handlePageChange(1, size);
-          } }
-        />
-      </div> */}
+      <div className="pagination">
+      <Pagination
+        current={currentPage}
+        pageSize={pageSize}
+        total={total}
+        onChange={(page, size) => fetchSales(page, size)}
+        showQuickJumper
+        showSizeChanger
+        pageSizeOptions={["10", "20", "50", "100"]}
+        showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+      />
+    </div>
       <Drawer
         title={ isEditing ? "Edit Sale" : "Create New Sale" }
         width={ 400 }
