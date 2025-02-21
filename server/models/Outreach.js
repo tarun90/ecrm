@@ -41,6 +41,16 @@ const outReachSchema = new mongoose.Schema({
         enum: ['Unassigned', 'Not Contacted', 'Contacted', 'Followup', 'Converted to Deal'],
         default: 'Unassigned'
     },
+    leadStatus: {
+        type: String,
+        enum: ['Nurturing', 'Lost', 'Intrested'],
+        default: 'Nurturing'
+    },
+    priority: {
+        type: String,
+        enum: ['Low', 'Medium', 'High'],
+        default: 'Low'
+    },
     campaign: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Campaign',

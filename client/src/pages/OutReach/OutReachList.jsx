@@ -851,6 +851,32 @@ const [total, setTotal] = useState(0);
                             </Form.Item>
 
                             <Form.Item
+                                label="Lead Status"
+                                name="leadStatus"
+                                // rules={ [{ required: true, message: 'Please select a Lead Status!' }] }
+                            >
+                                <Select>
+                                <Select.Option key={ "Nurturing" } value={ "Nurturing" }>Nurturing</Select.Option>
+                                <Select.Option key={ "Lost" } value={ "Lost" }>Lost</Select.Option>
+                                <Select.Option key={ "Intrested" } value={ "Intrested" }>Intrested</Select.Option>
+  
+                                </Select>
+                            </Form.Item>
+
+                            <Form.Item
+                                label="Priority"
+                                name="priority"
+                                // rules={ [{ required: true, message: 'Please select a Lead Status!' }] }
+                            >
+                                <Select>
+                                <Select.Option key={ "Low" } value={ "Low" }>Low</Select.Option>
+                                <Select.Option key={ "Medium" } value={ "Medium" }>Medium</Select.Option>
+                                <Select.Option key={ "High" } value={ "High" }>High</Select.Option>
+  
+                                </Select>
+                            </Form.Item>
+
+                            <Form.Item
                                 label="Region"
                                 name="region"
                                 rules={ [{ required: true, message: 'Please select the region!' }] }
