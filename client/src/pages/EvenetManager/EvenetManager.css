@@ -478,7 +478,7 @@ body {
   width: 100%;
   padding: 0.75rem;
   background-color: var(--primary-color);
-  color: var(--color-white);
+  color: #fff;
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;

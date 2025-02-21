@@ -104,7 +104,7 @@ div.buisness-manage-container {
   width: 100%;
   padding: 4px 30px;
   border: 1px solid #d1d5db;
-  border-radius: 0.375rem;
+  border-radius: 3px;
   font-size: 1rem;
   color: #4b5563;
 }

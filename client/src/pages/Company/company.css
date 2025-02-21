@@ -106,19 +106,21 @@
   color: #0369a1;
   font-weight: 600;
   text-align: left;
+  border-radius: 3px;
   padding: 16px;
   font-size: 14px;
-  border-bottom: 1px solid #e2e8f0;
+  border: 1px solid #9abce9d7;
 }
 
-.ant-table-wrapper .ant-table-content td,
+.ant-table-wrapper .ant-table-content .ant-table-tbody td,
 .contact-table td {
   padding: 10px 16px;
   color: #374151;
   text-align: left;
+  border-radius: 3px;
   background-color: #fff;
   font-size: 13px;
-  border-bottom: 1px solid #e2e8f0;
+  border: 1px solid #d8d9da;
   min-width: 130px;
 }
 

@@ -16,6 +16,7 @@ import {
 import { useLocation, useNavigate } from 'react-router-dom';
 import HeaderLogo from '../assets/Icons/headerlogo';
 import CompanyIcon from '../../public/Company';
+import SaleIcon from '../assets/Icons/SaleIcon';
 
 const { Sider } = Layout;
 
@@ -137,7 +138,7 @@ const Sidebar = ({ collapsed, onCollapse }) => {
     },
     {
       key: '11',
-      icon: <FileTextOutlined />,
+      icon: <SaleIcon />,
       label: 'Sales',
       onClick: () => navigate('/sales'),
     }
