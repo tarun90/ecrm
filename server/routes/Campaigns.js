@@ -37,7 +37,7 @@ router.post('/', auth, async (req, res) => {
 router.get('/', auth, async (req, res) => {
   try {
     const { searchTerm } = req.query;
-    const filter = { createdBy: req.user.user._id };
+    const filter = {  };
 
     if (searchTerm) {
       filter.campaignName = { $regex: searchTerm, $options: 'i' };

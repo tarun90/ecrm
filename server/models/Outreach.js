@@ -9,7 +9,6 @@ const outReachSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true,
         trim: true,
         lowercase: true
     },
@@ -29,6 +28,10 @@ const outReachSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
+    city: {
+        type: String,
+        trim: true
+    },
     country: {
         type: String,
         trim: true
@@ -37,6 +40,16 @@ const outReachSchema = new mongoose.Schema({
         type: String,
         enum: ['Unassigned', 'Not Contacted', 'Contacted', 'Followup', 'Converted to Deal'],
         default: 'Unassigned'
+    },
+    leadStatus: {
+        type: String,
+        enum: ['Nurturing', 'Lost', 'Intrested'],
+        default: 'Nurturing'
+    },
+    priority: {
+        type: String,
+        enum: ['Low', 'Medium', 'High'],
+        default: 'Low'
     },
     campaign: {
         type: mongoose.Schema.Types.ObjectId,
@@ -72,7 +85,7 @@ const outReachSchema = new mongoose.Schema({
 });
 
 // Add index for efficient querying
-outReachSchema.index({ email: 1, campaign: 1 }, { unique: true });
+// outReachSchema.index({  campaign: 1 }, { unique: true });
 
 const OutReach = mongoose.model('OutReach', outReachSchema);
 

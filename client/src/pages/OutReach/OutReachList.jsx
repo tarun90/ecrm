@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { message, Popconfirm, Button, Input, Modal, Select, Checkbox, Upload, Form, Row, Col, Divider, DatePicker, Typography, Empty, Drawer } from 'antd';
+import { message, Popconfirm, Button, Input, Modal, Select, Checkbox, Upload, Form, Row, Col, Divider, DatePicker, Typography, Empty, Drawer, Pagination } from 'antd';
 import { UploadOutlined, FileExcelOutlined, BarChartOutlined, InboxOutlined, DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { getUsers } from '../Users/userService';  // Add this import
 import { getCampaigns } from '../Campaigns/campaignService';
@@ -54,6 +54,9 @@ const OutReachList = () => {
         categories: [],
         assignToUsers: [],
     });
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(100);
+    const [total, setTotal] = useState(0);
     const checkBoxOptions = ["Email", "Phone", "IM", "Linkedin"];
 
     const [form] = Form.useForm();
@@ -129,7 +132,11 @@ const OutReachList = () => {
             // message.error('Failed to fetch users');
         }
     };
-
+    const handlePageChange = (page, size) => {
+        setCurrentPage(page);
+        setPageSize(size);
+        fetchOutreach(searchTerm, page, size);
+    };
     const fetchCampaigns = async () => {
         try {
             const data = await getCampaigns();
@@ -160,13 +167,34 @@ const OutReachList = () => {
         }
     };
 
-    const fetchOutreach = async () => {
+    const fetchOutreach = async (searchTerm = "", page = 1, pageSize = 100) => {
         try {
             setLoading(true);
-            const data = await getOutreach(searchTerm);
-            setOutreach(data);
+            const response = await getOutreach(searchTerm, page, pageSize);
+
+            if (response.success) {
+                setOutreach(response.data);
+                setTotal(response.total);
+
+                // Update current page if it's different from what we got back
+                if (response.currentPage !== currentPage) {
+                    setCurrentPage(response.currentPage);
+                }
+
+                // Update page size if it changed
+                if (response.pageSize !== pageSize) {
+                    setPageSize(response.pageSize);
+                }
+            } else {
+                message.error(response.message || 'Failed to fetch outreach data');
+                setOutreach([]);
+                setTotal(0);
+            }
         } catch (error) {
-            // message.error('Failed to fetch outreach data');
+            console.error('Error in fetchOutreach:', error);
+            message.error('Failed to fetch outreach data');
+            setOutreach([]);
+            setTotal(0);
         } finally {
             setLoading(false);
         }
@@ -278,7 +306,8 @@ const OutReachList = () => {
                 region: outreachItem.region._id,
                 campaign: outreachItem.campaign._id,
                 category: outreachItem.category._id,
-                designation: outreachItem?.designation
+                designation: outreachItem?.designation,
+                city: outreachItem?.city,
             });
             setEditMode(true);
             setEditId(id);
@@ -467,23 +496,23 @@ const OutReachList = () => {
                 </div>
 
                 <div className="action-buttons">
-                    {/* { userData?.department?.name == "Lead Generation" && <> */ }
-                    <Button
-                        onClick={ handleImportCSV }
-                        icon={ <UploadOutlined /> }
-                        className="import-btn"
-                    >
-                        Import CSV
-                    </Button>
-                    <Button
-                        type="primary"
-                        onClick={ handleAddOutreach }
-                        className="add-outreach-btn"
-                    >
-                        <PlusOutlined />
-                        Add Outreach
-                    </Button>
-                    {/* </> } */ }
+                    { userData?.department?.name == "Lead Generation" && <>
+                        <Button
+                            onClick={ handleImportCSV }
+                            icon={ <UploadOutlined /> }
+                            className="import-btn"
+                        >
+                            Import CSV
+                        </Button>
+                        <Button
+                            type="primary"
+                            onClick={ handleAddOutreach }
+                            className="add-outreach-btn"
+                        >
+                            <PlusOutlined />
+                            Add Outreach
+                        </Button>
+                    </> }
                     {/* <Button 
                         onClick={handleViewReports}
                         icon={<BarChartOutlined />}
@@ -515,95 +544,98 @@ const OutReachList = () => {
                     >
                         Reset Filter
                     </Button>
-                    <div className='assign-btn'>
-                        <span style={ { fontWeight: 500, marginRight: "10px" } }>
-                            Assign CSV:
-                        </span>
-                        <Select
-                            style={ { width: 300, height: '100%' } }  // Increased width to accommodate more content
-                            showSearch
-                            placeholder="Search by CSV name or campaign"
-                            onChange={ handleCSVDropdown }
-                            allowClear
-                            value={ selectedCSV }
-                            optionFilterProp="children"
-                            filterOption={ (input, option) => {
-                                // Enable search on both CSV name and campaign name
-                                const searchText = option?.searchtext?.toLowerCase() || '';
-                                return searchText.includes(input.toLowerCase());
-                            } }
-                        >
-                            { sourceFiles?.map(file => (
-                                <Select.Option
-                                    key={ file.sourceFile }
-                                    value={ file.sourceFile }
-                                    searchtext={ `${file.sourceFile} ${file.campaignName}` }  // For search functionality
+                    { userData?.isRegionHead &&
+                        <>
+                            <div className='assign-btn'>
+                                <span style={ { fontWeight: 500, marginRight: "10px" } }>
+                                    Assign CSV:
+                                </span>
+                                <Select
+                                    style={ { width: 300, height: '100%' } }  // Increased width to accommodate more content
+                                    showSearch
+                                    placeholder="Search by CSV name or campaign"
+                                    onChange={ handleCSVDropdown }
+                                    allowClear
+                                    value={ selectedCSV }
+                                    optionFilterProp="children"
+                                    filterOption={ (input, option) => {
+                                        // Enable search on both CSV name and campaign name
+                                        const searchText = option?.searchtext?.toLowerCase() || '';
+                                        return searchText.includes(input.toLowerCase());
+                                    } }
                                 >
-                                    <div style={ { display: 'flex', flexDirection: 'column' } }>
-                                        <Text strong>{ file.sourceFile }</Text>
-                                        <Text type="secondary" style={ { fontSize: '12px' } }>
-                                            Campaign: { file.campaignName } • { file.count } records
-                                        </Text>
-                                    </div>
-                                </Select.Option>
-                            )) }
-                        </Select>
-                    </div>
-                    {/* { selectedCSV != null && ( */ }
-                    <div className="assignment-section">
+                                    { sourceFiles?.map(file => (
+                                        <Select.Option
+                                            key={ file.sourceFile }
+                                            value={ file.sourceFile }
+                                            searchtext={ `${file.sourceFile} ${file.campaignName}` }  // For search functionality
+                                        >
+                                            <div style={ { display: 'flex', flexDirection: 'column' } }>
+                                                <Text strong>{ file.sourceFile }</Text>
+                                                <Text type="secondary" style={ { fontSize: '12px' } }>
+                                                    Campaign: { file.campaignName } • { file.count } records
+                                                </Text>
+                                            </div>
+                                        </Select.Option>
+                                    )) }
+                                </Select>
+                            </div>
 
-                        <Select
-                            style={ { width: 200, height: '100%' } }
-                            showSearch
-                            placeholder="Assign to user"
-                            onChange={ handleAssignOutreachByCSV }
-                            allowClear
-                            filterOption={ (input, option) =>
-                                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-                            }
-                            optionFilterProp="children"
-                        >
-                            { users.map(user => (
-                                <Select.Option key={ user._id } value={ user._id }>
-                                    { user.name }
-                                </Select.Option>
-                            )) }
-                        </Select>
+                            { selectedCSV != null && (
+                                <div className="assignment-section">
 
-
-
-                    </div>
-                    {/* ) } */ }
-                    {/* </> } */ }
-                    {/* { (selectedOutreach.length > 0 && selectedCSV == null) && ( */ }
-                    <div className="assignment-section">
-                        <span style={ { fontWeight: 500, marginRight: "10px" } }>
-                            Assign Outreach To : &nbsp;
-                        </span>
-                        <Select
-                            style={ { width: 200, height: '100%' } }
-                            showSearch
-                            placeholder="Assign to user"
-                            onChange={ handleAssignOutreach }
-                            allowClear
-                            filterOption={ (input, option) =>
-                                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-                            }
-                            optionFilterProp="children"
-                        >
-                            { users.map(user => (
-                                <Select.Option key={ user._id } value={ user._id }>
-                                    { user.name }
-                                </Select.Option>
-                            )) }
-                        </Select>
-                        <span style={ { fontWeight: 500, marginLeft: "10px" } }>
-                            { selectedOutreach.length } outreach selected
-                        </span>
+                                    <Select
+                                        style={ { width: 200, height: '100%' } }
+                                        showSearch
+                                        placeholder="Assign to user"
+                                        onChange={ handleAssignOutreachByCSV }
+                                        allowClear
+                                        filterOption={ (input, option) =>
+                                            (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                                        }
+                                        optionFilterProp="children"
+                                    >
+                                        { users.map(user => (
+                                            <Select.Option key={ user._id } value={ user._id }>
+                                                { user.name }
+                                            </Select.Option>
+                                        )) }
+                                    </Select>
 
 
-                    </div>
-                    {/* ) } */ }
+
+                                </div>
+                            ) }
+                        </> }
+                    { (selectedOutreach.length > 0 && selectedCSV == null) && (
+                        <div className="assignment-section">
+                            <span style={ { fontWeight: 500, marginRight: "10px" } }>
+                                Assign Outreach To : &nbsp;
+                            </span>
+                            <Select
+                                style={ { width: 200, height: '100%' } }
+                                showSearch
+                                placeholder="Assign to user"
+                                onChange={ handleAssignOutreach }
+                                allowClear
+                                filterOption={ (input, option) =>
+                                    (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                                }
+                                optionFilterProp="children"
+                            >
+                                { users.map(user => (
+                                    <Select.Option key={ user._id } value={ user._id }>
+                                        { user.name }
+                                    </Select.Option>
+                                )) }
+                            </Select>
+                            <span style={ { fontWeight: 500, marginLeft: "10px" } }>
+                                { selectedOutreach.length } outreach selected
+                            </span>
+
+
+                        </div>
+                    ) }
 
                 </div>
             </div>
@@ -704,7 +736,25 @@ const OutReachList = () => {
                             )) }
                         </tbody>
                     </table>
+
                 }
+                <div style={ { marginTop: '20px', display: 'flex', justifyContent: 'flex-end' } }>
+                    <Pagination
+                        current={ currentPage }
+                        pageSize={ pageSize }
+                        total={ total }
+                        onChange={ handlePageChange }
+                        //   showSizeChanger
+                        showQuickJumper
+                        showTotal={ (total, range) => `${range[0]}-${range[1]} of ${total} items` }
+                        pageSizeOptions={ ['100', '200'] }
+                        disabled={ loading }
+                        onShowSizeChange={ (current, size) => {
+                            console.log('Page size changed:', { current, size });
+                            handlePageChange(1, size);
+                        } }
+                    />
+                </div>
             </div>
 
             <Drawer
@@ -741,6 +791,7 @@ const OutReachList = () => {
                         campaign: '',
                         category: '',
                         designation: '',
+                        city: '',
                     } }
                 >
                     <Row gutter={ 24 }>
@@ -792,10 +843,42 @@ const OutReachList = () => {
 
                         <Col span={ 24 }>
                             <Form.Item
+                                label="City"
+                                name="city"
+                            >
+                                <Input />
+                            </Form.Item>
+                            <Form.Item
                                 label="Country"
                                 name="country"
                             >
                                 <Input />
+                            </Form.Item>
+
+                            <Form.Item
+                                label="Lead Status"
+                                name="leadStatus"
+                            // rules={ [{ required: true, message: 'Please select a Lead Status!' }] }
+                            >
+                                <Select>
+                                    <Select.Option key={ "Nurturing" } value={ "Nurturing" }>Nurturing</Select.Option>
+                                    <Select.Option key={ "Lost" } value={ "Lost" }>Lost</Select.Option>
+                                    <Select.Option key={ "Intrested" } value={ "Intrested" }>Intrested</Select.Option>
+
+                                </Select>
+                            </Form.Item>
+
+                            <Form.Item
+                                label="Priority"
+                                name="priority"
+                            // rules={ [{ required: true, message: 'Please select a Lead Status!' }] }
+                            >
+                                <Select>
+                                    <Select.Option key={ "Low" } value={ "Low" }>Low</Select.Option>
+                                    <Select.Option key={ "Medium" } value={ "Medium" }>Medium</Select.Option>
+                                    <Select.Option key={ "High" } value={ "High" }>High</Select.Option>
+
+                                </Select>
                             </Form.Item>
 
                             <Form.Item

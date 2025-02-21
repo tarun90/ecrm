@@ -2,12 +2,47 @@
 import axios from 'axios';
 
 const API_URL = `${import.meta.env.VITE_TM_API_URL}/api/outreach`;
-export const getOutreach = async (searchString = '') => {
+export const getOutreach = async (searchString = '', page = 1, pageSize = 10) => {
   try {
-    const response = await axios.get(`${API_URL}?search=${encodeURIComponent(searchString)}`);
-    return response.data;
+    const params = new URLSearchParams({
+      search: searchString,
+      page: page.toString(),
+      pageSize: pageSize.toString()
+    });
+
+    const response = await axios.get(`${API_URL}?${params.toString()}`);
+    
+    if (response.data.success) {
+      return {
+        success: true,
+        data: response.data.data,
+        total: response.data.total,
+        currentPage: response.data.currentPage,
+        pageSize: response.data.pageSize,
+        totalPages: response.data.totalPages
+      };
+    } else {
+      return {
+        success: false,
+        data: [],
+        total: 0,
+        currentPage: page,
+        pageSize: pageSize,
+        totalPages: 0,
+        message: response.data.message || 'Failed to fetch outreach data'
+      };
+    }
   } catch (error) {
-    throw error;
+    console.error('Error in getOutreach:', error);
+    return {
+      success: false,
+      data: [],
+      total: 0,
+      currentPage: page,
+      pageSize: pageSize,
+      totalPages: 0,
+      message: error.message || 'Error fetching outreach data'
+    };
   }
 };
 export const getOutreachDataById = async (id) => {
