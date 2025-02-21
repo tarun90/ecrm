@@ -661,6 +661,8 @@ const OutReachList = () => {
                                 <th>Website</th>
                                 <th>LinkedIn</th>
                                 <th>Country</th>
+                                <th>Lead Status</th>
+                                <th>Priority</th>
                                 <th>Status</th>
                                 <th>Region</th>
                                 <th>Campaign</th>
@@ -695,6 +697,9 @@ const OutReachList = () => {
                                     <td>{ item?.website }</td>
                                     <td>{ item?.linkedin }</td>
                                     <td>{ item?.country }</td>
+                                    <td>{ item?.leadStatus }</td>
+                                    <td>{ item?.priority }</td>
+
                                     <td>{ item?.status }</td>
                                     <td>{ item?.region?.regionName }</td>
                                     <td>{ item?.campaign?.campaignName }</td>
