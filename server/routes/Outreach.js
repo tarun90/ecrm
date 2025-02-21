@@ -49,9 +49,9 @@ router.get('/', auth, async (req, res) => {
     // Department-based filtering
     if (userWithDept?.department?.name.toLowerCase() === 'lead generation') {
       query.createdBy = user._id;
-    } else if (user.isRegionHead) {
+    } else if (user?.isRegionHead) {
       query.region = user.regionId;
-    } else if (userWithDept.department.name.toLowerCase() === 'outreach team') {
+    } else if (userWithDept?.department?.name?.toLowerCase() === 'outreach team') {
       query.assignedTo = user._id;
     }
 
