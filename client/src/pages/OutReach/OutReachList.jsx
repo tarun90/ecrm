@@ -732,7 +732,8 @@ const [total, setTotal] = useState(0);
                     </table>
                     
                 }
-                 <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end' }}>
+            </div>
+            <div className='Pagination' style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
         <Pagination
           current={currentPage}
           pageSize={pageSize}
@@ -749,7 +750,6 @@ const [total, setTotal] = useState(0);
           }}
         />
       </div>
-            </div>
 
             <Drawer
                 title={ editMode ? "Edit Outreach" : "Add Outreach" }

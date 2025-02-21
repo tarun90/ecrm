@@ -781,6 +781,7 @@ function Invoices() {
             <thead>
               <tr>
                 <th className="checkbox-column">
+                <label className="checkbox-wrapper">
                   <input
                     type="checkbox"
                     className="checkbox-select-all"
@@ -794,6 +795,9 @@ function Invoices() {
                       }
                     } }
                   />
+                  <span className="input-checkbox">
+                  </span>
+                  </label>
                 </th>
                 <th onClick={ () => handleSort("invoice_number") }>
                   Invoice Number{ " " }
@@ -825,6 +829,7 @@ function Invoices() {
               { invoices.map((invoice) => (
                 <tr key={ invoice._id }>
                   <td>
+                  <label className="checkbox-wrapper">
                     <input
                       type="checkbox"
                       checked={ selectedInvoices.includes(invoice._id) }
@@ -837,6 +842,9 @@ function Invoices() {
                       } }
                       className="checkbox-select"
                     />
+                    <span className="input-checkbox">
+                    </span>
+                    </label>
                   </td>
                   <td>{ invoice.invoice_number }</td>
                   <td>
