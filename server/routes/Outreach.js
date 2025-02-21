@@ -179,7 +179,7 @@ router.post("/filter", auth, async (req, res) => {
     if (status) query.status = status;
     if (region) query.region = region;
     if (campaign) query.campaign = campaign;
-    if (category) query.category = category;
+    // if (category) query.category = category;
     if (assignTo) query.assignedTo = assignTo;
 
     // ✅ Fetch filtered outreaches
@@ -187,7 +187,7 @@ router.post("/filter", auth, async (req, res) => {
       .populate("campaign", "campaignName")
       .populate("region", "regionName")
       .populate("createdBy", "name email")
-      .populate("category", "categoryName")
+      // .populate("category", "categoryName")
       .populate("assignedTo", "name");
 
     res.status(200).json(outreaches);

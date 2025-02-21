@@ -1107,7 +1107,7 @@ const OutReachList = () => {
                         </Select>
                     </Form.Item>
 
-                    <Form.Item label="Category" name="category">
+                    {/* <Form.Item label="Category" name="category">
                         <Select
                             onChange={ (value) => setFormData({ ...formData, category: value }) }
                             placeholder="Category"
@@ -1118,7 +1118,7 @@ const OutReachList = () => {
                                 </Select.Option>
                             )) }
                         </Select>
-                    </Form.Item>
+                    </Form.Item> */}
 
 
 
