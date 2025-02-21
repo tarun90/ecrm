@@ -133,14 +133,7 @@ router.patch('/:id', auth, async (req, res) => {
 // Delete campaign
 router.delete('/:id', auth, async (req, res) => {
   try {
-    const campaign = await Campaign.findOneAndDelete({
-      _id: req.params.id,
-      createdBy: req?.user?.user._id
-    });
-
-    if (!campaign) {
-      return res.status(404).json({ message: 'Campaign not found' });
-    }
+    
 
     res.status(200).json({ 
       message: 'Campaign deleted successfully.',
