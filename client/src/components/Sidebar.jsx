@@ -35,6 +35,7 @@ const Sidebar = ({ collapsed, onCollapse }) => {
     if (path.includes('/webmail')) return '8';
     if (path.includes('/company')) return '9';
     if (path.includes('/outreach')) return '10';
+    if (path.includes('/sales')) return '11';
 
     return '1';
   };
@@ -134,6 +135,12 @@ const Sidebar = ({ collapsed, onCollapse }) => {
         }
       ].filter(Boolean),
     },
+    {
+      key: '11',
+      icon: <FileTextOutlined />,
+      label: 'Sales',
+      onClick: () => navigate('/sales'),
+    }
   ];
 
   return (
