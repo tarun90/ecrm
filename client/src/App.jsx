@@ -27,9 +27,11 @@ import CategoryList from './pages/Categories/CategoryList';
 import ViewOutReach from './pages/viewOutreach/ViewOutReach';
 import Analytics from './pages/analytics/analytics';
 import Analytics2 from './pages/analytics/analytics2';
+import Sales from './pages/sales/sales';
+import SaleView from './pages/sales/SaleView';
 
 const PrivateRoute = ({ children }) => {
-  let token = localStorage.getItem('token');
+  let token = localStorage.getItem('token')
   return token ? children : <Navigate to="/login" />;
 };
 
@@ -98,6 +100,8 @@ function App() {
                       <Route path='/ViewOutReach/:id' element={<ViewOutReach/>}/>
                       <Route path='/outreach/analytics' element={<Analytics/>}/>
                       <Route path='/outreach/analytics2' element={<Analytics2/>}/>
+                      <Route path='/sales' element={<Sales/>}/>
+                      <Route path='/sales/view/:id' element={<SaleView/>}/>
                       
 
 

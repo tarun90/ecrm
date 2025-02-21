@@ -1,0 +1,480 @@
+/* ContactManagement.css */
+.sale-management {
+    display: flex;
+    gap: 1.5rem;
+    min-height: 100vh;
+}
+
+/* Sidebar Styles */
+.sale-management .sidebar {
+    width: 330px;
+    height: 100svh;
+    max-height: calc(100vh - 105px);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    position: sticky;
+    top: 0;
+    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3);
+}
+
+.sale-management .sidebar-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.sale-management .action-buttons button {
+    padding: 0;
+}
+
+.sale-management .sidebar-header span {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.sale-management .back-icon {
+    color: var(--primary-color);
+    width: 20px;
+    height: 20px;
+    margin-right: 0.5rem;
+}
+
+.sale-management .actions-btn {
+    margin-left: auto;
+    color: var(--primary-color);
+    font-weight: 500;
+    font-size: 1.125rem;
+}
+
+.sale-management .contact-card {
+    margin-bottom: 1.5rem;
+}
+
+.sale-management .contact-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.sale-management .avatar {
+    width: 64px;
+    height: 64px;
+    background-color: #bfdbfe;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.25rem;
+}
+
+.contact-details {
+    margin-left: 1rem;
+}
+
+.sale-management .contact-details h2 {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #1f2937;
+}
+
+.sale-management .contact-details h3 {
+    font-size: 1.125rem;
+    color: #1f2937;
+}
+
+.sale-management .contact-details p {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.sale-management .action-buttons {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.sale-management .action-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sale-management .icon-button {
+    width: 40px;
+    height: 40px;
+    background-color: #f3f4f6;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.25rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.sale-management .icon-button:hover {
+    background-color: #e5e7eb;
+}
+
+.sale-management .icon-button:hover svg {
+    color: var(--primary-color);
+}
+
+.sale-management .icon-button svg {
+    width: 17px;
+    height: 17px;
+    color: #6b7280;
+}
+
+.ant-layout-content .sale-management .about-actions button:hover {
+    color: var(--primary-color);
+    background-color: transparent;
+}
+
+.sale-management .button-label {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.sale-management .about-section {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    text-align: left;
+    border-top: 1px solid #e5e7eb;
+}
+
+.sale-management .about-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.sale-management .about-header h3 {
+    font-weight: 500;
+    color: #374151;
+}
+
+.sale-management .about-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sale-management .about-actions button {
+    color: var(--primary-color);
+    background: transparent;
+}
+
+.sale-management .about-actions button span {
+    font-weight: 500;
+}
+
+.sale-management .about-actions .lucide-settings {
+    width: 20px;
+    height: 20px;
+    color: var(--primary-color);
+}
+
+.sale-management .contact-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.sale-management .contact-fields .field {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sale-management .field .label {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.sale-management .field .value {
+    font-size: 0.875rem;
+    color: var(--primary-color);
+}
+
+/* Main Content Styles */
+.sale-management .main-content {
+    flex: 1;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3);
+    background-color: #fff;
+}
+
+.sale-management .content-section {
+    margin-bottom: 2rem;
+}
+
+.sale-management .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.sale-management .section-header h2 {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #1f2937;
+}
+
+.sale-management .header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 0.5rem;
+}
+
+.add-button {
+    display: flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    color: var(--primary-color);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.add-button:hover {
+    background-color: #f3f4f6;
+}
+
+.add-button svg {
+    width: 16px;
+    height: 16px;
+    margin-right: 0.25rem;
+}
+
+.section-content {
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+.section-content p {
+    color: #6b7280;
+}
+
+.ant-layout .sale-management .sidebar .sidebar-header .ant-btn {
+    background: transparent;
+    margin-left: auto;
+}
+
+
+
+.sale-management .sidebar .deal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.sale-management .sidebar .deal-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2d3748;
+    margin: 0;
+    text-align: left;
+}
+
+.sale-management .sidebar .edit-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: #0098ae;
+}
+
+
+.sale-management .sidebar .deal-content {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.sale-management .sidebar .field-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+}
+
+.sale-management .sidebar .field-label {
+    font-size: 14px;
+    color: #718096;
+    margin: 0;
+}
+
+.sale-management .sidebar .field-value {
+    font-size: 14px;
+    color: #2d3748;
+    font-weight: 500;
+    margin: 0;
+}
+
+.sale-management .sidebar .export-btn .field-value {
+
+    color: var(--primary-color);
+}
+
+.sale-management .sidebar .date-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sale-management .sidebar .calendar-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--primary-color);
+}
+
+.sale-management .sidebar .stage-button {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    padding: 0;
+    padding: 5px 10px;
+    color: var(--primary-color);
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.sale-management .sidebar .dropdown-icon {
+    width: 16px;
+    height: 16px;
+    stroke-width: 2;
+    fill: none;
+}
+
+.sale-management .sidebar .pipeline-value {
+    color: var(--primary-color);
+    font-weight: 500;
+    font-size: 16px;
+    margin: 0;
+}
+
+.sale-management .sidebar .edit-button:hover {
+    opacity: 0.8;
+}
+
+.sale-management .sidebar .stage-button:hover {
+    opacity: 0.8;
+    background-color: var(--bg-secondary);
+    color: #fff;
+}
+
+.sale-management .sidebar .email {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    font-weight: 500;
+    padding: 0;
+}
+
+.sale-management .sidebar .email a {
+    color: #1677ff;
+}
+
+.sale-management .sidebar .email svg {
+    color: var(--primary-color);
+    width: 17px;
+    height: 17px;
+}
+
+  .sale-management  .sidebar-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .sale-management .sidebar-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-left: 10px;
+    color: #333;
+  }
+  
+  .sale-management .sale-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+  
+  .sale-management .so-number h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  
+  .sale-management .info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .sale-management .info-item:last-child {
+    border-bottom: none;
+  }
+  
+  .sale-management .label {
+    font-weight: 600;
+    color: #555;
+  }
+  
+  .sale-management .value {
+    font-weight: 500;
+    color: #2c3e50;
+  }
+  
+  .sale-management .status-badge {
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-transform: capitalize;
+    font-size: 13px;
+  }
+  
+  .sale-management .status-badge.in-progress {
+    background-color: #ffedcc;
+    color: #d9822b;
+  }
+  
+  .sale-management .status-badge.completed {
+    background-color: #e6f7e6;
+    color: #52c41a;
+  }
+  
+  .sale-management .status-badge.pending {
+    background-color: #fff2cc;
+    color: #d48806;
+  }
+  
+  .sale-management .status-badge.canceled {
+    background-color: #ffe6e6;
+    color: #d9363e;
+  }
+  
+
+
