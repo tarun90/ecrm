@@ -24,6 +24,7 @@ import axios from 'axios';
 import { createNote } from '../viewOutreach/noteService';
 import NoDataUI from '../../components/NoData';
 import { Search } from 'lucide-react';
+import TruncatedText from '../../components/TruncatedText';
 
 const { Dragger } = Upload;
 const API_URL = import.meta.env.VITE_TM_API_URL;
@@ -285,6 +286,10 @@ const OutReachList = () => {
             // message.error('Failed to fetch regions');
         }
     };
+
+   
+      
+      
 
     const regionOptions = regions.map(region => ({
         value: region._id,
@@ -683,69 +688,62 @@ const OutReachList = () => {
                         <tbody>
 
                             { outreach.map(item => (
-                                <tr key={ item._id }>
-                                    { (userData?.isRegionHead || userData?.isSuperAdmin) &&
-                                        <td>
-                                            <Checkbox
-                                                checked={ selectedOutreach.includes(item._id) }
-                                                onChange={ () => handleCheckboxChange(item._id) }
-                                            />
-                                        </td>
-                                    }
-                                    {/* <td><Link to={`/ViewOutReach/${item._id}`}>
-                                    <span className='user-name'>{item.name}</span></Link></td> */}
-                                    <td onClick={ () => {
-                                        setOutreachIdForNote(item?._id)
-                                        modalOpenForNote()
-                                    } } style={ { color: 'blue', cursor: 'pointer' } }>
-                                        <span className='user-name'>{ item.name ? item.name : "-" }</span></td>
-                                    <td>{ item?.email }</td>
-                                    <td>{ item?.phone }</td>
-                                    <td>{ item?.website }</td>
-                                    <td>{ item?.linkedin }</td>
-                                    <td>{ item?.country }</td>
-                                    <td>{ item?.leadStatus }</td>
-                                    <td>{ item?.priority }</td>
-
-                                    <td>{ item?.status }</td>
-                                    <td>{ item?.region?.regionName }</td>
-                                    <td>{ item?.campaign?.campaignName }</td>
-                                    {/* <td>{ item?.category?.categoryName }</td> */}
-                                    <td>{ item?.assignedTo?.name ? item?.assignedTo.name : "-" }</td>
-                                    <td>{ item?.createdBy?.name }</td>
-                                    <td>
-                                        <div className='action-buttons'>
-                                            {/* <Button
-                                                type="primary"
-                                                icon={<PlusOutlined />}
-                                                onClick={() => {
-                                                    setOutreachIdForNote(item?._id)
-                                                    modalOpenForNote()
-                                                }}
-                                            >
-                                                Add Note
-                                            </Button> */}
-                                            <Link to={ `/ViewOutReach/${item._id}` }>
-                                                <Button
-                                                    type="primary"
-                                                >
-                                                    History
-                                                </Button></Link>
-                                            {( userData?.department?.name == "Lead Generation" || userData?.isSuperAdmin) && <>
-                                                <button className='edit-btn' onClick={ () => handleEditOutreach(item._id) }><EditOutlined /></button>
-                                                <Popconfirm
-                                                    title="Delete Outreach"
-                                                    description="Are you sure you want to delete this outreach?"
-                                                    onConfirm={ () => handleDelete(item._id) }
-                                                    okText="Yes"
-                                                    cancelText="No"
-                                                >
-                                                    <button className='delete-btn'><DeleteOutlined /></button>
-                                                </Popconfirm>
-                                            </> }
-                                        </div>
-                                    </td>
-                                </tr>
+                               <tr key={item._id}>
+                               {(userData?.isRegionHead || userData?.isSuperAdmin) && (
+                                 <td>
+                                   <Checkbox
+                                     checked={selectedOutreach.includes(item._id)}
+                                     onChange={() => handleCheckboxChange(item._id)}
+                                   />
+                                 </td>
+                               )}
+                               <td 
+                                 onClick={() => {
+                                   setOutreachIdForNote(item?._id);
+                                   modalOpenForNote();
+                                 }} 
+                                 style={{ color: 'blue', cursor: 'pointer' }}
+                               >
+                                 <span className='user-name'>
+                                   <TruncatedText text={item?.name} />
+                                 </span>
+                               </td>
+                               <td><TruncatedText text={item?.email} /></td>
+                               <td><TruncatedText text={item?.phone} isPhone={true} /></td>
+                               <td><TruncatedText text={item?.website} /></td>
+                               <td><TruncatedText text={item?.linkedin} /></td>
+                               <td><TruncatedText text={item?.country} /></td>
+                               <td><TruncatedText text={item?.leadStatus} /></td>
+                               <td><TruncatedText text={item?.priority} /></td>
+                               <td><TruncatedText text={item?.status} /></td>
+                               <td><TruncatedText text={item?.region?.regionName} /></td>
+                               <td><TruncatedText text={item?.campaign?.campaignName} /></td>
+                               <td><TruncatedText text={item?.assignedTo?.name} /></td>
+                               <td><TruncatedText text={item?.createdBy?.name} /></td>
+                               <td>
+                                 <div className='action-buttons'>
+                                   <Link to={`/ViewOutReach/${item._id}`}>
+                                     <Button type="primary">History</Button>
+                                   </Link>
+                                   {(userData?.department?.name == "Lead Generation" || userData?.isSuperAdmin) && (
+                                     <>
+                                       <button className='edit-btn' onClick={() => handleEditOutreach(item._id)}>
+                                         <EditOutlined />
+                                       </button>
+                                       <Popconfirm
+                                         title="Delete Outreach"
+                                         description="Are you sure you want to delete this outreach?"
+                                         onConfirm={() => handleDelete(item._id)}
+                                         okText="Yes"
+                                         cancelText="No"
+                                       >
+                                         <button className='delete-btn'><DeleteOutlined /></button>
+                                       </Popconfirm>
+                                     </>
+                                   )}
+                                 </div>
+                               </td>
+                             </tr>
                             )) }
                         </tbody>
                     </table>

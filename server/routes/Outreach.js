@@ -267,7 +267,12 @@ router.post('/import', auth, upload.single('file'), async (req, res) => {
 
     await new Promise((resolve, reject) => {
       fs.createReadStream(req.file.path)
-        .pipe(csv())
+        .pipe(csv({
+          mapHeaders: ({ header }) => {
+            // Trim whitespace from header names and convert to lowercase
+            return header.trim().toLowerCase();
+          }
+        }))
         .on('data', (data) => results.push(data))
         .on('end', resolve)
         .on('error', reject);
