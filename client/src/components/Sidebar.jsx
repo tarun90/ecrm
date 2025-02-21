@@ -107,15 +107,16 @@ const Sidebar = ({ collapsed, onCollapse }) => {
       className: 'menu-item-outreach',
 
       children: [
+       
         isAdmin && {
           key: '10-1',
-          label: 'Campaigns',
-          onClick: () => navigate('/outreach/campaign'),
+          label: 'Categories',
+          onClick: () => navigate('/outreach/categories'),
         },
         isAdmin && {
           key: '10-2',
-          label: 'Categories',
-          onClick: () => navigate('/outreach/categories'),
+          label: 'Dataset',
+          onClick: () => navigate('/outreach/campaign'),
         },
         {
           key: '10-3',

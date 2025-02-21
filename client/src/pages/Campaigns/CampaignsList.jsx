@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { message, Popconfirm, Button, Input, Modal, Form, Drawer } from 'antd';
+import { message, Popconfirm, Button, Input, Modal, Form, Drawer, Select } from 'antd';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
-import { getCampaigns, createCampaign, updateCampaign, deleteCampaign } from './campaignService';
+import { getCampaigns, createCampaign, updateCampaign, deleteCampaign, getCategories } from './campaignService';
 import './campaigns.css';
 import { Header } from 'antd/es/layout/layout';
 import { Delete, Edit, Search } from 'lucide-react';
@@ -13,30 +13,44 @@ const CampaignList = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [editId, setEditId] = useState(null);
     const [campaignName, setCampaignName] = useState('');
+    const [categories, setCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState(null);
     const [form] = Form.useForm();
     const { Search } = Input;
 
     useEffect(() => {
         fetchCampaigns();
+        fetchCategories();
     }, [searchTerm]);
+
+    const fetchCategories = async () => {
+        const data = await getCategories();
+        setCategories(data);
+    };
 
     const fetchCampaigns = async () => {
         const data = await getCampaigns(searchTerm);
         setCampaigns(data);
     };
-
     const handleAddCampaign = () => {
         setEditId(null);
         setCampaignName('');
+        setSelectedCategory(null);
+        form.resetFields();
         setModalVisible(true);
     };
 
-    const handleEditCampaign = (id, name) => {
-        setEditId(id);
-        setCampaignName(name);
+    const handleEditCampaign = (campaign) => {
+        console.log(campaign, "ketul campaign")
+        setEditId(campaign._id);
+        setCampaignName(campaign.campaignName);
+        setSelectedCategory(campaign.categoryId?._id);
+        form.setFieldsValue({
+            campaignName: campaign.campaignName,
+            categoryId: campaign.categoryId?._id
+        });
         setModalVisible(true);
     };
-
     const handleDelete = async (id) => {
         const deleteResponse = await deleteCampaign(id);
         if (deleteResponse?.status !== 200) {
@@ -46,31 +60,39 @@ const CampaignList = () => {
             fetchCampaigns();
         }
     };
-
     const handleSubmit = async () => {
-        if (!campaignName.trim()) {
-            message.error('Campaign name cannot be empty');
-            return;
-        }
+        try {
+            const values = await form.validateFields();
+            if (!values.campaignName.trim()) {
+                message.error('Campaign name cannot be empty');
+                return;
+            }
 
-        if (editId) {
-            await updateCampaign(editId, { campaignName });
-            message.success('Campaign updated successfully');
-        } else {
-            await createCampaign({ campaignName });
-            message.success('Campaign created successfully');
-        }
+            const campaignData = {
+                campaignName: values.campaignName,
+                categoryId: values.categoryId
+            };
 
-        setModalVisible(false);
-        fetchCampaigns();
+            if (editId) {
+                await updateCampaign(editId, campaignData);
+                message.success('Campaign updated successfully');
+            } else {
+                await createCampaign(campaignData);
+                message.success('Campaign created successfully');
+            }
+
+            setModalVisible(false);
+            fetchCampaigns();
+        } catch (error) {
+            console.error('Form validation failed:', error);
+        }
     };
-
     return (
         <div className="campaign-container">
             <Header className="contact-header">
                 <div className="search-container">
                     <div className='heading'>
-                        <h1>Campaigns</h1>
+                        <h1>Datasets</h1>
                     </div>
                     {/* { isSearching && <span className="searching-indicator">Searching...</span> } */ }
                 </div>
@@ -90,7 +112,7 @@ const CampaignList = () => {
                         </button> */}
                     <button className="add-contact-btn" onClick={ handleAddCampaign }>
                         <PlusOutlined />
-                        Add Campaign
+                        Add Dataset
                     </button>
                 </div>
             </Header>
@@ -98,7 +120,7 @@ const CampaignList = () => {
                 <div className='global-search'>
                     <Search
                         allowClear
-                        placeholder="Search Campaign..."
+                        placeholder="Search Dataset..."
                         value={ searchTerm }
                         onChange={ (e) => setSearchTerm(e.target.value) }
                         className="search-input"
@@ -109,7 +131,7 @@ const CampaignList = () => {
                     <table>
                         <thead>
                             <tr>
-                                <th>Campaign Name</th>
+                                <th>Dataset Name</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -119,10 +141,10 @@ const CampaignList = () => {
                                     <td>{ campaign.campaignName }</td>
                                     <td>
                                         <div className='action-buttons'>
-                                            <button className='edit-btn' onClick={ () => handleEditCampaign(campaign._id, campaign.campaignName) } ><EditOutlined /></button>
+                                            <button className='edit-btn' onClick={ () => handleEditCampaign(campaign) } ><EditOutlined /></button>
                                             <Popconfirm
-                                                title="Delete Campaign"
-                                                description="Are you sure you want to delete this campaign?"
+                                                title="Delete Dataset"
+                                                description="Are you sure you want to delete this Dataset?"
                                                 onConfirm={ () => handleDelete(campaign._id) }
                                                 okText="Yes"
                                                 cancelText="No"
@@ -139,34 +161,52 @@ const CampaignList = () => {
             </> }
 
             <Drawer
-                title={ editId ? "Edit Campaign" : "Add Campaign" }
-                open={ modalVisible }
-                onClose={ () => setModalVisible(false) }
-                width={ 400 } // Adjust width as needed
+                title={editId ? "Edit Dataset" : "Add dataset"}
+                open={modalVisible}
+                onClose={() => {setModalVisible(false)
+                    form.resetFields();
+                }}
+                width={400}
                 footer={
                     <div className='modal-footer'>
-                        <Button onClick={ () => setModalVisible(false) } className='text-btn'>Cancel</Button>
-                        <Button type="primary" onClick={ () => form.submit() }>Ok</Button>
+                        <Button onClick={() => setModalVisible(false)} className='text-btn'>
+                            Cancel
+                        </Button>
+                        <Button type="primary" onClick={() => form.submit()}>
+                            Ok
+                        </Button>
                     </div>
                 }
             >
                 <Form
-                    form={ form }
+                    form={form}
                     layout="vertical"
-                    onFinish={ handleSubmit } // Called when the form is submitted
+                    onFinish={handleSubmit}
                 >
                     <Form.Item
-                        label="Campaign Name"
-                        rules={ [{ required: true, message: "Please enter campaign name" }] }
+                        name="campaignName"
+                        label="Dataset Name"
+                        rules={[{ required: true, message: "Please enter dataset name" }]}
                     >
                         <Input
-                            value={ campaignName }
-                            onChange={ (e) => setCampaignName(e.target.value) }
-                            placeholder="Enter Campaign Name"
+                            placeholder="Enter Dataset Name"
+                        />
+                    </Form.Item>
+
+                    <Form.Item
+                        name="categoryId"
+                        label="Category"
+                        rules={[{ required: true, message: "Please select a category" }]}
+                    >
+                        <Select
+                            placeholder="Select a category"
+                            options={categories.map(category => ({
+                                value: category._id,
+                                label: category.categoryName
+                            }))}
                         />
                     </Form.Item>
                 </Form>
-
             </Drawer>
 
 

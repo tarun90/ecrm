@@ -64,7 +64,7 @@ router.get('/', auth, async (req, res) => {
         .populate('campaign', 'campaignName')
         .populate('region', 'regionName')
         .populate('createdBy', 'name email')
-        .populate('category', 'categoryName')
+        // .populate('category', 'categoryName')
         .populate('assignedTo', 'name');
 
       // Filter the populated results
@@ -72,7 +72,7 @@ router.get('/', auth, async (req, res) => {
         return (
           outreach.campaign?.campaignName?.match(searchRegex) ||
           outreach.region?.regionName?.match(searchRegex) ||
-          outreach.category?.categoryName?.match(searchRegex) ||
+          // outreach.category?.categoryName?.match(searchRegex) ||
           outreach.createdBy?.name?.match(searchRegex) ||
           outreach.createdBy?.email?.match(searchRegex) ||
           outreach.assignedTo?.name?.match(searchRegex) ||
@@ -101,7 +101,7 @@ router.get('/', auth, async (req, res) => {
       .populate('campaign', 'campaignName')
       .populate('region', 'regionName')
       .populate('createdBy', 'name email')
-      .populate('category', 'categoryName')
+      // .populate('category', 'categoryName')
       .populate('assignedTo', 'name')
       .sort({ createdAt: -1 })
       .skip(skip)
@@ -315,7 +315,7 @@ router.post('/import', auth, upload.single('file'), async (req, res) => {
         createdBy: req?.user?.user?._id,
         region: req.body?.region,
         campaign: req.body?.campaign,
-        category: req.body?.category,
+        // category: req.body?.category,
         sourceFile: req.file.originalname
       });
     }

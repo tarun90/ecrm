@@ -214,7 +214,7 @@ const OutReachList = () => {
     const handleImportSubmit = async () => {
         try {
             console.log(importData, "ketul")
-            if (!importData.campaign || !importData.region || !importData.category || !importData.file) {
+            if (!importData.campaign || !importData.region ||  !importData.file) {
                 message.error('Please fill in all required fields');
                 return;
             }
@@ -223,7 +223,7 @@ const OutReachList = () => {
             formData.append('file', importData.file);
             formData.append('campaign', importData.campaign);
             formData.append('region', importData.region);
-            formData.append('category', importData.category);
+            // formData.append('category', importData.category);
 
             setLoading(true);
             const resp = await importCSV(formData);
@@ -497,7 +497,7 @@ const OutReachList = () => {
                 </div>
 
                 <div className="action-buttons">
-                    { userData?.department?.name == "Lead Generation" && <>
+                    { (userData?.department?.name == "Lead Generation" || userData?.isSuperAdmin) && <>
                         <Button
                             onClick={ handleImportCSV }
                             icon={ <UploadOutlined /> }
@@ -545,7 +545,7 @@ const OutReachList = () => {
                     >
                         Reset Filter
                     </Button>
-                    { userData?.isRegionHead &&
+                    {( userData?.isRegionHead || userData?.isSuperAdmin) &&
                         <>
                             <div className='assign-btn'>
                                 <span style={ { fontWeight: 500, marginRight: "10px" } }>
@@ -554,7 +554,7 @@ const OutReachList = () => {
                                 <Select
                                     style={ { width: 300, height: '100%' } }  // Increased width to accommodate more content
                                     showSearch
-                                    placeholder="Search by CSV name or campaign"
+                                    placeholder="Search by CSV name or dataset"
                                     onChange={ handleCSVDropdown }
                                     allowClear
                                     value={ selectedCSV }
@@ -574,7 +574,7 @@ const OutReachList = () => {
                                             <div style={ { display: 'flex', flexDirection: 'column' } }>
                                                 <Text strong>{ file.sourceFile }</Text>
                                                 <Text type="secondary" style={ { fontSize: '12px' } }>
-                                                    Campaign: { file.campaignName } • { file.count } records
+                                                    Dataset: { file.campaignName } • { file.count } records
                                                 </Text>
                                             </div>
                                         </Select.Option>
@@ -647,7 +647,7 @@ const OutReachList = () => {
                     <table>
                         <thead>
                             <tr>
-                                { userData?.isRegionHead &&
+                                { (userData?.isRegionHead || userData?.isSuperAdmin) &&
                                     <th>
                                         <Checkbox
                                             onChange={ (e) => handleSelectAll(e.target.checked) }
@@ -665,8 +665,8 @@ const OutReachList = () => {
                                 <th>Priority</th>
                                 <th>Status</th>
                                 <th>Region</th>
-                                <th>Campaign</th>
-                                <th>Category</th>
+                                <th>Dataset</th>
+                                {/* <th>Category</th> */}
                                 <th>Assigned To</th>
                                 <th>Created By</th>
                                 <th>Actions</th>
@@ -677,7 +677,7 @@ const OutReachList = () => {
 
                             { outreach.map(item => (
                                 <tr key={ item._id }>
-                                    { userData?.isRegionHead &&
+                                    { (userData?.isRegionHead || userData?.isSuperAdmin) &&
                                         <td>
                                             <Checkbox
                                                 checked={ selectedOutreach.includes(item._id) }
@@ -703,7 +703,7 @@ const OutReachList = () => {
                                     <td>{ item?.status }</td>
                                     <td>{ item?.region?.regionName }</td>
                                     <td>{ item?.campaign?.campaignName }</td>
-                                    <td>{ item?.category?.categoryName }</td>
+                                    {/* <td>{ item?.category?.categoryName }</td> */}
                                     <td>{ item?.assignedTo?.name ? item?.assignedTo.name : "-" }</td>
                                     <td>{ item?.createdBy?.name }</td>
                                     <td>
@@ -724,7 +724,7 @@ const OutReachList = () => {
                                                 >
                                                     History
                                                 </Button></Link>
-                                            { userData?.department?.name == "Lead Generation" && <>
+                                            {( userData?.department?.name == "Lead Generation" || userData?.isSuperAdmin) && <>
                                                 <button className='edit-btn' onClick={ () => handleEditOutreach(item._id) }><EditOutlined /></button>
                                                 <Popconfirm
                                                     title="Delete Outreach"
@@ -897,9 +897,9 @@ const OutReachList = () => {
                             </Form.Item>
 
                             <Form.Item
-                                label="Campaign"
+                                label="Dataset"
                                 name="campaign"
-                                rules={ [{ required: true, message: 'Please select a campaign!' }] }
+                                rules={ [{ required: true, message: 'Please select a dataset!' }] }
                             >
                                 <Select>
                                     { campaigns.map(campaign => (
@@ -951,9 +951,9 @@ const OutReachList = () => {
             >
 
                 <div className="import-form">
-                    <Form.Item label="Campaign" style={ { marginBottom: 16 } }>
+                    <Form.Item label="Dataset" style={ { marginBottom: 16 } }>
                         <Select
-                            placeholder="Select Campaign"
+                            placeholder="Select Dataset"
                             value={ importData.campaign }
                             onChange={ (value) => setImportData((prev) => ({ ...prev, campaign: value })) }
                             style={ { width: '100%' } }
@@ -966,7 +966,7 @@ const OutReachList = () => {
                         </Select>
                     </Form.Item>
 
-                    <Form.Item label="Category" style={ { marginBottom: 16 } }>
+                    {/* <Form.Item label="Category" style={ { marginBottom: 16 } }>
                         <Select
                             value={ importData.category }
                             onChange={ (value) => setImportData((prev) => ({ ...prev, category: value })) }
@@ -979,7 +979,7 @@ const OutReachList = () => {
                                 </Select.Option>
                             )) }
                         </Select>
-                    </Form.Item>
+                    </Form.Item> */}
 
                     <Form.Item label="Region" style={ { marginBottom: 16 } }>
                         <Select
@@ -1092,10 +1092,10 @@ const OutReachList = () => {
                         />
                     </Form.Item>
 
-                    <Form.Item label="Campaigns" name="campaign">
+                    <Form.Item label="datasets" name="campaign">
                         <Select
                             onChange={ (value) => setFormData({ ...formData, campaign: value }) }
-                            placeholder="Campaign"
+                            placeholder="Dataset"
                         >
                             { campaigns.map(campaign => (
                                 <Select.Option key={ campaign._id } value={ campaign._id }>

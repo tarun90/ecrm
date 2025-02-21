@@ -8,6 +8,11 @@ const CampaignSchema = new mongoose.Schema(
       trim: true,
       unique: true
     },
+    categoryId: {  // Add this field
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Category',
+      required: true
+    },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
