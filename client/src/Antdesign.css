@@ -33,8 +33,10 @@
     line-height: normal;
     margin-bottom: 20px;
     display: flex;
-    gap: 10px;
     flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+
     justify-content: space-between;
 }
 

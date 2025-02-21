@@ -467,22 +467,23 @@ const OutReachList = () => {
                 </div>
 
                 <div className="action-buttons">
-                    { userData?.department?.name == "Lead Generation" && <>
-                        <Button
-                            onClick={ handleImportCSV }
-                            icon={ <UploadOutlined /> }
-                            className="import-btn"
-                        >
-                            Import CSV
-                        </Button>
-                        <Button
-                            type="primary"
-                            onClick={ handleAddOutreach }
-                            className="add-outreach-btn"
-                        >
-                            <PlusOutlined />
-                            Add Outreach
-                        </Button> </> }
+                    {/* { userData?.department?.name == "Lead Generation" && <> */ }
+                    <Button
+                        onClick={ handleImportCSV }
+                        icon={ <UploadOutlined /> }
+                        className="import-btn"
+                    >
+                        Import CSV
+                    </Button>
+                    <Button
+                        type="primary"
+                        onClick={ handleAddOutreach }
+                        className="add-outreach-btn"
+                    >
+                        <PlusOutlined />
+                        Add Outreach
+                    </Button>
+                    {/* </> } */ }
                     {/* <Button 
                         onClick={handleViewReports}
                         icon={<BarChartOutlined />}
@@ -494,18 +495,18 @@ const OutReachList = () => {
 
             </Header>
             <div className='global-search'>
-                <Search
-                    allowClear
-                    placeholder="Search Outreach..."
-                    value={ searchTerm }
-                    onChange={ (e) => setSearchTerm(e.target.value) }
-                    className="search-input"
-                    width={ 300 }
-                />
+                <div className='serach-bar'>
+                    <Search
+                        allowClear
+                        placeholder="Search Outreach..."
+                        value={ searchTerm }
+                        onChange={ (e) => setSearchTerm(e.target.value) }
+                        className="search-input"
+                        width={ 300 }
+                    />
+                </div>
                 <div className="outreach-header-wrapper">
-                    <div className="search-container"
-                    >
-                    </div>
+
                     <Button className='filter-btn btn' onClick={ () => { setfilterModal(true) } }>Filter</Button>
                     <Button
                         disabled={ !filterData } // Disable if no filtered data
@@ -514,94 +515,95 @@ const OutReachList = () => {
                     >
                         Reset Filter
                     </Button>
-                    {userData?.isRegionHead &&<>
-                    <span style={ { fontWeight: 500, marginRight: "10px" } }>
-                        Assign CSV:
-                    </span>
-                    <Select
-                        style={ { width: 300, height: '100%' } }  // Increased width to accommodate more content
-                        showSearch
-                        placeholder="Search by CSV name or campaign"
-                        onChange={ handleCSVDropdown }
-                        allowClear
-                        value={ selectedCSV }
-                        optionFilterProp="children"
-                        filterOption={ (input, option) => {
-                            // Enable search on both CSV name and campaign name
-                            const searchText = option?.searchtext?.toLowerCase() || '';
-                            return searchText.includes(input.toLowerCase());
-                        } }
-                    >
-                        { sourceFiles?.map(file => (
-                            <Select.Option
-                                key={ file.sourceFile }
-                                value={ file.sourceFile }
-                                searchtext={ `${file.sourceFile} ${file.campaignName}` }  // For search functionality
-                            >
-                                <div style={ { display: 'flex', flexDirection: 'column' } }>
-                                    <Text strong>{ file.sourceFile }</Text>
-                                    <Text type="secondary" style={ { fontSize: '12px' } }>
-                                        Campaign: { file.campaignName } • { file.count } records
-                                    </Text>
-                                </div>
-                            </Select.Option>
-                        )) }
-                    </Select>
-                    { selectedCSV != null && (
-                        <div className="assignment-section">
+                    <div className='assign-btn'>
+                        <span style={ { fontWeight: 500, marginRight: "10px" } }>
+                            Assign CSV:
+                        </span>
+                        <Select
+                            style={ { width: 300, height: '100%' } }  // Increased width to accommodate more content
+                            showSearch
+                            placeholder="Search by CSV name or campaign"
+                            onChange={ handleCSVDropdown }
+                            allowClear
+                            value={ selectedCSV }
+                            optionFilterProp="children"
+                            filterOption={ (input, option) => {
+                                // Enable search on both CSV name and campaign name
+                                const searchText = option?.searchtext?.toLowerCase() || '';
+                                return searchText.includes(input.toLowerCase());
+                            } }
+                        >
+                            { sourceFiles?.map(file => (
+                                <Select.Option
+                                    key={ file.sourceFile }
+                                    value={ file.sourceFile }
+                                    searchtext={ `${file.sourceFile} ${file.campaignName}` }  // For search functionality
+                                >
+                                    <div style={ { display: 'flex', flexDirection: 'column' } }>
+                                        <Text strong>{ file.sourceFile }</Text>
+                                        <Text type="secondary" style={ { fontSize: '12px' } }>
+                                            Campaign: { file.campaignName } • { file.count } records
+                                        </Text>
+                                    </div>
+                                </Select.Option>
+                            )) }
+                        </Select>
+                    </div>
+                    {/* { selectedCSV != null && ( */ }
+                    <div className="assignment-section">
 
-                            <Select
-                                style={ { width: 200, height: '100%' } }
-                                showSearch
-                                placeholder="Assign to user"
-                                onChange={ handleAssignOutreachByCSV }
-                                allowClear
-                                filterOption={ (input, option) =>
-                                    (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-                                }
-                                optionFilterProp="children"
-                            >
-                                { users.map(user => (
-                                    <Select.Option key={ user._id } value={ user._id }>
-                                        { user.name }
-                                    </Select.Option>
-                                )) }
-                            </Select>
-
-
-
-                        </div>
-                    ) }
-                    </> }
-                    { (selectedOutreach.length > 0 && selectedCSV == null) && (
-                        <div className="assignment-section">
-                            <span style={ { fontWeight: 500, marginRight: "10px" } }>
-                                Assign Outreach To : &nbsp;
-                            </span>
-                            <Select
-                                style={ { width: 200, height: '100%' } }
-                                showSearch
-                                placeholder="Assign to user"
-                                onChange={ handleAssignOutreach }
-                                allowClear
-                                filterOption={ (input, option) =>
-                                    (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-                                }
-                                optionFilterProp="children"
-                            >
-                                { users.map(user => (
-                                    <Select.Option key={ user._id } value={ user._id }>
-                                        { user.name }
-                                    </Select.Option>
-                                )) }
-                            </Select>
-                            <span style={ { fontWeight: 500, marginLeft: "10px" } }>
-                                { selectedOutreach.length } outreach selected
-                            </span>
+                        <Select
+                            style={ { width: 200, height: '100%' } }
+                            showSearch
+                            placeholder="Assign to user"
+                            onChange={ handleAssignOutreachByCSV }
+                            allowClear
+                            filterOption={ (input, option) =>
+                                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                            }
+                            optionFilterProp="children"
+                        >
+                            { users.map(user => (
+                                <Select.Option key={ user._id } value={ user._id }>
+                                    { user.name }
+                                </Select.Option>
+                            )) }
+                        </Select>
 
 
-                        </div>
-                    ) }
+
+                    </div>
+                    {/* ) } */ }
+                    {/* </> } */ }
+                    {/* { (selectedOutreach.length > 0 && selectedCSV == null) && ( */ }
+                    <div className="assignment-section">
+                        <span style={ { fontWeight: 500, marginRight: "10px" } }>
+                            Assign Outreach To : &nbsp;
+                        </span>
+                        <Select
+                            style={ { width: 200, height: '100%' } }
+                            showSearch
+                            placeholder="Assign to user"
+                            onChange={ handleAssignOutreach }
+                            allowClear
+                            filterOption={ (input, option) =>
+                                (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                            }
+                            optionFilterProp="children"
+                        >
+                            { users.map(user => (
+                                <Select.Option key={ user._id } value={ user._id }>
+                                    { user.name }
+                                </Select.Option>
+                            )) }
+                        </Select>
+                        <span style={ { fontWeight: 500, marginLeft: "10px" } }>
+                            { selectedOutreach.length } outreach selected
+                        </span>
+
+
+                    </div>
+                    {/* ) } */ }
 
                 </div>
             </div>
@@ -716,10 +718,10 @@ const OutReachList = () => {
                         Cancel
                     </Button>
                     <Button
-            type="primary"
-            onClick={() => form.submit()}
-            loading={loading}
-          >
+                        type="primary"
+                        onClick={ () => form.submit() }
+                        loading={ loading }
+                    >
                         { editMode ? "Update" : "Create" } Outreach
                     </Button>
                 </div> }
@@ -738,7 +740,7 @@ const OutReachList = () => {
                         region: '',
                         campaign: '',
                         category: '',
-                        designation:'',
+                        designation: '',
                     } }
                 >
                     <Row gutter={ 24 }>
@@ -1041,7 +1043,7 @@ const OutReachList = () => {
                     <Button style={ { marginRight: 10 } } onClick={ handleModalClose }>
                         Cancel
                     </Button>
-                    <Button type="primary" onClick={() => form.submit()}>
+                    <Button type="primary" onClick={ () => form.submit() }>
                         Save
                     </Button>
                 </div> }

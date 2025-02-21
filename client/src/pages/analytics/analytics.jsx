@@ -43,23 +43,23 @@ const Analytics = () => {
     return (
         <div className="analytics-container">
             <Header className="analytics-header">
-                <div className="search-container">
+                <div className="heading">
                     <h1>Analytics</h1>
-                    <Search
-                        allowClear
-                        placeholder="Search by category, campaign, or region..."
-                        value={searchTerm}
-                        onChange={(e) => handleSearch(e.target.value)}
-                        className="search-input"
-                        loading={loading}
-                    />
-                </div>
-                <div className="action-buttons">
-                    {/* Action buttons can be added here */}
+
                 </div>
             </Header>
+            <div className="global-search">
+                <Search
+                    allowClear
+                    placeholder="Search by category, campaign, or region..."
+                    value={ searchTerm }
+                    onChange={ (e) => handleSearch(e.target.value) }
+                    className="search-input"
+                    loading={ loading }
+                />
+            </div>
             <div className="contact-table">
-                {loading ? (
+                { loading ? (
                     <div className="loading-state">Loading...</div>
                 ) : !analyticsData || analyticsData.length === 0 ? (
                     <NoDataUI />
@@ -75,18 +75,18 @@ const Analytics = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {analyticsData.map((item, index) => (
-                                <tr key={index}>
-                                    <td>{item?.category}</td>
-                                    <td>{item?.campaign}</td>
-                                    <td>{item?.region}</td>
-                                    <td>{item?.totalData}</td>
-                                    <td>{item?.totalTouches}</td>
+                            { analyticsData.map((item, index) => (
+                                <tr key={ index }>
+                                    <td>{ item?.category }</td>
+                                    <td>{ item?.campaign }</td>
+                                    <td>{ item?.region }</td>
+                                    <td>{ item?.totalData }</td>
+                                    <td>{ item?.totalTouches }</td>
                                 </tr>
-                            ))}
+                            )) }
                         </tbody>
                     </table>
-                )}
+                ) }
             </div>
         </div>
     );
