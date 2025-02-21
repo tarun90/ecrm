@@ -65,6 +65,7 @@ router.get('/', auth, async (req, res) => {
     } else if (userWithDept?.department?.name?.toLowerCase() === 'outreach team') {
       query.assignedTo = user._id;
     }
+   
 
     // Apply filters if provided
     if (country) query.country = country;
@@ -281,7 +282,8 @@ router.post('/import', auth, upload.single('file'), async (req, res) => {
     // Check data limit
     if (results.length > 500) {
       fs.unlinkSync(req.file.path);
-      return res.status(400).json({
+     
+      return res.status(200).json({
         status: 400,
         message: 'File exceeds the maximum limit of 500 records'
       });
@@ -380,7 +382,7 @@ router.post('/import', auth, upload.single('file'), async (req, res) => {
     }
     
     console.error('Import error:', error);
-    res.status(400).json({
+    res.status(200).json({
       status: 400,
       message: 'Error importing CSV',
       error: error.message
