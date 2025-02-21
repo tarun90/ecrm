@@ -167,7 +167,7 @@ const OutReachList = () => {
         }
     };
 
-    const fetchOutreach = async (searchTerm = "", page = 1, pageSize = 100) => {
+    const fetchOutreach = async ( page = 1, pageSize = 100) => {
         try {
             setLoading(true);
             const response = await getOutreach(searchTerm, page, pageSize);
