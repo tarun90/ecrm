@@ -43,13 +43,13 @@ const outReachSchema = new mongoose.Schema({
     },
     leadStatus: {
         type: String,
-        enum: ['Nurturing', 'Lost', 'Intrested'],
-        default: 'Nurturing'
+        enum: ['-','Nurturing', 'Lost', 'Intrested'],
+        default: '-'
     },
     priority: {
         type: String,
-        enum: ['Low', 'Medium', 'High'],
-        default: 'Low'
+        enum: ['-','Low', 'Medium', 'High'],
+        default: '-'
     },
     campaign: {
         type: mongoose.Schema.Types.ObjectId,

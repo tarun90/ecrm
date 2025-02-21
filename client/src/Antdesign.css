@@ -80,6 +80,11 @@
 }
 
 
+.ant-pagination .ant-pagination-item-active a {
+    background-color: var(--btn-bg-primary);
+    color: #fff;
+    border-radius: 3px;
+}
 
 .ant-form-item .ant-form-item-explain-error {
     text-align: left;
