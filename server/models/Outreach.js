@@ -71,7 +71,7 @@ const outReachSchema = new mongoose.Schema({
 });
 
 // Add index for efficient querying
-outReachSchema.index({  campaign: 1 }, { unique: true });
+// outReachSchema.index({  campaign: 1 }, { unique: true });
 
 const OutReach = mongoose.model('OutReach', outReachSchema);
 
