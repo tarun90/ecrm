@@ -368,6 +368,7 @@ const OutReachList = () => {
 
             await createNote(outreachIdForNote, values);
             message.success('Note created successfully!');
+            fetchOutreach();
 
 
             handleModalClose();
