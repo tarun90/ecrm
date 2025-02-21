@@ -65,7 +65,8 @@ router.get('/', async (req, res) => {
         $match: {
           $or: [
             { sales_number: { $regex: search, $options: "i" } },
-            { "company.companyName": { $regex: search, $options: "i" } }
+            { "company.companyName": { $regex: search, $options: "i" } },
+            { technology: { $regex: search, $options: "i" } }
           ]
         }
       });
