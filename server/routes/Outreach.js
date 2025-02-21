@@ -219,43 +219,143 @@ router.delete('/:id', async (req, res) => {
 });
 
 // Import CSV to Create Outreaches
-router.post('/import', auth, upload.single('file'),async (req, res) => {
-  const existingRecord = await Outreach.findOne({ 
-    sourceFile: req.file.originalname 
-  });
-
-  if (existingRecord) {
-    // Delete the uploaded file since we won't be using it
-    fs.unlinkSync(req.file.path);
-    return res.status(200).json({ 
-      status: 400,
-      message: 'A file with this name has already been imported. Please rename your file or upload a different file.' 
+router.post('/import', auth, upload.single('file'), async (req, res) => {
+  try {
+    // Check for existing file first
+    const existingRecord = await Outreach.findOne({ 
+      sourceFile: req.file.originalname 
     });
-  }
-  let results = [];
-  fs.createReadStream(req.file.path)
-    .pipe(csv())
-    .on('data', (data) => results.push(data))
-    .on('end', async () => {
-      try {
 
-        const updatedResults = results.map(ele => ({
-          ...ele,
-          createdBy: req?.user?.user?._id, // Ensure safe access to nested properties
-          region: req.body?.region,
-          campaign: req.body?.campaign,
-          category: req.body?.category,
-          sourceFile: req.file.originalname
-        }));
-        // console.log(results)
-        await Outreach.insertMany(updatedResults);
-        fs.unlinkSync(req.file.path);
-        res.status(201).send({ message: 'CSV Imported successfully' });
-      } catch (error) {
-        console.log(error)
-        res.status(400).send(error);
+    if (existingRecord) {
+      fs.unlinkSync(req.file.path);
+      return res.status(200).json({ 
+        status: 400,
+        message: 'A file with this name has already been imported. Please rename your file or upload a different file.' 
+      });
+    }
+
+    // Read and process CSV
+    let results = [];
+    let skippedEmails = [];
+    let duplicateEmailsInSheet = [];
+    let skippedIncompleteRecords = [];
+
+    await new Promise((resolve, reject) => {
+      fs.createReadStream(req.file.path)
+        .pipe(csv())
+        .on('data', (data) => results.push(data))
+        .on('end', resolve)
+        .on('error', reject);
+    });
+
+    // Check data limit
+    if (results.length > 500) {
+      fs.unlinkSync(req.file.path);
+      return res.status(400).json({
+        status: 400,
+        message: 'File exceeds the maximum limit of 500 records'
+      });
+    }
+
+    // Create maps to track emails and their first occurrence
+    const emailCount = new Map();
+    const firstOccurrence = new Map(); // Store first occurrence of each email
+    
+    results.forEach((record, index) => {
+      if (record.email) {
+        if (!emailCount.has(record.email)) {
+          // Store the first occurrence index
+          firstOccurrence.set(record.email, index);
+        }
+        emailCount.set(record.email, (emailCount.get(record.email) || 0) + 1);
       }
     });
+
+    // Process records and handle duplicates
+    const processedResults = [];
+    const seenEmails = new Set(); // Track processed emails within current batch
+
+    for (const [index, record] of results.entries()) {
+      // Check if at least one of email, phone, or linkedin is present
+      const hasRequiredField = record.email || record.phone || record.linkedin;
+      
+      if (!hasRequiredField) {
+        skippedIncompleteRecords.push({
+          name: record.name || 'N/A',
+          reason: 'Missing all required fields (email, phone, and linkedin)'
+        });
+        continue;
+      }
+
+      // If email is present, check for duplicates
+      if (record.email) {
+        // If it's a duplicate but not the first occurrence, skip it
+        if (emailCount.get(record.email) > 1 && firstOccurrence.get(record.email) !== index) {
+          duplicateEmailsInSheet.push(record.email);
+          continue;
+        }
+
+        // Check if we've already processed this email in current batch
+        if (seenEmails.has(record.email)) {
+          continue;
+        }
+
+        // Check for existing email in database
+        const existingEmail = await Outreach.findOne({ email: record.email });
+        if (existingEmail) {
+          skippedEmails.push(record.email);
+          continue;
+        }
+
+        seenEmails.add(record.email);
+      }
+
+      processedResults.push({
+        ...record,
+        createdBy: req?.user?.user?._id,
+        region: req.body?.region,
+        campaign: req.body?.campaign,
+        category: req.body?.category,
+        sourceFile: req.file.originalname
+      });
+    }
+
+    // Insert valid records
+    if (processedResults.length > 0) {
+      await Outreach.insertMany(processedResults);
+    }
+
+    // Clean up the uploaded file
+    fs.unlinkSync(req.file.path);
+
+    // Send response with results
+    res.status(201).json({
+      message: 'CSV imported successfully',
+      totalRecords: results.length,
+      importedRecords: processedResults.length,
+      skippedDuplicatesFromDB: skippedEmails.length,
+      skippedDuplicatesInSheet: duplicateEmailsInSheet.length,
+      skippedIncompleteRecords: skippedIncompleteRecords.length,
+      details: {
+        skippedEmailsFromDB: [...new Set(skippedEmails)], // Remove duplicates from list
+        duplicateEmailsInSheet: [...new Set(duplicateEmailsInSheet)], // Remove duplicates from list
+        skippedIncompleteRecords // List of records skipped due to missing required fields
+      }
+    });
+
+  } catch (error) {
+    // Clean up file in case of error
+    if (req.file && req.file.path) {
+      fs.unlinkSync(req.file.path);
+    }
+    
+    console.error('Import error:', error);
+    res.status(400).json({
+      status: 400,
+      message: 'Error importing CSV',
+      error: error.message
+    });
+  }
 });
 
 // Assign Multiple Outreaches to User
