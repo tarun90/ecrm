@@ -502,7 +502,10 @@ const OutReachList = () => {
                             icon={ <UploadOutlined /> }
                             className="import-btn"
                         >
-                            Import CSV
+                            <span className='button__text'>
+
+                                Import CSV
+                            </span>
                         </Button>
                         <Button
                             type="primary"
@@ -639,70 +642,71 @@ const OutReachList = () => {
 
                 </div>
             </div>
-            <div className="contact-table">
-                { (!outreach || outreach.length == 0) ?
-                    <NoDataUI /> :
+            <div className='mai-table-wrapper'>
+                <div className="contact-table">
+                    { (!outreach || outreach.length == 0) ?
+                        <NoDataUI /> :
 
-                    <table>
-                        <thead>
-                            <tr>
-                                { userData?.isRegionHead &&
-                                    <th>
-                                        <Checkbox
-                                            onChange={ (e) => handleSelectAll(e.target.checked) }
-                                            checked={ selectedOutreach.length === outreach.length }
-                                        />
-                                    </th>
-                                }
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Website</th>
-                                <th>LinkedIn</th>
-                                <th>Country</th>
-                                <th>Status</th>
-                                <th>Region</th>
-                                <th>Campaign</th>
-                                <th>Category</th>
-                                <th>Assigned To</th>
-                                <th>Created By</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-
-                            { outreach.map(item => (
-                                <tr key={ item._id }>
+                        <table>
+                            <thead>
+                                <tr>
                                     { userData?.isRegionHead &&
-                                        <td>
+                                        <th>
                                             <Checkbox
-                                                checked={ selectedOutreach.includes(item._id) }
-                                                onChange={ () => handleCheckboxChange(item._id) }
+                                                onChange={ (e) => handleSelectAll(e.target.checked) }
+                                                checked={ selectedOutreach.length === outreach.length }
                                             />
-                                        </td>
+                                        </th>
                                     }
-                                    {/* <td><Link to={`/ViewOutReach/${item._id}`}>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Website</th>
+                                    <th>LinkedIn</th>
+                                    <th>Country</th>
+                                    <th>Status</th>
+                                    <th>Region</th>
+                                    <th>Campaign</th>
+                                    <th>Category</th>
+                                    <th>Assigned To</th>
+                                    <th>Created By</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                { outreach.map(item => (
+                                    <tr key={ item._id }>
+                                        { userData?.isRegionHead &&
+                                            <td>
+                                                <Checkbox
+                                                    checked={ selectedOutreach.includes(item._id) }
+                                                    onChange={ () => handleCheckboxChange(item._id) }
+                                                />
+                                            </td>
+                                        }
+                                        {/* <td><Link to={`/ViewOutReach/${item._id}`}>
                                     <span className='user-name'>{item.name}</span></Link></td> */}
-                                    <td onClick={ () => {
-                                        setOutreachIdForNote(item?._id)
-                                        modalOpenForNote()
-                                    } } style={ { color: 'blue', cursor: 'pointer' } }>
-                                        <span className='user-name'>{ item.name }</span></td>
-                                    <td>{ item?.email }</td>
-                                    <td>{ item?.phone }</td>
-                                    <td>{ item?.website }</td>
-                                    <td>{ item?.linkedin }</td>
-                                    <td>{ item?.country }</td>
-                                    <td>{ item?.status }</td>
-                                    <td>{ item?.region?.regionName }</td>
-                                    <td>{ item?.campaign?.campaignName }</td>
-                                    <td>{ item?.category?.categoryName }</td>
-                                    <td>{ item?.assignedTo?.name ? item?.assignedTo.name : "-" }</td>
-                                    <td>{ item?.createdBy?.name }</td>
-                                    <td>
-                                        <div className='action-buttons'>
-                                            {/* <Button
+                                        <td onClick={ () => {
+                                            setOutreachIdForNote(item?._id)
+                                            modalOpenForNote()
+                                        } } style={ { color: 'blue', cursor: 'pointer' } }>
+                                            <span className='user-name'>{ item.name }</span></td>
+                                        <td>{ item?.email }</td>
+                                        <td>{ item?.phone }</td>
+                                        <td>{ item?.website }</td>
+                                        <td>{ item?.linkedin }</td>
+                                        <td>{ item?.country }</td>
+                                        <td>{ item?.status }</td>
+                                        <td>{ item?.region?.regionName }</td>
+                                        <td>{ item?.campaign?.campaignName }</td>
+                                        <td>{ item?.category?.categoryName }</td>
+                                        <td>{ item?.assignedTo?.name ? item?.assignedTo.name : "-" }</td>
+                                        <td>{ item?.createdBy?.name }</td>
+                                        <td>
+                                            <div className='action-buttons'>
+                                                {/* <Button
                                                 type="primary"
                                                 icon={<PlusOutlined />}
                                                 onClick={() => {
@@ -712,51 +716,51 @@ const OutReachList = () => {
                                             >
                                                 Add Note
                                             </Button> */}
-                                            <Link to={ `/ViewOutReach/${item._id}` }>
-                                                <Button
-                                                    type="primary"
-                                                >
-                                                    History
-                                                </Button></Link>
-                                            { userData?.department?.name == "Lead Generation" && <>
-                                                <button className='edit-btn' onClick={ () => handleEditOutreach(item._id) }><EditOutlined /></button>
-                                                <Popconfirm
-                                                    title="Delete Outreach"
-                                                    description="Are you sure you want to delete this outreach?"
-                                                    onConfirm={ () => handleDelete(item._id) }
-                                                    okText="Yes"
-                                                    cancelText="No"
-                                                >
-                                                    <button className='delete-btn'><DeleteOutlined /></button>
-                                                </Popconfirm>
-                                            </> }
-                                        </div>
-                                    </td>
-                                </tr>
-                            )) }
-                        </tbody>
-                    </table>
+                                                <Link to={ `/ViewOutReach/${item._id}` }>
+                                                    <Button
+                                                        type="primary"
+                                                    >
+                                                        History
+                                                    </Button></Link>
+                                                { userData?.department?.name == "Lead Generation" && <>
+                                                    <button className='edit-btn' onClick={ () => handleEditOutreach(item._id) }><EditOutlined /></button>
+                                                    <Popconfirm
+                                                        title="Delete Outreach"
+                                                        description="Are you sure you want to delete this outreach?"
+                                                        onConfirm={ () => handleDelete(item._id) }
+                                                        okText="Yes"
+                                                        cancelText="No"
+                                                    >
+                                                        <button className='delete-btn'><DeleteOutlined /></button>
+                                                    </Popconfirm>
+                                                </> }
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )) }
+                            </tbody>
+                        </table>
 
-                }
+                    }
+                </div>
+                <div className='Pagination' style={ { marginTop: '20px', display: 'flex', justifyContent: 'center' } }>
+                    <Pagination
+                        current={ currentPage }
+                        pageSize={ pageSize }
+                        total={ total }
+                        onChange={ handlePageChange }
+                        //   showSizeChanger
+                        showQuickJumper
+                        showTotal={ (total, range) => `${range[0]}-${range[1]} of ${total} items` }
+                        pageSizeOptions={ ['100', '200'] }
+                        disabled={ loading }
+                        onShowSizeChange={ (current, size) => {
+                            console.log('Page size changed:', { current, size });
+                            handlePageChange(1, size);
+                        } }
+                    />
+                </div>
             </div>
-            <div className='Pagination' style={ { marginTop: '20px', display: 'flex', justifyContent: 'center' } }>
-                <Pagination
-                    current={ currentPage }
-                    pageSize={ pageSize }
-                    total={ total }
-                    onChange={ handlePageChange }
-                    //   showSizeChanger
-                    showQuickJumper
-                    showTotal={ (total, range) => `${range[0]}-${range[1]} of ${total} items` }
-                    pageSizeOptions={ ['100', '200'] }
-                    disabled={ loading }
-                    onShowSizeChange={ (current, size) => {
-                        console.log('Page size changed:', { current, size });
-                        handlePageChange(1, size);
-                    } }
-                />
-            </div>
-
             <Drawer
                 title={ editMode ? "Edit Outreach" : "Add Outreach" }
                 open={ modalVisible }

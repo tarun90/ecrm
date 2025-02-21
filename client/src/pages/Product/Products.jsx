@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Package, Edit2, Search, Plus, Trash2 } from "lucide-react";
 import MainLayout from "../../components/MainLayout";
-import "../../components/custome.css";
+import "../../components/custom.css";
 import "./Products.css";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { Modal, Form, Input, Select, Button, Divider, Row, Col, Drawer } from "antd";
@@ -202,20 +202,20 @@ function Products() {
         <div className="products-grid">
           { filteredProducts.map((product) => (
             <div key={ product._id } className="product-card">
-            <label className="checkbox-wrapper">
-              <input
-                type="checkbox"
-                checked={ selectedProducts.includes(product._id) }
-                onChange={ () => {
-                  setSelectedProducts((prev) =>
-                    prev.includes(product._id)
-                      ? prev.filter((id) => id !== product._id)
-                      : [...prev, product._id]
-                  );
-                } }
-              />
-              <span className="input-checkbox">
-              </span>
+              <label className="checkbox-wrapper">
+                <input
+                  type="checkbox"
+                  checked={ selectedProducts.includes(product._id) }
+                  onChange={ () => {
+                    setSelectedProducts((prev) =>
+                      prev.includes(product._id)
+                        ? prev.filter((id) => id !== product._id)
+                        : [...prev, product._id]
+                    );
+                  } }
+                />
+                <span className="input-checkbox">
+                </span>
               </label>
               <div className="product-info">
                 <div>

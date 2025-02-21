@@ -4,7 +4,7 @@ import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import dayjs from "dayjs";
 import { Edit, Search } from "lucide-react";
-import "../../components/custome.css";
+import "../../components/custom.css";
 import "./Invoice.css";
 import elsnerLogo from "/elsner_logo.png";
 import {
@@ -781,22 +781,22 @@ function Invoices() {
             <thead>
               <tr>
                 <th className="checkbox-column">
-                <label className="checkbox-wrapper">
-                  <input
-                    type="checkbox"
-                    className="checkbox-select-all"
-                    onChange={ (e) => {
-                      if (e.target.checked) {
-                        setSelectedInvoices(
-                          sortedInvoices.map((invoice) => invoice._id)
-                        );
-                      } else {
-                        setSelectedInvoices([]);
-                      }
-                    } }
-                  />
-                  <span className="input-checkbox">
-                  </span>
+                  <label className="checkbox-wrapper">
+                    <input
+                      type="checkbox"
+                      className="checkbox-select-all"
+                      onChange={ (e) => {
+                        if (e.target.checked) {
+                          setSelectedInvoices(
+                            sortedInvoices.map((invoice) => invoice._id)
+                          );
+                        } else {
+                          setSelectedInvoices([]);
+                        }
+                      } }
+                    />
+                    <span className="input-checkbox">
+                    </span>
                   </label>
                 </th>
                 <th onClick={ () => handleSort("invoice_number") }>
@@ -829,21 +829,21 @@ function Invoices() {
               { invoices.map((invoice) => (
                 <tr key={ invoice._id }>
                   <td>
-                  <label className="checkbox-wrapper">
-                    <input
-                      type="checkbox"
-                      checked={ selectedInvoices.includes(invoice._id) }
-                      onChange={ () => {
-                        setSelectedInvoices((prev) =>
-                          prev.includes(invoice._id)
-                            ? prev.filter((id) => id !== invoice._id)
-                            : [...prev, invoice._id]
-                        );
-                      } }
-                      className="checkbox-select"
-                    />
-                    <span className="input-checkbox">
-                    </span>
+                    <label className="checkbox-wrapper">
+                      <input
+                        type="checkbox"
+                        checked={ selectedInvoices.includes(invoice._id) }
+                        onChange={ () => {
+                          setSelectedInvoices((prev) =>
+                            prev.includes(invoice._id)
+                              ? prev.filter((id) => id !== invoice._id)
+                              : [...prev, invoice._id]
+                          );
+                        } }
+                        className="checkbox-select"
+                      />
+                      <span className="input-checkbox">
+                      </span>
                     </label>
                   </td>
                   <td>{ invoice.invoice_number }</td>
