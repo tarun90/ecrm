@@ -123,16 +123,16 @@ const Sidebar = ({ collapsed, onCollapse }) => {
           label: 'Outreach',
           onClick: () => navigate('/outreach/list'),
         },
-        (isRegionHead || isSuperAdmin) && {
-          key: '10-4',
-          label: 'Analytics',
-          onClick: () => navigate('/outreach/analytics'),
-        },
-        (isRegionHead || isSuperAdmin) && {
-          key: '10-5',
-          label: 'Analytics2',
-          onClick: () => navigate('/outreach/analytics2'),
-        }
+        // (isRegionHead || isSuperAdmin) && {
+        //   key: '10-4',
+        //   label: 'Analytics',
+        //   onClick: () => navigate('/outreach/analytics'),
+        // },
+        // (isRegionHead || isSuperAdmin) && {
+        //   key: '10-5',
+        //   label: 'Analytics2',
+        //   onClick: () => navigate('/outreach/analytics2'),
+        // }
       ].filter(Boolean),
     },
   ];
