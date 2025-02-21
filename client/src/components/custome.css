@@ -745,6 +745,10 @@ textarea {
   cursor: pointer;
   text-align: left;
 }
+.product-card .checkbox-wrapper {
+  margin-bottom: 10px;
+  display: block;
+}
 
 
 
@@ -784,11 +788,6 @@ textarea {
   max-width: 300px;
 }
 
-
-
-
-
-
 .heading h1 {
   font-size: 1.6rem;
   font-weight: 600;
@@ -796,7 +795,45 @@ textarea {
   color: #1f2937;
 }
 
-
+/* checkbox design */
+ .checkbox-wrapper .input-checkbox{
+  width: 17px;
+  height: 17px;
+  display: block;
+  border: 1px solid;
+  border-color: #03497a;
+  border-radius: 3px;
+  position: relative;
+  background-color: #fff;
+  cursor: pointer;
+}
+ .checkbox-wrapper input{
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
+}
+ .checkbox-wrapper .input-checkbox:after {
+  position: absolute;
+  content: "";
+  left: 3px;
+  top: 3px;
+  border: 0;
+  border-left-width: 2px;
+  border-bottom-width: 2px;
+  border-style: solid;
+  width: 7px;
+  height: 4px;
+  transform: rotate(-45deg);
+  border-color: #03497a;
+  opacity: 0;
+  visibility: hidden;
+}
+ .checkbox-wrapper input:checked~.input-checkbox:after{
+  opacity: 1;
+  visibility: visible;
+}
 
 
 @media (min-width:1440px) and (max-width:1680px) {

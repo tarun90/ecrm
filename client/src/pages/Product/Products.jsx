@@ -202,6 +202,7 @@ function Products() {
         <div className="products-grid">
           { filteredProducts.map((product) => (
             <div key={ product._id } className="product-card">
+            <label className="checkbox-wrapper">
               <input
                 type="checkbox"
                 checked={ selectedProducts.includes(product._id) }
@@ -213,6 +214,9 @@ function Products() {
                   );
                 } }
               />
+              <span className="input-checkbox">
+              </span>
+              </label>
               <div className="product-info">
                 <div>
                   <h3 className="product-name">{ product.name }</h3>

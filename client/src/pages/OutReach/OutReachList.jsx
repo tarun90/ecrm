@@ -738,23 +738,23 @@ const OutReachList = () => {
                     </table>
 
                 }
-                <div style={ { marginTop: '20px', display: 'flex', justifyContent: 'flex-end' } }>
-                    <Pagination
-                        current={ currentPage }
-                        pageSize={ pageSize }
-                        total={ total }
-                        onChange={ handlePageChange }
-                        //   showSizeChanger
-                        showQuickJumper
-                        showTotal={ (total, range) => `${range[0]}-${range[1]} of ${total} items` }
-                        pageSizeOptions={ ['100', '200'] }
-                        disabled={ loading }
-                        onShowSizeChange={ (current, size) => {
-                            console.log('Page size changed:', { current, size });
-                            handlePageChange(1, size);
-                        } }
-                    />
-                </div>
+            </div>
+            <div className='Pagination' style={ { marginTop: '20px', display: 'flex', justifyContent: 'center' } }>
+                <Pagination
+                    current={ currentPage }
+                    pageSize={ pageSize }
+                    total={ total }
+                    onChange={ handlePageChange }
+                    //   showSizeChanger
+                    showQuickJumper
+                    showTotal={ (total, range) => `${range[0]}-${range[1]} of ${total} items` }
+                    pageSizeOptions={ ['100', '200'] }
+                    disabled={ loading }
+                    onShowSizeChange={ (current, size) => {
+                        console.log('Page size changed:', { current, size });
+                        handlePageChange(1, size);
+                    } }
+                />
             </div>
 
             <Drawer
