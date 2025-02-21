@@ -6,7 +6,7 @@ const TruncatedText = ({ text, maxLength = 30, isPhone = false }) => {
     if (!text) return "-";
     
     // Remove spaces from phone numbers if isPhone is true
-    const processedText = isPhone ? text.replace(/[\s-]+/g, '') : text;
+    const processedText = isPhone ? text.replace(/[\s\-.]+/g, '') : text;
     
     const needsTruncation = processedText.length > maxLength;
     const displayText = needsTruncation 
