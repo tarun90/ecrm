@@ -306,7 +306,8 @@ const [total, setTotal] = useState(0);
                 region: outreachItem.region._id,
                 campaign: outreachItem.campaign._id,
                 category: outreachItem.category._id,
-                designation: outreachItem?.designation
+                designation: outreachItem?.designation,
+                city: outreachItem?.city,
             });
             setEditMode(true);
             setEditId(id);
@@ -785,6 +786,7 @@ const [total, setTotal] = useState(0);
                         campaign: '',
                         category: '',
                         designation:'',
+                        city:'',
                     } }
                 >
                     <Row gutter={ 24 }>
@@ -833,8 +835,14 @@ const [total, setTotal] = useState(0);
                                 <Input />
                             </Form.Item>
                         </Col>
-
+                      
                         <Col span={ 24 }>
+                        <Form.Item
+                                label="City"
+                                name="city"
+                            >
+                                <Input />
+                            </Form.Item>
                             <Form.Item
                                 label="Country"
                                 name="country"
