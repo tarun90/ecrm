@@ -91,7 +91,7 @@
   gap: 10px;
   width: 100%;
   overflow-x: auto;
-  min-height: calc(100vh - 185px);
+  min-height: calc(100vh - 300px);
 }
 
 .kanbanColumn {

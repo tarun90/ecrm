@@ -298,7 +298,7 @@ const CompanyList = () => {
                 </table>
             </div>
 
-            <div style={ { marginTop: '20px', display: 'flex', justifyContent: 'flex-end' } }>
+            <div className='pagination'>
                 <Pagination
                     current={ currentPage }
                     pageSize={ pageSize }

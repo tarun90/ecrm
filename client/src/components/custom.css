@@ -846,6 +846,12 @@ textarea {
   justify-content: space-between;
 }
 
+.fillter-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 @media (min-width:1440px) and (max-width:1680px) {
   .products-grid {
     display: grid;

@@ -77,9 +77,8 @@
 
 .ant-table-content,
 .contact-table {
-  background-color: #fff;
   border-radius: 3px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
   overflow: auto;
 }
 
@@ -98,6 +97,7 @@
   width: 100%;
   border-radius: 3px;
   border-collapse: collapse;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .ant-table-wrapper .ant-table-content .ant-table-thead th,
@@ -116,6 +116,7 @@
   padding: 10px 16px;
   color: #374151;
   text-align: left;
+  background-color: #fff;
   font-size: 13px;
   border-bottom: 1px solid #e2e8f0;
   min-width: 130px;

@@ -743,7 +743,7 @@ const OutReachList = () => {
 
                     }
                 </div>
-                <div className='Pagination' style={ { marginTop: '20px', display: 'flex', justifyContent: 'center' } }>
+                <div className='pagination'>
                     <Pagination
                         current={ currentPage }
                         pageSize={ pageSize }

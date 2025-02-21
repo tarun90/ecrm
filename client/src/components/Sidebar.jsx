@@ -42,9 +42,9 @@ const Sidebar = ({ collapsed, onCollapse }) => {
 
   const isAdmin = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData'))
     .isAdmin : {}
-    const isRegionHead = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData'))
+  const isRegionHead = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData'))
     .isRegionHead : {}
-    const isSuperAdmin = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData'))
+  const isSuperAdmin = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData'))
     .isSuperAdmin : {}
   const menuItems = [
     {
@@ -53,54 +53,54 @@ const Sidebar = ({ collapsed, onCollapse }) => {
       label: 'Dashboard',
       onClick: () => navigate('/'),
     },
-    // {
-    //   key: '2',
-    //   icon: <DollarOutlined />,
-    //   label: 'Deals',
-    //   onClick: () => navigate('/deals'),
-    // },
-    // {
-    //   key: '3',
-    //   icon: <TeamOutlined />,
-    //   label: 'Contacts',
-    //   onClick: () => navigate('/contacts'),
-    // },
-    // {
-    //   key: '4',
-    //   icon: <FileDoneOutlined />,
-    //   label: 'Tasks',
-    //   onClick: () => navigate('/tasks'),
-    // },
-    // {
-    //   key: '5',
-    //   icon: <CalendarOutlined />,
-    //   label: 'Event-Manager',
-    //   onClick: () => navigate('/event-manager'),
-    // },
-    // {
-    //   key: '6',
-    //   icon: <AppstoreOutlined />,
-    //   label: 'Products',
-    //   onClick: () => navigate('/products'),
-    // },
-    // {
-    //   key: '7',
-    //   icon: <FileTextOutlined />,
-    //   label: 'Invoices',
-    //   onClick: () => navigate('/invoices'),
-    // },
-    // {
-    //   key: '8',
-    //   icon: <MailOutlined />,
-    //   label: 'Web Mail',
-    //   onClick: () => navigate('/webmail-setup'),
-    // },
-    // {
-    //   key: '9',
-    //   icon: <CompanyIcon />,
-    //   label: 'Company',
-    //   onClick: () => navigate('/company'),
-    // },
+    {
+      key: '2',
+      icon: <DollarOutlined />,
+      label: 'Deals',
+      onClick: () => navigate('/deals'),
+    },
+    {
+      key: '3',
+      icon: <TeamOutlined />,
+      label: 'Contacts',
+      onClick: () => navigate('/contacts'),
+    },
+    {
+      key: '4',
+      icon: <FileDoneOutlined />,
+      label: 'Tasks',
+      onClick: () => navigate('/tasks'),
+    },
+    {
+      key: '5',
+      icon: <CalendarOutlined />,
+      label: 'Event-Manager',
+      onClick: () => navigate('/event-manager'),
+    },
+    {
+      key: '6',
+      icon: <AppstoreOutlined />,
+      label: 'Products',
+      onClick: () => navigate('/products'),
+    },
+    {
+      key: '7',
+      icon: <FileTextOutlined />,
+      label: 'Invoices',
+      onClick: () => navigate('/invoices'),
+    },
+    {
+      key: '8',
+      icon: <MailOutlined />,
+      label: 'Web Mail',
+      onClick: () => navigate('/webmail-setup'),
+    },
+    {
+      key: '9',
+      icon: <CompanyIcon />,
+      label: 'Company',
+      onClick: () => navigate('/company'),
+    },
     {
       key: '10',
       icon: <FolderOutlined />,

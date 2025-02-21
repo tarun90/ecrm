@@ -220,6 +220,9 @@
 }
 
 
+.ant-table-wrapper .ant-table-column-sorter {
+    color: var(--btn-bg-primary);
+}
 
 .ant-input-outlined:focus,
 .ant-input-outlined:hover,
@@ -231,6 +234,10 @@
 .ant-picker,
 .ant-input:hover {
     background: transparent;
+}
+
+.ant-table-tbody .ant-table-cell.ant-table-column-sort {
+    background-color: rgba(6, 155, 255, 0.116);
 }
 
 .submit-btn:hover {
@@ -500,4 +507,12 @@
     border-radius: 10px;
     -webkit-box-shadow: inset 0 0 4px #b9b9b9;
     background-color: #cac9c9;
+}
+
+.pagination .ant-pagination {
+    justify-content: center;
+}
+
+.ant-pagination .ant-pagination-item {
+    background-color: #ccc;
 }

@@ -29,8 +29,8 @@ const copyToClipboard = (text) => {
 const formatDate = (date) => {
   return date
     ? `${new Date(date).getDate().toString().padStart(2, '0')}-${(new Date(date).getMonth() + 1)
-        .toString()
-        .padStart(2, '0')}-${new Date(date).getFullYear()}`
+      .toString()
+      .padStart(2, '0')}-${new Date(date).getFullYear()}`
     : 'N/A';
 };
 
@@ -41,57 +41,57 @@ const Sidebar = ({ sale }) => {
 
   return (
     <div className="sidebar">
-  <div className="sidebar-header">
-    <ArrowLeft className="back-icon" onClick={() => navigate('/sales')} style={{ cursor: 'pointer' }} />
-    <span className="sidebar-title">Sale Details</span>
-  </div>
-
-  <div className="sale-card">
-    <div className="sale-info">
-      <div className="so-number">
-        <h2>{sale.sales_number}</h2>
+      <div className="sidebar-header">
+        <ArrowLeft className="back-icon" onClick={ () => navigate('/sales') } style={ { cursor: 'pointer' } } />
+        <span className="sidebar-title">Sale Details</span>
       </div>
 
-      <div className="info-item">
-        <span className="label">Technology:</span>
-        <span className="value">{sale.technology}</span>
-      </div>
+      <div className="contact-card scroll">
+        <div className="sale-info">
+          <div className="so-number">
+            <h2>{ sale.sales_number }</h2>
+          </div>
 
-      <div className="info-item">
-        <span className="label">Activities:</span>
-        <span className="value">{sale.activities}</span>
-      </div>
+          <div className="info-item">
+            <span className="label">Technology:</span>
+            <span className="value">{ sale.technology }</span>
+          </div>
 
-      <div className="info-item">
-        <span className="label">Status:</span>
-        <span className={`status-badge ${sale.status.toLowerCase().replace(/\s+/g, '-')}`}>
-          {sale.status}
-        </span>
-      </div>
+          <div className="info-item">
+            <span className="label">Activities:</span>
+            <span className="value">{ sale.activities }</span>
+          </div>
 
-      <div className="info-item">
-        <span className="label">Grand Total:</span>
-        <span className="value">
-          {sale.company?.currency || 'USD'} {sale.grand_total.toFixed(2)}
-        </span>
-      </div>
+          <div className="info-item">
+            <span className="label">Status:</span>
+            <span className={ `status-badge ${sale.status.toLowerCase().replace(/\s+/g, '-')}` }>
+              { sale.status }
+            </span>
+          </div>
 
-      <div className="info-item">
-        <span className="label">Created Date:</span>
-        <span className="value">
-            {sale.sales_date ? dayjs(sale.sales_date).format("DD-MM-YYYY hh:mm A") : "N/A"}
-        </span>
+          <div className="info-item">
+            <span className="label">Grand Total:</span>
+            <span className="value">
+              { sale.company?.currency || 'USD' } { sale.grand_total.toFixed(2) }
+            </span>
+          </div>
+
+          <div className="info-item">
+            <span className="label">Created Date:</span>
+            <span className="value">
+              { sale.sales_date ? dayjs(sale.sales_date).format("DD-MM-YYYY hh:mm A") : "N/A" }
+            </span>
+          </div>
+
+          <div className="info-item">
+            <span className="label">Last Updated:</span>
+            <span className="value">
+              { sale.sales_updated_date ? dayjs(sale.sales_updated_date).format("DD-MM-YYYY hh:mm A") : "N/A" }
+            </span>
+          </div>
         </div>
-
-        <div className="info-item">
-        <span className="label">Last Updated:</span>
-        <span className="value">
-            {sale.sales_updated_date ? dayjs(sale.sales_updated_date).format("DD-MM-YYYY hh:mm A") : "N/A"}
-        </span>
-        </div>
+      </div>
     </div>
-  </div>
-</div>
 
   );
 };
@@ -114,12 +114,12 @@ const CompanyView = ({ company }) => {
       </thead>
       <tbody>
         <tr>
-          <td>{company.companyName}</td>
-          <td>{company.companyOwner}</td>
-          <td>{company.phoneNumber}</td>
-          <td>{company.email}</td>
-          <td>{company.city}</td>
-          <td>{company.country}</td>
+          <td>{ company.companyName }</td>
+          <td>{ company.companyOwner }</td>
+          <td>{ company.phoneNumber }</td>
+          <td>{ company.email }</td>
+          <td>{ company.city }</td>
+          <td>{ company.country }</td>
         </tr>
       </tbody>
     </table>
@@ -139,21 +139,21 @@ const DealsView = ({ deals }) => (
       </tr>
     </thead>
     <tbody>
-      {deals.length ? (
+      { deals.length ? (
         deals.map((deal) => (
-          <tr key={deal._id}>
-            <td>{deal.name}</td>
-            <td>{deal.contact?.firstName} {deal.contact?.lastName}</td>
-            <td>{deal.amount}</td>
-            <td>{deal.stage}</td>
-            <td>{formatDate(deal.closeDate)}</td>
+          <tr key={ deal._id }>
+            <td>{ deal.name }</td>
+            <td>{ deal.contact?.firstName } { deal.contact?.lastName }</td>
+            <td>{ deal.amount }</td>
+            <td>{ deal.stage }</td>
+            <td>{ formatDate(deal.closeDate) }</td>
           </tr>
         ))
       ) : (
         <tr>
-          <td colSpan="5" style={{ textAlign: 'center' }}>No Deals Found</td>
+          <td colSpan="5" style={ { textAlign: 'center' } }>No Deals Found</td>
         </tr>
-      )}
+      ) }
     </tbody>
   </table>
 );
@@ -165,7 +165,7 @@ const MainContent = ({ sale, deals }) => (
       <div className="section-header">
         <h2>Company Details</h2>
       </div>
-      <CompanyView company={sale?.company} />
+      <CompanyView company={ sale?.company } />
     </div>
   </div>
 );
@@ -188,8 +188,8 @@ const SaleView = () => {
 
   return (
     <div className="sale-management">
-      <Sidebar sale={sale} />
-      <MainContent sale={sale} />
+      <Sidebar sale={ sale } />
+      <MainContent sale={ sale } />
     </div>
   );
 };

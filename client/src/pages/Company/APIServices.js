@@ -15,7 +15,7 @@ export const createCompany = async (companyData) => {
 export const getCompanies = async (searchTerm = "", page = 1, pageSize = 10) => {
   try {
     console.log('Calling API with:', { searchTerm, page, pageSize });
-    
+
     const response = await axios.get(`${API_URL}`, {
       params: {
         searchTerm,
@@ -23,22 +23,22 @@ export const getCompanies = async (searchTerm = "", page = 1, pageSize = 10) => 
         pageSize
       }
     });
-    
+
     console.log('Raw API response:', response.data);
 
     // If response.data is an array, implement pagination manually
     if (Array.isArray(response.data)) {
       const allData = response.data;
       const totalItems = allData.length;
-      
+
       // Calculate start and end indices for the current page
       const startIndex = (page - 1) * pageSize;
       const endIndex = Math.min(startIndex + pageSize, totalItems);
-      
+
       // Slice the array to get only the items for the current page
       const paginatedData = allData.slice(startIndex, endIndex);
-      
-      console.log('Pagination details:', {
+
+      console.log('pagination details:', {
         page,
         pageSize,
         totalItems,
@@ -55,10 +55,10 @@ export const getCompanies = async (searchTerm = "", page = 1, pageSize = 10) => 
         totalPages: Math.ceil(totalItems / pageSize)
       };
     }
-    
+
     // If response has pagination structure from backend
     return {
-      data: response.data.companies || response.data.data || [], 
+      data: response.data.companies || response.data.data || [],
       total: response.data.total || 0,
       success: true,
       currentPage: response.data.currentPage || page,
