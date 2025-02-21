@@ -78,6 +78,7 @@
     -moz-transition: all 0.2s ease-out;
     transition: all 0.2s ease-out;
     border: 1px solid #00a35f;
+    color: #fff;
 }
 
 .ant-btn.ant-btn-default.ant-btn-color-default.ant-btn-variant-outlined.import-btn:hover::before {
