@@ -77,6 +77,11 @@ router.get('/', auth, async (req, res) => {
           outreach.createdBy?.email?.match(searchRegex) ||
           outreach.assignedTo?.name?.match(searchRegex) ||
           outreach.status?.match(searchRegex) ||
+          outreach.email?.match(searchRegex) ||
+          outreach.phone?.match(searchRegex) ||
+          outreach.website?.match(searchRegex) ||
+          outreach.linkedin?.match(searchRegex) ||
+          outreach.country?.match(searchRegex) ||
           outreach.name?.match(searchRegex)
         );
       });

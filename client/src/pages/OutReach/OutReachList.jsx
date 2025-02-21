@@ -132,10 +132,11 @@ const OutReachList = () => {
             // message.error('Failed to fetch users');
         }
     };
-    const handlePageChange = (page, size) => {
-        setCurrentPage(page);
-        setPageSize(size);
-        fetchOutreach(searchTerm, page, size);
+    const handlePageChange = (pageNum, sizeData) => {
+        console.log(pageNum, sizeData)
+        setCurrentPage(pageNum);
+        setPageSize(sizeData);
+        fetchOutreach(pageNum, sizeData);
     };
     const fetchCampaigns = async () => {
         try {
@@ -169,6 +170,7 @@ const OutReachList = () => {
 
     const fetchOutreach = async ( page = 1, pageSize = 100) => {
         try {
+            console.log(page, pageSize)
             setLoading(true);
             const response = await getOutreach(searchTerm, page, pageSize);
 
@@ -756,10 +758,10 @@ const OutReachList = () => {
                     showTotal={ (total, range) => `${range[0]}-${range[1]} of ${total} items` }
                     pageSizeOptions={ ['100', '200'] }
                     disabled={ loading }
-                    onShowSizeChange={ (current, size) => {
-                        console.log('Page size changed:', { current, size });
-                        handlePageChange(1, size);
-                    } }
+                    // onShowSizeChange={ (current, size) => {
+                    //     console.log('Page size changed:', { current, size });
+                    //     handlePageChange(1, size);
+                    // } }
                 />
             </div>
 

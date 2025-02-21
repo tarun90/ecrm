@@ -22,7 +22,7 @@ import Users from "./routes/Users.js";
 import noteRoutes from './routes/noteRoutes.js';
 import Activities from "./routes/Activities.js";
 import sourceFileRoutes from './routes/sourceFileRoutes.js';
-
+import OutReach from './models/Outreach.js';
 dotenv.config();
 
 const app = express();
@@ -34,7 +34,9 @@ app.use(bodyParser.json());
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('Connected to MongoDB'))
+  .then(() => {
+     OutReach.collection.dropIndex('email_1');
+    console.log('Connected to MongoDB')})
   .catch((err) => console.error('MongoDB connection error:', err));
 
 

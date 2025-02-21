@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const API_URL = `${import.meta.env.VITE_TM_API_URL}/api/outreach`;
-export const getOutreach = async (searchString = '', page = 1, pageSize = 10) => {
+export const getOutreach = async (searchString = '', page = 1, pageSize = 100) => {
   try {
     const params = new URLSearchParams({
       search: searchString,
