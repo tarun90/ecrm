@@ -70,14 +70,7 @@ router.get('/', auth, async (req, res) => {
 // Get campaign by ID
 router.get('/:id', auth, async (req, res) => {
   try {
-    const campaign = await Campaign.findOne({ 
-      _id: req.params.id,
-      createdBy: req?.user?.user._id 
-    });
-
-    if (!campaign) {
-      return res.status(404).json({ message: 'Campaign not found' });
-    }
+   
     res.json(campaign);
   } catch (error) {
     res.status(500).json({ 
