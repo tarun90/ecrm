@@ -304,6 +304,7 @@ const OutReachList = () => {
 
     const handleEditOutreach = (id) => {
         const outreachItem = outreach.find(item => item._id === id);
+        console.log(outreachItem, "ketul.")
         if (outreachItem) {
             form.setFieldsValue({
                 name: outreachItem.name,
@@ -314,7 +315,7 @@ const OutReachList = () => {
                 country: outreachItem.country,
                 region: outreachItem.region._id,
                 campaign: outreachItem.campaign._id,
-                category: outreachItem.category._id,
+                // category: outreachItem.category._id,
                 designation: outreachItem?.designation,
                 city: outreachItem?.city,
             });
@@ -711,7 +712,7 @@ const OutReachList = () => {
                                <td><TruncatedText text={item?.email} /></td>
                                <td><TruncatedText text={item?.phone} isPhone={true} /></td>
                                <td><TruncatedText text={item?.website} /></td>
-                               <td><TruncatedText text={item?.linkedin} /></td>
+                               <td>{item?.linkedin ?<a href={`${item?.linkedin}`}> <TruncatedText text={item?.linkedin} /></a> : "-" }</td>
                                <td><TruncatedText text={item?.country} /></td>
                                <td><TruncatedText text={item?.leadStatus} /></td>
                                <td><TruncatedText text={item?.priority} /></td>
@@ -800,7 +801,7 @@ const OutReachList = () => {
                         country: '',
                         region: '',
                         campaign: '',
-                        category: '',
+                        // category: '',
                         designation: '',
                         city: '',
                     } }
@@ -915,7 +916,7 @@ const OutReachList = () => {
                                 </Select>
                             </Form.Item>
 
-                            <Form.Item
+                            {/* <Form.Item
                                 label="Category"
                                 name="category"
                                 rules={ [{ required: true, message: 'Please select a category!' }] }
@@ -927,7 +928,7 @@ const OutReachList = () => {
                                         </Select.Option>
                                     )) }
                                 </Select>
-                            </Form.Item>
+                            </Form.Item> */}
                         </Col>
                     </Row>
 

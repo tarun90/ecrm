@@ -22,7 +22,7 @@ import Users from "./routes/Users.js";
 import noteRoutes from './routes/noteRoutes.js';
 import Activities from "./routes/Activities.js";
 import sourceFileRoutes from './routes/sourceFileRoutes.js';
-import OutReach from './models/Outreach.js';
+import Dashboard from './routes/Dashboard.js';
 dotenv.config();
 
 const app = express();
@@ -85,6 +85,8 @@ app.use('/api/users',Users);
 app.use('/api/dept',Department);
 app.use('/api/activities',Activities);
 app.use('/api', sourceFileRoutes);
+app.use('/api/dashboard', Dashboard);
+
 // Start the reminder check every minute
 // setInterval(checkReminders, 60 * 1000);
 // Also run an initial check on startup

@@ -8,7 +8,7 @@ const noteSchema = new mongoose.Schema({
   },
   contactMethod: [{
     type: String,
-    enum: ['Email', 'Phone', 'IM', 'LinkedIn'],
+    enum: ['Email', 'Phone', 'IM', 'Linkedin'],
     required: true
   }],
   message: {

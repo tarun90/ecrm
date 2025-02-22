@@ -145,13 +145,13 @@ const MainContent = ({ form, outReachData, modalOpen, modalOpenForNote, modalClo
             <h2>{ section }</h2>
             <div className="header-actions">
               {/* {userData?.department?.name?.toLowerCase() == 'outreach team' && */ }
-              {/* <Button
+              <Button
                 type="primary"
                 icon={ <PlusOutlined /> }
                 onClick={ modalOpenForNote }
               >
                 Add
-              </Button> */}
+              </Button>
               {/* } */ }
               {/* <Settings /> */ }
             </div>
@@ -413,11 +413,65 @@ const Sidebar = ({ outReachData, modalOpenForNote }) => {
               </a>
 
             </div>
+
+
             <div className="field">
-              <p className="label">Created By </p>
-              <a >
+              <p className="label">Designation:  </p>
+              <p >
+                <div
+                >{ outReachData?.designation }</div>
+              </p>
+
+            </div>
+
+            <div className="field">
+              <p className="label">Created By:  </p>
+              <p >
                 <div
                 >{ outReachData?.createdBy?.name }</div>
+              </p>
+
+            </div>
+            <div className="field">
+              <p className="label">Region:  </p>
+              <p >
+                <div
+                >{ outReachData?.region?.regionName }</div>
+              </p>
+
+            </div>
+
+            <div className="field">
+              <p className="label">City:  </p>
+              <p >
+                <div
+                >{ outReachData?.city }</div>
+              </p>
+
+            </div>
+
+            <div className="field">
+              <p className="label">Country:  </p>
+              <p >
+                <div
+                >{ outReachData?.country }</div>
+              </p>
+
+            </div>
+            <div className="field">
+              <p className="label">Website:  </p>
+              <a href={`${outReachData?.website}`} >
+                <div
+                >{ outReachData?.website }</div>
+              </a>
+
+            </div>
+
+            <div className="field">
+              <p className="label">Linkedin:  </p>
+              <a href={`${outReachData?.linkedin}`} >
+                <div
+                >{ outReachData?.linkedin }</div>
               </a>
 
             </div>

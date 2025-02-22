@@ -1,5 +1,5 @@
 import express from 'express';
-import Outreach from '../models/Outreach.js';
+import OutReach from '../models/OutReach.js';
 import multer from 'multer';
 import csv from 'csv-parser';
 import fs from 'fs';
@@ -22,8 +22,8 @@ router.post('/', auth, async (req, res) => {
       ...req?.body,
       createdBy
     }
-    const outreach = new Outreach(data);
-    await outreach.save();
+    const outreach = new OutReach(data);
+    await OutReach.save();
     res.status(201).send(outreach);
   } catch (error) {
     res.status(400).send(error);
@@ -80,7 +80,7 @@ router.get('/', auth, async (req, res) => {
       const searchRegex = new RegExp(search, 'i');
       
       // Get filtered and populated results
-      const outreaches = await Outreach.find(query)
+      const outreaches = await OutReach.find(query)
         .populate('campaign', 'campaignName')
         .populate('region', 'regionName')
         .populate('createdBy', 'name email')
@@ -121,9 +121,9 @@ router.get('/', auth, async (req, res) => {
     }
 
     // If no search string, use MongoDB pagination with filters
-    const total = await Outreach.countDocuments(query);
+    const total = await OutReach.countDocuments(query);
     
-    const outreaches = await Outreach.find(query)
+    const outreaches = await OutReach.find(query)
       .populate('campaign', 'campaignName')
       .populate('region', 'regionName')
       .populate('createdBy', 'name email')
@@ -155,7 +155,7 @@ router.get('/', auth, async (req, res) => {
 router.get('/outreacbyid/:id', async (req, res) => {
   try {
 
-    const outreaches = await Outreach.findById({_id:req.params.id})
+    const outreaches = await OutReach.findById({_id:req.params.id})
       .populate('campaign', 'campaignName') // Populate campaign and retrieve only the name field
       .populate('region', 'regionName')   // Populate region and retrieve only the name field
       .populate('createdBy', 'name email') // Populate createdBy and retrieve name and email
@@ -204,7 +204,7 @@ router.post("/filter", auth, async (req, res) => {
     if (assignTo) query.assignedTo = assignTo;
 
     // ✅ Fetch filtered outreaches
-    const outreaches = await Outreach.find(query)
+    const outreaches = await OutReach.find(query)
       .populate("campaign", "campaignName")
       .populate("region", "regionName")
       .populate("createdBy", "name email")
@@ -227,7 +227,7 @@ router.post("/filter", auth, async (req, res) => {
 // Update Outreach
 router.put('/:id', async (req, res) => {
   try {
-    const outreach = await Outreach.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const outreach = await OutReach.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.status(200).send(outreach);
   } catch (error) {
     res.status(400).send(error);
@@ -237,7 +237,7 @@ router.put('/:id', async (req, res) => {
 // Delete Outreach
 router.delete('/:id', async (req, res) => {
   try {
-    await Outreach.findByIdAndDelete(req.params.id);
+    await OutReach.findByIdAndDelete(req.params.id);
     res.status(200).send({ message: 'Outreach deleted' });
   } catch (error) {
     res.status(500).send(error);
@@ -248,7 +248,7 @@ router.delete('/:id', async (req, res) => {
 router.post('/import', auth, upload.single('file'), async (req, res) => {
   try {
     // Check for existing file first
-    const existingRecord = await Outreach.findOne({ 
+    const existingRecord = await OutReach.findOne({ 
       sourceFile: req.file.originalname 
     });
 
@@ -333,7 +333,7 @@ router.post('/import', auth, upload.single('file'), async (req, res) => {
         }
 
         // Check for existing email in database
-        const existingEmail = await Outreach.findOne({ email: record.email });
+        const existingEmail = await OutReach.findOne({ email: record.email });
         if (existingEmail) {
           skippedEmails.push(record.email);
           continue;
@@ -354,7 +354,7 @@ router.post('/import', auth, upload.single('file'), async (req, res) => {
 
     // Insert valid records
     if (processedResults.length > 0) {
-      await Outreach.insertMany(processedResults);
+      await OutReach.insertMany(processedResults);
     }
 
     // Clean up the uploaded file
@@ -412,7 +412,7 @@ router.post('/assign', async (req, res) => {
     }
 
     // Perform the update
-    const result = await Outreach.updateMany(
+    const result = await OutReach.updateMany(
       query,
       { 
         $set: { 
@@ -542,7 +542,7 @@ router.get('/analytics-data', auth, async (req, res) => {
       }
     );
 
-    const result = await Outreach.aggregate(pipeline);
+    const result = await OutReach.aggregate(pipeline);
     res.status(200).json(result);
     
   } catch (error) {
@@ -641,7 +641,7 @@ router.get('/user-campaign-data', auth, async (req, res) => {
       }
     );
 
-    const result = await Outreach.aggregate(pipeline);
+    const result = await OutReach.aggregate(pipeline);
     let unassignedMatchQuery = {
       'outreaches': { $size: 0 },
       'isActive': true

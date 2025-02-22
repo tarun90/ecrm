@@ -1,4 +1,4 @@
-import OutReach from '../models/Outreach.js';
+import OutReach from '../models/OutReach.js';
 
 export const getUniqueSourceFiles = async (req, res) => {
     try {

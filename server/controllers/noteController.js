@@ -1,5 +1,5 @@
 import Note from '../models/Note.js';
-import Outreach from '../models/Outreach.js';
+import OutReach from '../models/OutReach.js';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
@@ -51,7 +51,7 @@ export const createNote = async (req, res) => {
       const { contactMethod, message, reminderDate } = req.body;
 
       // Validate outreach exists
-      const outreach = await Outreach.findById(outreachId);
+      const outreach = await OutReach.findById(outreachId);
       if (!outreach) {
         return res.status(404).json({ message: 'Outreach not found' });
       }
@@ -80,7 +80,7 @@ export const createNote = async (req, res) => {
       await note.populate('createdBy', 'name email');
 
       // Update outreach status based on whether it's first note or not
-      await Outreach.updateOne(
+      await OutReach.updateOne(
         { _id: outreachId },
         { $set: { status: existingNotesCount === 0 ? "Contacted" : "Follow Up" } }
       );
@@ -99,7 +99,7 @@ export const getNotesByOutreach = async (req, res) => {
     const { outreachId } = req.params;
     
     // Validate outreach exists
-    const outreach = await Outreach.findById(outreachId);
+    const outreach = await OutReach.findById(outreachId);
     if (!outreach) {
       return res.status(404).json({ message: 'Outreach not found' });
     }
