@@ -499,6 +499,9 @@ const OutReachList = () => {
         getUsersData()
     }, [])
 
+    const isOutreach = userData?.department?.name?.toLowerCase() === "outreach team";
+
+
     //   if (!outreach || outreach.length === 0) {
     //     return <NoDataUI />;
     //   }
@@ -711,7 +714,8 @@ const OutReachList = () => {
                                </td>
                                <td><TruncatedText text={item?.email} /></td>
                                <td><TruncatedText text={item?.phone} isPhone={true} /></td>
-                               <td><TruncatedText text={item?.website} /></td>
+                               {/* <td><TruncatedText text={item?.website} /></td> */}
+                               <td>{item?.website ?<a href={`${item?.website}`}> <TruncatedText text={item?.website} /></a> : "-" }</td>
                                <td>{item?.linkedin ?<a href={`${item?.linkedin}`}> <TruncatedText text={item?.linkedin} /></a> : "-" }</td>
                                <td><TruncatedText text={item?.country} /></td>
                                <td><TruncatedText text={item?.leadStatus} /></td>
@@ -726,20 +730,20 @@ const OutReachList = () => {
                                    <Link to={`/ViewOutReach/${item._id}`}>
                                      <Button type="primary">History</Button>
                                    </Link>
-                                   {(userData?.department?.name == "Lead Generation" || userData?.isSuperAdmin) && (
+                                   {(userData?.department?.name== "Lead Generation" || userData?.isSuperAdmin || (userData?.department?.name)?.toLowerCase() == "outreach team") && (
                                      <>
                                        <button className='edit-btn' onClick={() => handleEditOutreach(item._id)}>
                                          <EditOutlined />
                                        </button>
-                                       <Popconfirm
+                                       {userData?.department?.name == "Lead Generation" || userData?.isSuperAdmin && <Popconfirm
                                          title="Delete Outreach"
                                          description="Are you sure you want to delete this outreach?"
                                          onConfirm={() => handleDelete(item._id)}
                                          okText="Yes"
                                          cancelText="No"
                                        >
-                                         <button className='delete-btn'><DeleteOutlined /></button>
-                                       </Popconfirm>
+                                        <button className='delete-btn'><DeleteOutlined /></button>
+                                        </Popconfirm>}
                                      </>
                                    )}
                                  </div>
@@ -813,7 +817,7 @@ const OutReachList = () => {
                                 name="name"
                                 rules={ [{ required: true, message: 'Please input the name!' }] }
                             >
-                                <Input />
+                                <Input disabled={isOutreach} />
                             </Form.Item>
 
                             <Form.Item
@@ -821,7 +825,7 @@ const OutReachList = () => {
                                 name="email"
                                 rules={ [{ required: true, type: 'email', message: 'Please input a valid email!' }] }
                             >
-                                <Input />
+                                <Input disabled={isOutreach} />
                             </Form.Item>
 
                             <Form.Item
@@ -829,27 +833,27 @@ const OutReachList = () => {
                                 name="phone"
                                 rules={ [{ required: true, message: 'Please input the phone number!' }] }
                             >
-                                <Input />
+                                <Input disabled={isOutreach}/>
                             </Form.Item>
 
                             <Form.Item
                                 label="Website"
                                 name="website"
                             >
-                                <Input />
+                                <Input disabled={isOutreach}/>
                             </Form.Item>
 
                             <Form.Item
                                 label="LinkedIn"
                                 name="linkedin"
                             >
-                                <Input />
+                                <Input disabled={isOutreach}/>
                             </Form.Item>
                             <Form.Item
                                 label="Designation"
                                 name="designation"
                             >
-                                <Input />
+                                <Input disabled={isOutreach}/>
                             </Form.Item>
                         </Col>
 
@@ -858,13 +862,13 @@ const OutReachList = () => {
                                 label="City"
                                 name="city"
                             >
-                                <Input />
+                                <Input disabled={isOutreach} />
                             </Form.Item>
                             <Form.Item
                                 label="Country"
                                 name="country"
                             >
-                                <Input />
+                                <Input disabled={isOutreach}/>
                             </Form.Item>
 
                             <Form.Item
@@ -899,7 +903,7 @@ const OutReachList = () => {
                                 name="region"
                                 rules={ [{ required: true, message: 'Please select the region!' }] }
                             >
-                                <Select options={ regionOptions } />
+                                <Select disabled={isOutreach} options={ regionOptions } />
                             </Form.Item>
 
                             <Form.Item
@@ -907,7 +911,7 @@ const OutReachList = () => {
                                 name="campaign"
                                 rules={ [{ required: true, message: 'Please select a dataset!' }] }
                             >
-                                <Select>
+                                <Select disabled={isOutreach}>
                                     { campaigns.map(campaign => (
                                         <Select.Option key={ campaign._id } value={ campaign._id }>
                                             { campaign.campaignName }
